@@ -5,7 +5,7 @@
 - 📧 Email me at: [jefinojacob9488@gmail.com](mailto:jefinojacob9488@gmail.com)
 
 ## About Me
-
+ 
 👀 I'm passionate about making life easier through automation. Currently, I'm a student at Chennai Institute of Technology, pursuing B.Tech in Artificial Intelligence & Data Science.
 
 ## Learning Journey
