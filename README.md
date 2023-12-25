@@ -15,4 +15,5 @@
 ## Let's Connect
 
 🧑🏻‍🎓 Feel free to reach out to me on [Telegram](https://t.me/Jefino9488) or drop me an email at [jefinojacob9488@gmail.com](mailto:jefinojacob9488@gmail.com). I'm always open to connecting with like-minded individuals!
+### <a href="https://www.linkedin.com/in/jefino-jacob-69886423b/">linkedin</a> | <a href="https://www.github.com/Jefino9488">github</a> | <a href="https://www.twitter.com/Jefino29014673">twitter</a> |  <a href="https://t.me/Jefino9488">Telegram</a>
 
