@@ -1,4 +1,4 @@
-![Offline Twitch Banner Template (1) - Made with PosterMyWall](https://user-images.githubusercontent.com/89455522/206888250-f1f1398d-5b51-406c-8bdd-1de91209be65.jpg)
+
 # Hi there, I'm Jefino! 👋
 
 - 🌐 Find me on [Telegram](https://t.me/Jefino9488)
