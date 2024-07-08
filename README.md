@@ -1,23 +1,47 @@
-# Hi there, I'm Jefino! 👋
+<div id="user-content-toc">
+  <ul align="center">
+    <summary><h1 style="display: inline-block">Hi 👋, I'm Jefino</h1></summary>
+  </ul>
+</div>
 
-- 🌐 Find me on [Telegram](https://t.me/Jefino9488)
-- 📧 Email me at: [jefinojacob9488@gmail.com](mailto:jefinojacob9488@gmail.com)
+```python
+class Jefino:
+    def __init__(self):
+        self.name = "Jefino"
+        self.role = "Software Engineer"
+        self.location = "India,Tamil Nadu"
+        self.skills = {
+            "backend": ["Python", "Java"],
+            "frontend": ["HTML", "CSS", "JavaScript", "React"],
+            "tools": ["Docker", "Git", "PyCharm", "Vite", "Next.js"]
+        }
+        self.learning = ["Django", "FastAPI", "Flask", "Vue.js", "Nuxt.js"]
+        self.hobbies = ["Coding", "Gaming", "Reading", "Music"]
+        self.socials = {
+            "linkedin": "https://www.linkedin.com/in/jefino/",
+            "github": "https://github.com/Jefino9488",
+            "twitter": "https://twitter.com/Jefino9488"
+        }
 
-## About Me
+    def __str__(self):
+        info = f"Name: {self.name}\n"
+        return info
 
-👀 I'm passionate about making life easier through automation. Currently, I'm a student at Chennai Institute of
-Technology, pursuing B.Tech in Artificial Intelligence & Data Science.
 
-## Learning Journey
+if __name__ == "__main__":
+    me = Jefino()
+    print(me)
+```
 
-🌱 I'm on a journey of continuous learning, focusing on Artificial Intelligence and Data Science to stay at the forefront
-of technology.
 
-## Let's Connect
 
-🧑🏻‍🎓 Feel free to reach out to me on [Telegram](https://t.me/Jefino9488) or drop me an email
-at [jefinojacob9488@gmail.com](mailto:jefinojacob9488@gmail.com). I'm always open to connecting with like-minded
-individuals!
+<p align="center">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=git,docker,python,pycharm,java,html,react,vite,nextjs&perline="  alt=""/>
+  </a>
+</p>
 
-### <a href="https://www.linkedin.com/in/jefino-jacob-69886423b/">linkedin</a> | <a href="https://www.github.com/Jefino9488">github</a> | <a href="https://www.twitter.com/Jefino29014673">twitter</a> |  <a href="https://t.me/Jefino9488">Telegram</a>
+<div align="center">
+  <img src="https://github-profile-trophy.vercel.app/?username=Jefino9488&theme=onedark&margin-w=15&margin-h=15&column=4&row=2&no-frame=true&no-bg=true">
+</div>
 
