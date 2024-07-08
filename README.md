@@ -11,7 +11,7 @@ class Jefino:
     self.role = "Software Engineer"
     self.location = "India,Tamil Nadu"
     self.telegram = "@Jefino9488"
-    self.web = "https://jefino9488.github.io/Jefino9488"
+    self.web = "jefino9488.github.io/Jefino9488"
 
   def __str__(self):
     info = f"Name: {self.name}\n"
