@@ -10,18 +10,8 @@ class Jefino:
         self.name = "Jefino"
         self.role = "Software Engineer"
         self.location = "India,Tamil Nadu"
-        self.skills = {
-            "backend": ["Python", "Java"],
-            "frontend": ["HTML", "CSS", "JavaScript", "React"],
-            "tools": ["Docker", "Git", "PyCharm", "Vite", "Next.js"]
-        }
-        self.learning = ["Django", "FastAPI", "Flask", "Vue.js", "Nuxt.js"]
-        self.hobbies = ["Coding", "Gaming", "Reading", "Music"]
-        self.socials = {
-            "linkedin": "https://www.linkedin.com/in/jefino/",
-            "github": "https://github.com/Jefino9488",
-            "twitter": "https://twitter.com/Jefino9488"
-        }
+        self.telegram = "@Jefino9488"
+        self.web = "https://jefino9488.github.io/Jefino9488"
 
     def __str__(self):
         info = f"Name: {self.name}\n"
@@ -33,7 +23,7 @@ if __name__ == "__main__":
     print(me)
 ```
 
-
+[![Image of https://github.com/Jefino9488/MyProfileViews](https://github.com/Jefino9488/MyProfileViews/blob/master/svg/profile/badge.svg)](https://github.com/Jefino9488/MyProfileViews)
 
 <p align="center">
   <a href="https://skillicons.dev">
