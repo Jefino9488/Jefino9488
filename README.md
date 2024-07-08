@@ -30,7 +30,8 @@ if __name__ == "__main__":
       <img src="https://github-readme-streak-stats.herokuapp.com/?user=Jefino9488&theme=neon-dark&hide_border=true" alt="Jefino's GitHub Stats" />
     </p>
     <p>
-      <img src="https://github.com/Jefino9488/MyProfileViews/blob/master/svg/profile/badge.svg" alt="Profile Views Badge" />
+      <img src="https://github.com/Jefino9488/MyProfileViews/blob/master/svg/profile/badge.svg" alt="Profile Views Badge" />  <img src="https://img.shields.io/github/followers/Jefino9488
+" alt="">
     </p>
   </ul>
   <div align="center">
