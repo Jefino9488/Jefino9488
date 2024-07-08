@@ -34,14 +34,11 @@ if __name__ == "__main__":
       <img src="https://github.com/Jefino9488/MyProfileViews/blob/master/svg/profile/badge.svg" alt="Profile Views Badge" />
     </p>
   </ul>
+  <div align="center">
+    <img src="https://github-profile-trophy.vercel.app/?username=Jefino9488&theme=onedark&margin-w=15&margin-h=15&column=4&row=2&no-frame=true&no-bg=true">
+  </div>
 </div>
 
-
-<div id="user-content-toc">
-  <ul align="center">
-    <summary><h1 style="display: inline-block">Languages and Tools</h1></summary>
-  </ul>
-</div>
 
 <p align="center">
   <a href="https://skillicons.dev">
@@ -49,12 +46,5 @@ if __name__ == "__main__":
   </a>
 </p>
 
-<div id="user-content-toc">
-  <ul align="center">
-    <summary><h1 style="display: inline-block">GitHub Trophies</h1></summary>
-  </ul>
-</div>
-<div align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=Jefino9488&theme=onedark&margin-w=15&margin-h=15&column=4&row=2&no-frame=true&no-bg=true">
-</div>
+
 
