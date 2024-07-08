@@ -23,17 +23,16 @@ if __name__ == "__main__":
     print(me)
 ```
 
-<div style="text-align: center;">
+<div style="text-align: center;" align="center">
   <ul style="list-style-type: none; padding: 0;">
-    <li>
+    <p>
       <h1 style="display: inline-block;">GitHub Stats</h1>
-    </li>
-    <li>
+    <p>
       <img src="https://github-readme-streak-stats.herokuapp.com/?user=Jefino9488&theme=neon-dark&hide_border=true" alt="Jefino's GitHub Stats" />
-    </li>
-    <li>
+    </p>
+    <p>
       <img src="https://github.com/Jefino9488/MyProfileViews/blob/master/svg/profile/badge.svg" alt="Profile Views Badge" />
-    </li>
+    </p>
   </ul>
 </div>
 
