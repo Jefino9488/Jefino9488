@@ -23,21 +23,31 @@ if __name__ == "__main__":
     print(me)
 ```
 
-[![Image of https://github.com/Jefino9488/MyProfileViews](https://github.com/Jefino9488/MyProfileViews/blob/master/svg/profile/badge.svg)](https://github.com/Jefino9488/MyProfileViews)
+<div style="display: flex; align-items: center; justify-content: center;">
+  <ul align="center">
+    <summary><h1 style="display: inline-block">GitHub Stats</h1></summary>
+    <img src="https://github-readme-streak-stats.herokuapp.com/?user=Jefino9488&theme=neon-dark&hide_border=true" alt="Jefino's GitHub Stats" />
+    <img src="https://github.com/Jefino9488/MyProfileViews/blob/master/svg/profile/badge.svg" alt="Jefino's GitHub Stats" />
+  </ul>
+</div>
 
-### 📊 GitHub Stats:
-<p align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=Jefino9488&theme=neon-dark&hide_border=true" alt="Jefino's GitHub Stats" />
-</p>
+<div id="user-content-toc">
+  <ul align="center">
+    <summary><h1 style="display: inline-block">Languages and Tools</h1></summary>
+  </ul>
+</div>
 
-### 🛠️ Languages & Tools:
 <p align="center">
   <a href="https://skillicons.dev">
     <img src="https://skillicons.dev/icons?i=git,docker,python,pycharm,java,html,react,vite,nextjs&perline="  alt=""/>
   </a>
 </p>
 
-### 🏆 GitHub Trophies:
+<div id="user-content-toc">
+  <ul align="center">
+    <summary><h1 style="display: inline-block">GitHub Trophies</h1></summary>
+  </ul>
+</div>
 <div align="center">
   <img src="https://github-profile-trophy.vercel.app/?username=Jefino9488&theme=onedark&margin-w=15&margin-h=15&column=4&row=2&no-frame=true&no-bg=true">
 </div>
