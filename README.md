@@ -23,13 +23,20 @@ if __name__ == "__main__":
     print(me)
 ```
 
-<div style="display: flex; align-items: center; justify-content: center;">
-  <ul align="center">
-    <summary><h1 style="display: inline-block">GitHub Stats</h1></summary>
-    <img src="https://github-readme-streak-stats.herokuapp.com/?user=Jefino9488&theme=neon-dark&hide_border=true" alt="Jefino's GitHub Stats" />
-    <img src="https://github.com/Jefino9488/MyProfileViews/blob/master/svg/profile/badge.svg" alt="Jefino's GitHub Stats" />
+<div style="text-align: center;">
+  <ul style="list-style-type: none; padding: 0;">
+    <li>
+      <h1 style="display: inline-block;">GitHub Stats</h1>
+    </li>
+    <li>
+      <img src="https://github-readme-streak-stats.herokuapp.com/?user=Jefino9488&theme=neon-dark&hide_border=true" alt="Jefino's GitHub Stats" />
+    </li>
+    <li>
+      <img src="https://github.com/Jefino9488/MyProfileViews/blob/master/svg/profile/badge.svg" alt="Profile Views Badge" />
+    </li>
   </ul>
 </div>
+
 
 <div id="user-content-toc">
   <ul align="center">
