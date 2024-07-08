@@ -22,7 +22,6 @@ if __name__ == "__main__":
   me = Jefino()
   print(me)
 ```
-
 <div style="text-align: center;" align="center">
   <ul style="list-style-type: none; padding: 0;">
     <p>
@@ -37,14 +36,14 @@ if __name__ == "__main__":
   <div align="center">
     <img src="https://github-profile-trophy.vercel.app/?username=Jefino9488&theme=onedark&margin-w=15&margin-h=15&column=4&row=2&no-frame=true&no-bg=true">
   </div>
+  <div align="center">
+    <a href="https://skillicons.dev">
+      <img src="https://skillicons.dev/icons?i=git,docker,python,pycharm,java,html,react,vite&perline="  alt=""/>
+    </a>
+  </div>
 </div>
 
-
-<p align="center">
-  <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=git,docker,python,pycharm,java,html,react,vite,nextjs&perline="  alt=""/>
-  </a>
-</p>
+---
 
 
 
