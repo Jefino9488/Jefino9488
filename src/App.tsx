@@ -18,13 +18,10 @@ const projects = [
 const skills = ["React", "JavaScript", "TypeScript", "Node.js", "Tailwind CSS", "Next.js", "GraphQL", "MongoDB", "AWS"]
 
 export default function APP() {
-    const [ setHoveredProject] = useState<number | null>(null)
+    const [, setHoveredProject] = useState<number | null>(null)
 
     return (
         <div className="min-h-screen bg-gray-950 py-12 px-4 sm:px-6 lg:px-8 text-white">
-            {/* <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-purple-800 rounded-full filter blur-3xl opacity-30"></div>
-      </div> */}
             <div className="max-w-6xl mx-auto">
                 <header className="text-center mb-16">
                     <motion.div
@@ -139,4 +136,3 @@ export default function APP() {
         </div>
     )
 }
-
