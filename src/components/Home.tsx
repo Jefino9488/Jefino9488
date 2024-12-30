@@ -23,17 +23,17 @@ export default function Home() {
 
     return (
         <div className="min-h-screen bg-gray-950 flex flex-col text-white">
-            <div className="flex-grow max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-                <header className="text-center mb-16">
+            <div className="flex-grow max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+                <header className="text-center mb-12 sm:mb-16">
                     <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ duration: 0.5 }}
-                        className="flex justify-center mb-8"
+                        className="flex justify-center mb-6 sm:mb-8"
                     >
                         <div className="relative">
                             <div className="absolute inset-0 bg-purple-500 rounded-full filter blur-md opacity-50"></div>
-                            <Avatar className="w-32 h-32 sm:w-48 sm:h-48 border-4 border-purple-900 shadow-lg relative">
+                            <Avatar className="w-28 h-28 sm:w-48 sm:h-48 border-4 border-purple-900 shadow-lg relative">
                                 <AvatarImage src="https://avatars.githubusercontent.com/u/89455522?v=4" alt="Jefino" />
                                 <AvatarFallback>JT</AvatarFallback>
                             </Avatar>
@@ -51,7 +51,7 @@ export default function Home() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
-                        className="flex justify-center space-x-4 mt-8"
+                        className="flex justify-center space-x-4 mt-6 sm:mt-8"
                     >
                         <Button variant="ghost" size="icon" className="bg-gray-800 hover:bg-gray-700 transition-colors">
                             <a href="https://github.com/Jefino9488" target="_blank" rel="noopener noreferrer">
@@ -80,10 +80,10 @@ export default function Home() {
                     </motion.div>
                 </header>
 
-                <main className="space-y-10">
+                <main className="space-y-8 sm:space-y-10">
                     <section>
                         <Card className="bg-gray-800 border-none text-white rounded-3xl shadow-lg">
-                            <CardContent className="pt-8 px-4 sm:px-8">
+                            <CardContent className="pt-6 px-4 sm:px-8">
                                 <p className="text-lg sm:text-xl leading-relaxed text-gray-200">
                                     I'm a passionate Full Stack Developer with expertise in building modern web applications.
                                     I love turning complex problems into simple, beautiful, and intuitive solutions.
@@ -154,8 +154,8 @@ export default function Home() {
                     </section>
                 </main>
             </div>
-            <footer className="bg-gray-900 rounded-t-3xl mt-16">
-                <div className="max-w-6xl mx-auto px-6 py-8">
+            <footer className="bg-gray-900 rounded-t-3xl mt-12 sm:mt-16">
+                <div className="max-w-6xl mx-auto px-6 py-6 sm:py-8">
                     <div className="flex flex-col items-center justify-center space-y-4">
                         <div className="flex space-x-6">
                             <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
