@@ -158,13 +158,13 @@ export default function Home() {
                 <div className="max-w-6xl mx-auto px-6 py-6 sm:py-8">
                     <div className="flex flex-col items-center justify-center space-y-4">
                         <div className="flex space-x-6">
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
+                            <a href="/about" className="text-gray-400 hover:text-white transition-colors text-sm">
                                 About
                             </a>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
+                            <a href="/privacy-policy" className="text-gray-400 hover:text-white transition-colors text-sm">
                                 Privacy Policy
                             </a>
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
+                            <a href="/terms-of-service" className="text-gray-400 hover:text-white transition-colors text-sm">
                                 Terms of Service
                             </a>
                         </div>
