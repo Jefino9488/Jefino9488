@@ -7,8 +7,8 @@ export default function PrivacyPolicy() {
         <div className="min-h-screen bg-gray-950 text-white py-16 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
                 <Link to="/">
-                    <Button variant="ghost" className="mb-8 hover:bg-gray-800">
-                        <ArrowLeft className="mr-2 h-5 w-5" /> Back to Home
+                    <Button variant="ghost" className="mb-8 hover:bg-gray-800 hover:text-white transition-colors">
+                        <ArrowLeft className="mr-2 h-5 w-5 text-white" /> Back to Home
                     </Button>
                 </Link>
                 <div className="bg-gray-800 p-8 rounded-2xl shadow-lg">

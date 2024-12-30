@@ -40,8 +40,8 @@ export default function BlogPost() {
                     <CardContent>
                         <h1 className="text-3xl font-bold mb-4">Post not found</h1>
                         <Link to="/blog">
-                            <Button variant="ghost" className="hover:bg-gray-700">
-                                <ArrowLeft className="mr-2 h-5 w-5" /> Back to Blog
+                            <Button variant="ghost" className="mb-8 hover:bg-gray-700 hover:text-white transition-colors">
+                                <ArrowLeft className="mr-2 h-5 w-5 text-white" /> Back to Bolg
                             </Button>
                         </Link>
                     </CardContent>
@@ -54,8 +54,8 @@ export default function BlogPost() {
         <div className="min-h-screen bg-gray-950 py-16 px-4 sm:px-6 lg:px-8 text-white">
             <div className="max-w-3xl mx-auto">
                 <Link to="/blog">
-                    <Button variant="ghost" className="mb-8 hover:bg-gray-800">
-                        <ArrowLeft className="mr-2 h-5 w-5" /> Back to Blog
+                    <Button variant="ghost" className="mb-8 hover:bg-gray-800 hover:text-white transition-colors">
+                        <ArrowLeft className="mr-2 h-5 w-5 text-white" /> Back to Blogs
                     </Button>
                 </Link>
                 <Card className="bg-gray-800 border-none text-white rounded-2xl shadow-lg overflow-hidden">
