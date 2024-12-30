@@ -33,7 +33,7 @@ export default function Home() {
                     >
                         <div className="relative">
                             <div className="absolute inset-0 bg-purple-500 rounded-full filter blur-md opacity-50"></div>
-                            <Avatar className="w-48 h-48 border-4 border-purple-900 shadow-lg relative">
+                            <Avatar className="w-32 h-32 sm:w-48 sm:h-48 border-4 border-purple-900 shadow-lg relative">
                                 <AvatarImage src="https://avatars.githubusercontent.com/u/89455522?v=4" alt="Jefino" />
                                 <AvatarFallback>JT</AvatarFallback>
                             </Avatar>
@@ -44,8 +44,8 @@ export default function Home() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
                     >
-                        <h1 className="text-5xl font-bold mb-4 tracking-tight">Jefino</h1>
-                        <p className="text-2xl text-gray-300 font-light">Full Stack Developer</p>
+                        <h1 className="text-3xl sm:text-5xl font-bold mb-4 tracking-tight">Jefino</h1>
+                        <p className="text-lg sm:text-2xl text-gray-300 font-light">Full Stack Developer</p>
                     </motion.div>
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -80,11 +80,11 @@ export default function Home() {
                     </motion.div>
                 </header>
 
-                <main className="space-y-12">
+                <main className="space-y-10">
                     <section>
                         <Card className="bg-gray-800 border-none text-white rounded-3xl shadow-lg">
-                            <CardContent className="pt-8 px-8">
-                                <p className="text-xl leading-relaxed text-gray-200">
+                            <CardContent className="pt-8 px-4 sm:px-8">
+                                <p className="text-lg sm:text-xl leading-relaxed text-gray-200">
                                     I'm a passionate Full Stack Developer with expertise in building modern web applications.
                                     I love turning complex problems into simple, beautiful, and intuitive solutions.
                                     With a keen eye for design and a knack for writing clean, efficient code,
@@ -108,13 +108,13 @@ export default function Home() {
                         <Card className="bg-gradient-to-br from-purple-900 to-indigo-900 border-none text-white hover:from-purple-800 hover:to-indigo-800 transition-colors rounded-3xl shadow-lg overflow-hidden">
                             <Link to="/blog" className="block">
                                 <CardHeader className="pb-2">
-                                    <CardTitle className="flex items-center text-2xl font-bold">
+                                    <CardTitle className="flex items-center text-lg sm:text-2xl font-bold">
                                         <BookOpen className="h-8 w-8 mr-3" />
                                         Explore My Blogs
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <p className="text-lg text-gray-200 mb-4">Dive into my latest thoughts and insights on technology, development, and more.</p>
+                                    <p className="text-lg sm:text-xl text-gray-200 mb-4">Dive into my latest thoughts and insights on technology, development, and more.</p>
                                     <div className="flex items-center text-purple-300 hover:text-purple-100 transition-colors">
                                         <span className="mr-2 font-semibold">Read latest posts</span>
                                         <ArrowRight className="h-5 w-5" />
@@ -137,7 +137,7 @@ export default function Home() {
                                 >
                                     <Card className="h-full bg-gray-800 border-none text-white hover:bg-gray-700 transition-colors rounded-3xl shadow-lg">
                                         <CardHeader>
-                                            <CardTitle className="flex justify-between items-center text-xl">
+                                            <CardTitle className="flex justify-between items-center text-lg sm:text-xl">
                                                 {project.name}
                                                 <a href={project.link} target="_blank" rel="noopener noreferrer">
                                                     <ExternalLink className="h-5 w-5" />
@@ -145,7 +145,7 @@ export default function Home() {
                                             </CardTitle>
                                         </CardHeader>
                                         <CardContent>
-                                            <p className="text-gray-300">{project.description}</p>
+                                            <p className="text-gray-300 text-sm sm:text-base">{project.description}</p>
                                         </CardContent>
                                     </Card>
                                 </motion.div>
@@ -177,4 +177,3 @@ export default function Home() {
         </div>
     )
 }
-

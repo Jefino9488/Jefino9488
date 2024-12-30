@@ -5,7 +5,7 @@ import { ArrowLeft, Calendar, Clock, ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const blogPosts = [
-    { id: 1, title: "GGetting Started with FrameworkPatcher", excerpt: "Tool to modify miui/hyper frameworks", date: "2023-06-01", readTime: "5 min read" },
+    { id: 1, title: "Getting Started with FrameworkPatcher", excerpt: "Tool to modify miui/hyper frameworks", date: "2023-06-01", readTime: "5 min read" },
     { id: 2, title: "Advanced TypeScript Techniques", excerpt: "Exploring advanced features of TypeScript", date: "2023-06-15", readTime: "8 min read" },
 ]
 
@@ -14,11 +14,11 @@ export default function BlogList() {
         <div className="min-h-screen bg-gray-950 py-16 px-4 sm:px-6 lg:px-8 text-white">
             <div className="max-w-6xl mx-auto">
                 <header className="mb-16 text-center">
-                    <h1 className="text-5xl font-bold mb-4 tracking-tight">My Blog</h1>
+                    <h1 className="text-4xl sm:text-5xl font-bold mb-4 tracking-tight">My Blogs</h1>
                     <p className="text-xl text-gray-400 max-w-2xl mx-auto">Thoughts, ideas, and insights on technology, development, and more</p>
                 </header>
 
-                <main className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {blogPosts.map((post, index) => (
                         <motion.div
                             key={post.id}
@@ -29,7 +29,7 @@ export default function BlogList() {
                             <Link to={`/blog/${post.id}`}>
                                 <Card className="bg-gray-800 border-none text-white hover:bg-gray-700 transition-all duration-300 rounded-2xl shadow-lg transform hover:-translate-y-1">
                                     <CardHeader>
-                                        <CardTitle className="text-2xl font-semibold mb-2">{post.title}</CardTitle>
+                                        <CardTitle className="text-xl sm:text-2xl font-semibold mb-2">{post.title}</CardTitle>
                                         <div className="flex items-center text-sm text-gray-400 mb-2">
                                             <Calendar className="mr-2 h-4 w-4" />
                                             <span className="mr-4">{post.date}</span>

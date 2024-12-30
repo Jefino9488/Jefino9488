@@ -60,7 +60,7 @@ export default function BlogPost() {
                 </Link>
                 <Card className="bg-gray-800 border-none text-white rounded-2xl shadow-lg overflow-hidden">
                     <CardHeader className="bg-gradient-to-r from-purple-900 to-indigo-900 p-8">
-                        <CardTitle className="text-4xl font-bold mb-4">{post.title}</CardTitle>
+                        <CardTitle className="text-3xl sm:text-4xl font-bold mb-4">{post.title}</CardTitle>
                         <div className="flex items-center text-sm text-gray-300">
                             <Calendar className="mr-2 h-4 w-4" />
                             <span className="mr-4">{post.date}</span>
@@ -69,17 +69,17 @@ export default function BlogPost() {
                         </div>
                     </CardHeader>
                     <CardContent className="p-8 space-y-8">
-                        <p className="text-lg">{post.content.introduction}</p>
+                        <p className="text-lg sm:text-xl">{post.content.introduction}</p>
                         {post.content.sections.map((section, index) => (
                             <div key={index}>
-                                <h2 className="text-2xl font-semibold mb-4">{section.title}</h2>
+                                <h2 className="text-2xl sm:text-3xl font-semibold mb-4">{section.title}</h2>
                                 {section.content.map((para, i) => (
-                                    <p key={i} className="mb-4">{para}</p>
+                                    <p key={i} className="mb-4 text-lg sm:text-xl">{para}</p>
                                 ))}
                                 {section.list && (
                                     <ul className="list-disc pl-6 space-y-2">
                                         {section.list.map((item, i) => (
-                                            <li key={i} className="text-lg">{item}</li>
+                                            <li key={i} className="text-lg sm:text-xl">{item}</li>
                                         ))}
                                     </ul>
                                 )}
