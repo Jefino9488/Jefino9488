@@ -154,19 +154,20 @@ export default function Home() {
                     </section>
                 </main>
             </div>
+
             <footer className="bg-gray-900 rounded-t-3xl mt-12 sm:mt-16">
                 <div className="max-w-6xl mx-auto px-6 py-6 sm:py-8">
                     <div className="flex flex-col items-center justify-center space-y-4">
                         <div className="flex space-x-6">
-                            <a href="/about" className="text-gray-400 hover:text-white transition-colors text-sm">
+                            <Link to="/about" className="text-gray-400 hover:text-white transition-colors text-sm">
                                 About
-                            </a>
-                            <a href="/privacy-policy" className="text-gray-400 hover:text-white transition-colors text-sm">
+                            </Link>
+                            <Link to="/privacy-policy" className="text-gray-400 hover:text-white transition-colors text-sm">
                                 Privacy Policy
-                            </a>
-                            <a href="/terms-of-service" className="text-gray-400 hover:text-white transition-colors text-sm">
+                            </Link>
+                            <Link to="/terms-of-service" className="text-gray-400 hover:text-white transition-colors text-sm">
                                 Terms of Service
-                            </a>
+                            </Link>
                         </div>
                         <div className="text-gray-400 text-sm">
                             © {new Date().getFullYear()} Jefino. All rights reserved.
@@ -175,5 +176,5 @@ export default function Home() {
                 </div>
             </footer>
         </div>
-    )
+    );
 }
