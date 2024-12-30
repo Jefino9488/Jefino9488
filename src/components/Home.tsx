@@ -84,11 +84,11 @@ export default function Home() {
                     <section>
                         <Card className="bg-gray-800 border-none text-white rounded-3xl shadow-lg">
                             <CardContent className="pt-6 px-4 sm:px-8">
-                                <p className="text-lg sm:text-xl leading-relaxed text-gray-200">
-                                    I'm a passionate Full Stack Developer with expertise in building modern web applications.
-                                    I love turning complex problems into simple, beautiful, and intuitive solutions.
-                                    With a keen eye for design and a knack for writing clean, efficient code,
-                                    I strive to create seamless user experiences that make a difference.
+                                <p className="text-lg sm:text-xl leading-relaxed text-gray-200 text-center">
+                                    As a dedicated student and aspiring Full Stack Developer, I am passionate about
+                                    building modern, user-friendly web applications. I enjoy crafting intuitive designs
+                                    and writing efficient code, constantly working to expand my expertise and create
+                                    impactful digital solutions.
                                 </p>
                             </CardContent>
                         </Card>
@@ -97,7 +97,8 @@ export default function Home() {
                     <section>
                         <div className="flex flex-wrap justify-center gap-4">
                             {skills.map((skill, index) => (
-                                <Badge key={index} variant="secondary" className="text-lg py-2 px-4 bg-gray-800 hover:bg-gray-700 transition-colors rounded-2xl text-white">
+                                <Badge key={index} variant="secondary"
+                                       className="text-lg py-2 px-4 bg-gray-800 hover:bg-gray-700 transition-colors rounded-2xl text-white">
                                     {skill}
                                 </Badge>
                             ))}
