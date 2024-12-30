@@ -66,13 +66,13 @@ export default function Home() {
                             </a>
                         </Button>
                         <Button variant="ghost" size="icon" className="bg-gray-800 hover:bg-gray-700 transition-colors">
-                            <a href="#" target="_blank" rel="noopener noreferrer">
+                            <a href="https://www.linkedin.com/in/jefino9488/" target="_blank" rel="noopener noreferrer">
                                 <Linkedin className="h-6 w-6" />
                                 <span className="sr-only">LinkedIn</span>
                             </a>
                         </Button>
                         <Button variant="ghost" size="icon" className="bg-gray-800 hover:bg-gray-700 transition-colors">
-                            <a href="#" target="_blank" rel="noopener noreferrer">
+                            <a href="https://telegram.me/jefino9488" target="_blank" rel="noopener noreferrer">
                                 <Send className="h-6 w-6" />
                                 <span className="sr-only">Telegram</span>
                             </a>
