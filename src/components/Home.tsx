@@ -16,18 +16,19 @@ export default function Home() {
         <div className="min-h-screen bg-gray-950 flex flex-col text-white">
             <div className="flex-grow max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
                 <header className="mb-16">
-                    <Card className="bg-gray-800 border-none text-white rounded-3xl shadow-lg overflow-hidden">
+                    <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-none text-white rounded-3xl shadow-lg overflow-hidden">
                         <CardContent className="p-6 md:p-8">
-                            <div
-                                className="flex flex-col items-center md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-8">
+                            <div className="flex flex-col items-center md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-8">
                                 <motion.div
                                     initial={{scale: 0}}
                                     animate={{scale: 1}}
                                     transition={{duration: 0.5}}
-                                    className="flex-shrink-0"
+                                    className="flex-shrink-0 relative"
                                 >
+                                    <div className="absolute inset-0 bg-purple-800 rounded-full filter blur-xl opacity-50"></div>
                                     <Avatar
-                                        className="w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 border-4 border-purple-600 shadow-lg">
+                                        className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-4 border-purple-600 shadow-lg relative"
+                                    >
                                         <AvatarImage src="https://avatars.githubusercontent.com/u/89455522?v=4"
                                                      alt="Jefino"/>
                                         <AvatarFallback>JT</AvatarFallback>
@@ -39,8 +40,10 @@ export default function Home() {
                                         animate={{opacity: 1, y: 0}}
                                         transition={{duration: 0.5, delay: 0.2}}
                                     >
-                                        <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-2 tracking-tight">Jefino</h1>
-                                        <p className="text-lg sm:text-xl md:text-2xl text-purple-400 font-light mb-4">
+                                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-400">
+                                            Jefino
+                                        </h1>
+                                        <p className="text-xl sm:text-2xl md:text-3xl text-purple-300 font-light mb-4">
                                             Full Stack Developer
                                         </p>
                                         <div className="flex flex-col space-y-2 mb-6">
@@ -56,28 +59,28 @@ export default function Home() {
                                         transition={{duration: 0.5, delay: 0.4}}
                                         className="flex justify-center md:justify-start space-x-4"
                                     >
-                                        <Button variant="ghost" size="icon"
-                                                className="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                        <Button variant="outline" size="icon"
+                                                className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600">
                                             <a href="https://github.com/Jefino9488" target="_blank"
                                                rel="noopener noreferrer" aria-label="GitHub">
                                                 <Github className="h-5 w-5"/>
                                             </a>
                                         </Button>
-                                        <Button variant="ghost" size="icon"
-                                                className="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                        <Button variant="outline" size="icon"
+                                                className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600">
                                             <a href="mailto:jefinojacob9488@gmail.com" aria-label="Email">
                                                 <Mail className="h-5 w-5"/>
                                             </a>
                                         </Button>
-                                        <Button variant="ghost" size="icon"
-                                                className="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                        <Button variant="outline" size="icon"
+                                                className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600">
                                             <a href="https://www.linkedin.com/in/jefino9488/" target="_blank"
                                                rel="noopener noreferrer" aria-label="LinkedIn">
                                                 <Linkedin className="h-5 w-5"/>
                                             </a>
                                         </Button>
-                                        <Button variant="ghost" size="icon"
-                                                className="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                        <Button variant="outline" size="icon"
+                                                className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600">
                                             <a href="https://telegram.me/jefino9488" target="_blank"
                                                rel="noopener noreferrer" aria-label="Telegram">
                                                 <Send className="h-5 w-5"/>
@@ -210,3 +213,4 @@ export default function Home() {
         </div>
     );
 }
+
