@@ -37,50 +37,44 @@ const FEATURED_REPOS: string[] = [
     'HyperMod-Builder',
 ] as const;
 
-async function getGithubProjects(): Promise<{ projects: Project[], error?: string }> {
+async function getGithubProjects(): Promise<{ projects: Project[]; error?: string }> {
+    const API_URL = 'https://api.github.com/users/Jefino9488/repos';
     try {
-        const response = await fetch('https://api.github.com/users/Jefino9488/repos');
-
-        if (!response.ok) throw new Error('Failed to fetch repositories');
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+            return { projects: [], error: `Failed to fetch repositories: ${response.statusText}` };
+        }
 
         const repos: GitHubRepo[] = await response.json();
 
-        const projects = repos
-            .filter((repo): repo is GitHubRepo => FEATURED_REPOS.includes(repo.name))
-            .sort((a, b) =>
-                FEATURED_REPOS.indexOf(a.name) -
-                FEATURED_REPOS.indexOf(b.name)
-            )
-            .map(repo => ({
-                title: repo.name.toLowerCase(),
-                description: repo.description || '',
-                tech: getTechStack(repo),
-                stats: {
-                    stars: repo.stargazers_count,
-                    forks: repo.forks_count
-                },
-                link: repo.html_url
-            }));
+        const projects = FEATURED_REPOS.reduce<Project[]>((acc, repoName) => {
+            const repo = repos.find(r => r.name === repoName);
+            if (repo) {
+                const techStack = new Set<string>();
+                if (repo.language) techStack.add(repo.language);
+                repo.topics
+                    ?.filter(topic => !repo.language || !topic.toLowerCase().includes(repo.language.toLowerCase()))
+                    .slice(0, 2)
+                    .forEach(topic =>
+                        techStack.add(topic.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase()))
+                    );
+
+                acc.push({
+                    title: repo.name.toLowerCase(),
+                    description: repo.description || '',
+                    tech: Array.from(techStack),
+                    stats: { stars: repo.stargazers_count, forks: repo.forks_count },
+                    link: repo.html_url,
+                });
+            }
+            return acc;
+        }, []);
 
         return { projects };
     } catch (error) {
-        console.error('Error fetching GitHub repos:', error);
+        console.error('Error fetching GitHub repos:', error instanceof Error ? error.message : String(error));
         return { projects: [], error: 'Failed to load projects' };
     }
-}
-
-function getTechStack(repo: GitHubRepo): string[] {
-    const techStack: string[] = [];
-    if (repo.language) techStack.push(repo.language);
-    if (repo.topics) {
-        const filteredTopics = repo.topics
-            .filter(topic => !topic.toLowerCase().includes(repo.language?.toLowerCase() || ''))
-            .slice(0, 2)
-            .map(topic => topic.replace(/-/g, ' ').split(' ')
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
-        techStack.push(...filteredTopics);
-    }
-    return techStack;
 }
 
 export default function Home() {
