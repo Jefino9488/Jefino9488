@@ -6,6 +6,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import About from './components/About';
 import { useSmoothScroll } from './hooks/useSmoothScroll';
+import { ProjectsProvider } from './components/ProjectsContext';
 
 function AppContent() {
     useSmoothScroll();
@@ -24,7 +25,9 @@ function AppContent() {
 function App() {
     return (
         <Router>
-            <AppContent />
+            <ProjectsProvider>
+                <AppContent />
+            </ProjectsProvider>
         </Router>
     );
 }
