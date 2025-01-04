@@ -5,18 +5,26 @@ import BlogPost from './components/BlogPost';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import About from './components/About';
+import { useSmoothScroll } from './hooks/useSmoothScroll';
 
+function AppContent() {
+    useSmoothScroll();
+
+    return (
+        <Routes>
+            <Route path="/" element={<Home/>}/>
+            <Route path="/blog" element={<BlogList/>}/>
+            <Route path="/blog/:id" element={<BlogPost/>}/>
+            <Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
+            <Route path="/terms-of-service" element={<TermsOfService/>}/>
+            <Route path="/about" element={<About/>}/>
+        </Routes>
+    );
+}
 function App() {
     return (
         <Router>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/blog" element={<BlogList />} />
-                <Route path="/blog/:id" element={<BlogPost />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms-of-service" element={<TermsOfService />} />
-                <Route path="/about" element={<About />} />
-            </Routes>
+            <AppContent />
         </Router>
     );
 }

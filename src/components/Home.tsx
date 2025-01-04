@@ -1,100 +1,191 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Github, Mail, Linkedin, ExternalLink, Send, BookOpen, ArrowRight } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Github, Mail, Linkedin, ExternalLink, Send, BookOpen, ArrowRight, Star, GitFork, MapPin } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-const projects = [
-    { name: "FrameworkPatcher", description: "Automates the workflow for patching MIUI frameworks", link: "https://github.com/Jefino9488/FrameworkPatcher" },
-    { name: "Fastboot Flasher", description: "Simplifies and secures the process of flashing ROMs to devices", link: "https://github.com/Jefino9488/Fastboot-Flasher" },
-    { name: "Chat-with-PDF", description: "Enables question-answering using Google Generative AI and Chroma for vector-based retrieval", link: "https://github.com/Jefino9488/Chat-with-PDF" },
-    { name: "AI_Chatbot", description: "AI-driven chatbot that can converse and generate images based on user prompts", link: "https://github.com/Jefino9488/AI_Chatbot" },
-    { name: "ChatRoom", description: "A private, end-to-end encrypted platform for secure idea sharing", link: "https://github.com/Jefino9488/ChatRoom" },
-    { name: "HyperMod-Builder", description: "Streamlines the process of building custom ROMs for various devices", link: "https://github.com/Jefino9488/HyperMod-Builder" },
-]
+interface GitHubRepo {
+    name: string;
+    description: string | null;
+    html_url: string;
+    language: string | null;
+    topics: string[];
+    stargazers_count: number;
+    forks_count: number;
+}
 
-const skills = ["Python", "Java", "JavaScript", "React", "Tailwind CSS", "Flask", "MySql", "AWS", "Docker", "FireBase"]
+interface Project {
+    title: string;
+    description: string;
+    tech: string[];
+    stats: {
+        stars: number;
+        forks: number;
+    };
+    link: string;
+}
+
+const FEATURED_REPOS: string[] = [
+    'FrameworkPatcher',
+    'Fastboot-Flasher',
+    'Chat-with-PDF',
+    'AI_Chatbot',
+    'ChatRoom',
+    'HyperMod-Builder',
+] as const;
+
+async function getGithubProjects(): Promise<{ projects: Project[], error?: string }> {
+    try {
+        const response = await fetch('https://api.github.com/users/Jefino9488/repos');
+
+        if (!response.ok) throw new Error('Failed to fetch repositories');
+
+        const repos: GitHubRepo[] = await response.json();
+
+        const projects = repos
+            .filter((repo): repo is GitHubRepo => FEATURED_REPOS.includes(repo.name))
+            .sort((a, b) =>
+                FEATURED_REPOS.indexOf(a.name) -
+                FEATURED_REPOS.indexOf(b.name)
+            )
+            .map(repo => ({
+                title: repo.name.toLowerCase(),
+                description: repo.description || '',
+                tech: getTechStack(repo),
+                stats: {
+                    stars: repo.stargazers_count,
+                    forks: repo.forks_count
+                },
+                link: repo.html_url
+            }));
+
+        return { projects };
+    } catch (error) {
+        console.error('Error fetching GitHub repos:', error);
+        return { projects: [], error: 'Failed to load projects' };
+    }
+}
+
+function getTechStack(repo: GitHubRepo): string[] {
+    const techStack: string[] = [];
+    if (repo.language) techStack.push(repo.language);
+    if (repo.topics) {
+        const filteredTopics = repo.topics
+            .filter(topic => !topic.toLowerCase().includes(repo.language?.toLowerCase() || ''))
+            .slice(0, 2)
+            .map(topic => topic.replace(/-/g, ' ').split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '));
+        techStack.push(...filteredTopics);
+    }
+    return techStack;
+}
 
 export default function Home() {
-    const [, setHoveredProject] = useState<number | null>(null)
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            const { projects, error } = await getGithubProjects();
+            if (error) {
+                setError(error);
+            } else {
+                setProjects(projects);
+            }
+            setLoading(false);
+        };
+
+        fetchProjects();
+    }, []);
+
+    const skills = ["Python", "Java", "JavaScript", "React", "Tailwind CSS", "Flask", "MySql", "AWS", "Docker", "FireBase"];
 
     return (
         <div className="min-h-screen bg-gray-950 flex flex-col text-white">
-            <div className="flex-grow max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-                <header className="text-center mb-12 sm:mb-16">
-                    <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 0.5 }}
-                        className="flex justify-center mb-6 sm:mb-8"
-                    >
-                        <div className="relative">
-                            <div className="absolute inset-0 bg-purple-500 rounded-full filter blur-md opacity-50"></div>
-                            <Avatar className="w-28 h-28 sm:w-48 sm:h-48 border-4 border-purple-900 shadow-lg relative">
-                                <AvatarImage src="https://avatars.githubusercontent.com/u/89455522?v=4" alt="Jefino" />
-                                <AvatarFallback>JT</AvatarFallback>
-                            </Avatar>
-                        </div>
-                    </motion.div>
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                    >
-                        <h1 className="text-3xl sm:text-5xl font-bold mb-4 tracking-tight">Jefino</h1>
-                        <p className="text-lg sm:text-2xl text-gray-300 font-light">Full Stack Developer</p>
-                    </motion.div>
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.4 }}
-                        className="flex justify-center space-x-4 mt-6 sm:mt-8"
-                    >
-                        <Button variant="ghost" size="icon" className="bg-gray-800 hover:bg-gray-700 transition-colors">
-                            <a href="https://github.com/Jefino9488" target="_blank" rel="noopener noreferrer">
-                                <Github className="h-6 w-6" />
-                                <span className="sr-only">GitHub</span>
-                            </a>
-                        </Button>
-                        <Button variant="ghost" size="icon" className="bg-gray-800 hover:bg-gray-700 transition-colors">
-                            <a href="mailto:jefinojacob9488@gmail.com">
-                                <Mail className="h-6 w-6" />
-                                <span className="sr-only">Email</span>
-                            </a>
-                        </Button>
-                        <Button variant="ghost" size="icon" className="bg-gray-800 hover:bg-gray-700 transition-colors">
-                            <a href="https://www.linkedin.com/in/jefino9488/" target="_blank" rel="noopener noreferrer">
-                                <Linkedin className="h-6 w-6" />
-                                <span className="sr-only">LinkedIn</span>
-                            </a>
-                        </Button>
-                        <Button variant="ghost" size="icon" className="bg-gray-800 hover:bg-gray-700 transition-colors">
-                            <a href="https://telegram.me/jefino9488" target="_blank" rel="noopener noreferrer">
-                                <Send className="h-6 w-6" />
-                                <span className="sr-only">Telegram</span>
-                            </a>
-                        </Button>
-                    </motion.div>
+            <div className="flex-grow max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+                <header className="mb-16">
+                    <Card className="bg-gray-800 border-none text-white rounded-3xl shadow-lg overflow-hidden">
+                        <CardContent className="p-6 md:p-8">
+                            <div
+                                className="flex flex-col items-center md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-8">
+                                <motion.div
+                                    initial={{scale: 0}}
+                                    animate={{scale: 1}}
+                                    transition={{duration: 0.5}}
+                                    className="flex-shrink-0"
+                                >
+                                    <Avatar
+                                        className="w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 border-4 border-purple-600 shadow-lg">
+                                        <AvatarImage src="https://avatars.githubusercontent.com/u/89455522?v=4"
+                                                     alt="Jefino"/>
+                                        <AvatarFallback>JT</AvatarFallback>
+                                    </Avatar>
+                                </motion.div>
+                                <div className="flex-grow text-center md:text-left">
+                                    <motion.div
+                                        initial={{opacity: 0, y: 20}}
+                                        animate={{opacity: 1, y: 0}}
+                                        transition={{duration: 0.5, delay: 0.2}}
+                                    >
+                                        <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-2 tracking-tight">Jefino</h1>
+                                        <p className="text-lg sm:text-xl md:text-2xl text-purple-400 font-light mb-4">
+                                            Full Stack Developer
+                                        </p>
+                                        <div className="flex flex-col space-y-2 mb-6">
+                                            <p className="flex items-center justify-center md:justify-start text-gray-300">
+                                                <MapPin className="mr-2 h-5 w-5"/>
+                                                Based in Chennai, India
+                                            </p>
+                                        </div>
+                                    </motion.div>
+                                    <motion.div
+                                        initial={{opacity: 0}}
+                                        animate={{opacity: 1}}
+                                        transition={{duration: 0.5, delay: 0.4}}
+                                        className="flex justify-center md:justify-start space-x-4"
+                                    >
+                                        <Button variant="ghost" size="icon"
+                                                className="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                            <a href="https://github.com/Jefino9488" target="_blank"
+                                               rel="noopener noreferrer" aria-label="GitHub">
+                                                <Github className="h-5 w-5"/>
+                                            </a>
+                                        </Button>
+                                        <Button variant="ghost" size="icon"
+                                                className="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                            <a href="mailto:jefinojacob9488@gmail.com" aria-label="Email">
+                                                <Mail className="h-5 w-5"/>
+                                            </a>
+                                        </Button>
+                                        <Button variant="ghost" size="icon"
+                                                className="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                            <a href="https://www.linkedin.com/in/jefino9488/" target="_blank"
+                                               rel="noopener noreferrer" aria-label="LinkedIn">
+                                                <Linkedin className="h-5 w-5"/>
+                                            </a>
+                                        </Button>
+                                        <Button variant="ghost" size="icon"
+                                                className="bg-gray-700 hover:bg-gray-600 transition-colors">
+                                            <a href="https://telegram.me/jefino9488" target="_blank"
+                                               rel="noopener noreferrer" aria-label="Telegram">
+                                                <Send className="h-5 w-5"/>
+                                            </a>
+                                        </Button>
+                                    </motion.div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
                 </header>
 
-                <main className="space-y-8 sm:space-y-10">
-                    <section>
-                        <Card className="bg-gray-800 border-none text-white rounded-3xl shadow-lg">
-                            <CardContent className="pt-6 px-4 sm:px-8">
-                                <p className="text-lg sm:text-xl leading-relaxed text-gray-200 text-center">
-                                    As a dedicated student and aspiring Full Stack Developer, I am passionate about
-                                    building modern, user-friendly web applications. I enjoy crafting intuitive designs
-                                    and writing efficient code, constantly working to expand my expertise and create
-                                    impactful digital solutions.
-                                </p>
-                            </CardContent>
-                        </Card>
-                    </section>
 
+                <main className="space-y-12">
                     <section>
+                        {/* <h2 className="text-2xl font-semibold mb-6 text-center">Skills</h2> */}
                         <div className="flex flex-wrap justify-center gap-4">
                             {skills.map((skill, index) => (
                                 <Badge key={index} variant="secondary"
@@ -106,19 +197,22 @@ export default function Home() {
                     </section>
 
                     <section>
-                        <Card className="bg-gradient-to-br from-purple-900 to-indigo-900 border-none text-white hover:from-purple-800 hover:to-indigo-800 transition-colors rounded-3xl shadow-lg overflow-hidden">
+                        <Card
+                            className="bg-gradient-to-br from-purple-900 to-indigo-900 border-none text-white hover:from-purple-800 hover:to-indigo-800 transition-colors rounded-3xl shadow-lg overflow-hidden">
                             <Link to="/blog" className="block">
                                 <CardHeader className="pb-2">
                                     <CardTitle className="flex items-center text-lg sm:text-2xl font-bold">
-                                        <BookOpen className="h-8 w-8 mr-3" />
+                                        <BookOpen className="h-8 w-8 mr-3"/>
                                         Explore My Blogs
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <p className="text-lg sm:text-xl text-gray-200 mb-4">Dive into my latest thoughts and insights on technology, development, and more.</p>
-                                    <div className="flex items-center text-purple-300 hover:text-purple-100 transition-colors">
+                                    <p className="text-lg sm:text-xl text-gray-200 mb-4">Dive into my latest thoughts
+                                        and insights on technology, development, and more.</p>
+                                    <div
+                                        className="flex items-center text-purple-300 hover:text-purple-100 transition-colors">
                                         <span className="mr-2 font-semibold">Read latest posts</span>
-                                        <ArrowRight className="h-5 w-5" />
+                                        <ArrowRight className="h-5 w-5"/>
                                     </div>
                                 </CardContent>
                             </Link>
@@ -126,47 +220,78 @@ export default function Home() {
                     </section>
 
                     <section>
-                        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                            {projects.map((project, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                                    onHoverStart={() => setHoveredProject(index)}
-                                    onHoverEnd={() => setHoveredProject(null)}
-                                >
-                                    <Card className="h-full bg-gray-800 border-none text-white hover:bg-gray-700 transition-colors rounded-3xl shadow-lg">
-                                        <CardHeader>
-                                            <CardTitle className="flex justify-between items-center text-lg sm:text-xl">
-                                                {project.name}
-                                                <a href={project.link} target="_blank" rel="noopener noreferrer">
-                                                    <ExternalLink className="h-5 w-5" />
-                                                </a>
-                                            </CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <p className="text-gray-300 text-sm sm:text-base">{project.description}</p>
-                                        </CardContent>
-                                    </Card>
-                                </motion.div>
-                            ))}
-                        </div>
+                        {/* <h2 className="text-2xl font-semibold mb-6 text-center">Projects</h2> */}
+                        {loading ? (
+                            <div className="text-center text-gray-400">Loading projects...</div>
+                        ) : error ? (
+                            <div className="text-center text-red-500">{error}</div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {projects.map((project) => (
+                                    <motion.div
+                                        key={project.title}
+                                        initial={{opacity: 0, y: 20}}
+                                        animate={{opacity: 1, y: 0}}
+                                        transition={{duration: 0.5}}
+                                    >
+                                        <div className="group relative h-56">
+                                            <div
+                                                className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                                            <div
+                                                className="relative backdrop-blur-xl bg-gray-800 rounded-3xl p-6 border border-gray-700 transition-all duration-300 group-hover:border-purple-500/50 h-full flex flex-col">
+                                                <h3 className="text-xl font-semibold mb-3 text-white">{project.title}</h3>
+                                                <p className="text-gray-300 mb-4 text-sm line-clamp-2">{project.description}</p>
+                                                <div className="flex flex-wrap gap-2 mb-4">
+                                                    {project.tech.map((tech) => (
+                                                        <span
+                                                            key={tech}
+                                                            className="px-3 py-1 bg-gray-700 rounded-full text-xs text-gray-300"
+                                                        >
+                                                            {tech}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                                <div className="flex justify-between items-center mt-auto">
+                                                    <div className="flex gap-4 text-sm text-gray-400">
+                                                        <span className="flex items-center gap-1">
+                                                            <Star className="w-4 h-4"/> {project.stats.stars}
+                                                        </span>
+                                                        <span className="flex items-center gap-1">
+                                                            <GitFork className="w-4 h-4"/> {project.stats.forks}
+                                                        </span>
+                                                    </div>
+                                                    <a
+                                                        href={project.link}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="p-2 text-gray-400 hover:text-purple-400 transition-colors"
+                                                    >
+                                                        <ExternalLink className="w-5 h-5"/>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        )}
                     </section>
                 </main>
             </div>
 
-            <footer className="bg-gray-900 rounded-t-3xl mt-12 sm:mt-16">
-                <div className="max-w-6xl mx-auto px-6 py-6 sm:py-8">
+            <footer className="bg-gray-900 rounded-t-3xl mt-12">
+                <div className="max-w-6xl mx-auto px-6 py-8">
                     <div className="flex flex-col items-center justify-center space-y-4">
                         <div className="flex space-x-6">
                             <Link to="/about" className="text-gray-400 hover:text-white transition-colors text-sm">
                                 About
                             </Link>
-                            <Link to="/privacy-policy" className="text-gray-400 hover:text-white transition-colors text-sm">
+                            <Link to="/privacy-policy"
+                                  className="text-gray-400 hover:text-white transition-colors text-sm">
                                 Privacy Policy
                             </Link>
-                            <Link to="/terms-of-service" className="text-gray-400 hover:text-white transition-colors text-sm">
+                            <Link to="/terms-of-service"
+                                  className="text-gray-400 hover:text-white transition-colors text-sm">
                                 Terms of Service
                             </Link>
                         </div>
