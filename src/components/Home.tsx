@@ -6,17 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Github, Mail, Linkedin, ExternalLink, Send, BookOpen, ArrowRight, Star, GitFork, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-interface GitHubRepo {
-    name: string;
-    description: string | null;
-    html_url: string;
-    language: string | null;
-    topics: string[];
-    stargazers_count: number;
-    forks_count: number;
-}
-
 interface Project {
     title: string;
     description: string;
@@ -27,48 +16,111 @@ interface Project {
     };
     link: string;
 }
+interface GitHubRepository {
+    name: string;
+    description: string | null;
+    url: string;
+    stargazers: {
+        totalCount: number;
+    };
+    forks: {
+        totalCount: number;
+    };
+    primaryLanguage: {
+        name: string;
+    } | null;
+    repositoryTopics: {
+        nodes: {
+            topic: {
+                name: string;
+            };
+        }[];
+    };
+}
 
-const FEATURED_REPOS: string[] = [
-    'FrameworkPatcher',
-    'Fastboot-Flasher',
-    'Chat-with-PDF',
-    'AI_Chatbot',
-    'ChatRoom',
-    'HyperMod-Builder',
-] as const;
+interface GitHubUser {
+    pinnedItems: {
+        nodes: GitHubRepository[];
+    };
+}
+
+interface GitHubGraphQLResponse {
+    data: {
+        user: GitHubUser;
+    };
+}
 
 async function getGithubProjects(): Promise<{ projects: Project[]; error?: string }> {
-    const API_URL = 'https://api.github.com/users/Jefino9488/repos';
+    const GITHUB_API_URL = 'https://api.github.com/graphql';
+    const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
+
+    const query = `
+        query {
+            user(login: "Jefino9488") {
+                pinnedItems(first: 6, types: [REPOSITORY]) {
+                    nodes {
+                        ... on Repository {
+                            name
+                            description
+                            url
+                            stargazers {
+                                totalCount
+                            }
+                            forks {
+                                totalCount
+                            }
+                            primaryLanguage {
+                                name
+                            }
+                            repositoryTopics(first: 3) {
+                                nodes {
+                                    topic {
+                                        name
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    `;
+
     try {
-        const response = await fetch(API_URL);
+        const response = await fetch(GITHUB_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${GITHUB_TOKEN}`,
+            },
+            body: JSON.stringify({ query }),
+        });
+
         if (!response.ok) {
             return { projects: [], error: `Failed to fetch repositories: ${response.statusText}` };
         }
 
-        const repos: GitHubRepo[] = await response.json();
+        const data: GitHubGraphQLResponse = await response.json();
+        const pinnedRepos = data.data.user.pinnedItems.nodes;
 
-        const projects = FEATURED_REPOS.reduce<Project[]>((acc, repoName) => {
-            const repo = repos.find(r => r.name === repoName);
-            if (repo) {
-                const techStack = new Set<string>();
-                if (repo.language) techStack.add(repo.language);
-                repo.topics
-                    ?.filter(topic => !repo.language || !topic.toLowerCase().includes(repo.language.toLowerCase()))
-                    .slice(0, 2)
-                    .forEach(topic =>
-                        techStack.add(topic.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase()))
-                    );
+        const projects = pinnedRepos.map((repo: GitHubRepository) => {
+            const techStack = new Set<string>();
+            if (repo.primaryLanguage?.name) techStack.add(repo.primaryLanguage.name);
 
-                acc.push({
-                    title: repo.name.toLowerCase(),
-                    description: repo.description || '',
-                    tech: Array.from(techStack),
-                    stats: { stars: repo.stargazers_count, forks: repo.forks_count },
-                    link: repo.html_url,
-                });
-            }
-            return acc;
-        }, []);
+            repo.repositoryTopics.nodes
+                .slice(0, 2)
+                .forEach((topic) =>
+                    techStack.add(topic.topic.name.replace(/-/g, ' ').replace(/\b\w/g, (char: string) => char.toUpperCase()))
+                );
+
+            return {
+                title: repo.name.toLowerCase(),
+                description: repo.description || '',
+                tech: Array.from(techStack),
+                stats: { stars: repo.stargazers.totalCount, forks: repo.forks.totalCount },
+                link: repo.url,
+            };
+        });
 
         return { projects };
     } catch (error) {
