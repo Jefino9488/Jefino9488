@@ -11,8 +11,11 @@ import Projects from './components/Projects';
 import Loader from './components/Loader';
 import TransitionWrapper from './components/TransitionWrapper';
 import { ProjectsProvider } from './components/ProjectsContext';
+import { useSmoothScroll } from './hooks/useSmoothScroll';
 
 function AppContent() {
+    useSmoothScroll();
+
     return (
         <AnimatePresence mode="wait">
             <Routes>

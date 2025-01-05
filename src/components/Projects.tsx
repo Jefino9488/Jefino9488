@@ -60,12 +60,6 @@ export default function Projects() {
     return (
         <div className="min-h-screen bg-gray-950 text-white py-16 px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
-                <Link to="/">
-                    <Button variant="ghost" className="mb-8 hover:bg-gray-800 hover:text-white transition-colors">
-                        <ArrowLeft className="mr-2 h-5 w-5 text-white" /> Back to Home
-                    </Button>
-                </Link>
-
                 {/* Heading Section */}
                 <h1 className="text-3xl sm:text-4xl font-bold text-center text-white mb-12">
                     My Projects
@@ -117,6 +111,15 @@ export default function Projects() {
                             </div>
                         </motion.div>
                     ))}
+                </div>
+
+                {/* Back to Home Button at the Bottom */}
+                <div className="mt-12 text-center">
+                    <Link to="/">
+                        <Button variant="ghost" className="hover:bg-gray-800 hover:text-white transition-colors">
+                            <ArrowLeft className="mr-2 h-5 w-5 text-white" /> Back to Home
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </div>
