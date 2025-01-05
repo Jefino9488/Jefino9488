@@ -6,7 +6,6 @@ import { motion } from 'framer-motion'
 
 const blogPosts = [
     { id: 1, title: "Getting Started with FrameworkPatcher", excerpt: "Tool to modify miui/hyper frameworks", date: "2023-06-01", readTime: "5 min read" },
-    { id: 2, title: "Advanced TypeScript Techniques", excerpt: "Exploring advanced features of TypeScript", date: "2023-06-15", readTime: "8 min read" },
 ]
 
 export default function BlogList() {

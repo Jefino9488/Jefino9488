@@ -1,31 +1,46 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Github, Mail, Linkedin, ExternalLink, Send, BookOpen, ArrowRight, Star, GitFork, MapPin } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { useProjects } from './ProjectsContext';
 
 export default function Home() {
     const { projects, loading, error } = useProjects();
 
-    const skills = ["Python", "Java", "JavaScript", "React", "Tailwind CSS", "Flask", "MySql", "AWS", "Docker", "FireBase"];
+    const navigate = useNavigate();
+
+    const dragY = useMotionValue(0);
+    const opacity = useTransform(dragY, [0, -100], [1, 0]);
+    const scale = useTransform(dragY, [0, -100], [1, 0.8]);
+
+    const handleDragEnd = (_event: MouseEvent | TouchEvent, info: PanInfo) => {
+        if (info.offset.y < -50) {
+            navigate('/projects');
+        }
+    };
+
+    const skills = ["Python", "Java", "JavaScript", "React", "Tailwind CSS", "Flask", "MySql", "Docker", "FireBase"];
 
     return (
-        <div className="min-h-screen bg-gray-950 flex flex-col text-white">
+        <div className="poppins-medium min-h-screen bg-gray-950 flex flex-col text-white">
             <div className="flex-grow max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
                 <header className="mb-8 sm:mb-12">
-                    <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-none text-white rounded-3xl shadow-lg overflow-hidden">
+                    <Card
+                        className="bg-gradient-to-br from-gray-900 to-gray-800 border-none text-white rounded-3xl shadow-lg overflow-hidden">
                         <CardContent className="p-6 md:p-8">
-                            <div className="flex flex-col items-center md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-8">
+                            <div
+                                className="flex flex-col items-center md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-8">
                                 <motion.div
                                     initial={{scale: 0}}
                                     animate={{scale: 1}}
                                     transition={{duration: 0.5}}
                                     className="flex-shrink-0 relative"
                                 >
-                                    <div className="absolute inset-0 bg-purple-800 rounded-full filter blur-xl opacity-50"></div>
+                                    <div
+                                        className="absolute inset-0 bg-purple-800 rounded-full filter blur-xl opacity-50"></div>
                                     <Avatar
                                         className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-4 border-purple-800 shadow-lg relative"
                                     >
@@ -40,14 +55,14 @@ export default function Home() {
                                         animate={{opacity: 1, y: 0}}
                                         transition={{duration: 0.5, delay: 0.2}}
                                     >
-                                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-purple-700">
+                                        <h1 className="rubik-mono-one-regular text-3xl sm:text-4xl md:text-5xl font-bold mb-2 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-purple-700">
                                             Jefino
                                         </h1>
-                                        <p className="text-xl sm:text-2xl md:text-3xl text-purple-300 font-light mb-4">
+                                        <p className="orbitron-regular text-xl sm:text-2xl md:text-3xl text-purple-300 font-light mb-4">
                                             Full Stack Developer
                                         </p>
                                         <div className="flex flex-col space-y-2 mb-6">
-                                            <p className="flex items-center justify-center md:justify-start text-gray-300">
+                                            <p className="poppins-regular flex items-center justify-center md:justify-start text-gray-300">
                                                 <MapPin className="mr-2 h-5 w-5"/>
                                                 Based in Chennai, India
                                             </p>
@@ -185,9 +200,36 @@ export default function Home() {
                     </section>
                 </main>
             </div>
-
-            <footer className="bg-gray-900 rounded-t-3xl mt-12">
-                <div className="max-w-6xl mx-auto px-6 py-8">
+            <motion.div
+                drag="y"
+                onDragEnd={handleDragEnd}
+                style={{
+                    y: dragY,
+                    opacity,
+                    scale,
+                    padding: "10px",
+                    borderRadius: "20px",
+                }}
+                dragConstraints={{ top: -100, bottom: 0 }}
+                className="cursor-grab active:cursor-grabbing transition-all ease-in-out"
+            >
+                <div className="flex flex-col items-center justify-center">
+                    <p className="text-gray-300 text-xs sm:text-sm mb-2 animate-pulse text-center">
+                        Pull up to explore projects
+                    </p>
+                    <motion.div
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                        }}
+                        className="w-8 h-1.5 sm:w-12 sm:h-2 bg-gray-500 rounded-full"
+                    ></motion.div>
+                </div>
+            </motion.div>
+            <footer className="bg-gray-900 rounded-t-3xl mt-8">
+                <div className="max-w-6xl mx-auto px-6 py-6">
                     <div className="flex flex-col items-center justify-center space-y-4">
                         <div className="flex space-x-6">
                             <Link to="/about" className="text-gray-400 hover:text-white transition-colors text-sm">

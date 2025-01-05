@@ -1,9 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway+Dots&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background-home: #121212;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -62,5 +63,55 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-color: var(--background-home);
+  }
+}
+.anton-regular {
+  font-family: "Anton", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.orbitron-regular {
+  font-family: "Orbitron", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+.poppins-regular {
+  font-family: "Poppins", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.poppins-medium {
+  font-family: "Poppins", serif;
+  font-weight: 500;
+  font-style: normal;
+}
+@layer components {
+  .animate-pulse {
+    animation: pulse 1.8s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+  }
+  @keyframes pulse {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    25% {
+      opacity: 0.75;
+      transform: scale(1.02);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(1);
+    }
+    75% {
+      opacity: 0.75;
+      transform: scale(1.02);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 }
