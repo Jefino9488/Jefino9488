@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft, Calendar, Clock, ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 
-const blogPosts = [
-    { id: 1, title: "Getting Started with FrameworkPatcher", excerpt: "Tool to modify miui/hyper frameworks", date: "2023-06-01", readTime: "5 min read" },
-]
+import post1 from '@/blogPosts/post1.json'
+import post2 from '@/blogPosts/post2.json'
+
+const blogPosts = [post1, post2];
 
 export default function BlogList() {
     return (
