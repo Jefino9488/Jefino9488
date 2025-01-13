@@ -11,10 +11,10 @@ const blogPosts = [post1, post2];
 
 export default function BlogList() {
     return (
-        <div className="min-h-screen bg-gray-950 py-16 px-4 sm:px-6 lg:px-8 text-white">
+        <div className="min-h-screen bg-[#11111b] py-16 px-4 sm:px-6 lg:px-8 text-[#cdd6f4]">
             <div className="max-w-6xl mx-auto">
                 <header className="mb-16 text-center">
-                    <h1 className="text-4xl sm:text-5xl font-bold mb-4 tracking-tight">My Blogs</h1>
+                    <h1 className="text-4xl sm:text-5xl font-bold mb-4 tracking-tight text-[#cba6f7]">My Blogs</h1>
                     <p className="text-xl text-gray-400 max-w-2xl mx-auto">Thoughts, ideas, and insights on technology, development, and more</p>
                 </header>
 
@@ -27,21 +27,21 @@ export default function BlogList() {
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
                             <Link to={`/blog/${post.id}`}>
-                                <Card className="bg-gray-800 border-none text-white hover:bg-gray-700 transition-all duration-300 rounded-2xl shadow-lg transform hover:-translate-y-1">
+                                <Card className="bg-[#313244] border-none text-[#cdd6f4] hover:bg-[#45475a] transition-all duration-300 rounded-2xl shadow-lg transform hover:-translate-y-1">
                                     <CardHeader>
                                         <CardTitle className="text-xl sm:text-2xl font-semibold mb-2">{post.title}</CardTitle>
                                         <div className="flex items-center text-sm text-gray-400 mb-2">
-                                            <Calendar className="mr-2 h-4 w-4" />
+                                            <Calendar className="mr-2 h-4 w-4 text-[#89b4fa]" />
                                             <span className="mr-4">{post.date}</span>
-                                            <Clock className="mr-2 h-4 w-4" />
+                                            <Clock className="mr-2 h-4 w-4 text-[#89b4fa]" />
                                             <span>{post.readTime}</span>
                                         </div>
                                     </CardHeader>
                                     <CardContent>
                                         <p className="text-gray-300 mb-4">{post.excerpt}</p>
-                                        <div className="flex items-center text-purple-400 hover:text-purple-300 transition-colors">
+                                        <div className="flex items-center text-[#cba6f7] hover:text-[#f5c2e7] transition-colors">
                                             <span className="mr-2 font-semibold">Read more</span>
-                                            <ArrowRight className="h-4 w-4" />
+                                            <ArrowRight className="h-4 w-4 text-[#89b4fa]" />
                                         </div>
                                     </CardContent>
                                 </Card>
@@ -52,11 +52,12 @@ export default function BlogList() {
             </div>
             <div className="mt-12 text-center">
                 <Link to="/">
-                    <Button variant="ghost" className="hover:bg-gray-800 hover:text-white transition-colors">
-                        <ArrowLeft className="mr-2 h-5 w-5" /> Back to Home
+                    <Button variant="ghost" className="hover:bg-[#45475a] hover:text-[#cdd6f4] transition-colors">
+                        <ArrowLeft className="mr-2 h-5 w-5 text-[#89b4fa]" /> Back to Home
                     </Button>
                 </Link>
             </div>
         </div>
     )
 }
+

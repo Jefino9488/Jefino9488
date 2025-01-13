@@ -21,8 +21,8 @@ const CodeBlock = ({ code }: { code: string }) => {
     };
 
     return (
-        <div className="relative bg-gray-900 rounded-lg my-4 overflow-hidden">
-            <div className="flex items-center justify-between px-4 py-2 bg-gray-700">
+        <div className="relative bg-[#11111b] rounded-lg my-4 overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2 bg-[#45475a]">
                 <span className="text-sm font-medium text-gray-200">Code</span>
                 <button
                     onClick={() => handleCopy(code, -1)}
@@ -56,7 +56,7 @@ const CodeBlock = ({ code }: { code: string }) => {
 };
 
 const renderTitle = (title: string, level: 1 | 2 | 3 | 4 | 5 | 6) => {
-    const baseClasses = "font-bold mb-4 text-purple-400";
+    const baseClasses = "font-bold mb-4 text-[#f5c2e7]";
     const sizes: { [key: number]: string } = {
         1: "text-4xl sm:text-5xl",
         2: "text-3xl sm:text-4xl",
@@ -107,10 +107,10 @@ export default function BlogPost() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-950 py-8 sm:py-16 px-4 sm:px-6 lg:px-8 text-white">
+        <div className="min-h-screen bg-[#11111b] py-8 sm:py-16 px-4 sm:px-6 lg:px-8 text-[#cdd6f4]">
             <div className="max-w-3xl mx-auto">
                 <Link to="/blog">
-                    <Button variant="ghost" className="mb-8 hover:bg-gray-800 hover:text-white transition-colors">
+                    <Button variant="ghost" className="mb-8 hover:bg-[#45475a] hover:text-[#cdd6f4] transition-colors">
                         <ArrowLeft className="mr-2 h-5 w-5" /> Back to Blogs
                     </Button>
                 </Link>
@@ -119,16 +119,16 @@ export default function BlogPost() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <Card className="bg-gray-800 border-none text-white rounded-2xl shadow-lg overflow-hidden">
-                        <CardHeader className="bg-gradient-to-r from-purple-900 to-indigo-900 p-6 sm:p-8">
-                            <CardTitle className="text-2xl sm:text-4xl font-bold mb-4">{post.title}</CardTitle>
+                    <Card className="bg-[#313244] border-none text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
+                        <CardHeader className="bg-[#1e1e2e] border-b border-[#313244] p-6 sm:p-8">
+                            <CardTitle className="text-2xl sm:text-4xl font-bold mb-4 text-[#cba6f7]">{post.title}</CardTitle>
                             <div className="flex flex-wrap items-center text-sm text-gray-300">
                                 <div className="flex items-center mr-4 mb-2 sm:mb-0">
-                                    <Calendar className="mr-2 h-4 w-4" />
+                                    <Calendar className="mr-2 h-4 w-4 text-[#89b4fa]" />
                                     <span>{post.date}</span>
                                 </div>
                                 <div className="flex items-center">
-                                    <Clock className="mr-2 h-4 w-4" />
+                                    <Clock className="mr-2 h-4 w-4 text-[#89b4fa]" />
                                     <span>{post.readTime}</span>
                                 </div>
                             </div>
@@ -177,3 +177,4 @@ export default function BlogPost() {
         </div>
     );
 }
+
