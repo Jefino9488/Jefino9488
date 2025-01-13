@@ -3,20 +3,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, Clock, Copy, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-import post1 from '@/blogPosts/post1.json'
-import post2 from '@/blogPosts/post2.json'
-
-const blogPosts = [post1, post2];
+const blogPosts = [
+    () => import('@/blogPosts/post1.json'),
+    () => import('@/blogPosts/post2.json'),
+];
 
 const CodeBlock = ({ code }: { code: string }) => {
     const [copiedLines, setCopiedLines] = useState<Record<number, boolean>>({});
 
     const handleCopy = (line: string, index: number) => {
         navigator.clipboard.writeText(line).then(() => {
-            setCopiedLines(prev => ({ ...prev, [index]: true }));
-            setTimeout(() => setCopiedLines(prev => ({ ...prev, [index]: false })), 2000);
+            setCopiedLines((prev) => ({ ...prev, [index]: true }));
+            setTimeout(() => setCopiedLines((prev) => ({ ...prev, [index]: false })), 2000);
         });
     };
 
@@ -26,6 +26,7 @@ const CodeBlock = ({ code }: { code: string }) => {
                 <span className="text-sm font-medium text-gray-200">Code</span>
                 <button
                     onClick={() => handleCopy(code, -1)}
+                    aria-label="Copy entire code"
                     className="text-gray-400 hover:text-white transition-colors"
                 >
                     {copiedLines[-1] ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
@@ -38,6 +39,13 @@ const CodeBlock = ({ code }: { code: string }) => {
                             <div key={index} className="group flex">
                                 <span className="mr-4 text-gray-500 select-none">{index + 1}</span>
                                 <span>{line}</span>
+                                <button
+                                    onClick={() => handleCopy(line, index)}
+                                    aria-label={`Copy line ${index + 1}`}
+                                    className="ml-2 text-gray-400 hover:text-white hidden group-hover:inline"
+                                >
+                                    {copiedLines[index] ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                                </button>
                             </div>
                         ))}
                     </code>
@@ -47,40 +55,55 @@ const CodeBlock = ({ code }: { code: string }) => {
     );
 };
 
-const renderTitle = (title: string, level: number) => {
+const renderTitle = (title: string, level: 1 | 2 | 3 | 4 | 5 | 6) => {
     const baseClasses = "font-bold mb-4 text-purple-400";
-    const sizes = {
+    const sizes: { [key: number]: string } = {
         1: "text-4xl sm:text-5xl",
         2: "text-3xl sm:text-4xl",
         3: "text-2xl sm:text-3xl",
         4: "text-xl sm:text-2xl",
         5: "text-lg sm:text-xl",
-        6: "text-base sm:text-lg"
+        6: "text-base sm:text-lg",
     };
     const Tag = `h${level}` as keyof JSX.IntrinsicElements;
-    return <Tag className={`${baseClasses} ${sizes[level as keyof typeof sizes] || sizes[2]}`}>{title}</Tag>;
+    return <Tag className={`${baseClasses} ${sizes[level]}`}>{title}</Tag>;
 };
+
+const CardNotFound = () => (
+    <div className="min-h-screen bg-gray-950 flex items-center justify-center text-white p-4">
+        <Card className="w-full max-w-md bg-gray-800 border-none text-white rounded-2xl shadow-lg">
+            <CardContent className="p-6">
+                <h1 className="text-2xl sm:text-3xl font-bold mb-4">Post not found</h1>
+                <Link to="/blog">
+                    <Button variant="ghost" className="w-full justify-center hover:bg-gray-700 hover:text-white transition-colors">
+                        <ArrowLeft className="mr-2 h-5 w-5" /> Back to Blog
+                    </Button>
+                </Link>
+            </CardContent>
+        </Card>
+    </div>
+);
 
 export default function BlogPost() {
     const { id } = useParams<{ id: string }>();
-    const postId = Number(id);
-    const post = blogPosts.find(p => p.id === postId);
+    const [post, setPost] = useState<any | null>(null);
+
+    useEffect(() => {
+        const loadPost = async () => {
+            const postId = Number(id);
+            if (isNaN(postId) || postId < 1 || postId > blogPosts.length) {
+                setPost(null);
+                return;
+            }
+            const loadedPost = await blogPosts[postId - 1]();
+            setPost(loadedPost.default);
+        };
+
+        loadPost();
+    }, [id]);
 
     if (!post) {
-        return (
-            <div className="min-h-screen bg-gray-950 flex items-center justify-center text-white p-4">
-                <Card className="w-full max-w-md bg-gray-800 border-none text-white rounded-2xl shadow-lg">
-                    <CardContent className="p-6">
-                        <h1 className="text-2xl sm:text-3xl font-bold mb-4">Post not found</h1>
-                        <Link to="/blog">
-                            <Button variant="ghost" className="w-full justify-center hover:bg-gray-700 hover:text-white transition-colors">
-                                <ArrowLeft className="mr-2 h-5 w-5" /> Back to Blog
-                            </Button>
-                        </Link>
-                    </CardContent>
-                </Card>
-            </div>
-        );
+        return <CardNotFound />;
     }
 
     return (
@@ -112,7 +135,7 @@ export default function BlogPost() {
                         </CardHeader>
                         <CardContent className="p-6 sm:p-8 space-y-6 sm:space-y-8">
                             <p className="text-base sm:text-lg text-gray-300 leading-relaxed">{post.content.introduction}</p>
-                            {post.content.sections.map((section, index) => (
+                            {post.content.sections.map((section: any, index: number) => (
                                 <motion.div
                                     key={index}
                                     initial={{ opacity: 0, y: 20 }}
@@ -120,7 +143,7 @@ export default function BlogPost() {
                                     transition={{ duration: 0.5, delay: index * 0.2 }}
                                 >
                                     {section.title && renderTitle(section.title, section.titleLevel || 2)}
-                                    {section.content.map((para, i) => (
+                                    {section.content.map((para: string, i: number) => (
                                         <p key={i} className="mb-4 text-base sm:text-lg text-gray-300 leading-relaxed">{para}</p>
                                     ))}
                                     {section.code && <CodeBlock code={section.code} />}
@@ -140,7 +163,7 @@ export default function BlogPost() {
                                     })}
                                     {section.list && (
                                         <ul className="list-disc pl-6 space-y-2">
-                                            {section.list.map((item, i) => (
+                                            {section.list.map((item: string, i: number) => (
                                                 <li key={i} className="text-base sm:text-lg text-gray-300 leading-relaxed">{item}</li>
                                             ))}
                                         </ul>
