@@ -27,7 +27,7 @@ export default function BlogList() {
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
                             <Link to={`/blog/${post.id}`}>
-                                <Card className="bg-[#313244] border-none text-[#cdd6f4] hover:bg-[#45475a] transition-all duration-300 rounded-2xl shadow-lg transform hover:-translate-y-1">
+                                <Card className="bg-[#1e1e2e] border-none text-[#cdd6f4] hover:bg-[#313244] transition-all duration-300 rounded-2xl shadow-lg transform hover:-translate-y-1">
                                     <CardHeader>
                                         <CardTitle className="text-xl sm:text-2xl font-semibold mb-2">{post.title}</CardTitle>
                                         <div className="flex items-center text-sm text-gray-400 mb-2">

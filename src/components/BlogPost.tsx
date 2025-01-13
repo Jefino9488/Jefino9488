@@ -119,8 +119,8 @@ export default function BlogPost() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <Card className="bg-[#313244] border-none text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
-                        <CardHeader className="bg-[#1e1e2e] border-b border-[#313244] p-6 sm:p-8">
+                    <Card className="bg-[#1e1e2e] border-none text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
+                        <CardHeader className="bg-[#313244] border-b border-[#313244] p-6 sm:p-8">
                             <CardTitle className="text-2xl sm:text-4xl font-bold mb-4 text-[#cba6f7]">{post.title}</CardTitle>
                             <div className="flex flex-wrap items-center text-sm text-gray-300">
                                 <div className="flex items-center mr-4 mb-2 sm:mb-0">
