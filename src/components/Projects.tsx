@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, GitFork, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
+import GitHubDashboard from "@/components/GitHubDashboard.tsx";
 
 export default function Projects() {
     const { allProjects, loading, error } = useProjects();
 
     if (loading) {
-        return <div className="text-center text-[#cdd6f4]">Loading projects...</div>;
+        return <div className="text-center text-[#cdd6f4]">Loading Repository...</div>;
     }
 
     if (error) {
@@ -18,9 +19,9 @@ export default function Projects() {
     return (
         <div className="min-h-screen bg-[#11111b] text-[#cdd6f4] py-16 px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
-                <h1 className="text-3xl sm:text-4xl font-bold text-center text-[#cba6f7] mb-12">
-                    My Projects
-                </h1>
+                <section className="mb-8">
+                    <GitHubDashboard username="Jefino9488" />
+                </section>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {allProjects.map((project, index) => (
                         <motion.div
