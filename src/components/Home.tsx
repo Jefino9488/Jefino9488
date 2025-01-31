@@ -141,7 +141,6 @@ export default function Home() {
                             </Link>
                         </Card>
                     </section>
-
                     <section>
                         {loading ? (
                             <div className="text-center text-gray-400">Loading projects...</div>
@@ -215,7 +214,7 @@ export default function Home() {
             >
                 <div className="flex flex-col items-center justify-center">
                     <p className="text-[#cdd6f4] text-xs sm:text-sm mb-2 animate-pulse text-center">
-                        Pull up to explore projects
+                        Pull up for Github Overview
                     </p>
                     <motion.div
                         animate={{ scale: [1, 1.2, 1] }}
