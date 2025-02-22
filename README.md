@@ -11,7 +11,7 @@ class Jefino:
     self.role = "Full Stack Developer"
     self.location = "India,Tamil Nadu"
     self.telegram = "@Jefino9488"
-    self.web = "jefino9488.vercel.app"
+    self.web = "jefino.is-a.dev"
 
   def __str__(self):
     info = f"Name: {self.name}\n"
