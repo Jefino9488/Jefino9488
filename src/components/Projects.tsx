@@ -1,27 +1,42 @@
-import { useProjects } from './ProjectsContext';
-import { Link } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, ExternalLink, GitFork, Star } from 'lucide-react';
-import { motion } from 'framer-motion';
-import GitHubDashboard from "@/components/GitHubDashboard.tsx";
+import { useProjects } from "./ProjectsContext"
+import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button"
+import { ArrowLeft, ExternalLink, GitFork, Star } from "lucide-react"
+import { motion } from "framer-motion"
+import GitHubDashboard from "@/components/GitHubDashboard.tsx"
 
 export default function Projects() {
-    const { allProjects, loading, error } = useProjects();
+    const { allProjects, loading, error } = useProjects()
 
     if (loading) {
-        return <div className="text-center text-[#cdd6f4]">Loading Repository...</div>;
+        return (
+            <div className="min-h-screen bg-[#11111b] flex items-center justify-center">
+                <div className="text-center text-[#cdd6f4]">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#f5c2e7] mx-auto mb-4"></div>
+                    Loading Repository...
+                </div>
+            </div>
+        )
     }
 
     if (error) {
-        return <div className="text-center text-[#f38ba8]">{error}</div>;
+        return (
+            <div className="min-h-screen bg-[#11111b] flex items-center justify-center">
+                <div className="text-center text-[#f38ba8]">{error}</div>
+            </div>
+        )
     }
 
     return (
-        <div className="min-h-screen bg-[#11111b] text-[#cdd6f4] py-16 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-                <section className="mb-8">
+        <div className="min-h-screen bg-[#11111b] text-[#cdd6f4]">
+            {/* Full width dashboard section */}
+            <section className="w-full py-10 ">
+                <div className="container mx-auto px-4">
                     <GitHubDashboard username="Jefino9488" />
-                </section>
+                </div>
+            </section>
+
+            <div className="container mx-auto px-4 py-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {allProjects.map((project, index) => (
                         <motion.div
@@ -37,22 +52,19 @@ export default function Projects() {
                                     <p className="text-[#cdd6f4] mb-4 text-sm line-clamp-2">{project.description}</p>
                                     <div className="flex flex-wrap gap-2 mb-4">
                                         {project.tech.map((tech) => (
-                                            <span
-                                                key={tech}
-                                                className="px-3 py-1 bg-[#313244] rounded-full text-xs text-[#cdd6f4]"
-                                            >
-                                                {tech}
-                                            </span>
+                                            <span key={tech} className="px-3 py-1 bg-[#313244] rounded-full text-xs text-[#cdd6f4]">
+                        {tech}
+                      </span>
                                         ))}
                                     </div>
                                     <div className="flex justify-between items-center mt-auto">
                                         <div className="flex gap-4 text-sm text-[#a6adc8]">
+                      <span className="flex items-center gap-1">
+                        <Star className="w-4 h-4 text-[#f5c2e7]" /> {project.stats.stars}
+                      </span>
                                             <span className="flex items-center gap-1">
-                                                <Star className="w-4 h-4 text-[#f5c2e7]" /> {project.stats.stars}
-                                            </span>
-                                            <span className="flex items-center gap-1">
-                                                <GitFork className="w-4 h-4 text-[#f5c2e7]" /> {project.stats.forks}
-                                            </span>
+                        <GitFork className="w-4 h-4 text-[#f5c2e7]" /> {project.stats.forks}
+                      </span>
                                         </div>
                                         <a
                                             href={project.link}
@@ -77,5 +89,5 @@ export default function Projects() {
                 </div>
             </div>
         </div>
-    );
+    )
 }
