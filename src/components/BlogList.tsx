@@ -1,24 +1,26 @@
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Calendar, Clock, ArrowRight } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { ArrowLeft, Calendar, Clock, ArrowRight } from "lucide-react"
+import { motion } from "framer-motion"
 
-import post1 from '@/blogPosts/post1.json'
-import post2 from '@/blogPosts/post2.json'
+import post1 from "@/blogPosts/post1.json"
+import post2 from "@/blogPosts/post2.json"
 
-const blogPosts = [post1, post2];
+const blogPosts = [post1, post2]
 
 export default function BlogList() {
     return (
-        <div className="min-h-screen bg-[#11111b] py-16 px-4 sm:px-6 lg:px-8 text-[#cdd6f4]">
-            <div className="max-w-6xl mx-auto">
+        <div className="min-h-screen bg-[#11111b] py-16 text-[#cdd6f4]">
+            <div className="container mx-auto px-4">
                 <header className="mb-16 text-center">
                     <h1 className="text-4xl sm:text-5xl font-bold mb-4 tracking-tight text-[#cba6f7]">My Blogs</h1>
-                    <p className="text-xl text-gray-400 max-w-2xl mx-auto">Thoughts, ideas, and insights on technology, development, and more</p>
+                    <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                        Thoughts, ideas, and insights on technology, development, and more
+                    </p>
                 </header>
 
-                <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <main className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
                     {blogPosts.map((post, index) => (
                         <motion.div
                             key={post.id}
@@ -27,7 +29,7 @@ export default function BlogList() {
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
                             <Link to={`/blog/${post.id}`}>
-                                <Card className="bg-[#1e1e2e] border-none text-[#cdd6f4] hover:bg-[#313244] transition-all duration-300 rounded-2xl shadow-lg transform hover:-translate-y-1">
+                                <Card className="bg-[#1e1e2e] border-[#313244] border text-[#cdd6f4] hover:bg-[#313244] transition-all duration-300 rounded-2xl shadow-lg transform hover:-translate-y-1 h-full">
                                     <CardHeader>
                                         <CardTitle className="text-xl sm:text-2xl font-semibold mb-2">{post.title}</CardTitle>
                                         <div className="flex items-center text-sm text-gray-400 mb-2">
@@ -60,4 +62,3 @@ export default function BlogList() {
         </div>
     )
 }
-
