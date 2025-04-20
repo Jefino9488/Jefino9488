@@ -51,31 +51,30 @@ export default function GitHubDashboard({ username }: GitHubDashboardProps) {
     }
 
     return (
-        <Card className="bg-[#1e1e2e] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
-            <CardHeader className="bg-[#1e1e2e] py-4 px-4">
-                <CardTitle className="flex flex-col items-center text-center">
+        <Card className="bg-[#1e1e2e] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden w-full">
+            <CardHeader className="py-4 px-4 border-b border-[#313244]">
+                <CardTitle className="flex items-center justify-center">
                     <h1 className="text-2xl sm:text-3xl font-bold text-[#cba6f7]">Github Overview</h1>
                 </CardTitle>
             </CardHeader>
             <CardContent className="p-4">
                 <motion.div variants={containerVariants} initial="hidden" animate="visible">
-                    {/* GitHub Metrics Grid */}
-                    <div className="grid grid-cols-3 gap-2 mb-4">
+                    <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
                         {[
                             { icon: Star, label: "Stars", value: stats.totalStars },
                             { icon: GitCommit, label: "Commits", value: stats.totalCommits },
                             { icon: GitFork, label: "Repos", value: profile.public_repos },
                             { icon: Users, label: "Followers", value: profile.followers },
                             { icon: Users, label: "Following", value: profile.following },
-                            { icon: GitPullRequest, label: "Pull Requests", value: stats.totalPullRequests }, // Replace streak with pull requests
+                            { icon: GitPullRequest, label: "PRs", value: stats.totalPullRequests },
                         ].map((item, index) => (
                             <motion.div
                                 key={index}
                                 variants={itemVariants}
-                                className="flex flex-col items-center p-2 bg-[#313244] rounded-xl hover:bg-[#313244] transition-colors"
+                                className="flex flex-col items-center p-3 bg-[#313244] rounded-xl hover:bg-[#45475a] transition-all duration-300"
                             >
-                                <item.icon className="h-5 w-5 text-[#cba6f7] mb-1" />
-                                <span className="text-sm font-bold text-[#f5c2e7]">{item.value}</span>
+                                <item.icon className="h-6 w-6 text-[#cba6f7] mb-2" />
+                                <span className="text-base font-bold text-[#f5c2e7]">{item.value}</span>
                                 <span className="text-xs text-[#cdd6f4]">{item.label}</span>
                             </motion.div>
                         ))}
@@ -85,4 +84,3 @@ export default function GitHubDashboard({ username }: GitHubDashboardProps) {
         </Card>
     )
 }
-
