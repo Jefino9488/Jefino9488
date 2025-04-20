@@ -1,0 +1,82 @@
+[
+  {
+    "id": "cert1",
+    "title": "Certified Streetcred",
+    "issuer": "TUBLIAN",
+    "date": "June 2024",
+    "description": "",
+    "skills": ["Open Source", "Streetcred", "TUBLIAN"],
+    "credentialUrl": null,
+    "imageUrl": "https://t74hnvwwsd.execute-api.us-east-1.amazonaws.com/dev/ft/profile/streetcred/badge/Jefino9488?type=with_score"
+  },
+  {
+    "id": "cert3",
+    "title": "DeepLearning.AI TensorFlow Developer",
+    "issuer": "DeepLearning.AI",
+    "date": "February 2024",
+    "description": "",
+    "skills": ["Dropouts", "Augmentation", "TensorFlow", "Convolutional Neural Networks", "Machine Learning", "Tokenization"],
+    "credentialUrl": "https://www.coursera.org/account/accomplishments/specialization/2Q4PC88HVSHX",
+    "imageUrl": "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~2Q4PC88HVSHX/CERTIFICATE_LANDING_PAGE~2Q4PC88HVSHX.jpeg"
+  },
+  {
+    "id": "cert4",
+    "title": "Sequences, Time Series and Prediction",
+    "issuer": "DeepLearning.AI",
+    "date": "February 2024",
+    "description": "",
+    "skills": ["Tensorflow", "Forecasting", "Machine Learning", "prediction", "Time Series"],
+    "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/X4XMLNJ354NR",
+    "imageUrl": "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~X4XMLNJ354NR/CERTIFICATE_LANDING_PAGE~X4XMLNJ354NR.jpeg"
+  },
+  {
+    "id": "cert6",
+    "title": "Convolutional Neural Networks in TensorFlow",
+    "issuer": "DeepLearning.AI",
+    "date": "January 2024",
+    "description": "",
+    "skills": ["Dropouts", "Transfer Learning", "TensorFlow", "Data Augmentation", "CNN", "Machine Learning"],
+    "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/BGJ54L5H24S3",
+    "imageUrl": "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~BGJ54L5H24S3/CERTIFICATE_LANDING_PAGE~BGJ54L5H24S3.jpeg"
+  },
+  {
+    "id": "cert7",
+    "title": "Natural Language Processing in TensorFlow",
+    "issuer": "DeepLearning.AI",
+    "date": "January 2024",
+    "description": "",
+    "skills": ["TensorFlow", "RNNs", "Natural Language Processing", "Machine Learning", "Text Vectorization"],
+    "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/MRKGVRG3D35C",
+    "imageUrl": "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~MRKGVRG3D35C/CERTIFICATE_LANDING_PAGE~MRKGVRG3D35C.jpeg"
+  },
+  {
+    "id": "cert8",
+    "title": "Machine Learning with Python",
+    "issuer": "IBM",
+    "date": "February 2024",
+    "description": "",
+    "skills": ["Python Programming", "Regression", "Human Learning", "Algorithms"],
+    "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/MBJAM645FQR3",
+    "imageUrl": "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~MBJAM645FQR3/CERTIFICATE_LANDING_PAGE~MBJAM645FQR3.jpeg"
+  },
+  {
+    "id": "cert9",
+    "title": "Introduction to TensorFlow for AI, ML, and DL",
+    "issuer": "DeepLearning.AI",
+    "date": "September 2023",
+    "description": "",
+    "skills": ["Machine Learning", "TensorFlow", "Computer Vision"],
+    "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/AY7LQHRK56WK",
+    "imageUrl": "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~AY7LQHRK56WK/CERTIFICATE_LANDING_PAGE~AY7LQHRK56WK.jpeg"
+  },
+  {
+    "id": "cert2",
+    "title": "UiPath Academy Automation Explorer",
+    "issuer": "UiPath",
+    "date": "April 2024",
+    "description": "",
+    "skills": ["UiPath", "Robotic Process Automation", "Orchestrator", "Studio", "Robots"],
+    "credentialUrl": "https://credentials.uipath.com/7f442dd6-c243-419a-b089-42b9e702e0ef#acc.xbA8utDU",
+    "imageUrl": "https://api.accredible.com/v1/frontend/credential_website_embed_image/certificate/123227672"
+  }
+]
