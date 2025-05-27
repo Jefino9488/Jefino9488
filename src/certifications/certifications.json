@@ -78,5 +78,15 @@
     "skills": ["UiPath", "Robotic Process Automation", "Orchestrator", "Studio", "Robots"],
     "credentialUrl": "https://credentials.uipath.com/7f442dd6-c243-419a-b089-42b9e702e0ef#acc.xbA8utDU",
     "imageUrl": "https://api.accredible.com/v1/frontend/credential_website_embed_image/certificate/123227672"
-  }
+  },
+    {
+        "id": "cert5",
+        "title": "UiPath Academy Automation Developer",
+        "issuer": "UiPath",
+        "date": "April 2024",
+        "description": "",
+        "skills": ["UiPath", "Robotic Process Automation", "Orchestrator", "Studio", "Robots"],
+        "credentialUrl": "https://credentials.uipath.com/7f442dd6-c243-419a-b089-42b9e702e0ef#acc.xbA8utDU",
+        "imageUrl": "https://api.accredible.com/v1/frontend/credential_website_embed_image/certificate/123227672"
+    }
 ]

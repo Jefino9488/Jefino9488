@@ -23,7 +23,7 @@ export default function Home() {
         }
     }
 
-    const skills = ["Python", "Java", "JavaScript", "React", "Tailwind CSS", "Flask", "MySql", "Docker", "FireBase"]
+    const skills = ["Python", "Java", "Flask", "React", "Spring Boot", "GitHub", "Postgress", "Docker", "FireBase"]
 
     // Select projects based on screen size
     const pinnedTitles = new Set(pinnedProjects.map(project => project.title.toLowerCase()))
