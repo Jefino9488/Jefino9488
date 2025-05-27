@@ -1,34 +1,17 @@
-import { useEffect, useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { fetchGitHubProfile, fetchGitHubStats, type GitHubProfile, type GitHubStats } from "@/utils/github"
-import { Star, GitCommit, GitFork, Users, GitPullRequest } from "lucide-react"
-import { motion } from "framer-motion"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Star, GitCommit, GitFork, Users, GitPullRequest } from "lucide-react";
+import { motion } from "framer-motion";
+import { useGitHubData } from "@/components/GitHubContext"; // Import your context
 
-interface GitHubDashboardProps {
-    username: string
-}
+export default function GitHubDashboard() {
+    const { profile, stats, loading } = useGitHubData();
 
-export default function GitHubDashboard({ username }: GitHubDashboardProps) {
-    const [profile, setProfile] = useState<GitHubProfile | null>(null)
-    const [stats, setStats] = useState<GitHubStats | null>(null)
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const profileData = await fetchGitHubProfile(username)
-            const statsData = await fetchGitHubStats(username)
-            setProfile(profileData)
-            setStats(statsData)
-        }
-
-        fetchData()
-    }, [username])
-
-    if (!profile || !stats) {
+    if (loading || !profile || !stats) {
         return (
             <div className="flex justify-center items-center h-48 bg-[#11111b] rounded-2xl">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#f5c2e7]"></div>
             </div>
-        )
+        );
     }
 
     const containerVariants = {
@@ -40,7 +23,7 @@ export default function GitHubDashboard({ username }: GitHubDashboardProps) {
                 staggerChildren: 0.1,
             },
         },
-    }
+    };
 
     const itemVariants = {
         hidden: { y: 10, opacity: 0 },
@@ -48,7 +31,7 @@ export default function GitHubDashboard({ username }: GitHubDashboardProps) {
             y: 0,
             opacity: 1,
         },
-    }
+    };
 
     return (
         <Card className="bg-[#1e1e2e] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden w-full">
@@ -82,5 +65,5 @@ export default function GitHubDashboard({ username }: GitHubDashboardProps) {
                 </motion.div>
             </CardContent>
         </Card>
-    )
+    );
 }

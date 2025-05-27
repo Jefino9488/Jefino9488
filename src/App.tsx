@@ -18,6 +18,7 @@ import { useSmoothScroll } from "./hooks/useSmoothScroll"
 import FloatingActionButton from "@/components/ChatBot/FloatingActionButton.tsx";
 import ChatBot from "@/components/ChatBot/ChatBot.tsx";
 import { ChatProvider } from "@/components/ChatBot/ChatContext.tsx";
+import {GitHubProvider} from "@/components/GitHubContext.tsx";
 
 function AppContent() {
     useSmoothScroll()
@@ -107,13 +108,15 @@ function App() {
         <Router>
             <ProjectsProvider>
                 <ChatProvider>
-                    <Suspense fallback={<Loader />}>
-                        <AppContent />
-                    </Suspense>
+                    <GitHubProvider>
+                        <Suspense fallback={<Loader />}>
+                            <AppContent />
+                        </Suspense>
+                    </GitHubProvider>
                 </ChatProvider>
             </ProjectsProvider>
         </Router>
-    )
+    );
 }
 
 export default App
