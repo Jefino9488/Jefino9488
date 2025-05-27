@@ -45,7 +45,7 @@
     "issuer": "DeepLearning.AI",
     "date": "January 2024",
     "description": "",
-    "skills": ["TensorFlow", "RNNs", "Natural Language Processing", "Machine Learning", "Text Vectorization"],
+    "skills": [ "Natural Language Processing", "Machine Learning", "Text Vectorization"],
     "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/MRKGVRG3D35C",
     "imageUrl": "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~MRKGVRG3D35C/CERTIFICATE_LANDING_PAGE~MRKGVRG3D35C.jpeg"
   },
@@ -71,22 +71,67 @@
   },
   {
     "id": "cert2",
-    "title": "UiPath Academy Automation Explorer",
+    "title": "Automation Explorer",
     "issuer": "UiPath",
     "date": "April 2024",
     "description": "",
-    "skills": ["UiPath", "Robotic Process Automation", "Orchestrator", "Studio", "Robots"],
+    "skills": [ " Automation", "Orchestrator", "Robots"],
     "credentialUrl": "https://credentials.uipath.com/7f442dd6-c243-419a-b089-42b9e702e0ef#acc.xbA8utDU",
     "imageUrl": "https://api.accredible.com/v1/frontend/credential_website_embed_image/certificate/123227672"
   },
-    {
-        "id": "cert5",
-        "title": "UiPath Academy Automation Developer",
-        "issuer": "UiPath",
-        "date": "April 2024",
-        "description": "",
-        "skills": ["UiPath", "Robotic Process Automation", "Orchestrator", "Studio", "Robots"],
-        "credentialUrl": "https://credentials.uipath.com/7f442dd6-c243-419a-b089-42b9e702e0ef#acc.xbA8utDU",
-        "imageUrl": "https://api.accredible.com/v1/frontend/credential_website_embed_image/certificate/123227672"
-    }
+  {
+    "id": 1,
+    "title": "CCNA: Introduction to Networks",
+    "issuer": "Cisco",
+    "date": "2025-05-26",
+    "description": "",
+    "skills": ["Networking Fundamentals", "IP Addressing", "Network Protocols", "OSI Model"],
+    "filename": "CCNA1",
+    "credentialUrl": "https://www.netacad.com/certificates?issuanceId=0c0c65eb-b3bc-4a0e-b8c2-4ea16d89a43d",
+    "imageUrl": "/certificates/CCNA1-1.jpg"
+  },
+  {
+    "id": 2,
+    "title": "CCNA: Switching, Routing, and Wireless Essentials",
+    "issuer": "Cisco",
+    "date": "2025-05-26",
+    "description": "",
+    "skills": ["Switching", "Routing", "Wireless Networking", "VLANs", "Network Security Basics"],
+    "filename": "CCNA2",
+    "credentialUrl": "https://www.netacad.com/certificates?issuanceId=b3e40e69-989b-4a4d-b24d-4f2f9f85404c",
+    "imageUrl": "/certificates/CCNA2-1.jpg"
+  },
+  {
+    "id": 3,
+    "title": "CCNA: Networking, Security, and Automation",
+    "issuer": "Cisco",
+    "date": "2025-05-26",
+    "description": "",
+    "skills": ["Enterprise Networking", "Network Security", "Automation", "WAN Technologies"],
+    "filename": "CCNA3",
+    "credentialUrl": "https://www.netacad.com/certificates?issuanceId=408f6804-cd78-49b9-b4b8-66f1425b7656",
+    "imageUrl": "/certificates/CCNA3-1.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Python Essentials 1",
+    "issuer": "Cisco Networking Academy",
+    "date": "2025-05-15",
+    "description": "",
+    "skills": ["Python Programming", "Basic Syntax", "Data Types", "Control Structures"],
+    "filename": "PE1",
+    "credentialUrl": "https://www.netacad.com/certificates?issuanceId=7eab2915-abf3-4e83-9c68-71c4af0d3b56",
+    "imageUrl": "/certificates/PE1-1.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Python Essentials 2",
+    "issuer": "Cisco",
+    "date": "2025-05-15",
+    "description": "",
+    "skills": ["Python Programming", "Object-Oriented Programming", "File Handling", "Modules", "Exception Handling"],
+    "filename": "PE2",
+    "credentialUrl": "https://www.netacad.com/certificates?issuanceId=02ab3e93-1d43-486d-9dc2-f996df8b8021",
+    "imageUrl": "/certificates/PE2-1.jpg"
+  }
 ]

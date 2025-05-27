@@ -66,11 +66,12 @@ export default function Certificates() {
                                             <div className="relative rounded-lg overflow-hidden bg-[#313244] p-2">
                                                 {cert.imageUrl.includes(".pdf") ? (
                                                     <iframe
-                                                        src={`${cert.imageUrl}#view=Fit&toolbar=0&statusbar=0&messages=0&navpanes=0&scrollbar=0`}
+                                                        src={`${cert.imageUrl}#toolbar=0&navpanes=0&scrollbar=0`}
                                                         title={`${cert.title} PDF Certificate`}
-                                                        className="w-full h-[400px] rounded-lg"
+                                                        className="w-full h-auto aspect-[4/3] rounded-lg pointer-events-none"
                                                         loading="lazy"
                                                     />
+
                                                 ) : (
                                                     <img
                                                         src={cert.imageUrl}
