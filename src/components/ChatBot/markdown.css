@@ -1,0 +1,130 @@
+.markdown-content {
+    line-height: 1.5;
+}
+
+.markdown-content p {
+    margin-bottom: 0.75rem;
+}
+
+.markdown-content p:last-child {
+    margin-bottom: 0;
+}
+
+.markdown-content a {
+    color: #89b4fa;
+    text-decoration: none;
+}
+
+.markdown-content a:hover {
+    text-decoration: underline;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+    margin-bottom: 0.75rem;
+    padding-left: 1.5rem;
+}
+
+.markdown-content ul {
+    list-style-type: disc;
+}
+
+.markdown-content ol {
+    list-style-type: decimal;
+}
+
+.markdown-content li {
+    margin-bottom: 0.25rem;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+    font-weight: 600;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.markdown-content h1 {
+    font-size: 1.25rem;
+}
+
+.markdown-content h2 {
+    font-size: 1.15rem;
+}
+
+.markdown-content h3 {
+    font-size: 1.05rem;
+}
+
+.markdown-content code {
+    background-color: rgba(30, 30, 46, 0.5);
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.25rem;
+    font-family: monospace;
+    font-size: 0.9em;
+    color: #f5c2e7;
+}
+
+.markdown-content pre {
+    background-color: rgba(30, 30, 46, 0.5);
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    overflow-x: auto;
+    margin: 0.75rem 0;
+}
+
+.markdown-content pre code {
+    background-color: transparent;
+    padding: 0;
+    color: #f5c2e7;
+    font-size: 0.85em;
+}
+
+.markdown-content blockquote {
+    border-left: 3px solid #89b4fa;
+    padding-left: 0.75rem;
+    margin-left: 0;
+    margin-right: 0;
+    font-style: italic;
+    color: #a6adc8;
+}
+
+.markdown-content img {
+    max-width: 100%;
+    border-radius: 0.25rem;
+    margin: 0.5rem 0;
+}
+
+.markdown-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0.75rem 0;
+}
+
+.markdown-content th,
+.markdown-content td {
+    border: 1px solid #45475a;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.markdown-content th {
+    background-color: rgba(69, 71, 90, 0.5);
+}
+
+.markdown-content tr:nth-child(even) {
+    background-color: rgba(69, 71, 90, 0.2);
+}
+
+.hide-scrollbar {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE 10+ */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}

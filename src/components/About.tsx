@@ -180,21 +180,33 @@ export default function About() {
                 <div className="flex flex-wrap gap-2 mb-6">
                     <Button
                         variant={activeTab === "overview" ? "default" : "outline"}
-                        className={activeTab === "overview" ? "bg-[#cba6f7] text-[#11111b]" : "border-[#313244] text-[#cdd6f4]"}
+                        className={
+                            activeTab === "overview"
+                                ? "!bg-[#cba6f7] !text-[#11111b]"
+                                : "border-[#313244] text-[#cdd6f4] hover:bg-transparent hover:text-[#cdd6f4]"
+                        }
                         onClick={() => setActiveTab("overview")}
                     >
                         Overview
                     </Button>
                     <Button
                         variant={activeTab === "timeline" ? "default" : "outline"}
-                        className={activeTab === "timeline" ? "bg-[#cba6f7] text-[#11111b]" : "border-[#313244] text-[#cdd6f4]"}
+                        className={
+                            activeTab === "timeline"
+                                ? "!bg-[#cba6f7] !text-[#11111b]"
+                                : "border-[#313244] text-[#cdd6f4] hover:bg-transparent hover:text-[#cdd6f4]"
+                        }
                         onClick={() => setActiveTab("timeline")}
                     >
                         Timeline
                     </Button>
                     <Button
                         variant={activeTab === "skills" ? "default" : "outline"}
-                        className={activeTab === "skills" ? "bg-[#cba6f7] text-[#11111b]" : "border-[#313244] text-[#cdd6f4]"}
+                        className={
+                            activeTab === "skills"
+                                ? "!bg-[#cba6f7] !text-[#11111b]"
+                                : "border-[#313244] text-[#cdd6f4] hover:bg-transparent hover:text-[#cdd6f4]"
+                        }
                         onClick={() => setActiveTab("skills")}
                     >
                         Skills

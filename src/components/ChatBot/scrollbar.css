@@ -1,0 +1,68 @@
+.custom-scrollbar-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.custom-scrollbar-viewport {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.custom-scrollbar-viewport::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.custom-scrollbar-content {
+    width: 100%;
+    min-height: 100%;
+}
+
+.custom-scrollbar-track {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 100%;
+    background-color: transparent;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+}
+
+.custom-scrollbar-container:hover .custom-scrollbar-track {
+    background-color: rgba(203, 166, 247, 0.05);
+}
+
+.custom-scrollbar-thumb {
+    position: absolute;
+    width: 6px;
+    right: 1px;
+    border-radius: 3px;
+    background-color: rgba(203, 166, 247, 0.3);
+    transition: background-color 0.2s, width 0.2s, right 0.2s;
+}
+
+.custom-scrollbar-container:hover .custom-scrollbar-thumb {
+    background-color: rgba(203, 166, 247, 0.5);
+    width: 8px;
+    right: 0;
+}
+
+.custom-scrollbar-thumb:hover,
+.custom-scrollbar-thumb:active {
+    background-color: rgba(203, 166, 247, 0.8);
+}
+
+.hide-scrollbar {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE/Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}

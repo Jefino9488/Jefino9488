@@ -64,11 +64,20 @@ export default function Certificates() {
                                     <div className="mt-4 space-y-4">
                                         {cert.imageUrl && (
                                             <div className="relative rounded-lg overflow-hidden bg-[#313244] p-2">
-                                                <img
-                                                    src={cert.imageUrl || "/placeholder.svg"}
-                                                    alt={`${cert.title} Certificate`}
-                                                    className="w-full h-auto rounded-lg object-cover"
-                                                />
+                                                {cert.imageUrl.includes(".pdf") ? (
+                                                    <iframe
+                                                        src={`${cert.imageUrl}#view=Fit&toolbar=0&statusbar=0&messages=0&navpanes=0&scrollbar=0`}
+                                                        title={`${cert.title} PDF Certificate`}
+                                                        className="w-full h-[400px] rounded-lg"
+                                                        loading="lazy"
+                                                    />
+                                                ) : (
+                                                    <img
+                                                        src={cert.imageUrl}
+                                                        alt={`${cert.title} Certificate`}
+                                                        className="w-full h-auto rounded-lg object-cover"
+                                                    />
+                                                )}
                                             </div>
                                         )}
 

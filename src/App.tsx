@@ -15,6 +15,9 @@ import Footer from "./components/Footer"
 import TransitionWrapper from "./components/TransitionWrapper"
 import { ProjectsProvider } from "./components/ProjectsContext"
 import { useSmoothScroll } from "./hooks/useSmoothScroll"
+import FloatingActionButton from "@/components/ChatBot/FloatingActionButton.tsx";
+import ChatBot from "@/components/ChatBot/ChatBot.tsx";
+import { ChatProvider } from "@/components/ChatBot/ChatContext.tsx";
 
 function AppContent() {
     useSmoothScroll()
@@ -93,6 +96,8 @@ function AppContent() {
                 </AnimatePresence>
             </main>
             <Footer />
+            <FloatingActionButton />
+            <ChatBot />
         </div>
     )
 }
@@ -101,9 +106,11 @@ function App() {
     return (
         <Router>
             <ProjectsProvider>
-                <Suspense fallback={<Loader />}>
-                    <AppContent />
-                </Suspense>
+                <ChatProvider>
+                    <Suspense fallback={<Loader />}>
+                        <AppContent />
+                    </Suspense>
+                </ChatProvider>
             </ProjectsProvider>
         </Router>
     )

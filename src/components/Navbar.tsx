@@ -65,7 +65,7 @@ export default function Navbar() {
                                         variant="ghost"
                                         className={`relative px-3 py-2 text-sm rounded-lg transition-colors ${
                                             isActive
-                                                ? "text-[#f5c2e7] bg-[#313244]"
+                                                ? "!text-[#f5c2e7] !bg-[#313244]"
                                                 : "text-[#cdd6f4] hover:text-[#f5c2e7] hover:bg-[#313244]/50"
                                         }`}
                                     >
@@ -112,7 +112,8 @@ export default function Navbar() {
                         <div className="px-4 py-3 space-y-1">
                             {navItems.map((item) => {
                                 const isActive =
-                                    location.pathname === item.path || (item.path !== "/" && location.pathname.startsWith(item.path))
+                                    location.pathname === item.path ||
+                                    (item.path !== "/" && location.pathname.startsWith(item.path))
 
                                 return (
                                     <Link key={item.path} to={item.path} className="block">
@@ -120,8 +121,8 @@ export default function Navbar() {
                                             variant="ghost"
                                             className={`w-full justify-start text-left ${
                                                 isActive
-                                                    ? "bg-[#313244] text-[#f5c2e7]"
-                                                    : "text-[#cdd6f4] hover:bg-[#313244]/50 hover:text-[#f5c2e7]"
+                                                    ? "!bg-[#313244] !text-[#f5c2e7]"
+                                                    : "text-[#cdd6f4] hover:bg-transparent hover:text-[#cdd6f4]"
                                             }`}
                                         >
                                             <item.icon className="w-5 h-5 mr-3" />
@@ -133,6 +134,7 @@ export default function Navbar() {
                         </div>
                     </motion.div>
                 )}
+
             </AnimatePresence>
         </header>
     )

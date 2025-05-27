@@ -153,3 +153,8 @@
 :focus-visible {
   @apply outline-none ring-2 ring-[#cba6f7] ring-offset-2 ring-offset-[#11111b];
 }
+
+input:focus {
+  box-shadow: none !important;
+}
+
