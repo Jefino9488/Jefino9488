@@ -32,7 +32,7 @@ export default function Projects() {
             {/* Full width dashboard section */}
             <section className="w-full py-10 ">
                 <div className="container mx-auto px-4">
-                    <GitHubDashboard username="Jefino9488" />
+                    <GitHubDashboard />
                 </div>
             </section>
 

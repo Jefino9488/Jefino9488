@@ -242,7 +242,7 @@ export default function About() {
 
                                         <div>
                                             <h2 className="text-2xl font-bold mb-4 text-[#f5c2e7]">GitHub Activity</h2>
-                                            <GitHubDashboard username="Jefino9488" />
+                                            <GitHubDashboard/>
                                         </div>
                                     </div>
                                 </CardContent>
