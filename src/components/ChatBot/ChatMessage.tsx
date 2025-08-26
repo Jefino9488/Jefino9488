@@ -26,7 +26,7 @@ export default function ChatMessage({ message, index }: ChatMessageProps) {
         >
             {message.sender === "bot" && (
                 <Avatar className="h-8 w-8 mr-2 mt-1 hidden sm:inline-flex flex-shrink-0">
-                    <AvatarImage src="https://avatars.githubusercontent.com/u/89455522?v=4" alt="Jefino" />
+                    <AvatarImage src="/profile/profile.png" alt="Jefino" />
                     <AvatarFallback>JT</AvatarFallback>
                 </Avatar>
             )}

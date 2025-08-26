@@ -53,7 +53,7 @@ export default function Home() {
                                 >
                                     <div className="absolute inset-0 bg-purple-800 rounded-full filter blur-xl opacity-50"></div>
                                     <Avatar className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-4 border-[#f5c2e7] shadow-lg relative">
-                                        <AvatarImage src="https://avatars.githubusercontent.com/u/89455522?v=4" alt="Jefino" />
+                                        <AvatarImage src="/profile/profile.png" alt="Jefino" />
                                         <AvatarFallback>JT</AvatarFallback>
                                     </Avatar>
                                 </motion.div>

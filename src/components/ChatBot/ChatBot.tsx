@@ -102,7 +102,7 @@ export default function ChatBot() {
                 <div className="bg-gradient-to-r from-[#313244] to-[#45475a] p-4 flex justify-between items-center border-b border-[#45475a]">
                     <div className="flex items-center">
                         <Avatar className="h-10 w-10 mr-3 border-2 border-[#cba6f7]">
-                            <AvatarImage src="https://avatars.githubusercontent.com/u/89455522?v=4" alt="Jefino" />
+                            <AvatarImage src="/profile/profile.png" alt="Jefino" />
                             <AvatarFallback>JT</AvatarFallback>
                         </Avatar>
                         <div>
@@ -149,7 +149,7 @@ export default function ChatBot() {
                                 {isLoading && (
                                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start">
                                         <Avatar className="h-8 w-8 mr-2 mt-1 hidden sm:inline-flex flex-shrink-0">
-                                            <AvatarImage src="https://avatars.githubusercontent.com/u/89455522?v=4" alt="Jefino" />
+                                            <AvatarImage src="/profile/profile.png" alt="Jefino" />
                                             <AvatarFallback>JT</AvatarFallback>
                                         </Avatar>
                                         <div className="bg-[#313244] text-[#cdd6f4] rounded-2xl px-4 py-3 max-w-[85%] rounded-tl-sm">
