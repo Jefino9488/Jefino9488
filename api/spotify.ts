@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 let accessToken: string | null = null;
 let expiry = 0;
@@ -25,12 +25,16 @@ async function getAccessToken() {
     });
 
     const data = await res.json();
+    if (!res.ok) {
+        throw new Error(JSON.stringify(data));
+    }
+
     accessToken = data.access_token;
     expiry = Date.now() + data.expires_in * 1000;
     return accessToken;
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         const token = await getAccessToken();
 
@@ -42,32 +46,35 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (r.status === 200) {
             const data = await r.json();
             if (data?.item) {
-                return res.json({
+                type Artist = { name: string };
+                return res.status(200).json({
                     isPlaying: data.is_playing,
                     name: data.item.name,
-                    artist: data.item.artists.map((a: any) => a.name).join(", "),
+                    artist: data.item.artists.map((a: Artist) => a.name).join(", "),
                     albumArt: data.item.album.images[0].url,
                     url: data.item.external_urls.spotify,
                 });
             }
         }
 
-        // Fallback to recently played
+        // Fallback recently played
         r = await fetch("https://api.spotify.com/v1/me/player/recently-played?limit=1", {
             headers: { Authorization: `Bearer ${token}` },
         });
         const recent = await r.json();
         const track = recent.items[0].track;
-
-        return res.json({
+        type Artist = { name: string };
+        return res.status(200).json({
             isPlaying: false,
             name: track.name,
-            artist: track.artists.map((a: any) => a.name).join(", "),
+            artist: track.artists.map((a: Artist) => a.name).join(", "),
             albumArt: track.album.images[0].url,
             url: track.external_urls.spotify,
         });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Spotify fetch failed" });
+    } catch (err: unknown) {
+        let message = "Unknown error";
+        if (err instanceof Error) message = err.message;
+        console.error("Spotify API error:", err);
+        return res.status(500).json({ error: "Spotify fetch failed", details: message });
     }
 }
