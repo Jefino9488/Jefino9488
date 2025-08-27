@@ -7,7 +7,7 @@ import { Github, Mail, Linkedin, ExternalLink, Send, BookOpen, ArrowRight, Star,
 import { motion, useMotionValue, useTransform, type PanInfo, AnimatePresence } from "framer-motion"
 import { useProjects } from "./ProjectsContext"
 import { useScreenSize } from "@/hooks/useScreenSize"
-import { getCurrentlyPlaying, SpotifyTrack, initiateSpotifyLogin, handleCallback } from "@/utils/spotify"
+import { SpotifyTrack, initiateSpotifyLogin, handleCallback } from "@/utils/spotify"
 import { useEffect, useState, useCallback } from "react"
 
 export default function Home() {
@@ -46,18 +46,18 @@ export default function Home() {
 
     const fetchSpotifyTrack = useCallback(async () => {
         try {
-            const track = await getCurrentlyPlaying()
-            if (track) {
-                setSpotifyTrack(track)
-                setIsSpotifyConnected(true)
-            } else {
-                setIsSpotifyConnected(false);
+            const res = await fetch("/api/spotify");
+            if (res.ok) {
+                const track = await res.json();
+                setSpotifyTrack(track);
+                setIsSpotifyConnected(true);
             }
         } catch (error) {
-            console.error('Error fetching Spotify track:', error)
-            setIsSpotifyConnected(false)
+            console.error("Error fetching Spotify track:", error);
+            setIsSpotifyConnected(false);
         }
-    }, [])
+    }, []);
+
 
     useEffect(() => {
         async function init() {
