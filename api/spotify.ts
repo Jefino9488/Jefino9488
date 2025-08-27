@@ -1,55 +1,28 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+// api/spotify.ts (or .js if you don’t want TypeScript)
+export default async function handler(req, res) {
     try {
-        const clientId = process.env.SPOTIFY_CLIENT_ID!;
-        const clientSecret = process.env.SPOTIFY_CLIENT_SECRET!;
-        const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN!;
+        const refresh_token = process.env.SPOTIFY_REFRESH_TOKEN;
+        const client_id = process.env.SPOTIFY_CLIENT_ID;
+        const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
-        if (!clientId || !clientSecret || !refreshToken) {
-            return res.status(500).json({ error: "Missing Spotify environment variables" });
-        }
+        const basic = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
 
-        const authHeader = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
-
-        const tokenResponse = await fetch("https://accounts.spotify.com/api/token", {
+        const response = await fetch("https://accounts.spotify.com/api/token", {
             method: "POST",
             headers: {
-                Authorization: `Basic ${authHeader}`,
+                "Authorization": `Basic ${basic}`,
                 "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: `grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`, // 👈 send raw string
+            body: new URLSearchParams({
+                grant_type: "refresh_token",
+                refresh_token,
+            }),
         });
 
-        if (!tokenResponse.ok) {
-            const errorText = await tokenResponse.text();
-            console.error("Spotify token error:", errorText);
-            return res.status(tokenResponse.status).json({ error: "Failed to fetch access token", details: errorText });
-        }
-
-        const { access_token } = await tokenResponse.json();
-
-        if (!access_token) {
-            return res.status(500).json({ error: "No access token received" });
-        }
-
-        const profileResponse = await fetch("https://api.spotify.com/v1/me", {
-            headers: {
-                Authorization: `Bearer ${access_token}`,
-            },
-        });
-
-        if (!profileResponse.ok) {
-            const errorText = await profileResponse.text();
-            console.error("Spotify profile error:", errorText);
-            return res.status(profileResponse.status).json({ error: "Failed to fetch profile", details: errorText });
-        }
-
-        const profileData = await profileResponse.json();
-        return res.status(200).json(profileData);
-
-    } catch (error: any) {
-        console.error("Unexpected error:", error);
-        return res.status(500).json({ error: "Unexpected error", details: error.message });
+        const data = await response.json();
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Something went wrong" });
     }
 }
