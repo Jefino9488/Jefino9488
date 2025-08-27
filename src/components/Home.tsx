@@ -7,7 +7,7 @@ import { Github, Mail, Linkedin, ExternalLink, Send, BookOpen, ArrowRight, Star,
 import { motion, useMotionValue, useTransform, type PanInfo, AnimatePresence } from "framer-motion"
 import { useProjects } from "./ProjectsContext"
 import { useScreenSize } from "@/hooks/useScreenSize"
-import { getCurrentlyPlaying, SpotifyTrack, initiateSpotifyLogin } from "@/utils/spotify"
+import { getCurrentlyPlaying, SpotifyTrack, initiateSpotifyLogin, handleCallback } from "@/utils/spotify"
 import { useEffect, useState, useCallback } from "react"
 
 export default function Home() {
@@ -50,8 +50,8 @@ export default function Home() {
             if (track) {
                 setSpotifyTrack(track)
                 setIsSpotifyConnected(true)
-            } else if (!localStorage.getItem('spotify_auth_pending')) {
-                setIsSpotifyConnected(false)
+            } else {
+                setIsSpotifyConnected(false);
             }
         } catch (error) {
             console.error('Error fetching Spotify track:', error)
@@ -60,12 +60,20 @@ export default function Home() {
     }, [])
 
     useEffect(() => {
-        if (isSpotifyConnected) {
-            fetchSpotifyTrack()
-            const interval = setInterval(fetchSpotifyTrack, 10000) // Update every 10 seconds
-            return () => clearInterval(interval)
+        async function init() {
+            const didAuth = await handleCallback(); // handles ?code=... exchange
+            if (didAuth) {
+                setIsSpotifyConnected(true);
+            }
+            if (isSpotifyConnected || didAuth) {
+                fetchSpotifyTrack();
+                const interval = setInterval(fetchSpotifyTrack, 10000); // Update every 10 seconds
+                return () => clearInterval(interval);
+            }
         }
-    }, [fetchSpotifyTrack, isSpotifyConnected])
+        init();
+    }, [fetchSpotifyTrack, isSpotifyConnected]);
+
 
     return (
         <div className="min-h-screen bg-[#020203] text-[#cdd6f4]">
