@@ -27,7 +27,8 @@ export interface GitHubStats {
 
 const axiosInstance = axios.create({
     headers: {
-        Authorization: GITHUB_TOKEN ? `token ${GITHUB_TOKEN}` : undefined
+        ...(GITHUB_TOKEN ? { 'Authorization': `Bearer ${GITHUB_TOKEN}` } : {}),
+        'Accept': 'application/vnd.github.v3+json'
     }
 });
 

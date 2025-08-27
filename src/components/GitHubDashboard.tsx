@@ -2,13 +2,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Star, GitCommit, GitFork, Users, GitPullRequest } from "lucide-react";
 import { motion } from "framer-motion";
 import { useGitHubData } from "@/components/GitHubContext"; // Import your context
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 export default function GitHubDashboard() {
     const { profile, stats, loading } = useGitHubData();
 
     if (loading || !profile || !stats) {
         return (
-            <div className="flex justify-center items-center h-48 bg-[#11111b] rounded-2xl">
+            <div className="flex justify-center items-center h-48 bg-[#0D0911] rounded-2xl">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#f5c2e7]"></div>
             </div>
         );
@@ -34,11 +35,16 @@ export default function GitHubDashboard() {
     };
 
     return (
-        <Card className="bg-[#1e1e2e] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden w-full">
+        <Card className="bg-[#0D0911] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden w-full">
             <CardHeader className="py-4 px-4 border-b border-[#313244]">
-                <CardTitle className="flex items-center justify-center">
-                    <h1 className="text-2xl sm:text-3xl font-bold text-[#cba6f7]">Github Overview</h1>
-                </CardTitle>
+                <div className="flex flex-col items-center">
+                    <Avatar className="w-16 h-16 mb-2">
+                        <AvatarImage src="/profile/profile.png" alt="Jefino" />
+                    </Avatar>
+                    <CardTitle className="flex items-center justify-center">
+                        <h1 className="text-2xl sm:text-3xl font-bold text-[#cba6f7]">Github Overview</h1>
+                    </CardTitle>
+                </div>
             </CardHeader>
             <CardContent className="p-4">
                 <motion.div variants={containerVariants} initial="hidden" animate="visible">
@@ -54,7 +60,7 @@ export default function GitHubDashboard() {
                             <motion.div
                                 key={index}
                                 variants={itemVariants}
-                                className="flex flex-col items-center p-3 bg-[#313244] rounded-xl hover:bg-[#45475a] transition-all duration-300"
+                                className="flex flex-col items-center p-3 bg-[#2B1F37] rounded-xl hover:bg-[#45475a] transition-all duration-300"
                             >
                                 <item.icon className="h-6 w-6 text-[#cba6f7] mb-2" />
                                 <span className="text-base font-bold text-[#f5c2e7]">{item.value}</span>

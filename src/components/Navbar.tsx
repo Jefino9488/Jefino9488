@@ -43,7 +43,7 @@ export default function Navbar() {
     return (
         <header
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-                scrolled ? "bg-[#1e1e2e]/90 backdrop-blur-md shadow-md" : "bg-transparent"
+                scrolled ? "bg-[#020203]/90 backdrop-blur-md shadow-md" : "bg-transparent"
             }`}
         >
             <div className="container mx-auto px-4">
@@ -65,8 +65,8 @@ export default function Navbar() {
                                         variant="ghost"
                                         className={`relative px-3 py-2 text-sm rounded-lg transition-colors ${
                                             isActive
-                                                ? "!text-[#f5c2e7] !bg-[#313244]"
-                                                : "text-[#cdd6f4] hover:text-[#f5c2e7] hover:bg-[#313244]/50"
+                                                ? "!text-[#f5c2e7] !bg-[#0C0810]"
+                                                : "text-[#cdd6f4] hover:text-[#f5c2e7] hover:bg-[#313244]"
                                         }`}
                                     >
                                         <item.icon className="w-4 h-4 mr-2" />
@@ -91,7 +91,7 @@ export default function Navbar() {
                             size="icon"
                             onClick={() => setIsOpen(!isOpen)}
                             aria-label={isOpen ? "Close menu" : "Open menu"}
-                            className="text-[#cdd6f4] hover:bg-[#313244]/50 hover:text-[#f5c2e7]"
+                            className="text-[#cdd6f4] hover:bg-[#313244] hover:text-[#f5c2e7]"
                         >
                             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                         </Button>
@@ -107,7 +107,7 @@ export default function Navbar() {
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="md:hidden bg-[#1e1e2e] border-b border-[#313244]"
+                        className="md:hidden bg-[#0C0810] border-b border-[#191121]"
                     >
                         <div className="px-4 py-3 space-y-1">
                             {navItems.map((item) => {
@@ -121,7 +121,7 @@ export default function Navbar() {
                                             variant="ghost"
                                             className={`w-full justify-start text-left ${
                                                 isActive
-                                                    ? "!bg-[#313244] !text-[#f5c2e7]"
+                                                    ? "!bg-[#0C0810] !text-[#f5c2e7]"
                                                     : "text-[#cdd6f4] hover:bg-transparent hover:text-[#cdd6f4]"
                                             }`}
                                         >

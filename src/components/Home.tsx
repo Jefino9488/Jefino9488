@@ -3,10 +3,12 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Github, Mail, Linkedin, ExternalLink, Send, BookOpen, ArrowRight, Star, GitFork, MapPin, Award } from 'lucide-react'
-import { motion, useMotionValue, useTransform, type PanInfo } from "framer-motion"
+import { Github, Mail, Linkedin, ExternalLink, Send, BookOpen, ArrowRight, Star, GitFork, MapPin, Award, Music2 } from 'lucide-react'
+import { motion, useMotionValue, useTransform, type PanInfo, AnimatePresence } from "framer-motion"
 import { useProjects } from "./ProjectsContext"
 import { useScreenSize } from "@/hooks/useScreenSize"
+import { getCurrentlyPlaying, SpotifyTrack, initiateSpotifyLogin } from "@/utils/spotify"
+import { useEffect, useState, useCallback } from "react"
 
 export default function Home() {
     const { pinnedProjects, allProjects, loading, error } = useProjects()
@@ -38,11 +40,38 @@ export default function Home() {
         ...(isXlScreen ? recentNonPinnedProjects : [])
     ].slice(0, projectCount)
 
+    const [spotifyTrack, setSpotifyTrack] = useState<SpotifyTrack | null>(null)
+    const [showSpotifyDetails, setShowSpotifyDetails] = useState(false)
+    const [isSpotifyConnected, setIsSpotifyConnected] = useState(!!localStorage.getItem('spotify_access_token'))
+
+    const fetchSpotifyTrack = useCallback(async () => {
+        try {
+            const track = await getCurrentlyPlaying()
+            if (track) {
+                setSpotifyTrack(track)
+                setIsSpotifyConnected(true)
+            } else if (!localStorage.getItem('spotify_auth_pending')) {
+                setIsSpotifyConnected(false)
+            }
+        } catch (error) {
+            console.error('Error fetching Spotify track:', error)
+            setIsSpotifyConnected(false)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (isSpotifyConnected) {
+            fetchSpotifyTrack()
+            const interval = setInterval(fetchSpotifyTrack, 10000) // Update every 10 seconds
+            return () => clearInterval(interval)
+        }
+    }, [fetchSpotifyTrack, isSpotifyConnected])
+
     return (
-        <div className="poppins-medium min-h-screen bg-[#11111b] flex flex-col text-[#cdd6f4]">
+        <div className="min-h-screen bg-[#020203] text-[#cdd6f4]">
             <div className="flex-grow w-full py-12">
                 <header className="mb-8 sm:mb-12 container mx-auto px-4">
-                    <Card className="bg-gradient-to-br from-[#11111b] to-[#1e1e2e] border-none text-[#cdd6f4] rounded-3xl shadow-lg overflow-hidden">
+                    <Card className="bg-gradient-to-br from-[#0C0810] to-[#0D0911] border-none text-[#cdd6f4] rounded-3xl shadow-lg overflow-hidden">
                         <CardContent className="p-6 md:p-8">
                             <div className="flex flex-col items-center md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-8">
                                 <motion.div
@@ -51,11 +80,62 @@ export default function Home() {
                                     transition={{ duration: 0.5 }}
                                     className="flex-shrink-0 relative"
                                 >
-                                    <div className="absolute inset-0 bg-purple-800 rounded-full filter blur-xl opacity-50"></div>
-                                    <Avatar className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-4 border-[#f5c2e7] shadow-lg relative">
-                                        <AvatarImage src="/profile/profile.png" alt="Jefino" />
+                                    <div className="absolute inset-0 bg-purple-950 rounded-full filter blur-xl opacity-100"></div>
+                                    <Avatar className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-4 border-[#3F304E] shadow-lg relative">
+                                        <AvatarImage src="/profile/profile.jpg" alt="Jefino" />
                                         <AvatarFallback>JT</AvatarFallback>
                                     </Avatar>
+
+                                    {/* Spotify Section */}
+                                    {!isSpotifyConnected ? (
+                                        <div
+                                            onClick={initiateSpotifyLogin}
+                                            className="group absolute -bottom-2 right-0 bg-[#1DB954] rounded-full shadow-lg border-2 border-[#020203] transition-all hover:scale-105 cursor-pointer px-3 py-1.5"
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <Music2 className="w-4 h-4 text-white" />
+                                                <span className="text-white text-xs font-medium">
+                                                    Connect Spotify
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ) : spotifyTrack && (
+                                        <div
+                                            className="group absolute -bottom-2 right-0 bg-[#1DB954] rounded-full shadow-lg border-2 border-[#020203] transition-all hover:scale-105 cursor-pointer"
+                                            onClick={() => window.open(spotifyTrack.url, '_blank')}
+                                            onMouseEnter={() => setShowSpotifyDetails(true)}
+                                            onMouseLeave={() => setShowSpotifyDetails(false)}
+                                        >
+                                            <div className="flex items-center gap-2 pl-2 pr-3 py-1.5">
+                                                <Music2 className={`w-4 h-4 text-white ${spotifyTrack.isPlaying ? 'animate-pulse' : ''}`} />
+                                                <div className="text-white text-xs font-medium max-w-[120px] truncate">
+                                                    {spotifyTrack.name}
+                                                </div>
+                                            </div>
+
+                                            {/* Floating Details */}
+                                            <AnimatePresence>
+                                                {showSpotifyDetails && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, scale: 0.9, y: 5 }}
+                                                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                                                        exit={{ opacity: 0, scale: 0.9, y: 5 }}
+                                                        className="absolute right-0 bottom-full mb-2 bg-[#0C0810] rounded-lg shadow-xl border border-[#313244] w-48 p-3"
+                                                    >
+                                                        <div className="text-[#f5c2e7] text-xs font-medium mb-1">
+                                                            {spotifyTrack.isPlaying ? "Now Playing" : "Recently Played"}
+                                                        </div>
+                                                        <div className="text-white text-sm font-semibold mb-0.5 truncate">
+                                                            {spotifyTrack.name}
+                                                        </div>
+                                                        <div className="text-[#a6adc8] text-xs truncate">
+                                                            {spotifyTrack.artist}
+                                                        </div>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
+                                    )}
                                 </motion.div>
                                 <div className="flex-grow text-center md:text-left">
                                     <motion.div
@@ -146,7 +226,7 @@ export default function Home() {
                                 <Badge
                                     key={index}
                                     variant="secondary"
-                                    className="text-lg py-2 px-4 bg-[#313244] hover:bg-[#585b70] transition-colors rounded-2xl text-[#cdd6f4]"
+                                    className="text-lg py-2 px-4 bg-[#191121] hover:bg-[#1E1627] transition-colors rounded-2xl text-[#cdd6f4]"
                                 >
                                     {skill}
                                 </Badge>
@@ -155,7 +235,7 @@ export default function Home() {
                     </section>
 
                     <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Card className="bg-[#1e1e2e] border-[#313244] border text-[#cdd6f4] hover:bg-[#313244] transition-colors rounded-3xl shadow-lg overflow-hidden hover-lift">
+                        <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] hover:bg-[#1E1627] transition-colors rounded-3xl shadow-lg overflow-hidden hover-lift">
                             <Link to="/blog" className="block">
                                 <CardHeader className="pb-2">
                                     <CardTitle className="flex items-center text-lg sm:text-2xl font-bold text-[#f5c2e7]">
@@ -175,7 +255,7 @@ export default function Home() {
                             </Link>
                         </Card>
 
-                        <Card className="bg-[#1e1e2e] border-[#313244] border text-[#cdd6f4] hover:bg-[#313244] transition-colors rounded-3xl shadow-lg overflow-hidden hover-lift">
+                        <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] hover:bg-[#1E1627] transition-colors rounded-3xl shadow-lg overflow-hidden hover-lift">
                             <Link to="/certificates" className="block">
                                 <CardHeader className="pb-2">
                                     <CardTitle className="flex items-center text-lg sm:text-2xl font-bold text-[#f5c2e7]">
@@ -221,7 +301,7 @@ export default function Home() {
                                     >
                                         <div className="group relative h-full">
                                             <div className="absolute inset-0 bg-gradient-to-r from-[#89b4fa]/20 to-[#cba6f7]/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                                            <div className="relative backdrop-blur-xl bg-[#1e1e2e] rounded-3xl p-6 border border-[#45475a] transition-all duration-300 group-hover:border-[#cba6f7]/50 h-full flex flex-col">
+                                            <div className="relative backdrop-blur-xl bg-[#0D0911] rounded-3xl p-6 border border-[#45475a] transition-all duration-300 group-hover:border-[#cba6f7]/50 h-full flex flex-col">
                                                 <h3 className="text-xl font-semibold mb-3 text-white">{project.title}</h3>
                                                 <p className="text-[#cdd6f4] mb-4 text-sm line-clamp-2">{project.description}</p>
                                                 <div className="flex flex-wrap gap-2 mb-4">

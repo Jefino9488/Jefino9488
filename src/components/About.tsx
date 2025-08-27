@@ -77,7 +77,7 @@ export default function About() {
     const [activeTab, setActiveTab] = useState<"overview" | "timeline" | "skills">("overview")
 
     return (
-        <div className="min-h-screen bg-[#11111b] text-[#cdd6f4]">
+        <div className="min-h-screen bg-[#020203] text-[#cdd6f4]">
             <div className="container mx-auto px-4 py-16">
                 <div className="flex justify-between items-center mb-8">
                     <Link to="/">
@@ -94,13 +94,13 @@ export default function About() {
 
                 {/* Dashboard Header */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <Card className="bg-[#1e1e2e] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden lg:col-span-2">
+                    <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden lg:col-span-2">
                         <CardContent className="p-6">
                             <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
                                 <div className="relative">
                                     <div className="absolute inset-0 bg-purple-800 rounded-full filter blur-xl opacity-50"></div>
                                     <img
-                                        src="/profile/profile.png"
+                                        src="/profile/profile.jpg"
                                         alt="Jefino"
                                         className="w-32 h-32 rounded-full border-4 border-[#f5c2e7] shadow-lg relative"
                                     />
@@ -149,25 +149,25 @@ export default function About() {
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-[#1e1e2e] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
+                    <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
                         <CardHeader className="pb-2">
                             <CardTitle className="text-xl font-semibold text-[#f5c2e7]">Quick Stats</CardTitle>
                         </CardHeader>
                         <CardContent className="p-6">
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="bg-[#313244] p-4 rounded-xl">
+                                <div className="bg-[#3F304E] p-4 rounded-xl">
                                     <p className="text-sm text-[#a6adc8]">Experience</p>
                                     <p className="text-2xl font-bold text-[#cba6f7]">3+ Years</p>
                                 </div>
-                                <div className="bg-[#313244] p-4 rounded-xl">
+                                <div className="bg-[#3F304E] p-4 rounded-xl">
                                     <p className="text-sm text-[#a6adc8]">Projects</p>
                                     <p className="text-2xl font-bold text-[#cba6f7]">15+</p>
                                 </div>
-                                <div className="bg-[#313244] p-4 rounded-xl">
+                                <div className="bg-[#3F304E] p-4 rounded-xl">
                                     <p className="text-sm text-[#a6adc8]">Certifications</p>
                                     <p className="text-2xl font-bold text-[#cba6f7]">3</p>
                                 </div>
-                                <div className="bg-[#313244] p-4 rounded-xl">
+                                <div className="bg-[#3F304E] p-4 rounded-xl">
                                     <p className="text-sm text-[#a6adc8]">Languages</p>
                                     <p className="text-2xl font-bold text-[#cba6f7]">5+</p>
                                 </div>
@@ -217,7 +217,7 @@ export default function About() {
                 <div className="mb-8">
                     {activeTab === "overview" && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                            <Card className="bg-[#1e1e2e] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
+                            <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
                                 <CardContent className="p-6">
                                     <div className="space-y-6">
                                         <div>
@@ -252,7 +252,7 @@ export default function About() {
 
                     {activeTab === "timeline" && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                            <Card className="bg-[#1e1e2e] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
+                            <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
                                 <CardContent className="p-6">
                                     <h2 className="text-2xl font-bold mb-6 text-[#f5c2e7]">My Journey</h2>
                                     <div className="relative">
@@ -294,7 +294,7 @@ export default function About() {
 
                     {activeTab === "skills" && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                            <Card className="bg-[#1e1e2e] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
+                            <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
                                 <CardContent className="p-6">
                                     <h2 className="text-2xl font-bold mb-6 text-[#f5c2e7]">Technical Skills</h2>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

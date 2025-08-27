@@ -18,8 +18,8 @@ const CodeBlock = ({ code }: { code: string }) => {
     }
 
     return (
-        <div className="relative bg-[#11111b] rounded-lg my-4 overflow-hidden">
-            <div className="flex items-center justify-between px-4 py-2 bg-[#45475a]">
+        <div className="relative bg-[#020203] rounded-lg my-4 overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2 bg-[#020203]">
                 <span className="text-sm font-medium text-gray-200">Code</span>
                 <button
                     onClick={() => handleCopy(code, -1)}
@@ -107,7 +107,7 @@ export default function BlogPost() {
     }
 
     return (
-        <div className="min-h-screen bg-[#11111b] py-8 sm:py-16 text-[#cdd6f4]">
+        <div className="min-h-screen bg-[#020203] py-8 sm:py-16 text-[#cdd6f4]">
             <div className="container mx-auto px-4">
                 <div className="max-w-4xl mx-auto">
                     <Link to="/blog">

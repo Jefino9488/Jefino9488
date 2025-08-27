@@ -14,7 +14,7 @@ export default function TransitionWrapper({ children }: { children: React.ReactN
             animate="animate"
             exit="exit"
             transition={{ duration: 0.5, ease: 'easeInOut' }}
-            className="min-h-screen bg-gray-950 text-white"
+            className="min-h-screen bg-[#020203] text-white"
         >
             {children}
         </motion.div>

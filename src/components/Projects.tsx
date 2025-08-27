@@ -10,7 +10,7 @@ export default function Projects() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#11111b] flex items-center justify-center">
+            <div className="min-h-screen bg-[#020203] flex items-center justify-center">
                 <div className="text-center text-[#cdd6f4]">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#f5c2e7] mx-auto mb-4"></div>
                     Loading Repository...
@@ -21,14 +21,14 @@ export default function Projects() {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-[#11111b] flex items-center justify-center">
+            <div className="min-h-screen bg-[#020203] flex items-center justify-center">
                 <div className="text-center text-[#f38ba8]">{error}</div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-[#11111b] text-[#cdd6f4]">
+        <div className="min-h-screen bg-[#020203] text-[#cdd6f4]">
             {/* Full width dashboard section */}
             <section className="w-full py-10 ">
                 <div className="container mx-auto px-4">
@@ -47,7 +47,7 @@ export default function Projects() {
                         >
                             <div className="group relative h-56 rounded-3xl overflow-hidden shadow-lg">
                                 <div className="absolute inset-0 bg-gradient-to-r from-[#89b4fa]/20 to-[#cba6f7]/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                                <div className="relative backdrop-blur-xl bg-[#1e1e2e] rounded-3xl p-6 border border-[#45475a] transition-all duration-300 group-hover:border-[#cba6f7]/50 h-full flex flex-col">
+                                <div className="relative backdrop-blur-xl bg-[#0D0911] rounded-3xl p-6 border border-[#45475a] transition-all duration-300 group-hover:border-[#cba6f7]/50 h-full flex flex-col">
                                     <h3 className="text-xl font-semibold mb-3 text-[#89b4fa]">{project.title}</h3>
                                     <p className="text-[#cdd6f4] mb-4 text-sm line-clamp-2">{project.description}</p>
                                     <div className="flex flex-wrap gap-2 mb-4">

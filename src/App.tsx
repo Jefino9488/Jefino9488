@@ -1,5 +1,5 @@
-import { Suspense } from "react"
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
+import { Suspense, useEffect } from "react"
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom"
 import { AnimatePresence } from "framer-motion"
 import Home from "./components/Home"
 import BlogList from "./components/BlogList"
@@ -19,12 +19,21 @@ import FloatingActionButton from "@/components/ChatBot/FloatingActionButton.tsx"
 import ChatBot from "@/components/ChatBot/ChatBot.tsx";
 import { ChatProvider } from "@/components/ChatBot/ChatContext.tsx";
 import {GitHubProvider} from "@/components/GitHubContext.tsx";
+import { handleCallback as handleSpotifyCallback } from "@/utils/spotify"
 
 function AppContent() {
     useSmoothScroll()
+    const location = useLocation()
+
+    useEffect(() => {
+        // Handle Spotify authentication callback
+        if (window.location.hash) {
+            handleSpotifyCallback()
+        }
+    }, [location])
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen bg-[#000000]">
             <Navbar />
             <main className="flex-grow pt-16">
                 <AnimatePresence mode="wait">

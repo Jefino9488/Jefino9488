@@ -8,7 +8,7 @@ import certificates from "@/certifications/certifications.json"
 
 export default function Certificates() {
     return (
-        <div className="min-h-screen bg-[#11111b] text-[#cdd6f4]">
+        <div className="min-h-screen bg-[#020203] text-[#cdd6f4]">
             {/* Header Section - Full Width */}
             <section className="w-full py-10">
                 <div className="container mx-auto px-4">
@@ -38,7 +38,7 @@ export default function Certificates() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                         >
-                            <Card className="bg-[#1e1e2e] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden hover:border-[#cba6f7]/50 transition-all duration-300 h-full flex flex-col">
+                            <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden hover:border-[#cba6f7]/50 transition-all duration-300 h-full flex flex-col">
                                 <CardHeader className="pb-2">
                                     <div className="flex justify-between items-start">
                                         <div>

@@ -11,7 +11,7 @@ const blogPosts = [post1, post2]
 
 export default function BlogList() {
     return (
-        <div className="min-h-screen bg-[#11111b] py-16 text-[#cdd6f4]">
+        <div className="min-h-screen bg-[#020203] py-16 text-[#cdd6f4]">
             <div className="container mx-auto px-4">
                 <header className="mb-16 text-center">
                     <h1 className="text-4xl sm:text-5xl font-bold mb-4 tracking-tight text-[#cba6f7]">My Blogs</h1>
@@ -29,7 +29,7 @@ export default function BlogList() {
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
                             <Link to={`/blog/${post.id}`}>
-                                <Card className="bg-[#1e1e2e] border-[#313244] border text-[#cdd6f4] hover:bg-[#313244] transition-all duration-300 rounded-2xl shadow-lg transform hover:-translate-y-1 h-full">
+                                <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] hover:bg-[#313244] transition-all duration-300 rounded-2xl shadow-lg transform hover:-translate-y-1 h-full">
                                     <CardHeader>
                                         <CardTitle className="text-xl sm:text-2xl font-semibold mb-2">{post.title}</CardTitle>
                                         <div className="flex items-center text-sm text-gray-400 mb-2">

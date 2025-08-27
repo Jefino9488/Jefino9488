@@ -34,7 +34,7 @@ export default function ChatMessage({ message, index }: ChatMessageProps) {
                 className={`max-w-[85%] rounded-2xl px-4 py-3 ${
                     message.sender === "user"
                         ? "bg-gradient-to-br from-[#cba6f7] to-[#f5c2e7] text-[#1e1e2e] rounded-tr-sm"
-                        : "bg-[#313244] text-[#cdd6f4] rounded-tl-sm"
+                        : "bg-[#181825] text-[#cdd6f4] rounded-tl-sm"
                 }`}
                 style={{ boxShadow: "0 1px 2px rgba(0, 0, 0, 0.1)" }}
             >
