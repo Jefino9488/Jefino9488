@@ -3,12 +3,11 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Github, Mail, Linkedin, ExternalLink, Send, BookOpen, ArrowRight, Star, GitFork, MapPin, Award, Music2 } from 'lucide-react'
-import { motion, useMotionValue, useTransform, type PanInfo, AnimatePresence } from "framer-motion"
+import { Github, Mail, Linkedin, ExternalLink, Send, BookOpen, ArrowRight, Star, GitFork, MapPin, Award } from 'lucide-react'
+import { motion, useMotionValue, useTransform, type PanInfo } from "framer-motion"
 import { useProjects } from "./ProjectsContext"
+import SpotifyWidget from '@/components/SpotifyWidget';
 import { useScreenSize } from "@/hooks/useScreenSize"
-import { SpotifyTrack, initiateSpotifyLogin, handleCallback } from "@/utils/spotify"
-import { useEffect, useState, useCallback } from "react"
 
 export default function Home() {
     const { pinnedProjects, allProjects, loading, error } = useProjects()
@@ -40,39 +39,6 @@ export default function Home() {
         ...(isXlScreen ? recentNonPinnedProjects : [])
     ].slice(0, projectCount)
 
-    const [spotifyTrack, setSpotifyTrack] = useState<SpotifyTrack | null>(null)
-    const [showSpotifyDetails, setShowSpotifyDetails] = useState(false)
-    const [isSpotifyConnected, setIsSpotifyConnected] = useState(!!localStorage.getItem('spotify_access_token'))
-
-    const fetchSpotifyTrack = useCallback(async () => {
-        try {
-            const res = await fetch("/api/spotify");
-            if (res.ok) {
-                const track = await res.json();
-                setSpotifyTrack(track);
-                setIsSpotifyConnected(true);
-            }
-        } catch (error) {
-            console.error("Error fetching Spotify track:", error);
-            setIsSpotifyConnected(false);
-        }
-    }, []);
-
-
-    useEffect(() => {
-        async function init() {
-            const didAuth = await handleCallback(); // handles ?code=... exchange
-            if (didAuth) {
-                setIsSpotifyConnected(true);
-            }
-            if (isSpotifyConnected || didAuth) {
-                fetchSpotifyTrack();
-                const interval = setInterval(fetchSpotifyTrack, 10000); // Update every 10 seconds
-                return () => clearInterval(interval);
-            }
-        }
-        init();
-    }, [fetchSpotifyTrack, isSpotifyConnected]);
 
 
     return (
@@ -93,57 +59,9 @@ export default function Home() {
                                         <AvatarImage src="/profile/profile.jpg" alt="Jefino" />
                                         <AvatarFallback>JT</AvatarFallback>
                                     </Avatar>
-
-                                    {/* Spotify Section */}
-                                    {!isSpotifyConnected ? (
-                                        <div
-                                            onClick={initiateSpotifyLogin}
-                                            className="group absolute -bottom-2 right-0 bg-[#1DB954] rounded-full shadow-lg border-2 border-[#020203] transition-all hover:scale-105 cursor-pointer px-3 py-1.5"
-                                        >
-                                            <div className="flex items-center gap-2">
-                                                <Music2 className="w-4 h-4 text-white" />
-                                                <span className="text-white text-xs font-medium">
-                                                    Connect Spotify
-                                                </span>
-                                            </div>
-                                        </div>
-                                    ) : spotifyTrack && (
-                                        <div
-                                            className="group absolute -bottom-2 right-0 bg-[#1DB954] rounded-full shadow-lg border-2 border-[#020203] transition-all hover:scale-105 cursor-pointer"
-                                            onClick={() => window.open(spotifyTrack.url, '_blank')}
-                                            onMouseEnter={() => setShowSpotifyDetails(true)}
-                                            onMouseLeave={() => setShowSpotifyDetails(false)}
-                                        >
-                                            <div className="flex items-center gap-2 pl-2 pr-3 py-1.5">
-                                                <Music2 className={`w-4 h-4 text-white ${spotifyTrack.isPlaying ? 'animate-pulse' : ''}`} />
-                                                <div className="text-white text-xs font-medium max-w-[120px] truncate">
-                                                    {spotifyTrack.name}
-                                                </div>
-                                            </div>
-
-                                            {/* Floating Details */}
-                                            <AnimatePresence>
-                                                {showSpotifyDetails && (
-                                                    <motion.div
-                                                        initial={{ opacity: 0, scale: 0.9, y: 5 }}
-                                                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                                                        exit={{ opacity: 0, scale: 0.9, y: 5 }}
-                                                        className="absolute right-0 bottom-full mb-2 bg-[#0C0810] rounded-lg shadow-xl border border-[#313244] w-48 p-3"
-                                                    >
-                                                        <div className="text-[#f5c2e7] text-xs font-medium mb-1">
-                                                            {spotifyTrack.isPlaying ? "Now Playing" : "Recently Played"}
-                                                        </div>
-                                                        <div className="text-white text-sm font-semibold mb-0.5 truncate">
-                                                            {spotifyTrack.name}
-                                                        </div>
-                                                        <div className="text-[#a6adc8] text-xs truncate">
-                                                            {spotifyTrack.artist}
-                                                        </div>
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
-                                        </div>
-                                    )}
+                                    <div className="absolute -bottom-2 right-0">
+                                        <SpotifyWidget showDetails={true} />
+                                    </div>
                                 </motion.div>
                                 <div className="flex-grow text-center md:text-left">
                                     <motion.div
