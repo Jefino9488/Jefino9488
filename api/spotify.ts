@@ -2,9 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const clientId = process.env.SPOTIFY_CLIENT_ID;
-        const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-        const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
+        const clientId = process.env.SPOTIFY_CLIENT_ID!;
+        const clientSecret = process.env.SPOTIFY_CLIENT_SECRET!;
+        const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN!;
 
         if (!clientId || !clientSecret || !refreshToken) {
             return res.status(500).json({ error: "Missing Spotify environment variables" });
@@ -18,10 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 Authorization: `Basic ${authHeader}`,
                 "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: new URLSearchParams({
-                grant_type: "refresh_token",
-                refresh_token: refreshToken,
-            }),
+            body: `grant_type=refresh_token&refresh_token=${encodeURIComponent(refreshToken)}`, // 👈 send raw string
         });
 
         if (!tokenResponse.ok) {
@@ -30,8 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(tokenResponse.status).json({ error: "Failed to fetch access token", details: errorText });
         }
 
-        const tokenData = await tokenResponse.json();
-        const { access_token } = tokenData;
+        const { access_token } = await tokenResponse.json();
 
         if (!access_token) {
             return res.status(500).json({ error: "No access token received" });
