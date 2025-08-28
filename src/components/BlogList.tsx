@@ -31,7 +31,8 @@ export default function BlogList() {
 
     const allTags = useMemo(() => {
         const tags = new Set<string>();
-        posts.forEach(post => post.tag_list?.forEach(tag => tags.add(tag)));
+        // FIX: Explicitly type 'tag' as string
+        posts.forEach(post => post.tag_list?.forEach((tag: string) => tags.add(tag)));
         return Array.from(tags).sort();
     }, [posts]);
 
@@ -162,7 +163,8 @@ export default function BlogList() {
                                                 <p className="text-gray-300 mb-4 flex-grow">{post.description}</p>
                                                 {post.tag_list && post.tag_list.length > 0 && (
                                                     <div className="flex flex-wrap gap-2 mb-4">
-                                                        {post.tag_list.slice(0, 3).map(tag => (
+                                                        {/* FIX: Explicitly type 'tag' as string */}
+                                                        {post.tag_list.slice(0, 3).map((tag: string) => (
                                                             <Badge key={tag} className="bg-[#313244] text-xs font-medium text-[#cdd6f4] border-none">
                                                                 #{tag}
                                                             </Badge>
