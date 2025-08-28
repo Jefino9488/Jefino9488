@@ -24,3 +24,10 @@ dist-ssr
 *.sw?
 /.env
 .vercel
+/.venv/*
+/.env.production
+/.venv/lib64/
+/.venv/lib64/
+/.venv/lib64/
+/digest.txt
+/get-refresh-token.js
