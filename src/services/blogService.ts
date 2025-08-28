@@ -1,8 +1,9 @@
 // src/services/blogService.ts
 
 // Define a type for the blog post data we expect from the API
+
 export interface BlogPost {
-    tag_list: string;
+    tag_list: any;
     id: number;
     title: string;
     description: string;
