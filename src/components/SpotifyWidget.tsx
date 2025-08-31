@@ -20,22 +20,8 @@ export default function SpotifyWidget({ className = '', showDetails = true }: Sp
                 className={`group relative bg-gradient-to-br from-[#0C0810] to-[#0D0911] rounded-full shadow-lg border border-[#45475a] transition-all hover:scale-105 hover:shadow-xl ${className}`}
             >
                 <div className="flex items-center gap-2 px-3 py-1.5">
-                    <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                    >
-                        <Music2 className="w-4 h-4 text-[#a6adc8]" />
-                    </motion.div>
+                    <Music2 className="w-4 h-4 text-[#a6adc8]" />
                     <span className="text-[#a6adc8] text-xs font-medium">Loading...</span>
-                </div>
-
-                {/* Subtle loading ring */}
-                <div className="absolute inset-0 rounded-full">
-                    <motion.div
-                        className="absolute inset-0 rounded-full border-2 border-transparent border-t-[#a6adc8]/20"
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                    />
                 </div>
             </motion.div>
         );
