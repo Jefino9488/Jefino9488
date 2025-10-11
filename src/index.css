@@ -158,3 +158,69 @@
 input:focus {
   box-shadow: none !important;
 }
+
+/* Mobile touch improvements */
+@media (hover: none) and (pointer: coarse) {
+  /* Remove hover effects on touch devices */
+  .hover-lift:hover {
+    @apply transform-none shadow-none;
+  }
+  
+  /* Ensure minimum touch target size */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improve touch feedback */
+  button:active, a:active, [role="button"]:active {
+    @apply scale-95 transition-transform duration-75;
+  }
+}
+
+/* Prevent zoom on input focus on iOS */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select, textarea, input[type="text"], input[type="password"], 
+  input[type="datetime"], input[type="datetime-local"], 
+  input[type="date"], input[type="month"], input[type="time"], 
+  input[type="week"], input[type="number"], input[type="email"], 
+  input[type="url"], input[type="search"], input[type="tel"], 
+  input[type="color"] {
+    font-size: 16px;
+  }
+}
+
+/* Smooth scrolling for better mobile experience */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Better text selection */
+::selection {
+  background-color: rgba(203, 166, 247, 0.3);
+  color: #cdd6f4;
+}
+
+/* Hide scrollbars on mobile while keeping functionality */
+@media (max-width: 768px) {
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Touch-friendly spacing */
+@media (hover: none) and (pointer: coarse) {
+  .space-x-4 > * + * {
+    margin-left: 1rem;
+  }
+  
+  .space-y-4 > * + * {
+    margin-top: 1rem;
+  }
+}

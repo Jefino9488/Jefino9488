@@ -19,6 +19,8 @@ import FloatingActionButton from "@/components/ChatBot/FloatingActionButton.tsx"
 import ChatBot from "@/components/ChatBot/ChatBot.tsx";
 import { ChatProvider } from "@/components/ChatBot/ChatContext.tsx";
 import { GitHubProvider } from "@/components/GitHubContext.tsx";
+import ErrorBoundary from "./components/ErrorBoundary";
+import NetworkErrorBoundary from "./components/NetworkErrorBoundary";
 
 function AppContent() {
     useSmoothScroll();
@@ -105,17 +107,30 @@ function AppContent() {
 
 function App() {
     return (
-        <Router>
-            <ProjectsProvider>
-                <ChatProvider>
-                    <GitHubProvider>
-                        <Suspense fallback={<Loader />}>
-                            <AppContent />
-                        </Suspense>
-                    </GitHubProvider>
-                </ChatProvider>
-            </ProjectsProvider>
-        </Router>
+        <ErrorBoundary
+            onError={(error, errorInfo) => {
+                // Log error to console in development
+                if (process.env.NODE_ENV === 'development') {
+                    console.error('App Error Boundary caught an error:', error, errorInfo);
+                }
+                // In production, you might want to send this to an error reporting service
+                // Example: Sentry.captureException(error, { extra: errorInfo });
+            }}
+        >
+            <NetworkErrorBoundary>
+                <Router>
+                    <ProjectsProvider>
+                        <ChatProvider>
+                            <GitHubProvider>
+                                <Suspense fallback={<Loader />}>
+                                    <AppContent />
+                                </Suspense>
+                            </GitHubProvider>
+                        </ChatProvider>
+                    </ProjectsProvider>
+                </Router>
+            </NetworkErrorBoundary>
+        </ErrorBoundary>
     );
 }
 

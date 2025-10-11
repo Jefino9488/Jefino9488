@@ -8,6 +8,8 @@ import { motion, useMotionValue, useTransform, type PanInfo } from "framer-motio
 import { useProjects } from "./ProjectsContext"
 import SpotifyWidget from '@/components/SpotifyWidget';
 import { useScreenSize } from "@/hooks/useScreenSize"
+import LazyImage from './LazyImage'
+import TouchFeedback from './TouchFeedback'
 
 export default function Home() {
     const { pinnedProjects, allProjects, loading, error } = useProjects()
@@ -55,10 +57,16 @@ export default function Home() {
                                     className="flex-shrink-0 relative"
                                 >
                                     <div className="absolute inset-0 bg-purple-950 rounded-full filter blur-xl opacity-100"></div>
-                                    <Avatar className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-4 border-[#3F304E] shadow-lg relative">
-                                        <AvatarImage src="/profile/profile.jpg" alt="Jefino" />
-                                        <AvatarFallback>JT</AvatarFallback>
-                                    </Avatar>
+                                    <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-4 border-[#3F304E] shadow-lg relative rounded-full overflow-hidden">
+                                        <LazyImage
+                                            src="/profile/profile.jpg"
+                                            alt="Jefino Jacob - Full Stack Developer"
+                                            className="w-full h-full object-cover"
+                                            priority={true}
+                                            width={192}
+                                            height={192}
+                                        />
+                                    </div>
                                     <div className="absolute -bottom-2 right-0">
                                         <SpotifyWidget showDetails={true} />
                                     </div>
@@ -88,57 +96,58 @@ export default function Home() {
                                         transition={{ duration: 0.5, delay: 0.4 }}
                                         className="flex justify-center md:justify-start space-x-4"
                                     >
-                                        <Button
-                                            variant="outline"
-                                            size="icon"
-                                            className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600"
+                                        <TouchFeedback
+                                            onTap={() => window.open("https://github.com/Jefino9488", '_blank', 'noopener,noreferrer')}
+                                            ripple={false}
                                         >
-                                            <a
-                                                href="https://github.com/Jefino9488"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600 min-h-[44px] min-w-[44px]"
                                                 aria-label="GitHub"
                                             >
                                                 <Github className="h-5 w-5 text-[#f5c2e7]" />
-                                            </a>
-                                        </Button>
-                                        <Button
-                                            variant="outline"
-                                            size="icon"
-                                            className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600"
+                                            </Button>
+                                        </TouchFeedback>
+                                        <TouchFeedback
+                                            onTap={() => window.open("mailto:jefinojacob9488@gmail.com", '_blank')}
+                                            ripple={false}
                                         >
-                                            <a href="mailto:jefinojacob9488@gmail.com" aria-label="Email">
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600 min-h-[44px] min-w-[44px]"
+                                                aria-label="Email"
+                                            >
                                                 <Mail className="h-5 w-5 text-[#f5c2e7]" />
-                                            </a>
-                                        </Button>
-                                        <Button
-                                            variant="outline"
-                                            size="icon"
-                                            className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600"
+                                            </Button>
+                                        </TouchFeedback>
+                                        <TouchFeedback
+                                            onTap={() => window.open("https://www.linkedin.com/in/jefino9488/", '_blank', 'noopener,noreferrer')}
+                                            ripple={false}
                                         >
-                                            <a
-                                                href="https://www.linkedin.com/in/jefino9488/"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600 min-h-[44px] min-w-[44px]"
                                                 aria-label="LinkedIn"
                                             >
                                                 <Linkedin className="h-5 w-5 text-[#f5c2e7]" />
-                                            </a>
-                                        </Button>
-                                        <Button
-                                            variant="outline"
-                                            size="icon"
-                                            className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600"
+                                            </Button>
+                                        </TouchFeedback>
+                                        <TouchFeedback
+                                            onTap={() => window.open("https://telegram.me/jefino9488", '_blank', 'noopener,noreferrer')}
+                                            ripple={false}
                                         >
-                                            <a
-                                                href="https://telegram.me/jefino9488"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600 min-h-[44px] min-w-[44px]"
                                                 aria-label="Telegram"
                                             >
                                                 <Send className="h-5 w-5 text-[#f5c2e7]" />
-                                            </a>
-                                        </Button>
+                                            </Button>
+                                        </TouchFeedback>
                                     </motion.div>
                                 </div>
                             </div>
@@ -225,39 +234,44 @@ export default function Home() {
                                         transition={{ duration: 0.5 }}
                                         className="hover-lift"
                                     >
-                                        <div className="group relative h-full">
-                                            <div className="absolute inset-0 bg-gradient-to-r from-[#89b4fa]/20 to-[#cba6f7]/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                                            <div className="relative backdrop-blur-xl bg-[#0D0911] rounded-3xl p-6 border border-[#45475a] transition-all duration-300 group-hover:border-[#cba6f7]/50 h-full flex flex-col">
-                                                <h3 className="text-xl font-semibold mb-3 text-white">{project.title}</h3>
-                                                <p className="text-[#cdd6f4] mb-4 text-sm line-clamp-2">{project.description}</p>
-                                                <div className="flex flex-wrap gap-2 mb-4">
-                                                    {project.tech.map((tech) => (
-                                                        <span key={tech} className="px-3 py-1 bg-gray-700 rounded-full text-xs text-[#cdd6f4]">
-                                                            {tech}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                                <div className="flex justify-between items-center mt-auto">
-                                                    <div className="flex gap-4 text-sm text-[#a6adc8]">
-                                                        <span className="flex items-center gap-1">
-                                                            <Star className="w-4 h-4 text-[#cba6f7]" /> {project.stats.stars}
-                                                        </span>
-                                                        <span className="flex items-center gap-1">
-                                                            <GitFork className="w-4 h-4 text-[#cba6f7]" /> {project.stats.forks}
-                                                        </span>
+                                        <TouchFeedback
+                                            onTap={() => window.open(project.link, '_blank', 'noopener,noreferrer')}
+                                            onLongPress={() => {
+                                                // Copy project link to clipboard
+                                                navigator.clipboard.writeText(project.link);
+                                                // You could add a toast notification here
+                                            }}
+                                            ripple={true}
+                                            className="h-full"
+                                        >
+                                            <div className="group relative h-full cursor-pointer">
+                                                <div className="absolute inset-0 bg-gradient-to-r from-[#89b4fa]/20 to-[#cba6f7]/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                                                <div className="relative backdrop-blur-xl bg-[#0D0911] rounded-3xl p-6 border border-[#45475a] transition-all duration-300 group-hover:border-[#cba6f7]/50 h-full flex flex-col">
+                                                    <h3 className="text-xl font-semibold mb-3 text-white">{project.title}</h3>
+                                                    <p className="text-[#cdd6f4] mb-4 text-sm line-clamp-2">{project.description}</p>
+                                                    <div className="flex flex-wrap gap-2 mb-4">
+                                                        {project.tech.map((tech) => (
+                                                            <span key={tech} className="px-3 py-1 bg-gray-700 rounded-full text-xs text-[#cdd6f4]">
+                                                                {tech}
+                                                            </span>
+                                                        ))}
                                                     </div>
-                                                    <a
-                                                        href={project.link}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="p-2 text-[#a6adc8] hover:text-purple-400 transition-colors"
-                                                        aria-label={`View ${project.title} on GitHub`}
-                                                    >
-                                                        <ExternalLink className="w-5 h-5 text-[#cba6f7]" />
-                                                    </a>
+                                                    <div className="flex justify-between items-center mt-auto">
+                                                        <div className="flex gap-4 text-sm text-[#a6adc8]">
+                                                            <span className="flex items-center gap-1">
+                                                                <Star className="w-4 h-4 text-[#cba6f7]" /> {project.stats.stars}
+                                                            </span>
+                                                            <span className="flex items-center gap-1">
+                                                                <GitFork className="w-4 h-4 text-[#cba6f7]" /> {project.stats.forks}
+                                                            </span>
+                                                        </div>
+                                                        <div className="p-2 text-[#a6adc8] hover:text-purple-400 transition-colors">
+                                                            <ExternalLink className="w-5 h-5 text-[#cba6f7]" />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </TouchFeedback>
                                     </motion.div>
                                 ))}
                             </div>
