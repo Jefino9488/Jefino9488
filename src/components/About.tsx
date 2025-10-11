@@ -17,9 +17,13 @@ import {
     Mail,
     Linkedin,
     Send,
+    Loader2,
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import GitHubDashboard from "./GitHubDashboard"
+import LazyImage from "./LazyImage"
+import certificates from "@/certifications/certifications.json"
+import { useProjects } from "./ProjectsContext"
 
 // Timeline data
 interface TimelineItem {
@@ -73,8 +77,93 @@ const skills = {
     tools: ["Git", "Docker", "AWS", "Firebase", "VS Code", "Figma"],
 }
 
+
 export default function About() {
     const [activeTab, setActiveTab] = useState<"overview" | "timeline" | "skills">("overview")
+    const { allProjects } = useProjects()
+
+    // Contact form state
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+    });
+
+    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const validateForm = (): boolean => {
+        const newErrors: Record<string, string> = {};
+
+        if (!formData.name.trim()) {
+            newErrors.name = 'Name is required';
+        }
+
+        if (!formData.email.trim()) {
+            newErrors.email = 'Email is required';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = 'Please enter a valid email address';
+        }
+
+        if (!formData.subject.trim()) {
+            newErrors.subject = 'Subject is required';
+        }
+
+        if (!formData.message.trim()) {
+            newErrors.message = 'Message is required';
+        } else if (formData.message.trim().length < 10) {
+            newErrors.message = 'Message must be at least 10 characters long';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        if (!validateForm()) {
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            // Create mailto link with form data
+            const subject = encodeURIComponent(formData.subject);
+            const body = encodeURIComponent(
+                `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+            );
+            
+            const mailtoLink = `mailto:jefinojacob9488@gmail.com?subject=${subject}&body=${body}`;
+            
+            // Open email client
+            window.open(mailtoLink, '_blank');
+            
+            setIsSubmitted(true);
+            setFormData({ name: '', email: '', subject: '', message: '' });
+            
+            // Reset success message after 5 seconds
+            setTimeout(() => setIsSubmitted(false), 5000);
+            
+        } catch (error) {
+            console.error('Error submitting form:', error);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+        
+        // Clear error when user starts typing
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: '' }));
+        }
+    };
 
     return (
         <div className="min-h-screen bg-[#020203] text-[#cdd6f4]">
@@ -99,11 +188,16 @@ export default function About() {
                             <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
                                 <div className="relative">
                                     <div className="absolute inset-0 bg-purple-800 rounded-full filter blur-xl opacity-50"></div>
-                                    <img
-                                        src="/profile/profile.jpg"
-                                        alt="Jefino"
-                                        className="w-32 h-32 rounded-full border-4 border-[#f5c2e7] shadow-lg relative"
-                                    />
+                                    <div className="w-32 h-32 rounded-full border-4 border-[#f5c2e7] shadow-lg relative overflow-hidden">
+                                        <LazyImage
+                                            src="/profile/profile.jpg"
+                                            alt="Jefino Jacob - Full Stack Developer"
+                                            className="w-full h-full object-cover"
+                                            priority={true}
+                                            width={128}
+                                            height={128}
+                                        />
+                                    </div>
                                 </div>
                                 <div className="flex-grow text-center md:text-left">
                                     <h1 className="text-3xl font-bold mb-2 text-[#cba6f7]">Jefino</h1>
@@ -161,11 +255,11 @@ export default function About() {
                                 </div>
                                 <div className="bg-[#3F304E] p-4 rounded-xl">
                                     <p className="text-sm text-[#a6adc8]">Projects</p>
-                                    <p className="text-2xl font-bold text-[#cba6f7]">15+</p>
+                                    <p className="text-2xl font-bold text-[#cba6f7]">{allProjects.length}+</p>
                                 </div>
                                 <div className="bg-[#3F304E] p-4 rounded-xl">
                                     <p className="text-sm text-[#a6adc8]">Certifications</p>
-                                    <p className="text-2xl font-bold text-[#cba6f7]">3</p>
+                                    <p className="text-2xl font-bold text-[#cba6f7]">{certificates.length}</p>
                                 </div>
                                 <div className="bg-[#3F304E] p-4 rounded-xl">
                                     <p className="text-sm text-[#a6adc8]">Languages</p>
@@ -365,7 +459,119 @@ export default function About() {
                             </Card>
                         </motion.div>
                     )}
+
                 </div>
+
+                {/* Compact Contact Form Section */}
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="mt-8"
+                >
+                    <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] rounded-xl shadow-lg overflow-hidden">
+                        <CardContent className="p-4">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-2 bg-[#cba6f7] rounded-lg">
+                                    <Mail className="w-4 h-4 text-[#11111b]" />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold text-[#cba6f7]">Get In Touch</h3>
+                                    <p className="text-sm text-[#a6adc8]">Quick message or just say hello!</p>
+                                </div>
+                            </div>
+
+                            {isSubmitted && (
+                                <motion.div 
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="mb-4 p-3 bg-green-900/20 border border-green-500/30 rounded-lg"
+                                >
+                                    <p className="text-green-400 text-sm">
+                                        ✅ Message sent! Your email client should open shortly.
+                                    </p>
+                                </motion.div>
+                            )}
+
+                            <form onSubmit={handleSubmit} className="space-y-3">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleInputChange}
+                                        className={`w-full px-3 py-2 bg-[#11111b] border rounded-lg text-sm text-[#cdd6f4] placeholder-[#6c7086] focus:outline-none focus:ring-2 focus:ring-[#cba6f7] focus:border-transparent transition-colors ${
+                                            errors.name ? 'border-red-500' : 'border-[#313244]'
+                                        }`}
+                                        placeholder="Your name"
+                                    />
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleInputChange}
+                                        className={`w-full px-3 py-2 bg-[#11111b] border rounded-lg text-sm text-[#cdd6f4] placeholder-[#6c7086] focus:outline-none focus:ring-2 focus:ring-[#cba6f7] focus:border-transparent transition-colors ${
+                                            errors.email ? 'border-red-500' : 'border-[#313244]'
+                                        }`}
+                                        placeholder="your.email@example.com"
+                                    />
+                                </div>
+
+                                <input
+                                    type="text"
+                                    name="subject"
+                                    value={formData.subject}
+                                    onChange={handleInputChange}
+                                    className={`w-full px-3 py-2 bg-[#11111b] border rounded-lg text-sm text-[#cdd6f4] placeholder-[#6c7086] focus:outline-none focus:ring-2 focus:ring-[#cba6f7] focus:border-transparent transition-colors ${
+                                        errors.subject ? 'border-red-500' : 'border-[#313244]'
+                                    }`}
+                                    placeholder="What's this about?"
+                                />
+
+                                <textarea
+                                    name="message"
+                                    value={formData.message}
+                                    onChange={handleInputChange}
+                                    rows={3}
+                                    className={`w-full px-3 py-2 bg-[#11111b] border rounded-lg text-sm text-[#cdd6f4] placeholder-[#6c7086] focus:outline-none focus:ring-2 focus:ring-[#cba6f7] focus:border-transparent transition-colors resize-none ${
+                                        errors.message ? 'border-red-500' : 'border-[#313244]'
+                                    }`}
+                                    placeholder="Your message..."
+                                />
+
+                                <Button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="w-full bg-[#cba6f7] hover:bg-[#a78bfa] text-[#11111b] font-medium py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                                >
+                                    {isSubmitting ? (
+                                        <div className="flex items-center justify-center gap-2">
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            Sending...
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center justify-center gap-2">
+                                            <Send className="w-4 h-4" />
+                                            Send Message
+                                        </div>
+                                    )}
+                                </Button>
+                            </form>
+
+                            <div className="mt-4 pt-3 border-t border-[#313244]">
+                                <p className="text-[#a6adc8] text-xs text-center">
+                                    Or email me directly at{' '}
+                                    <a 
+                                        href="mailto:jefinojacob9488@gmail.com" 
+                                        className="text-[#cba6f7] hover:underline"
+                                    >
+                                        jefinojacob9488@gmail.com
+                                    </a>
+                                </p>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </motion.div>
             </div>
         </div>
     )
