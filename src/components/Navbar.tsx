@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Home, BookOpen, Award, Github, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import TouchFeedback from "./TouchFeedback"
 
 interface NavItem {
     path: string
@@ -86,15 +87,20 @@ export default function Navbar() {
 
                     {/* Mobile Menu Button */}
                     <div className="md:hidden">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setIsOpen(!isOpen)}
-                            aria-label={isOpen ? "Close menu" : "Open menu"}
-                            className="text-[#cdd6f4] hover:bg-[#313244] hover:text-[#f5c2e7]"
+                        <TouchFeedback
+                            onTap={() => setIsOpen(!isOpen)}
+                            ripple={false}
+                            className="rounded-lg"
                         >
-                            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                        </Button>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                aria-label={isOpen ? "Close menu" : "Open menu"}
+                                className="text-[#cdd6f4] hover:bg-[#313244] hover:text-[#f5c2e7] min-h-[44px] min-w-[44px]"
+                            >
+                                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                            </Button>
+                        </TouchFeedback>
                     </div>
                 </div>
             </div>
@@ -117,17 +123,23 @@ export default function Navbar() {
 
                                 return (
                                     <Link key={item.path} to={item.path} className="block">
-                                        <Button
-                                            variant="ghost"
-                                            className={`w-full justify-start text-left ${
-                                                isActive
-                                                    ? "!bg-[#0C0810] !text-[#f5c2e7]"
-                                                    : "text-[#cdd6f4] hover:bg-transparent hover:text-[#cdd6f4]"
-                                            }`}
+                                        <TouchFeedback
+                                            onTap={() => setIsOpen(false)}
+                                            ripple={false}
+                                            className="w-full"
                                         >
-                                            <item.icon className="w-5 h-5 mr-3" />
-                                            {item.label}
-                                        </Button>
+                                            <Button
+                                                variant="ghost"
+                                                className={`w-full justify-start text-left min-h-[44px] ${
+                                                    isActive
+                                                        ? "!bg-[#0C0810] !text-[#f5c2e7]"
+                                                        : "text-[#cdd6f4] hover:bg-transparent hover:text-[#cdd6f4]"
+                                                }`}
+                                            >
+                                                <item.icon className="w-5 h-5 mr-3" />
+                                                {item.label}
+                                            </Button>
+                                        </TouchFeedback>
                                     </Link>
                                 )
                             })}
