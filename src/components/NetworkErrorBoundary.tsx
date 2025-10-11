@@ -17,7 +17,7 @@ interface NetworkStatus {
 export default function NetworkErrorBoundary({ children, onRetry }: NetworkErrorBoundaryProps) {
   const [networkStatus, setNetworkStatus] = useState<NetworkStatus>({
     isOnline: navigator.onLine,
-    isConnected: true,
+    isConnected: navigator.onLine, // Use browser's online status
     retryCount: 0,
   });
 
@@ -34,55 +34,17 @@ export default function NetworkErrorBoundary({ children, onRetry }: NetworkError
       setShowError(true);
     };
 
-    // Check network connectivity
-    const checkConnectivity = async () => {
-      try {
-        const response = await fetch('/api/health', { 
-          method: 'HEAD',
-          cache: 'no-cache',
-          signal: AbortSignal.timeout(5000)
-        });
-        
-        const isConnected = response.ok;
-        setNetworkStatus(prev => {
-          const newRetryCount = isConnected ? 0 : prev.retryCount + 1;
-          
-          if (!isConnected && newRetryCount >= 2) {
-            setShowError(true);
-          }
-          
-          return {
-            ...prev, 
-            isConnected,
-            retryCount: newRetryCount
-          };
-        });
-      } catch (error) {
-        setNetworkStatus(prev => ({ 
-          ...prev, 
-          isConnected: false,
-          retryCount: prev.retryCount + 1
-        }));
-        
-        if (networkStatus.retryCount >= 2) {
-          setShowError(true);
-        }
-      }
-    };
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // Check connectivity every 30 seconds
-    const interval = setInterval(checkConnectivity, 30000);
-
-    // Initial connectivity check
-    checkConnectivity();
+    // For static sites, we don't need aggressive connectivity checks
+    // Only rely on browser online/offline events
+    // checkConnectivity(); // Disabled for static sites
 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
-      clearInterval(interval);
     };
   }, [networkStatus.retryCount]);
 
@@ -94,17 +56,9 @@ export default function NetworkErrorBoundary({ children, onRetry }: NetworkError
       onRetry();
     }
 
-    // Trigger a connectivity check
-    try {
-      await fetch('/api/health', { 
-        method: 'HEAD',
-        cache: 'no-cache',
-        signal: AbortSignal.timeout(5000)
-      });
-      setNetworkStatus(prev => ({ ...prev, isConnected: true }));
-    } catch (error) {
-      setNetworkStatus(prev => ({ ...prev, isConnected: false }));
-    }
+    // For static sites, just reset the connection status
+    // The browser's online/offline events will handle real connectivity
+    setNetworkStatus(prev => ({ ...prev, isConnected: navigator.onLine }));
   };
 
   const isNetworkError = !networkStatus.isOnline || !networkStatus.isConnected;
