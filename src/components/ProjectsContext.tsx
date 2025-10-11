@@ -60,7 +60,7 @@ const getPinnedProjectsQuery = `
 const getAllProjectsQuery = `
     query {
       user(login: "Jefino9488") {
-        repositories(first: 15, orderBy: { field: UPDATED_AT, direction: DESC }) {
+        repositories(first: 30, orderBy: { field: UPDATED_AT, direction: DESC }) {
           nodes {
             name
             description
