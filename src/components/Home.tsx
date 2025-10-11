@@ -61,6 +61,7 @@ export default function Home() {
                                             src="/profile/profile.jpg"
                                             alt="Jefino Jacob - Full Stack Developer"
                                             className="w-full h-full object-cover"
+                                            style={{ objectPosition: 'center 20%' }}
                                             priority={true}
                                             width={192}
                                             height={192}
