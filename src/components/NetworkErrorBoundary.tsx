@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Wifi, WifiOff, RefreshCw, AlertCircle } from 'lucide-react';
+import { WifiOff, RefreshCw, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface NetworkErrorBoundaryProps {
@@ -44,15 +44,19 @@ export default function NetworkErrorBoundary({ children, onRetry }: NetworkError
         });
         
         const isConnected = response.ok;
-        setNetworkStatus(prev => ({ 
-          ...prev, 
-          isConnected,
-          retryCount: isConnected ? 0 : prev.retryCount + 1
-        }));
-        
-        if (!isConnected && prev.retryCount >= 2) {
-          setShowError(true);
-        }
+        setNetworkStatus(prev => {
+          const newRetryCount = isConnected ? 0 : prev.retryCount + 1;
+          
+          if (!isConnected && newRetryCount >= 2) {
+            setShowError(true);
+          }
+          
+          return {
+            ...prev, 
+            isConnected,
+            retryCount: newRetryCount
+          };
+        });
       } catch (error) {
         setNetworkStatus(prev => ({ 
           ...prev, 

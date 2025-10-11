@@ -106,7 +106,7 @@ export default function LazyImage({
         onError={handleImageError}
         className={`transition-opacity duration-300 ${
           isLoaded ? 'opacity-100' : 'opacity-70'
-        } ${props.className || ''}`}
+        } ${className || ''}`}
         loading={priority ? 'eager' : 'lazy'}
         decoding="async"
       />
