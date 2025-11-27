@@ -31,11 +31,10 @@ export default function ChatMessage({ message, index }: ChatMessageProps) {
                 </Avatar>
             )}
             <div
-                className={`max-w-[85%] rounded-2xl px-4 py-3 ${
-                    message.sender === "user"
-                        ? "bg-gradient-to-br from-[#cba6f7] to-[#f5c2e7] text-[#1e1e2e] rounded-tr-sm"
-                        : "bg-[#181825] text-[#cdd6f4] rounded-tl-sm"
-                }`}
+                className={`max-w-[85%] rounded-2xl px-4 py-3 ${message.sender === "user"
+                        ? "bg-primary text-primary-foreground rounded-tr-sm"
+                        : "bg-secondary text-foreground rounded-tl-sm"
+                    }`}
                 style={{ boxShadow: "0 1px 2px rgba(0, 0, 0, 0.1)" }}
             >
                 {message.isMarkdown ? (
@@ -47,7 +46,7 @@ export default function ChatMessage({ message, index }: ChatMessageProps) {
                                 p: (props) => <p className="mb-2 last:mb-0" {...props} />,
                                 a: (props) => (
                                     <a
-                                        className="text-[#89b4fa] hover:underline"
+                                        className="text-primary hover:underline"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         {...props}
@@ -61,12 +60,12 @@ export default function ChatMessage({ message, index }: ChatMessageProps) {
                                 h3: (props) => <h3 className="text-sm font-bold mb-2" {...props} />,
                                 code: ({ inline, children, ...props }: { inline?: boolean; children?: React.ReactNode }) =>
                                     inline ? (
-                                        <code className="bg-[#1e1e2e] px-1 py-0.5 rounded text-[#f5c2e7]" {...props}>
+                                        <code className="bg-muted px-1 py-0.5 rounded text-foreground" {...props}>
                                             {children}
                                         </code>
                                     ) : (
                                         <code
-                                            className="block bg-[#1e1e2e] p-2 rounded overflow-x-auto text-[#f5c2e7] my-2"
+                                            className="block bg-muted p-2 rounded overflow-x-auto text-foreground my-2"
                                             style={{ fontSize: "0.85em" }}
                                             {...props}
                                         >

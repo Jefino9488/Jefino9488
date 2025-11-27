@@ -18,9 +18,9 @@ const CodeBlock = ({ code }: { code: string }) => {
     }
 
     return (
-        <div className="relative bg-[#020203] rounded-lg my-4 overflow-hidden">
-            <div className="flex items-center justify-between px-4 py-2 bg-[#020203]">
-                <span className="text-sm font-medium text-gray-200">Code</span>
+        <div className="relative bg-card rounded-lg my-4 overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2 bg-muted/50">
+                <span className="text-sm font-medium text-muted-foreground">Code</span>
                 <button
                     onClick={() => handleCopy(code, -1)}
                     aria-label="Copy entire code"
@@ -30,30 +30,30 @@ const CodeBlock = ({ code }: { code: string }) => {
                 </button>
             </div>
             <div className="p-4 overflow-x-auto">
-        <pre className="text-sm text-gray-200">
-          <code>
-            {code.split("\n").map((line, index) => (
-                <div key={index} className="group flex">
-                    <span className="mr-4 text-gray-500 select-none">{index + 1}</span>
-                    <span>{line}</span>
-                    <button
-                        onClick={() => handleCopy(line, index)}
-                        aria-label={`Copy line ${index + 1}`}
-                        className="ml-2 text-gray-400 hover:text-white hidden group-hover:inline"
-                    >
-                        {copiedLines[index] ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                    </button>
-                </div>
-            ))}
-          </code>
-        </pre>
+                <pre className="text-sm text-foreground">
+                    <code>
+                        {code.split("\n").map((line, index) => (
+                            <div key={index} className="group flex">
+                                <span className="mr-4 text-muted-foreground select-none">{index + 1}</span>
+                                <span>{line}</span>
+                                <button
+                                    onClick={() => handleCopy(line, index)}
+                                    aria-label={`Copy line ${index + 1}`}
+                                    className="ml-2 text-gray-400 hover:text-white hidden group-hover:inline"
+                                >
+                                    {copiedLines[index] ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                                </button>
+                            </div>
+                        ))}
+                    </code>
+                </pre>
             </div>
         </div>
     )
 }
 
 const renderTitle = (title: string, level: 1 | 2 | 3 | 4 | 5 | 6) => {
-    const baseClasses = "font-bold mb-4 text-[#f5c2e7]"
+    const baseClasses = "font-bold mb-4 text-primary"
     const sizes: { [key: number]: string } = {
         1: "text-4xl sm:text-5xl",
         2: "text-3xl sm:text-4xl",
@@ -67,8 +67,8 @@ const renderTitle = (title: string, level: 1 | 2 | 3 | 4 | 5 | 6) => {
 }
 
 const CardNotFound = () => (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center text-white p-4">
-        <Card className="w-full max-w-md bg-gray-800 border-none text-white rounded-2xl shadow-lg">
+    <div className="min-h-screen bg-background flex items-center justify-center text-foreground p-4">
+        <Card className="w-full max-w-md bg-card border-none text-card-foreground rounded-2xl shadow-lg">
             <CardContent className="p-6">
                 <h1 className="text-2xl sm:text-3xl font-bold mb-4">Post not found</h1>
                 <Link to="/blog">
@@ -107,73 +107,50 @@ export default function BlogPost() {
     }
 
     return (
-        <div className="min-h-screen bg-[#020203] py-8 sm:py-16 text-[#cdd6f4]">
+        <div className="min-h-screen bg-background py-8 sm:py-16 text-foreground">
             <div className="container mx-auto px-4">
                 <div className="max-w-4xl mx-auto">
                     <Link to="/blog">
-                        <Button variant="ghost" className="mb-8 hover:bg-[#45475a] hover:text-[#cdd6f4] transition-colors">
+                        <Button variant="ghost" className="mb-8 hover:bg-secondary hover:text-foreground transition-colors">
                             <ArrowLeft className="mr-2 h-5 w-5" /> Back to Blogs
                         </Button>
                     </Link>
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                        <Card className="bg-[#1e1e2e] border-none text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
-                            <CardHeader className="bg-[#313244] border-b border-[#313244] p-6 sm:p-8">
-                                <CardTitle className="text-2xl sm:text-4xl font-bold mb-4 text-[#cba6f7]">{post.title}</CardTitle>
-                                <div className="flex flex-wrap items-center text-sm text-gray-300">
+                        <Card className="bg-card border-none text-card-foreground rounded-2xl shadow-lg overflow-hidden">
+                            <CardHeader className="bg-muted/30 border-b border-border p-6 sm:p-8">
+                                <CardTitle className="text-2xl sm:text-4xl font-bold mb-4 text-primary">{post.title}</CardTitle>
+                                <div className="flex flex-wrap items-center text-sm text-muted-foreground">
                                     <div className="flex items-center mr-4 mb-2 sm:mb-0">
-                                        <Calendar className="mr-2 h-4 w-4 text-[#89b4fa]" />
+                                        <Calendar className="mr-2 h-4 w-4 text-primary" />
                                         <span>{post.date}</span>
                                     </div>
                                     <div className="flex items-center">
-                                        <Clock className="mr-2 h-4 w-4 text-[#89b4fa]" />
+                                        <Clock className="mr-2 h-4 w-4 text-primary" />
                                         <span>{post.readTime}</span>
                                     </div>
                                 </div>
                             </CardHeader>
                             <CardContent className="p-6 sm:p-8 space-y-6 sm:space-y-8">
-                                <p className="text-base sm:text-lg text-gray-300 leading-relaxed">{post.content.introduction}</p>
+                                <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">{post.content.introduction}</p>
                                 {post.content.sections.map((section: any, index: number) => (
-                                    <motion.div
-                                        key={index}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.5, delay: index * 0.2 }}
-                                    >
-                                        {section.title && renderTitle(section.title, section.titleLevel || 2)}
-                                        {section.content.map((para: string, i: number) => (
-                                            <p key={i} className="mb-4 text-base sm:text-lg text-gray-300 leading-relaxed">
-                                                {para}
-                                            </p>
-                                        ))}
-                                        {section.code && <CodeBlock code={section.code} />}
-                                        {Object.keys(section).map((key) => {
-                                            if (key.startsWith("img_url")) {
-                                                const imgNumber = key.replace("img_url", "")
-                                                const descriptionKey = `img_description${imgNumber}`
-                                                const description = section[descriptionKey] || "Image description not available."
-                                                return (
-                                                    <div key={key} className="my-4">
-                                                        <img
-                                                            src={section[key] || "/placeholder.svg"}
-                                                            alt={section.title}
-                                                            className="w-full rounded-lg"
-                                                        />
-                                                        <p className="text-sm text-gray-400 mt-2 text-center">{description}</p>
-                                                    </div>
-                                                )
-                                            }
-                                            return null
-                                        })}
+                                    <div key={index} className="mb-6">
+                                        {section.title && <h2 className="text-2xl font-bold mb-2 text-primary">{section.title}</h2>}
+                                        {section.content && <p className="text-muted-foreground mb-4">{section.content}</p>}
+                                        {section.image && (
+                                            <div className="my-4">
+                                                <img src={section.image} alt={section.title || "Section image"} className="w-full rounded-lg" />
+                                                {section.caption && <p className="text-sm text-muted-foreground mt-2 text-center">{section.caption}</p>}
+                                            </div>
+                                        )}
                                         {section.list && (
                                             <ul className="list-disc pl-6 space-y-2">
                                                 {section.list.map((item: string, i: number) => (
-                                                    <li key={i} className="text-base sm:text-lg text-gray-300 leading-relaxed">
-                                                        {item}
-                                                    </li>
+                                                    <li key={i} className="text-muted-foreground">{item}</li>
                                                 ))}
                                             </ul>
                                         )}
-                                    </motion.div>
+                                        {section.code && <CodeBlock code={section.code} />}
+                                    </div>
                                 ))}
                             </CardContent>
                         </Card>

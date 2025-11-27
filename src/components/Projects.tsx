@@ -10,9 +10,9 @@ export default function Projects() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#020203] flex items-center justify-center">
-                <div className="text-center text-[#cdd6f4]">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#f5c2e7] mx-auto mb-4"></div>
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="text-center text-muted-foreground">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto mb-4"></div>
                     Loading Repository...
                 </div>
             </div>
@@ -21,14 +21,14 @@ export default function Projects() {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-[#020203] flex items-center justify-center">
-                <div className="text-center text-[#f38ba8]">{error}</div>
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="text-center text-destructive">{error}</div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-[#020203] text-[#cdd6f4]">
+        <div className="min-h-screen bg-background text-foreground">
             {/* Full width dashboard section */}
             <section className="w-full py-10 ">
                 <div className="container mx-auto px-4">
@@ -47,36 +47,36 @@ export default function Projects() {
                             transition={{ duration: 0.5, delay: index * 0.05 }}
                         >
                             <div className="group relative h-56 rounded-3xl overflow-hidden shadow-lg">
-                                <div className="absolute inset-0 bg-gradient-to-r from-[#89b4fa]/20 to-[#cba6f7]/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                                <div className="relative backdrop-blur-xl bg-[#0D0911] rounded-3xl p-6 border border-[#45475a] transition-all duration-300 group-hover:border-[#cba6f7]/50 h-full flex flex-col">
-                                    <h3 className="text-xl font-semibold mb-3 text-[#89b4fa] line-clamp-1">{project.title}</h3>
-                                    <p className="text-[#cdd6f4] mb-4 text-sm line-clamp-2">{project.description}</p>
+                                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                                <div className="relative backdrop-blur-xl bg-card rounded-3xl p-6 border border-border transition-all duration-300 group-hover:border-primary/50 h-full flex flex-col">
+                                    <h3 className="text-xl font-semibold mb-3 text-primary line-clamp-1">{project.title}</h3>
+                                    <p className="text-muted-foreground mb-4 text-sm line-clamp-2">{project.description}</p>
                                     <div className="flex flex-wrap gap-2 mb-4">
                                         {project.tech.slice(0, 3).map((tech) => (
-                                            <span key={tech} className="px-2 py-1 bg-[#313244] rounded-full text-xs text-[#cdd6f4]">
+                                            <span key={tech} className="px-2 py-1 bg-secondary rounded-full text-xs text-secondary-foreground">
                                                 {tech}
                                             </span>
                                         ))}
                                         {project.tech.length > 3 && (
-                                            <span className="px-2 py-1 bg-[#45475a] rounded-full text-xs text-[#a6adc8]">
+                                            <span className="px-2 py-1 bg-secondary/50 rounded-full text-xs text-muted-foreground">
                                                 +{project.tech.length - 3}
                                             </span>
                                         )}
                                     </div>
                                     <div className="flex justify-between items-center mt-auto">
-                                        <div className="flex gap-4 text-sm text-[#a6adc8]">
+                                        <div className="flex gap-4 text-sm text-muted-foreground">
                                             <span className="flex items-center gap-1">
-                                                <Star className="w-4 h-4 text-[#f5c2e7]" /> {project.stats.stars}
+                                                <Star className="w-4 h-4 text-primary" /> {project.stats.stars}
                                             </span>
                                             <span className="flex items-center gap-1">
-                                                <GitFork className="w-4 h-4 text-[#f5c2e7]" /> {project.stats.forks}
+                                                <GitFork className="w-4 h-4 text-primary" /> {project.stats.forks}
                                             </span>
                                         </div>
                                         <a
                                             href={project.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="p-2 text-[#a6adc8] hover:text-[#f5c2e7] transition-colors"
+                                            className="p-2 text-muted-foreground hover:text-primary transition-colors"
                                             aria-label={`View ${project.title} on GitHub`}
                                         >
                                             <ExternalLink className="w-5 h-5" />
@@ -95,25 +95,25 @@ export default function Projects() {
                     transition={{ duration: 0.5, delay: allProjects.length * 0.05 }}
                     className="mt-12 text-center"
                 >
-                    <div className="bg-[#0C0810] border border-[#313244] rounded-2xl p-8 max-w-2xl mx-auto">
+                    <div className="bg-card border border-border rounded-2xl p-8 max-w-2xl mx-auto">
                         <div className="flex items-center justify-center mb-4">
-                            <div className="w-16 h-16 bg-[#313244] rounded-full flex items-center justify-center mr-4">
-                                <Github className="w-8 h-8 text-[#cba6f7]" />
+                            <div className="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mr-4">
+                                <Github className="w-8 h-8 text-primary" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-bold text-[#f5c2e7] mb-1">View More Projects</h3>
-                                <p className="text-[#a6adc8]">Explore all {allProjects.length} repositories on GitHub</p>
+                                <h3 className="text-2xl font-bold text-foreground mb-1">View More Projects</h3>
+                                <p className="text-muted-foreground">Explore all {allProjects.length} repositories on GitHub</p>
                             </div>
                         </div>
-                        <p className="text-[#cdd6f4] mb-6 max-w-lg mx-auto">
-                            This is just a preview of my work. Visit my GitHub profile to see all projects, 
+                        <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
+                            This is just a preview of my work. Visit my GitHub profile to see all projects,
                             including private repositories, detailed commit history, and collaborative work.
                         </p>
                         <a
                             href="https://github.com/Jefino9488?tab=repositories"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center bg-[#cba6f7] hover:bg-[#f5c2e7] text-[#11111b] font-medium px-8 py-3 rounded-xl transition-all duration-200 hover:scale-105"
+                            className="inline-flex items-center bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-8 py-3 rounded-xl transition-all duration-200 hover:scale-105"
                         >
                             <Github className="w-5 h-5 mr-2" />
                             View All Repositories
@@ -123,8 +123,8 @@ export default function Projects() {
                 </motion.div>
                 <div className="mt-12 text-center">
                     <Link to="/">
-                        <Button variant="ghost" className="hover:bg-[#313244] hover:text-[#cdd6f4] transition-colors">
-                            <ArrowLeft className="mr-2 h-5 w-5 text-[#89b4fa]" /> Back to Home
+                        <Button variant="ghost" className="hover:bg-secondary hover:text-foreground transition-colors">
+                            <ArrowLeft className="mr-2 h-5 w-5 text-primary" /> Back to Home
                         </Button>
                     </Link>
                 </div>

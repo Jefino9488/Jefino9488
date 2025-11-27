@@ -65,18 +65,18 @@ export default function BlogList() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#020203] flex items-center justify-center">
-                <div className="text-center text-[#cdd6f4]">
-                    <Loader2 className="h-16 w-16 animate-spin mx-auto mb-6 text-[#cba6f7]" />
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="text-center text-foreground">
+                    <Loader2 className="h-16 w-16 animate-spin mx-auto mb-6 text-primary" />
                     <p className="text-lg font-medium">Loading articles...</p>
-                    <p className="text-sm text-gray-400 mt-2">Fetching the latest content for you</p>
+                    <p className="text-sm text-muted-foreground mt-2">Fetching the latest content for you</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#020203] text-[#cdd6f4]">
+        <div className="min-h-screen bg-background text-foreground">
             <div className="container mx-auto px-4 py-16">
                 {/* Redesigned Header */}
                 <header className="mb-12">
@@ -87,21 +87,21 @@ export default function BlogList() {
                         className="flex flex-col md:flex-row justify-between md:items-center gap-8"
                     >
                         <div>
-                            <h1 className="text-4xl sm:text-5xl font-bold mb-2 bg-gradient-to-r from-[#cba6f7] to-[#f5c2e7] bg-clip-text text-transparent">
+                            <h1 className="text-4xl sm:text-5xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                                 Tech Journal
                             </h1>
-                            <p className="text-lg text-gray-400">
+                            <p className="text-lg text-muted-foreground">
                                 A collection of my thoughts and development articles.
                             </p>
                         </div>
                         <div className="relative w-full md:w-72">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                             <input
                                 type="text"
                                 placeholder="Search articles..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 bg-[#0C0810] border border-[#313244] rounded-lg text-[#cdd6f4] placeholder-gray-500 focus:border-[#cba6f7] focus:outline-none focus:ring-1 focus:ring-[#cba6f7]/50 transition-all"
+                                className="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
                             />
                         </div>
                     </motion.div>
@@ -111,12 +111,12 @@ export default function BlogList() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.2, duration: 0.5 }}
-                        className="flex flex-wrap gap-2 mt-8 border-t border-[#313244] pt-6"
+                        className="flex flex-wrap gap-2 mt-8 border-t border-border pt-6"
                     >
                         <Button
                             onClick={() => setSelectedTag("")}
                             variant="ghost"
-                            className={`px-3 py-1 h-auto text-sm rounded-full transition-colors ${selectedTag === "" ? 'bg-[#cba6f7] text-[#11111b]' : 'bg-[#1e1e2e] hover:bg-[#313244]'}`}
+                            className={`px-3 py-1 h-auto text-sm rounded-full transition-colors ${selectedTag === "" ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'}`}
                         >
                             All Topics
                         </Button>
@@ -125,7 +125,7 @@ export default function BlogList() {
                                 key={tag}
                                 onClick={() => handleTagClick(tag)}
                                 variant="ghost"
-                                className={`px-3 py-1 h-auto text-sm rounded-full transition-colors ${selectedTag === tag ? 'bg-[#cba6f7] text-[#11111b]' : 'bg-[#1e1e2e] hover:bg-[#313244]'}`}
+                                className={`px-3 py-1 h-auto text-sm rounded-full transition-colors ${selectedTag === tag ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'}`}
                             >
                                 {tag.charAt(0).toUpperCase() + tag.slice(1)}
                             </Button>
@@ -146,7 +146,7 @@ export default function BlogList() {
                                     className="h-full"
                                 >
                                     <a href={post.url} target="_blank" rel="noopener noreferrer" className="block h-full">
-                                        <Card className="group relative bg-[#0C0810] border-[#313244] text-[#cdd6f4] hover:border-[#cba6f7]/50 transition-all duration-300 rounded-2xl shadow-lg transform hover:-translate-y-1 h-full flex flex-col overflow-hidden">
+                                        <Card className="group relative bg-card border-border text-card-foreground hover:border-primary/50 transition-all duration-300 rounded-2xl shadow-lg transform hover:-translate-y-1 h-full flex flex-col overflow-hidden">
                                             {post.cover_image && (
                                                 <div className="overflow-hidden">
                                                     <img
@@ -157,24 +157,24 @@ export default function BlogList() {
                                                 </div>
                                             )}
                                             <CardHeader>
-                                                <CardTitle className="text-xl font-semibold mb-2 text-[#f5c2e7] group-hover:text-[#cba6f7] transition-colors">{post.title}</CardTitle>
+                                                <CardTitle className="text-xl font-semibold mb-2 text-primary group-hover:text-primary/80 transition-colors">{post.title}</CardTitle>
                                             </CardHeader>
                                             <CardContent className="flex-grow flex flex-col pt-0">
-                                                <p className="text-gray-300 mb-4 flex-grow">{post.description}</p>
+                                                <p className="text-muted-foreground mb-4 flex-grow">{post.description}</p>
                                                 {post.tag_list && post.tag_list.length > 0 && (
                                                     <div className="flex flex-wrap gap-2 mb-4">
                                                         {/* FIX: Explicitly type 'tag' as string */}
                                                         {post.tag_list.slice(0, 3).map((tag: string) => (
-                                                            <Badge key={tag} className="bg-[#313244] text-xs font-medium text-[#cdd6f4] border-none">
+                                                            <Badge key={tag} className="bg-secondary text-xs font-medium text-foreground border-none">
                                                                 #{tag}
                                                             </Badge>
                                                         ))}
                                                     </div>
                                                 )}
-                                                <div className="flex items-center text-sm text-gray-400 mt-auto pt-4 border-t border-[#313244]/50">
-                                                    <Calendar className="mr-2 h-4 w-4 text-[#89b4fa]" />
+                                                <div className="flex items-center text-sm text-muted-foreground mt-auto pt-4 border-t border-border/50">
+                                                    <Calendar className="mr-2 h-4 w-4 text-primary" />
                                                     <span className="mr-4">{formatDate(post.published_at)}</span>
-                                                    <Clock className="mr-2 h-4 w-4 text-[#89b4fa]" />
+                                                    <Clock className="mr-2 h-4 w-4 text-primary" />
                                                     <span>{post.reading_time_minutes} min read</span>
                                                 </div>
                                             </CardContent>
@@ -187,11 +187,11 @@ export default function BlogList() {
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="text-center text-gray-400 py-20"
+                            className="text-center text-muted-foreground py-20"
                         >
                             <h2 className="text-2xl font-semibold mb-2">No Articles Found</h2>
                             <p>Try adjusting your search or selecting a different topic.</p>
-                            <Button onClick={() => { setSearchTerm(""); setSelectedTag(""); }} variant="link" className="text-[#89b4fa] mt-4">
+                            <Button onClick={() => { setSearchTerm(""); setSelectedTag(""); }} variant="link" className="text-primary mt-4">
                                 Clear Filters
                             </Button>
                         </motion.div>
@@ -200,8 +200,8 @@ export default function BlogList() {
 
                 <div className="mt-16 text-center">
                     <Link to="/">
-                        <Button variant="ghost" className="hover:bg-[#45475a] hover:text-[#cdd6f4] transition-colors">
-                            <ArrowLeft className="mr-2 h-5 w-5 text-[#89b4fa]" /> Back to Home
+                        <Button variant="ghost" className="hover:bg-secondary hover:text-foreground transition-colors">
+                            <ArrowLeft className="mr-2 h-5 w-5 text-primary" /> Back to Home
                         </Button>
                     </Link>
                 </div>

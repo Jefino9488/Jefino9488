@@ -9,8 +9,8 @@ export default function GitHubDashboard() {
 
     if (loading || !profile || !stats) {
         return (
-            <div className="flex justify-center items-center h-48 bg-[#0D0911] rounded-2xl">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#f5c2e7]"></div>
+            <div className="flex justify-center items-center h-48 bg-card rounded-2xl">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
             </div>
         );
     }
@@ -35,14 +35,14 @@ export default function GitHubDashboard() {
     };
 
     return (
-        <Card className="bg-[#0D0911] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden w-full">
-            <CardHeader className="py-4 px-4 border-b border-[#313244]">
+        <Card className="bg-card border-border border text-card-foreground rounded-2xl shadow-lg overflow-hidden w-full">
+            <CardHeader className="py-4 px-4 border-b border-border">
                 <div className="flex flex-col items-center">
                     <Avatar className="w-16 h-16 mb-2">
                         <AvatarImage src="/profile/profile.png" alt="Jefino" />
                     </Avatar>
                     <CardTitle className="flex items-center justify-center">
-                        <h1 className="text-2xl sm:text-3xl font-bold text-[#cba6f7]">Github Overview</h1>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Github Overview</h1>
                     </CardTitle>
                 </div>
             </CardHeader>
@@ -60,11 +60,11 @@ export default function GitHubDashboard() {
                             <motion.div
                                 key={index}
                                 variants={itemVariants}
-                                className="flex flex-col items-center p-3 bg-[#2B1F37] rounded-xl hover:bg-[#45475a] transition-all duration-300"
+                                className="flex flex-col items-center p-3 bg-secondary/50 rounded-xl hover:bg-secondary transition-all duration-300"
                             >
-                                <item.icon className="h-6 w-6 text-[#cba6f7] mb-2" />
-                                <span className="text-base font-bold text-[#f5c2e7]">{item.value}</span>
-                                <span className="text-xs text-[#cdd6f4]">{item.label}</span>
+                                <item.icon className="h-6 w-6 text-primary mb-2" />
+                                <span className="text-base font-bold text-foreground">{item.value}</span>
+                                <span className="text-xs text-muted-foreground">{item.label}</span>
                             </motion.div>
                         ))}
                     </div>

@@ -1,5 +1,4 @@
 import type React from "react"
-
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
@@ -123,7 +122,7 @@ export default function About() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!validateForm()) {
             return;
         }
@@ -136,18 +135,18 @@ export default function About() {
             const body = encodeURIComponent(
                 `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
             );
-            
+
             const mailtoLink = `mailto:jefinojacob9488@gmail.com?subject=${subject}&body=${body}`;
-            
+
             // Open email client
             window.open(mailtoLink, '_blank');
-            
+
             setIsSubmitted(true);
             setFormData({ name: '', email: '', subject: '', message: '' });
-            
+
             // Reset success message after 5 seconds
             setTimeout(() => setIsSubmitted(false), 5000);
-            
+
         } catch (error) {
             console.error('Error submitting form:', error);
         } finally {
@@ -158,7 +157,7 @@ export default function About() {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-        
+
         // Clear error when user starts typing
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
@@ -166,110 +165,105 @@ export default function About() {
     };
 
     return (
-        <div className="min-h-screen bg-[#020203] text-[#cdd6f4]">
+        <div className="min-h-screen bg-background text-foreground">
             <div className="container mx-auto px-4 py-16">
                 <div className="flex justify-between items-center mb-8">
                     <Link to="/">
-                        <Button variant="ghost" className="hover:bg-[#313244] hover:text-[#cdd6f4] transition-colors">
-                            <ArrowLeft className="mr-2 h-5 w-5 text-[#89b4fa]" /> Back to Home
+                        <Button variant="ghost" className="hover:bg-secondary hover:text-foreground transition-colors">
+                            <ArrowLeft className="mr-2 h-5 w-5 text-primary" /> Back to Home
                         </Button>
                     </Link>
                     <a href="https://my-drive.pages.dev/Public/resume.pdf" target="_blank" rel="noopener noreferrer">
-                        <Button className="bg-[#cba6f7] hover:bg-[#f5c2e7] text-[#11111b]">
+                        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                             <Download className="mr-2 h-5 w-5" /> Download Resume
                         </Button>
                     </a>
                 </div>
 
-                {/* Dashboard Header */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden lg:col-span-2">
-                        <CardContent className="p-6">
-                            <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
-                                <div className="relative">
-                                    <div className="absolute inset-0 bg-purple-800 rounded-full filter blur-xl opacity-50"></div>
-                                    <div className="w-32 h-32 rounded-full border-4 border-[#f5c2e7] shadow-lg relative overflow-hidden">
-                                        <LazyImage
-                                            src="/profile/profile.jpg"
-                                            alt="Jefino Jacob - Full Stack Developer"
-                                            className="w-full h-full object-cover"
-                                            style={{ objectPosition: 'center 20%' }}
-                                            priority={true}
-                                            width={128}
-                                            height={128}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="flex-grow text-center md:text-left">
-                                    <h1 className="text-3xl font-bold mb-2 text-[#cba6f7]">Jefino</h1>
-                                    <p className="text-xl text-[#f5c2e7] mb-4">Full Stack Developer</p>
-                                    <p className="text-[#cdd6f4] mb-4 max-w-2xl">
-                                        Passionate developer with experience in creating modern, dynamic, and efficient web applications.
-                                        Focused on delivering clean, maintainable code and intuitive user experiences.
-                                    </p>
-                                    <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-4">
-                                        <a
-                                            href="https://github.com/Jefino9488"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-3 py-1.5 bg-[#313244] rounded-full text-sm text-[#cdd6f4] hover:bg-[#45475a] transition-colors"
-                                        >
-                                            <Github className="h-4 w-4 text-[#cba6f7]" /> GitHub
-                                        </a>
-                                        <a
-                                            href="mailto:jefinojacob9488@gmail.com"
-                                            className="flex items-center gap-2 px-3 py-1.5 bg-[#313244] rounded-full text-sm text-[#cdd6f4] hover:bg-[#45475a] transition-colors"
-                                        >
-                                            <Mail className="h-4 w-4 text-[#cba6f7]" /> Email
-                                        </a>
-                                        <a
-                                            href="https://www.linkedin.com/in/jefino9488/"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-3 py-1.5 bg-[#313244] rounded-full text-sm text-[#cdd6f4] hover:bg-[#45475a] transition-colors"
-                                        >
-                                            <Linkedin className="h-4 w-4 text-[#cba6f7]" /> LinkedIn
-                                        </a>
-                                        <a
-                                            href="https://telegram.me/jefino9488"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-3 py-1.5 bg-[#313244] rounded-full text-sm text-[#cdd6f4] hover:bg-[#45475a] transition-colors"
-                                        >
-                                            <Send className="h-4 w-4 text-[#cba6f7]" /> Telegram
-                                        </a>
-                                    </div>
+                <Card className="bg-card border-border border text-card-foreground rounded-2xl shadow-lg overflow-hidden mb-8">
+                    <CardContent className="p-6 md:p-8">
+                        <div className="flex flex-col md:flex-row items-center gap-8">
+                            <div className="flex-shrink-0">
+                                <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-primary/20">
+                                    <LazyImage
+                                        src="https://avatars.githubusercontent.com/u/9488?v=4"
+                                        alt="Jefino"
+                                        className="object-cover w-full h-full"
+                                        priority={true}
+                                        width={128}
+                                        height={128}
+                                    />
                                 </div>
                             </div>
-                        </CardContent>
-                    </Card>
+                            <div className="flex-grow text-center md:text-left">
+                                <h1 className="text-3xl font-bold mb-2 text-primary">Jefino</h1>
+                                <p className="text-xl text-muted-foreground mb-4">Full Stack Developer</p>
+                                <p className="text-foreground mb-4 max-w-2xl">
+                                    Passionate developer with experience in creating modern, dynamic, and efficient web applications.
+                                    Focused on delivering clean, maintainable code and intuitive user experiences.
+                                </p>
+                                <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-4">
+                                    <a
+                                        href="https://github.com/Jefino9488"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-full text-sm text-foreground hover:bg-secondary/80 transition-colors"
+                                    >
+                                        <Github className="h-4 w-4 text-primary" /> GitHub
+                                    </a>
+                                    <a
+                                        href="mailto:jefinojacob9488@gmail.com"
+                                        className="flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-full text-sm text-foreground hover:bg-secondary/80 transition-colors"
+                                    >
+                                        <Mail className="h-4 w-4 text-primary" /> Email
+                                    </a>
+                                    <a
+                                        href="https://www.linkedin.com/in/jefino9488/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-full text-sm text-foreground hover:bg-secondary/80 transition-colors"
+                                    >
+                                        <Linkedin className="h-4 w-4 text-primary" /> LinkedIn
+                                    </a>
+                                    <a
+                                        href="https://telegram.me/jefino9488"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-full text-sm text-foreground hover:bg-secondary/80 transition-colors"
+                                    >
+                                        <Send className="h-4 w-4 text-primary" /> Telegram
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
 
-                    <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-xl font-semibold text-[#f5c2e7]">Quick Stats</CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-6">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="bg-[#3F304E] p-4 rounded-xl">
-                                    <p className="text-sm text-[#a6adc8]">Experience</p>
-                                    <p className="text-2xl font-bold text-[#cba6f7]">3+ Years</p>
-                                </div>
-                                <div className="bg-[#3F304E] p-4 rounded-xl">
-                                    <p className="text-sm text-[#a6adc8]">Projects</p>
-                                    <p className="text-2xl font-bold text-[#cba6f7]">{allProjects.length}+</p>
-                                </div>
-                                <div className="bg-[#3F304E] p-4 rounded-xl">
-                                    <p className="text-sm text-[#a6adc8]">Certifications</p>
-                                    <p className="text-2xl font-bold text-[#cba6f7]">{certificates.length}</p>
-                                </div>
-                                <div className="bg-[#3F304E] p-4 rounded-xl">
-                                    <p className="text-sm text-[#a6adc8]">Languages</p>
-                                    <p className="text-2xl font-bold text-[#cba6f7]">5+</p>
-                                </div>
+                <Card className="bg-card border-border border text-card-foreground rounded-2xl shadow-lg overflow-hidden mb-8">
+                    <CardHeader className="pb-2">
+                        <CardTitle className="text-xl font-semibold text-primary">Quick Stats</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="bg-secondary/50 p-4 rounded-xl">
+                                <p className="text-sm text-muted-foreground">Experience</p>
+                                <p className="text-2xl font-bold text-primary">3+ Years</p>
                             </div>
-                        </CardContent>
-                    </Card>
-                </div>
+                            <div className="bg-secondary/50 p-4 rounded-xl">
+                                <p className="text-sm text-muted-foreground">Projects</p>
+                                <p className="text-2xl font-bold text-primary">{allProjects.length}+</p>
+                            </div>
+                            <div className="bg-secondary/50 p-4 rounded-xl">
+                                <p className="text-sm text-muted-foreground">Certifications</p>
+                                <p className="text-2xl font-bold text-primary">{certificates.length}</p>
+                            </div>
+                            <div className="bg-secondary/50 p-4 rounded-xl">
+                                <p className="text-sm text-muted-foreground">Languages</p>
+                                <p className="text-2xl font-bold text-primary">5+</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
 
                 {/* Tab Navigation */}
                 <div className="flex flex-wrap gap-2 mb-6">
@@ -277,8 +271,8 @@ export default function About() {
                         variant={activeTab === "overview" ? "default" : "outline"}
                         className={
                             activeTab === "overview"
-                                ? "!bg-[#cba6f7] !text-[#11111b]"
-                                : "border-[#313244] text-[#cdd6f4] hover:bg-transparent hover:text-[#cdd6f4]"
+                                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                                : "border-border text-muted-foreground hover:bg-secondary hover:text-foreground"
                         }
                         onClick={() => setActiveTab("overview")}
                     >
@@ -288,8 +282,8 @@ export default function About() {
                         variant={activeTab === "timeline" ? "default" : "outline"}
                         className={
                             activeTab === "timeline"
-                                ? "!bg-[#cba6f7] !text-[#11111b]"
-                                : "border-[#313244] text-[#cdd6f4] hover:bg-transparent hover:text-[#cdd6f4]"
+                                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                                : "border-border text-muted-foreground hover:bg-secondary hover:text-foreground"
                         }
                         onClick={() => setActiveTab("timeline")}
                     >
@@ -299,8 +293,8 @@ export default function About() {
                         variant={activeTab === "skills" ? "default" : "outline"}
                         className={
                             activeTab === "skills"
-                                ? "!bg-[#cba6f7] !text-[#11111b]"
-                                : "border-[#313244] text-[#cdd6f4] hover:bg-transparent hover:text-[#cdd6f4]"
+                                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                                : "border-border text-muted-foreground hover:bg-secondary hover:text-foreground"
                         }
                         onClick={() => setActiveTab("skills")}
                     >
@@ -312,23 +306,23 @@ export default function About() {
                 <div className="mb-8">
                     {activeTab === "overview" && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                            <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
+                            <Card className="bg-card border-border border text-card-foreground rounded-2xl shadow-lg overflow-hidden">
                                 <CardContent className="p-6">
                                     <div className="space-y-6">
                                         <div>
-                                            <h2 className="text-2xl font-bold mb-4 text-[#f5c2e7]">About Me</h2>
-                                            <p className="text-[#cdd6f4] mb-4">
+                                            <h2 className="text-2xl font-bold mb-4 text-primary">About Me</h2>
+                                            <p className="text-muted-foreground mb-4">
                                                 Welcome to my portfolio! I am Jefino, a passionate Full Stack Developer with experience in
                                                 creating modern, dynamic, and efficient web applications. This site serves as a showcase for my
                                                 skills, projects, and experience in the software development industry.
                                             </p>
-                                            <p className="text-[#cdd6f4] mb-4">
+                                            <p className="text-muted-foreground mb-4">
                                                 I started my journey in software development with a deep interest in building efficient and
                                                 scalable applications. Over the years, I have honed my skills across various technologies and
                                                 platforms, from backend development with Flask and Python to creating responsive frontends using
                                                 React and Tailwind CSS.
                                             </p>
-                                            <p className="text-[#cdd6f4]">
+                                            <p className="text-muted-foreground">
                                                 I am always eager to learn new things, whether it be the latest development tools, frameworks,
                                                 or programming paradigms. My goal is to combine my love for technology with my passion for
                                                 solving complex problems and delivering seamless user experiences.
@@ -336,8 +330,8 @@ export default function About() {
                                         </div>
 
                                         <div>
-                                            <h2 className="text-2xl font-bold mb-4 text-[#f5c2e7]">GitHub Activity</h2>
-                                            <GitHubDashboard/>
+                                            <h2 className="text-2xl font-bold mb-4 text-primary">GitHub Activity</h2>
+                                            <GitHubDashboard />
                                         </div>
                                     </div>
                                 </CardContent>
@@ -347,12 +341,12 @@ export default function About() {
 
                     {activeTab === "timeline" && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                            <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
+                            <Card className="bg-card border-border border text-card-foreground rounded-2xl shadow-lg overflow-hidden">
                                 <CardContent className="p-6">
-                                    <h2 className="text-2xl font-bold mb-6 text-[#f5c2e7]">My Journey</h2>
+                                    <h2 className="text-2xl font-bold mb-6 text-primary">My Journey</h2>
                                     <div className="relative">
                                         {/* Timeline line */}
-                                        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-[#313244]"></div>
+                                        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-border"></div>
 
                                         <div className="space-y-8">
                                             {timelineItems.map((item, index) => (
@@ -364,19 +358,19 @@ export default function About() {
                                                     className="relative pl-12"
                                                 >
                                                     {/* Timeline dot */}
-                                                    <div className="absolute left-0 top-0 w-8 h-8 rounded-full bg-[#313244] flex items-center justify-center">
-                                                        <item.icon className="h-4 w-4 text-[#cba6f7]" />
+                                                    <div className="absolute left-0 top-0 w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
+                                                        <item.icon className="h-4 w-4 text-primary" />
                                                     </div>
 
-                                                    <div className="bg-[#313244] p-4 rounded-xl">
+                                                    <div className="bg-secondary/50 p-4 rounded-xl">
                                                         <div className="flex justify-between items-start mb-2">
-                                                            <h3 className="text-lg font-semibold text-[#f5c2e7]">{item.title}</h3>
-                                                            <Badge className="bg-[#45475a] text-[#cdd6f4] border-none">
+                                                            <h3 className="text-lg font-semibold text-primary">{item.title}</h3>
+                                                            <Badge className="bg-muted text-muted-foreground border-none">
                                                                 <Calendar className="h-3 w-3 mr-1" />
                                                                 {item.date}
                                                             </Badge>
                                                         </div>
-                                                        <p className="text-[#cdd6f4]">{item.description}</p>
+                                                        <p className="text-muted-foreground">{item.description}</p>
                                                     </div>
                                                 </motion.div>
                                             ))}
@@ -389,23 +383,23 @@ export default function About() {
 
                     {activeTab === "skills" && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                            <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
+                            <Card className="bg-card border-border border text-card-foreground rounded-2xl shadow-lg overflow-hidden">
                                 <CardContent className="p-6">
-                                    <h2 className="text-2xl font-bold mb-6 text-[#f5c2e7]">Technical Skills</h2>
+                                    <h2 className="text-2xl font-bold mb-6 text-primary">Technical Skills</h2>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <div>
-                                            <h3 className="text-lg font-semibold mb-4 text-[#cba6f7] flex items-center">
+                                            <h3 className="text-lg font-semibold mb-4 text-primary flex items-center">
                                                 <Code className="h-5 w-5 mr-2" /> Frontend
                                             </h3>
                                             <div className="space-y-3">
                                                 {skills.frontend.map((skill, index) => (
-                                                    <div key={index} className="bg-[#313244] rounded-lg p-3">
+                                                    <div key={index} className="bg-secondary/50 rounded-lg p-3">
                                                         <div className="flex justify-between items-center mb-1">
                                                             <span className="font-medium">{skill}</span>
                                                         </div>
-                                                        <div className="w-full bg-[#45475a] rounded-full h-2">
+                                                        <div className="w-full bg-muted rounded-full h-2">
                                                             <div
-                                                                className="bg-gradient-to-r from-[#cba6f7] to-[#f5c2e7] h-2 rounded-full"
+                                                                className="bg-gradient-to-r from-primary to-primary/60 h-2 rounded-full"
                                                                 style={{ width: `${90 - index * 10}%` }}
                                                             ></div>
                                                         </div>
@@ -415,18 +409,18 @@ export default function About() {
                                         </div>
 
                                         <div>
-                                            <h3 className="text-lg font-semibold mb-4 text-[#cba6f7] flex items-center">
+                                            <h3 className="text-lg font-semibold mb-4 text-primary flex items-center">
                                                 <Code className="h-5 w-5 mr-2" /> Backend
                                             </h3>
                                             <div className="space-y-3">
                                                 {skills.backend.map((skill, index) => (
-                                                    <div key={index} className="bg-[#313244] rounded-lg p-3">
+                                                    <div key={index} className="bg-secondary/50 rounded-lg p-3">
                                                         <div className="flex justify-between items-center mb-1">
                                                             <span className="font-medium">{skill}</span>
                                                         </div>
-                                                        <div className="w-full bg-[#45475a] rounded-full h-2">
+                                                        <div className="w-full bg-muted rounded-full h-2">
                                                             <div
-                                                                className="bg-gradient-to-r from-[#89b4fa] to-[#74c7ec] h-2 rounded-full"
+                                                                className="bg-gradient-to-r from-primary to-primary/60 h-2 rounded-full"
                                                                 style={{ width: `${85 - index * 8}%` }}
                                                             ></div>
                                                         </div>
@@ -436,18 +430,18 @@ export default function About() {
                                         </div>
 
                                         <div>
-                                            <h3 className="text-lg font-semibold mb-4 text-[#cba6f7] flex items-center">
+                                            <h3 className="text-lg font-semibold mb-4 text-primary flex items-center">
                                                 <Code className="h-5 w-5 mr-2" /> Tools & Technologies
                                             </h3>
                                             <div className="space-y-3">
                                                 {skills.tools.map((skill, index) => (
-                                                    <div key={index} className="bg-[#313244] rounded-lg p-3">
+                                                    <div key={index} className="bg-secondary/50 rounded-lg p-3">
                                                         <div className="flex justify-between items-center mb-1">
                                                             <span className="font-medium">{skill}</span>
                                                         </div>
-                                                        <div className="w-full bg-[#45475a] rounded-full h-2">
+                                                        <div className="w-full bg-muted rounded-full h-2">
                                                             <div
-                                                                className="bg-gradient-to-r from-[#f38ba8] to-[#fab387] h-2 rounded-full"
+                                                                className="bg-gradient-to-r from-primary to-primary/60 h-2 rounded-full"
                                                                 style={{ width: `${88 - index * 9}%` }}
                                                             ></div>
                                                         </div>
@@ -460,30 +454,29 @@ export default function About() {
                             </Card>
                         </motion.div>
                     )}
-
                 </div>
 
                 {/* Compact Contact Form Section */}
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                     className="mt-8"
                 >
-                    <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] rounded-xl shadow-lg overflow-hidden">
+                    <Card className="bg-card border-border border text-card-foreground rounded-xl shadow-lg overflow-hidden">
                         <CardContent className="p-4">
                             <div className="flex items-center gap-3 mb-4">
-                                <div className="p-2 bg-[#cba6f7] rounded-lg">
-                                    <Mail className="w-4 h-4 text-[#11111b]" />
+                                <div className="p-2 bg-primary rounded-lg">
+                                    <Mail className="w-4 h-4 text-primary-foreground" />
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold text-[#cba6f7]">Get In Touch</h3>
-                                    <p className="text-sm text-[#a6adc8]">Quick message or just say hello!</p>
+                                    <h3 className="text-lg font-bold text-primary">Get In Touch</h3>
+                                    <p className="text-sm text-muted-foreground">Quick message or just say hello!</p>
                                 </div>
                             </div>
 
                             {isSubmitted && (
-                                <motion.div 
+                                <motion.div
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     className="mb-4 p-3 bg-green-900/20 border border-green-500/30 rounded-lg"
@@ -501,9 +494,8 @@ export default function About() {
                                         name="name"
                                         value={formData.name}
                                         onChange={handleInputChange}
-                                        className={`w-full px-3 py-2 bg-[#11111b] border rounded-lg text-sm text-[#cdd6f4] placeholder-[#6c7086] focus:outline-none focus:ring-2 focus:ring-[#cba6f7] focus:border-transparent transition-colors ${
-                                            errors.name ? 'border-red-500' : 'border-[#313244]'
-                                        }`}
+                                        className={`w-full px-3 py-2 bg-input border rounded-lg text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${errors.name ? 'border-destructive' : 'border-border'
+                                            }`}
                                         placeholder="Your name"
                                     />
                                     <input
@@ -511,9 +503,8 @@ export default function About() {
                                         name="email"
                                         value={formData.email}
                                         onChange={handleInputChange}
-                                        className={`w-full px-3 py-2 bg-[#11111b] border rounded-lg text-sm text-[#cdd6f4] placeholder-[#6c7086] focus:outline-none focus:ring-2 focus:ring-[#cba6f7] focus:border-transparent transition-colors ${
-                                            errors.email ? 'border-red-500' : 'border-[#313244]'
-                                        }`}
+                                        className={`w-full px-3 py-2 bg-input border rounded-lg text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${errors.email ? 'border-destructive' : 'border-border'
+                                            }`}
                                         placeholder="your.email@example.com"
                                     />
                                 </div>
@@ -523,9 +514,8 @@ export default function About() {
                                     name="subject"
                                     value={formData.subject}
                                     onChange={handleInputChange}
-                                    className={`w-full px-3 py-2 bg-[#11111b] border rounded-lg text-sm text-[#cdd6f4] placeholder-[#6c7086] focus:outline-none focus:ring-2 focus:ring-[#cba6f7] focus:border-transparent transition-colors ${
-                                        errors.subject ? 'border-red-500' : 'border-[#313244]'
-                                    }`}
+                                    className={`w-full px-3 py-2 bg-input border rounded-lg text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${errors.subject ? 'border-destructive' : 'border-border'
+                                        }`}
                                     placeholder="What's this about?"
                                 />
 
@@ -534,16 +524,15 @@ export default function About() {
                                     value={formData.message}
                                     onChange={handleInputChange}
                                     rows={3}
-                                    className={`w-full px-3 py-2 bg-[#11111b] border rounded-lg text-sm text-[#cdd6f4] placeholder-[#6c7086] focus:outline-none focus:ring-2 focus:ring-[#cba6f7] focus:border-transparent transition-colors resize-none ${
-                                        errors.message ? 'border-red-500' : 'border-[#313244]'
-                                    }`}
+                                    className={`w-full px-3 py-2 bg-input border rounded-lg text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-none ${errors.message ? 'border-destructive' : 'border-border'
+                                        }`}
                                     placeholder="Your message..."
                                 />
 
                                 <Button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="w-full bg-[#cba6f7] hover:bg-[#a78bfa] text-[#11111b] font-medium py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                                 >
                                     {isSubmitting ? (
                                         <div className="flex items-center justify-center gap-2">
@@ -559,12 +548,12 @@ export default function About() {
                                 </Button>
                             </form>
 
-                            <div className="mt-4 pt-3 border-t border-[#313244]">
-                                <p className="text-[#a6adc8] text-xs text-center">
+                            <div className="mt-4 pt-3 border-t border-border">
+                                <p className="text-muted-foreground text-xs text-center">
                                     Or email me directly at{' '}
-                                    <a 
-                                        href="mailto:jefinojacob9488@gmail.com" 
-                                        className="text-[#cba6f7] hover:underline"
+                                    <a
+                                        href="mailto:jefinojacob9488@gmail.com"
+                                        className="text-primary hover:underline"
                                     >
                                         jefinojacob9488@gmail.com
                                     </a>

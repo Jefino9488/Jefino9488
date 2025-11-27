@@ -9,7 +9,7 @@ export default function FloatingActionButton() {
     return (
         <motion.button
             onClick={toggleChat}
-            className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-50 bg-gradient-to-r from-[#cba6f7] to-[#f5c2e7] text-[#1e1e2e] rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
+            className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-50 bg-primary text-primary-foreground rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
             whileHover={{ scale: 1.1, rotate: 5 }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, scale: 0, rotate: -10 }}
@@ -34,7 +34,7 @@ export default function FloatingActionButton() {
                         repeatType: "loop",
                     }}
                 >
-                    <Sparkles className="h-3.5 w-3.5 text-[#1e1e2e]" />
+                    <Sparkles className="h-3.5 w-3.5 text-primary-foreground" />
                 </motion.div>
             </div>
         </motion.button>

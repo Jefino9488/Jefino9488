@@ -40,13 +40,11 @@ export default function Home() {
         ...(isXlScreen ? recentNonPinnedProjects : [])
     ].slice(0, projectCount)
 
-
-
     return (
-        <div className="min-h-screen bg-[#020203] text-[#cdd6f4]">
+        <div className="min-h-screen bg-background text-foreground">
             <div className="flex-grow w-full py-12">
                 <header className="mb-8 sm:mb-12 container mx-auto px-4">
-                    <Card className="bg-gradient-to-br from-[#0C0810] to-[#0D0911] border-none text-[#cdd6f4] rounded-3xl shadow-lg overflow-hidden">
+                    <Card className="bg-card border-border text-card-foreground rounded-3xl shadow-lg overflow-hidden">
                         <CardContent className="p-6 md:p-8">
                             <div className="flex flex-col items-center md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-8">
                                 <motion.div
@@ -55,8 +53,8 @@ export default function Home() {
                                     transition={{ duration: 0.5 }}
                                     className="flex-shrink-0 relative"
                                 >
-                                    <div className="absolute inset-0 bg-purple-950 rounded-full filter blur-xl opacity-100"></div>
-                                    <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-4 border-[#3F304E] shadow-lg relative rounded-full overflow-hidden">
+                                    <div className="absolute inset-0 bg-primary/20 rounded-full filter blur-xl opacity-100"></div>
+                                    <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-4 border-border shadow-lg relative rounded-full overflow-hidden">
                                         <LazyImage
                                             src="/profile/profile.jpg"
                                             alt="Jefino Jacob - Full Stack Developer"
@@ -77,15 +75,15 @@ export default function Home() {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.5, delay: 0.2 }}
                                     >
-                                        <h1 className="font-poppins text-3xl sm:text-4xl md:text-5xl font-bold mb-2 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#f5c2e7] to-[#cba6f7]">
+                                        <h1 className="font-poppins text-3xl sm:text-4xl md:text-5xl font-bold mb-2 tracking-tight text-foreground">
                                             Jefino
                                         </h1>
-                                        <p className="orbitron-regular text-xl sm:text-2xl md:text-3xl text-[#cba6f7] font-light mb-4">
-                                            Full Stack Developer
+                                        <p className="orbitron-regular text-xl sm:text-2xl md:text-3xl text-muted-foreground font-light mb-4">
+                                            Backend Fullstack Developer
                                         </p>
                                         <div className="flex flex-col space-y-2 mb-6">
-                                            <p className="font-inter flex items-center justify-center md:justify-start text-[#cdd6f4]">
-                                                <MapPin className="mr-2 h-5 w-5 text-[#cba6f7]" />
+                                            <p className="font-inter flex items-center justify-center md:justify-start text-muted-foreground">
+                                                <MapPin className="mr-2 h-5 w-5 text-primary" />
                                                 Based in Chennai, India
                                             </p>
                                         </div>
@@ -103,10 +101,10 @@ export default function Home() {
                                             <Button
                                                 variant="outline"
                                                 size="icon"
-                                                className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600 min-h-[44px] min-w-[44px]"
+                                                className="bg-secondary hover:bg-secondary/80 transition-colors border-border min-h-[44px] min-w-[44px]"
                                                 aria-label="GitHub"
                                             >
-                                                <Github className="h-5 w-5 text-[#f5c2e7]" />
+                                                <Github className="h-5 w-5 text-foreground" />
                                             </Button>
                                         </TouchFeedback>
                                         <TouchFeedback
@@ -116,10 +114,10 @@ export default function Home() {
                                             <Button
                                                 variant="outline"
                                                 size="icon"
-                                                className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600 min-h-[44px] min-w-[44px]"
+                                                className="bg-secondary hover:bg-secondary/80 transition-colors border-border min-h-[44px] min-w-[44px]"
                                                 aria-label="Email"
                                             >
-                                                <Mail className="h-5 w-5 text-[#f5c2e7]" />
+                                                <Mail className="h-5 w-5 text-foreground" />
                                             </Button>
                                         </TouchFeedback>
                                         <TouchFeedback
@@ -129,10 +127,10 @@ export default function Home() {
                                             <Button
                                                 variant="outline"
                                                 size="icon"
-                                                className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600 min-h-[44px] min-w-[44px]"
+                                                className="bg-secondary hover:bg-secondary/80 transition-colors border-border min-h-[44px] min-w-[44px]"
                                                 aria-label="LinkedIn"
                                             >
-                                                <Linkedin className="h-5 w-5 text-[#f5c2e7]" />
+                                                <Linkedin className="h-5 w-5 text-foreground" />
                                             </Button>
                                         </TouchFeedback>
                                         <TouchFeedback
@@ -142,10 +140,10 @@ export default function Home() {
                                             <Button
                                                 variant="outline"
                                                 size="icon"
-                                                className="bg-gray-700 hover:bg-gray-600 transition-colors border-gray-600 min-h-[44px] min-w-[44px]"
+                                                className="bg-secondary hover:bg-secondary/80 transition-colors border-border min-h-[44px] min-w-[44px]"
                                                 aria-label="Telegram"
                                             >
-                                                <Send className="h-5 w-5 text-[#f5c2e7]" />
+                                                <Send className="h-5 w-5 text-foreground" />
                                             </Button>
                                         </TouchFeedback>
                                     </motion.div>
@@ -161,7 +159,7 @@ export default function Home() {
                                 <Badge
                                     key={index}
                                     variant="secondary"
-                                    className="text-lg py-2 px-4 bg-[#191121] hover:bg-[#1E1627] transition-colors rounded-2xl text-[#cdd6f4]"
+                                    className="text-lg py-2 px-4 bg-secondary hover:bg-secondary/80 transition-colors rounded-2xl text-secondary-foreground"
                                 >
                                     {skill}
                                 </Badge>
@@ -170,19 +168,19 @@ export default function Home() {
                     </section>
 
                     <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] hover:bg-[#1E1627] transition-colors rounded-3xl shadow-lg overflow-hidden hover-lift">
+                        <Card className="bg-card border-border border text-card-foreground hover:bg-accent transition-colors rounded-3xl shadow-lg overflow-hidden hover-lift">
                             <Link to="/blog" className="block">
                                 <CardHeader className="pb-2">
-                                    <CardTitle className="flex items-center text-lg sm:text-2xl font-bold text-[#f5c2e7]">
-                                        <BookOpen className="h-8 w-8 mr-3 text-[#cba6f7]" />
+                                    <CardTitle className="flex items-center text-lg sm:text-2xl font-bold text-foreground">
+                                        <BookOpen className="h-8 w-8 mr-3 text-primary" />
                                         Explore My Blogs
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <p className="text-lg sm:text-xl text-[#cdd6f4] mb-4">
+                                    <p className="text-lg sm:text-xl text-muted-foreground mb-4">
                                         Dive into my latest thoughts and insights on technology, development, and more.
                                     </p>
-                                    <div className="flex items-center text-[#89b4fa] hover:text-[#f5c2e7] transition-colors">
+                                    <div className="flex items-center text-primary hover:text-primary/80 transition-colors">
                                         <span className="mr-2 font-semibold">Read latest posts</span>
                                         <ArrowRight className="h-5 w-5" />
                                     </div>
@@ -190,19 +188,19 @@ export default function Home() {
                             </Link>
                         </Card>
 
-                        <Card className="bg-[#0C0810] border-[#313244] border text-[#cdd6f4] hover:bg-[#1E1627] transition-colors rounded-3xl shadow-lg overflow-hidden hover-lift">
+                        <Card className="bg-card border-border border text-card-foreground hover:bg-accent transition-colors rounded-3xl shadow-lg overflow-hidden hover-lift">
                             <Link to="/certificates" className="block">
                                 <CardHeader className="pb-2">
-                                    <CardTitle className="flex items-center text-lg sm:text-2xl font-bold text-[#f5c2e7]">
-                                        <Award className="h-8 w-8 mr-3 text-[#cba6f7]" />
+                                    <CardTitle className="flex items-center text-lg sm:text-2xl font-bold text-foreground">
+                                        <Award className="h-8 w-8 mr-3 text-primary" />
                                         View My Certificates
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <p className="text-lg sm:text-xl text-[#cdd6f4] mb-4">
+                                    <p className="text-lg sm:text-xl text-muted-foreground mb-4">
                                         Check out my professional certifications and achievements in various technologies.
                                     </p>
-                                    <div className="flex items-center text-[#89b4fa] hover:text-[#f5c2e7] transition-colors">
+                                    <div className="flex items-center text-primary hover:text-primary/80 transition-colors">
                                         <span className="mr-2 font-semibold">See certificates</span>
                                         <ArrowRight className="h-5 w-5" />
                                     </div>
@@ -213,17 +211,17 @@ export default function Home() {
 
                     <section>
                         <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-2xl sm:text-3xl font-bold text-[#cba6f7]">Featured Projects</h2>
-                            <Link to="/projects" className="text-[#89b4fa] hover:text-[#f5c2e7] transition-colors flex items-center">
+                            <h2 className="text-2xl sm:text-3xl font-bold text-foreground">Featured Projects</h2>
+                            <Link to="/projects" className="text-primary hover:text-primary/80 transition-colors flex items-center">
                                 <span className="mr-2">View all</span>
                                 <ArrowRight className="h-5 w-5" />
                             </Link>
                         </div>
 
                         {loading ? (
-                            <div className="text-center text-gray-400 py-12">Loading projects...</div>
+                            <div className="text-center text-muted-foreground py-12">Loading projects...</div>
                         ) : error ? (
-                            <div className="text-center text-red-500 py-12">{error}</div>
+                            <div className="text-center text-destructive py-12">{error}</div>
                         ) : (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                                 {displayedProjects.map((project) => (
@@ -237,36 +235,34 @@ export default function Home() {
                                         <TouchFeedback
                                             onTap={() => window.open(project.link, '_blank', 'noopener,noreferrer')}
                                             onLongPress={() => {
-                                                // Copy project link to clipboard
                                                 navigator.clipboard.writeText(project.link);
-                                                // You could add a toast notification here
                                             }}
                                             ripple={true}
                                             className="h-full"
                                         >
                                             <div className="group relative h-full cursor-pointer">
-                                                <div className="absolute inset-0 bg-gradient-to-r from-[#89b4fa]/20 to-[#cba6f7]/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                                                <div className="relative backdrop-blur-xl bg-[#0D0911] rounded-3xl p-6 border border-[#45475a] transition-all duration-300 group-hover:border-[#cba6f7]/50 h-full flex flex-col">
-                                                    <h3 className="text-xl font-semibold mb-3 text-white">{project.title}</h3>
-                                                    <p className="text-[#cdd6f4] mb-4 text-sm line-clamp-2">{project.description}</p>
+                                                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                                                <div className="relative backdrop-blur-xl bg-card rounded-3xl p-6 border border-border transition-all duration-300 group-hover:border-primary/50 h-full flex flex-col">
+                                                    <h3 className="text-xl font-semibold mb-3 text-card-foreground">{project.title}</h3>
+                                                    <p className="text-muted-foreground mb-4 text-sm line-clamp-2">{project.description}</p>
                                                     <div className="flex flex-wrap gap-2 mb-4">
                                                         {project.tech.map((tech) => (
-                                                            <span key={tech} className="px-3 py-1 bg-gray-700 rounded-full text-xs text-[#cdd6f4]">
+                                                            <span key={tech} className="px-3 py-1 bg-secondary rounded-full text-xs text-secondary-foreground">
                                                                 {tech}
                                                             </span>
                                                         ))}
                                                     </div>
                                                     <div className="flex justify-between items-center mt-auto">
-                                                        <div className="flex gap-4 text-sm text-[#a6adc8]">
+                                                        <div className="flex gap-4 text-sm text-muted-foreground">
                                                             <span className="flex items-center gap-1">
-                                                                <Star className="w-4 h-4 text-[#cba6f7]" /> {project.stats.stars}
+                                                                <Star className="w-4 h-4 text-primary" /> {project.stats.stars}
                                                             </span>
                                                             <span className="flex items-center gap-1">
-                                                                <GitFork className="w-4 h-4 text-[#cba6f7]" /> {project.stats.forks}
+                                                                <GitFork className="w-4 h-4 text-primary" /> {project.stats.forks}
                                                             </span>
                                                         </div>
-                                                        <div className="p-2 text-[#a6adc8] hover:text-purple-400 transition-colors">
-                                                            <ExternalLink className="w-5 h-5 text-[#cba6f7]" />
+                                                        <div className="p-2 text-muted-foreground hover:text-primary transition-colors">
+                                                            <ExternalLink className="w-5 h-5 text-primary" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -293,7 +289,7 @@ export default function Home() {
                 className="cursor-grab active:cursor-grabbing transition-all ease-in-out"
             >
                 <div className="flex flex-col items-center justify-center">
-                    <p className="text-[#cdd6f4] text-xs sm:text-sm mb-2 animate-pulse text-center">
+                    <p className="text-muted-foreground text-xs sm:text-sm mb-2 animate-pulse text-center">
                         Pull up for Github Overview
                     </p>
                     <motion.div
@@ -303,7 +299,7 @@ export default function Home() {
                             repeat: Number.POSITIVE_INFINITY,
                             ease: "easeInOut",
                         }}
-                        className="w-8 h-1.5 sm:w-12 sm:h-2 bg-gray-500 rounded-full"
+                        className="w-8 h-1.5 sm:w-12 sm:h-2 bg-muted-foreground rounded-full"
                     ></motion.div>
                 </div>
             </motion.div>

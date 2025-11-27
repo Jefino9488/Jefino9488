@@ -88,9 +88,9 @@ export default function LazyImage({
     <motion.div
       ref={imgRef}
       className={`relative ${className.includes('w-full') ? 'w-full' : ''} ${className.includes('h-full') ? 'h-full' : ''}`}
-      style={{ 
-        width: className.includes('w-full') ? undefined : width, 
-        height: className.includes('h-full') ? undefined : height 
+      style={{
+        width: className.includes('w-full') ? undefined : width,
+        height: className.includes('h-full') ? undefined : height
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: isLoaded ? 1 : 0.7 }}
@@ -104,18 +104,17 @@ export default function LazyImage({
         height={height}
         onLoad={handleImageLoad}
         onError={handleImageError}
-        className={`transition-opacity duration-300 ${
-          isLoaded ? 'opacity-100' : 'opacity-70'
-        } ${className || ''}`}
+        className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-70'
+          } ${className || ''}`}
         loading={priority ? 'eager' : 'lazy'}
         decoding="async"
       />
-      
+
       {/* Loading indicator */}
       {!isLoaded && !hasError && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-800/50">
           <motion.div
-            className="w-8 h-8 border-2 border-[#cba6f7] border-t-transparent rounded-full"
+            className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full"
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
           />
