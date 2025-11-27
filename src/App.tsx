@@ -11,6 +11,7 @@ import Projects from "./components/Projects";
 import Certificates from "./components/Certificates";
 import Loader from "./components/Loader";
 import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
 import TransitionWrapper from "./components/TransitionWrapper";
 import { ProjectsProvider } from "./components/ProjectsContext";
@@ -26,81 +27,89 @@ function AppContent() {
     useSmoothScroll();
 
     return (
-        <div className="flex flex-col min-h-screen bg-[#000000]">
-            <Navbar />
-            <main className="flex-grow pt-16">
-                <AnimatePresence mode="wait">
-                    <Routes>
-                        <Route
-                            path="/"
-                            element={
-                                <TransitionWrapper>
-                                    <Home />
-                                </TransitionWrapper>
-                            }
-                        />
-                        <Route
-                            path="/blog"
-                            element={
-                                <TransitionWrapper>
-                                    <BlogList />
-                                </TransitionWrapper>
-                            }
-                        />
-                        <Route
-                            path="/blog/:id"
-                            element={
-                                <TransitionWrapper>
-                                    <BlogPost />
-                                </TransitionWrapper>
-                            }
-                        />
-                        <Route
-                            path="/privacy-policy"
-                            element={
-                                <TransitionWrapper>
-                                    <PrivacyPolicy />
-                                </TransitionWrapper>
-                            }
-                        />
-                        <Route
-                            path="/terms-of-service"
-                            element={
-                                <TransitionWrapper>
-                                    <TermsOfService />
-                                </TransitionWrapper>
-                            }
-                        />
-                        <Route
-                            path="/about"
-                            element={
-                                <TransitionWrapper>
-                                    <About />
-                                </TransitionWrapper>
-                            }
-                        />
-                        <Route
-                            path="/projects"
-                            element={
-                                <TransitionWrapper>
-                                    <Projects />
-                                </TransitionWrapper>
-                            }
-                        />
-                        <Route
-                            path="/certificates"
-                            element={
-                                <TransitionWrapper>
-                                    <Certificates />
-                                </TransitionWrapper>
-                            }
-                        />
-                    </Routes>
-                </AnimatePresence>
-            </main>
-            <Footer />
-            <FloatingActionButton />
-            <ChatBot />
+        <div className="flex min-h-screen bg-[#000000]">
+            {/* Sidebar - Desktop Only (25% width) */}
+            <Sidebar />
+
+            {/* Main Content Area - Full width on mobile, 75% on desktop */}
+            <div className="flex flex-col min-h-screen w-full lg:ml-[25%]">
+                {/* Navbar - Mobile Only */}
+                <Navbar />
+
+                <main className="flex-grow pt-16 lg:pt-0 overflow-x-hidden">
+                    <AnimatePresence mode="wait">
+                        <Routes>
+                            <Route
+                                path="/"
+                                element={
+                                    <TransitionWrapper>
+                                        <Home />
+                                    </TransitionWrapper>
+                                }
+                            />
+                            <Route
+                                path="/blog"
+                                element={
+                                    <TransitionWrapper>
+                                        <BlogList />
+                                    </TransitionWrapper>
+                                }
+                            />
+                            <Route
+                                path="/blog/:id"
+                                element={
+                                    <TransitionWrapper>
+                                        <BlogPost />
+                                    </TransitionWrapper>
+                                }
+                            />
+                            <Route
+                                path="/privacy-policy"
+                                element={
+                                    <TransitionWrapper>
+                                        <PrivacyPolicy />
+                                    </TransitionWrapper>
+                                }
+                            />
+                            <Route
+                                path="/terms-of-service"
+                                element={
+                                    <TransitionWrapper>
+                                        <TermsOfService />
+                                    </TransitionWrapper>
+                                }
+                            />
+                            <Route
+                                path="/about"
+                                element={
+                                    <TransitionWrapper>
+                                        <About />
+                                    </TransitionWrapper>
+                                }
+                            />
+                            <Route
+                                path="/projects"
+                                element={
+                                    <TransitionWrapper>
+                                        <Projects />
+                                    </TransitionWrapper>
+                                }
+                            />
+                            <Route
+                                path="/certificates"
+                                element={
+                                    <TransitionWrapper>
+                                        <Certificates />
+                                    </TransitionWrapper>
+                                }
+                            />
+                        </Routes>
+                    </AnimatePresence>
+                </main>
+                <Footer />
+                <FloatingActionButton />
+                <ChatBot />
+            </div>
         </div>
     );
 }

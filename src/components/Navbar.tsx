@@ -43,7 +43,7 @@ export default function Navbar() {
 
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-background/90 backdrop-blur-md shadow-md" : "bg-transparent"
+            className={`lg:hidden fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-background/90 backdrop-blur-md shadow-md" : "bg-transparent"
                 }`}
         >
             <div className="container mx-auto px-4">
@@ -64,8 +64,8 @@ export default function Navbar() {
                                     <Button
                                         variant="ghost"
                                         className={`relative px-3 py-2 text-sm rounded-lg transition-colors ${isActive
-                                                ? "!text-foreground !bg-secondary"
-                                                : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                                            ? "!text-foreground !bg-secondary"
+                                            : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                                             }`}
                                     >
                                         <item.icon className="w-4 h-4 mr-2" />
@@ -129,8 +129,8 @@ export default function Navbar() {
                                             <Button
                                                 variant="ghost"
                                                 className={`w-full justify-start text-left min-h-[44px] ${isActive
-                                                        ? "!bg-secondary !text-foreground"
-                                                        : "text-muted-foreground hover:bg-transparent hover:text-foreground"
+                                                    ? "!bg-secondary !text-foreground"
+                                                    : "text-muted-foreground hover:bg-transparent hover:text-foreground"
                                                     }`}
                                             >
                                                 <item.icon className="w-5 h-5 mr-3" />

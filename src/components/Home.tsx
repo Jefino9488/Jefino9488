@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button"
 import { Github, Mail, Linkedin, ExternalLink, Send, BookOpen, ArrowRight, Star, GitFork, MapPin, Award, Terminal } from 'lucide-react'
 import { motion, useMotionValue, useTransform, type PanInfo } from "framer-motion"
 import { useProjects } from "./ProjectsContext"
-import SpotifyWidget from '@/components/SpotifyWidget';
 import { useScreenSize } from "@/hooks/useScreenSize"
 import LazyImage from './LazyImage'
 import TouchFeedback from './TouchFeedback'
@@ -60,9 +59,9 @@ export default function Home() {
     return (
         <div className="min-h-screen bg-background text-foreground">
             <div className="flex-grow w-full py-12">
-                <header className="mb-8 sm:mb-12 container mx-auto px-4">
+                <header className="mb-8 sm:mb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <Card className="bg-card border-border text-card-foreground rounded-3xl shadow-lg overflow-hidden">
-                        <CardContent className="p-6 md:p-8">
+                        <CardContent className="p-4 md:p-6">
                             <div className="flex flex-col items-center md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-8">
                                 <motion.div
                                     initial={{ scale: 0 }}
@@ -71,19 +70,16 @@ export default function Home() {
                                     className="flex-shrink-0 relative"
                                 >
                                     <div className="absolute inset-0 bg-primary/20 rounded-full filter blur-xl opacity-100"></div>
-                                    <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-4 border-border shadow-lg relative rounded-full overflow-hidden">
+                                    <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 border-4 border-border shadow-lg relative rounded-full overflow-hidden">
                                         <LazyImage
                                             src="/profile/profile.jpg"
                                             alt="Jefino Jacob - Full Stack Developer"
                                             className="w-full h-full object-cover"
                                             style={{ objectPosition: 'center 20%' }}
                                             priority={true}
-                                            width={192}
-                                            height={192}
+                                            width={128}
+                                            height={128}
                                         />
-                                    </div>
-                                    <div className="absolute -bottom-2 right-0">
-                                        <SpotifyWidget showDetails={true} />
                                     </div>
                                 </motion.div>
                                 <div className="flex-grow text-center md:text-left">
@@ -92,10 +88,10 @@ export default function Home() {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.5, delay: 0.2 }}
                                     >
-                                        <h1 className="font-poppins text-3xl sm:text-4xl md:text-5xl font-bold mb-2 tracking-tight text-foreground">
+                                        <h1 className="font-poppins text-2xl sm:text-3xl md:text-4xl font-bold mb-2 tracking-tight text-foreground">
                                             Jefino
                                         </h1>
-                                        <p className="orbitron-regular text-xl sm:text-2xl md:text-3xl text-muted-foreground font-light mb-4">
+                                        <p className="orbitron-regular text-lg sm:text-xl md:text-2xl text-muted-foreground font-light mb-4">
                                             Backend Fullstack Developer
                                         </p>
                                         <div className="flex flex-col space-y-2 mb-6">
@@ -169,7 +165,7 @@ export default function Home() {
                         </CardContent>
                     </Card>
                 </header>
-                <main className="space-y-8 sm:space-y-10 container mx-auto px-4">
+                <main className="space-y-8 sm:space-y-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                     {/* Things I've Learnt & I know Section - Scrolling Icons */}
                     <section className="overflow-hidden">
@@ -358,7 +354,7 @@ export default function Home() {
                         )}
                     </section>
                 </main>
-            </div>
+            </div >
             <motion.div
                 drag="y"
                 onDragEnd={handleDragEnd}
@@ -387,6 +383,6 @@ export default function Home() {
                     ></motion.div>
                 </div>
             </motion.div>
-        </div>
+        </div >
     )
 }
