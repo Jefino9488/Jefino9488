@@ -4,8 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import Home from "./components/Home";
 import BlogList from "./components/BlogList";
 import BlogPost from "./components/BlogPost";
-import PrivacyPolicy from "./components/PrivacyPolicy";
-import TermsOfService from "./components/TermsOfService";
+
 import About from "./components/About";
 import Projects from "./components/Projects";
 import Certificates from "./components/Certificates";
@@ -63,22 +62,7 @@ function AppContent() {
                                     </TransitionWrapper>
                                 }
                             />
-                            <Route
-                                path="/privacy-policy"
-                                element={
-                                    <TransitionWrapper>
-                                        <PrivacyPolicy />
-                                    </TransitionWrapper>
-                                }
-                            />
-                            <Route
-                                path="/terms-of-service"
-                                element={
-                                    <TransitionWrapper>
-                                        <TermsOfService />
-                                    </TransitionWrapper>
-                                }
-                            />
+
                             <Route
                                 path="/about"
                                 element={
@@ -106,7 +90,9 @@ function AppContent() {
                         </Routes>
                     </AnimatePresence>
                 </main>
-                <Footer />
+                <div className="lg:hidden">
+                    <Footer />
+                </div>
                 <FloatingActionButton />
                 <ChatBot />
             </div>

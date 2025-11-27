@@ -38,9 +38,7 @@ export default function GitHubDashboard() {
         <Card className="bg-card border-border border text-card-foreground rounded-2xl shadow-lg overflow-hidden w-full">
             <CardHeader className="py-4 px-4 border-b border-border">
                 <div className="flex flex-col items-center">
-                    <Avatar className="w-16 h-16 mb-2">
-                        <AvatarImage src="/profile/profile.png" alt="Jefino" />
-                    </Avatar>
+
                     <CardTitle className="flex items-center justify-center">
                         <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Github Overview</h1>
                     </CardTitle>

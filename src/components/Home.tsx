@@ -48,9 +48,9 @@ export default function Home() {
     const pinnedTitles = new Set(pinnedProjects.map(project => project.title.toLowerCase()))
     const recentNonPinnedProjects = allProjects
         .filter(project => !pinnedTitles.has(project.title.toLowerCase()))
-        .slice(0, 2)
+        .slice(0, 6)
 
-    const projectCount = isXlScreen ? 8 : 6
+    const projectCount = 6
     const displayedProjects = [
         ...pinnedProjects.slice(0, 6),
         ...(isXlScreen ? recentNonPinnedProjects : [])
@@ -303,7 +303,7 @@ export default function Home() {
                         ) : error ? (
                             <div className="text-center text-destructive py-12">{error}</div>
                         ) : (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                                 {displayedProjects.map((project) => (
                                     <motion.div
                                         key={project.title}
@@ -354,7 +354,7 @@ export default function Home() {
                         )}
                     </section>
                 </main>
-            </div >
+            </div>
             <motion.div
                 drag="y"
                 onDragEnd={handleDragEnd}
@@ -383,6 +383,6 @@ export default function Home() {
                     ></motion.div>
                 </div>
             </motion.div>
-        </div >
+        </div>
     )
 }

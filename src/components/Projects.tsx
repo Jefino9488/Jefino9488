@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft, ExternalLink, GitFork, Star, Github } from "lucide-react"
 import { motion } from "framer-motion"
 import GitHubDashboard from "@/components/GitHubDashboard.tsx"
+import { useGitHubData } from "@/components/GitHubContext"
 
 export default function Projects() {
     const { allProjects, loading, error } = useProjects()
+    const { profile } = useGitHubData()
 
     if (loading) {
         return (
@@ -102,7 +104,7 @@ export default function Projects() {
                             </div>
                             <div>
                                 <h3 className="text-2xl font-bold text-foreground mb-1">View More Projects</h3>
-                                <p className="text-muted-foreground">Explore all {allProjects.length} repositories on GitHub</p>
+                                <p className="text-muted-foreground">Explore all {profile?.public_repos || allProjects.length} repositories on GitHub</p>
                             </div>
                         </div>
                         <p className="text-muted-foreground mb-6 max-w-lg mx-auto">

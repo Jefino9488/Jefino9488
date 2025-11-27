@@ -84,7 +84,7 @@ export default function Sidebar() {
 
                         {/* Spotify Widget */}
                         <div className="absolute left-32 bottom-8 z-10">
-                            <SpotifyWidget showDetails={false} className="scale-90 origin-bottom-left" />
+                            <SpotifyWidget showDetails={true} className="origin-bottom-left" />
                         </div>
                     </div>
 
