@@ -52,19 +52,7 @@ const CodeBlock = ({ code }: { code: string }) => {
     )
 }
 
-const renderTitle = (title: string, level: 1 | 2 | 3 | 4 | 5 | 6) => {
-    const baseClasses = "font-bold mb-4 text-primary"
-    const sizes: { [key: number]: string } = {
-        1: "text-4xl sm:text-5xl",
-        2: "text-3xl sm:text-4xl",
-        3: "text-2xl sm:text-3xl",
-        4: "text-xl sm:text-2xl",
-        5: "text-lg sm:text-xl",
-        6: "text-base sm:text-lg",
-    }
-    const Tag = `h${level}` as keyof JSX.IntrinsicElements
-    return <Tag className={`${baseClasses} ${sizes[level]}`}>{title}</Tag>
-}
+
 
 const CardNotFound = () => (
     <div className="min-h-screen bg-background flex items-center justify-center text-foreground p-4">
