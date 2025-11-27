@@ -69,7 +69,7 @@ export default function Sidebar() {
                             <div className="w-28 h-28 rounded-full border-[6px] border-card bg-card overflow-hidden relative z-10">
                                 <LazyImage
                                     src="/profile/profile.jpg"
-                                    alt="Jefino Jacob"
+                                    alt="Jefino"
                                     className="w-full h-full object-cover"
                                     style={{ objectPosition: 'center 20%' }}
                                     priority={true}
@@ -96,7 +96,7 @@ export default function Sidebar() {
 
                     {/* Bio */}
                     <p className="text-sm text-[#c9d1d9] leading-relaxed mb-5">
-                        AI & Data Science Undergrad | Full-Stack Developer | Open Source & Automation Enthusiast
+                        AI & Data Science Undergrad | Full-Stack Developer | Open Source
                     </p>
 
                     {/* GitHub Buttons */}
@@ -171,15 +171,15 @@ export default function Sidebar() {
                     <div>
                         <h3 className="text-sm font-bold text-[#c9d1d9] mb-3">Organizations</h3>
                         <div className="flex gap-2">
-                            <div className="w-9 h-9 rounded bg-white flex items-center justify-center overflow-hidden border border-[#30363d]">
-                                <span className="text-black font-bold text-xs">ROS</span>
-                            </div>
-                            <div className="w-9 h-9 rounded bg-black flex items-center justify-center overflow-hidden border border-[#30363d]">
-                                <div className="w-5 h-5 rounded-full bg-purple-600"></div>
-                            </div>
-                            <div className="w-9 h-9 rounded bg-[#111] flex items-center justify-center overflow-hidden border border-[#30363d]">
-                                <div className="text-cyan-400 text-sm">⚛️</div>
-                            </div>
+                            <a href="https://github.com/ResurrectedOS" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded bg-white flex items-center justify-center overflow-hidden border border-[#30363d] hover:opacity-80 transition-opacity">
+                                <img src="https://avatars.githubusercontent.com/u/159568627?s=64&v=4" alt="ResurrectedOS" className="w-full h-full object-cover" />
+                            </a>
+                            <a href="https://github.com/Kaizen-Spark" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded bg-white flex items-center justify-center overflow-hidden border border-[#30363d] hover:opacity-80 transition-opacity">
+                                <img src="https://avatars.githubusercontent.com/u/177112339?s=64&v=4" alt="Kaizen-Spark" className="w-full h-full object-cover" />
+                            </a>
+                            <a href="https://github.com/XagaForge" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded bg-white flex items-center justify-center overflow-hidden border border-[#30363d] hover:opacity-80 transition-opacity">
+                                <img src="https://avatars.githubusercontent.com/u/182200090?s=200&v=4" alt="XagaForge" className="w-full h-full object-cover" />
+                            </a>
                         </div>
                     </div>
                 </div>
