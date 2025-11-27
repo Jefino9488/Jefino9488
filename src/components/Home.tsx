@@ -1,14 +1,16 @@
 import { Link, useNavigate } from "react-router-dom"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Github, Mail, Linkedin, ExternalLink, Send, BookOpen, ArrowRight, Star, GitFork, MapPin, Award } from 'lucide-react'
+import { Github, Mail, Linkedin, ExternalLink, Send, BookOpen, ArrowRight, Star, GitFork, MapPin, Award, Terminal } from 'lucide-react'
 import { motion, useMotionValue, useTransform, type PanInfo } from "framer-motion"
 import { useProjects } from "./ProjectsContext"
 import SpotifyWidget from '@/components/SpotifyWidget';
 import { useScreenSize } from "@/hooks/useScreenSize"
 import LazyImage from './LazyImage'
 import TouchFeedback from './TouchFeedback'
+import { ReactIcon, NodeIcon, ExpressIcon, SpringIcon, JavaIcon, NotionIcon, GitIcon, GitHubIcon, VercelIcon, NetlifyIcon, RenderIcon } from './Icons'
+import ExperienceCard from './ExperienceCard'
+import ContributionGraph from './ContributionGraph'
 
 export default function Home() {
     const { pinnedProjects, allProjects, loading, error } = useProjects()
@@ -25,15 +27,30 @@ export default function Home() {
         }
     }
 
-    const skills = ["Python", "Java", "Flask", "React", "Spring Boot", "GitHub", "Postgress", "Docker", "FireBase"]
+    const techStack = [
+        { name: "React", icon: <ReactIcon className="w-8 h-8" /> },
+        { name: "NodeJS", icon: <NodeIcon className="w-8 h-8" /> },
+        { name: "Express", icon: <ExpressIcon className="w-8 h-8" /> },
+        { name: "Spring Boot", icon: <SpringIcon className="w-8 h-8" /> },
+        { name: "Spring Jpa", icon: <SpringIcon className="w-8 h-8" /> },
+        { name: "Java", icon: <JavaIcon className="w-8 h-8" /> },
+        { name: "Vercel", icon: <VercelIcon className="w-8 h-8" /> },
+        { name: "Netlify", icon: <NetlifyIcon className="w-8 h-8" /> },
+        { name: "Render", icon: <RenderIcon className="w-8 h-8" /> },
+        { name: "Notion", icon: <NotionIcon className="w-8 h-8" /> },
+        { name: "Git", icon: <GitIcon className="w-8 h-8" /> },
+        { name: "GitHub", icon: <GitHubIcon className="w-8 h-8" /> },
+    ]
+
+    const techStackRow1 = techStack.slice(0, 6)
+    const techStackRow2 = techStack.slice(6)
 
     // Select projects based on screen size
     const pinnedTitles = new Set(pinnedProjects.map(project => project.title.toLowerCase()))
     const recentNonPinnedProjects = allProjects
-        .filter(project => !pinnedTitles.has(project.title.toLowerCase())) // Exclude pinned projects
-        .slice(0, 2) // Take the top 2 (already sorted by UPDATED_AT)
+        .filter(project => !pinnedTitles.has(project.title.toLowerCase()))
+        .slice(0, 2)
 
-    // Display 8 projects on xl screens, 6 otherwise
     const projectCount = isXlScreen ? 8 : 6
     const displayedProjects = [
         ...pinnedProjects.slice(0, 6),
@@ -153,18 +170,85 @@ export default function Home() {
                     </Card>
                 </header>
                 <main className="space-y-8 sm:space-y-10 container mx-auto px-4">
-                    <section>
-                        <div className="flex flex-wrap justify-center gap-4">
-                            {skills.map((skill, index) => (
-                                <Badge
-                                    key={index}
-                                    variant="secondary"
-                                    className="text-lg py-2 px-4 bg-secondary hover:bg-secondary/80 transition-colors rounded-2xl text-secondary-foreground"
-                                >
-                                    {skill}
-                                </Badge>
-                            ))}
+
+                    {/* Things I've Learnt & I know Section - Scrolling Icons */}
+                    <section className="overflow-hidden">
+                        {/* <div className="relative mb-6">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg blur opacity-25"></div>
+                            <h2 className="relative text-2xl font-bold text-foreground border-l-4 border-primary pl-4 py-1">
+                                Things I've Learnt & I know
+                            </h2>
+                        </div> */}
+
+                        {/* Row 1 - Scroll Right */}
+                        <div className="relative overflow-hidden mb-4">
+                            <motion.div
+                                className="flex gap-6"
+                                animate={{
+                                    x: [0, -1000],
+                                }}
+                                transition={{
+                                    x: {
+                                        repeat: Infinity,
+                                        repeatType: "loop",
+                                        duration: 20,
+                                        ease: "linear",
+                                    },
+                                }}
+                            >
+                                {[...techStackRow1, ...techStackRow1, ...techStackRow1].map((tech, index) => (
+                                    <div key={index} className="flex items-center gap-3 px-6 py-3 bg-card/50 backdrop-blur border border-border rounded-xl min-w-fit">
+                                        <div>{tech.icon}</div>
+                                        <span className="font-medium text-sm text-foreground whitespace-nowrap">{tech.name}</span>
+                                    </div>
+                                ))}
+                            </motion.div>
                         </div>
+
+                        {/* Row 2 - Scroll Left */}
+                        <div className="relative overflow-hidden">
+                            <motion.div
+                                className="flex gap-6"
+                                animate={{
+                                    x: [-1000, 0],
+                                }}
+                                transition={{
+                                    x: {
+                                        repeat: Infinity,
+                                        repeatType: "loop",
+                                        duration: 20,
+                                        ease: "linear",
+                                    },
+                                }}
+                            >
+                                {[...techStackRow2, ...techStackRow2, ...techStackRow2].map((tech, index) => (
+                                    <div key={index} className="flex items-center gap-3 px-6 py-3 bg-card/50 backdrop-blur border border-border rounded-xl min-w-fit">
+                                        <div>{tech.icon}</div>
+                                        <span className="font-medium text-sm text-foreground whitespace-nowrap">{tech.name}</span>
+                                    </div>
+                                ))}
+                            </motion.div>
+                        </div>
+                    </section>
+
+                    {/* Framework Patcher Project */}
+                    <section>
+                        <div className="space-y-4">
+                            <ExperienceCard
+                                company="Framework Patcher"
+                                role="Android Patching & Security Tool"
+                                date="2024 - Present"
+                                location="Open Source"
+                                status="Ongoing"
+                                link="https://github.com/Jefino9488/FrameworkPatcher"
+                                logo={<Terminal className="w-8 h-8" />}
+                            />
+                        </div>
+                    </section>
+
+                    {/* Contribution Graph Section */}
+                    <section>
+                        <ContributionGraph />
                     </section>
 
                     <section className="grid grid-cols-1 md:grid-cols-2 gap-6">

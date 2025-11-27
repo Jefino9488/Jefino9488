@@ -244,3 +244,29 @@ html {
     margin-top: 1rem;
   }
 }
+/* Custom minimal scrollbar for contribution graph */
+.contribution-graph-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.contribution-graph-scroll::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+    margin: 0 10px;
+}
+
+.contribution-graph-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    transition: background 0.2s;
+}
+
+.contribution-graph-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Firefox minimal scrollbar */
+.contribution-graph-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
