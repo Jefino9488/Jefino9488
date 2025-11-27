@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Star, GitCommit, GitFork, Users, GitPullRequest } from "lucide-react";
 import { motion } from "framer-motion";
 import { useGitHubData } from "@/components/GitHubContext"; // Import your context
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+
 
 export default function GitHubDashboard() {
     const { profile, stats, loading } = useGitHubData();
