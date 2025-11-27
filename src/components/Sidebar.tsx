@@ -49,9 +49,9 @@ export default function Sidebar() {
     return (
         <aside className="hidden lg:flex lg:flex-col lg:fixed lg:left-0 lg:top-0 lg:h-screen lg:w-1/4 bg-background border-r border-border overflow-y-auto font-sans custom-scrollbar">
             {/* Profile Card Container */}
-            <div className="m-3 bg-card rounded-xl overflow-hidden shadow-lg border border-border">
+            <div className="m-3 bg-card rounded-xl shadow-lg border border-border">
                 {/* Banner */}
-                <div className="h-28 relative">
+                <div className="h-28 relative rounded-t-xl overflow-hidden">
                     <LazyImage
                         src="/profile/banner.jpg"
                         alt="Profile Banner"
