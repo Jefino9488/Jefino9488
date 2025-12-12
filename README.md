@@ -27,7 +27,7 @@ if __name__ == "__main__":
     <p>
       <h1 style="display: inline-block;">GitHub Stats</h1>
     <p>
-      <img src="https://streak-stats.demolab.com/?user=Jefino9488&theme=neon-dark&hide_border=true&border_radius=8" alt="Jefino's GitHub Stats" />
+      <a href="https://git.io/streak-stats"><img src="https://github-readme-streak-stats-beta-one.vercel.app?user=Jefino9488&theme=neon-dark&hide_border=true" alt="GitHub Streak" /></a>
     </p>
     <p>
       <img src="https://github.com/Jefino9488/MyProfileViews/blob/master/svg/profile/badge.svg" alt="Profile Views Badge" />  <img src="https://img.shields.io/github/followers/Jefino9488" alt="">
