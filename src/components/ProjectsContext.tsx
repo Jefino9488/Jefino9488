@@ -9,6 +9,7 @@ interface Project {
     forks: number;
   };
   link: string;
+  updatedAt?: string;
 }
 
 const ProjectsContext = createContext<{
@@ -34,6 +35,7 @@ const getPinnedProjectsQuery = `
               name
               description
               url
+              updatedAt
               stargazers {
                 totalCount
               }
@@ -65,6 +67,7 @@ const getAllProjectsQuery = `
             name
             description
             url
+            updatedAt
             stargazers {
               totalCount
             }
@@ -130,6 +133,7 @@ async function fetchGitHubProjects(query: string): Promise<{ projects: Project[]
       ].filter((tech: string) => tech), // Filter out undefined/null values
       stats: { stars: repo.stargazers.totalCount, forks: repo.forks.totalCount },
       link: repo.url,
+      updatedAt: repo.updatedAt,
     }));
 
     return { projects, error: undefined };

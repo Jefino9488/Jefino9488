@@ -7,7 +7,7 @@ interface ExperienceCardProps {
     date: string;
     location: string;
     logo?: React.ReactNode;
-    status?: "Completed" | "Ongoing";
+    status?: string;
     link?: string;
 }
 
