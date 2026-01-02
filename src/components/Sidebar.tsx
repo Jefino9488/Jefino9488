@@ -1,7 +1,9 @@
 import { Link, useLocation } from "react-router-dom"
+import { useState, useEffect } from "react"
 import { Home, BookOpen, Award, Github, User, MapPin, Mail, Link as LinkIcon, Users, Building2, Star, Cpu } from "lucide-react"
 import LazyImage from "./LazyImage"
 import SpotifyWidget from "./SpotifyWidget"
+import { fetchGitHubProfile } from "@/utils/github"
 
 interface NavItem {
     path: string
@@ -45,6 +47,26 @@ const navItems: NavItem[] = [
 
 export default function Sidebar() {
     const location = useLocation()
+    const [followers, setFollowers] = useState<number | null>(null)
+    const [following, setFollowing] = useState<number | null>(null)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchGitHubStats = async () => {
+            try {
+                const profile = await fetchGitHubProfile("Jefino9488")
+                if (profile) {
+                    setFollowers(profile.followers)
+                    setFollowing(profile.following)
+                }
+            } catch (error) {
+                console.error("Failed to fetch GitHub stats:", error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchGitHubStats()
+    }, [])
 
     return (
         <aside className="hidden lg:flex lg:flex-col lg:fixed lg:left-0 lg:top-0 lg:h-screen lg:w-1/4 bg-background border-r border-border overflow-y-auto font-sans custom-scrollbar">
@@ -111,13 +133,33 @@ export default function Sidebar() {
 
                     {/* Stats */}
                     <div className="flex items-center gap-4 text-sm text-[#8b949e] mb-5">
-                        <div className="flex items-center gap-1 hover:text-[#58a6ff] cursor-pointer transition-colors">
+                        <a
+                            href="https://github.com/Jefino9488?tab=followers"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 hover:text-[#58a6ff] cursor-pointer transition-colors"
+                        >
                             <Users className="w-4 h-4" />
-                            <span className="font-bold text-[#c9d1d9]">82</span> followers
-                        </div>
-                        <div className="flex items-center gap-1 hover:text-[#58a6ff] cursor-pointer transition-colors">
-                            <span className="font-bold text-[#c9d1d9]">55</span> following
-                        </div>
+                            {loading ? (
+                                <span className="font-bold text-[#c9d1d9] animate-pulse bg-[#30363d] rounded w-8 h-4 inline-block"></span>
+                            ) : (
+                                <span className="font-bold text-[#c9d1d9]">{followers ?? '—'}</span>
+                            )}
+                            {' '}followers
+                        </a>
+                        <a
+                            href="https://github.com/Jefino9488?tab=following"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 hover:text-[#58a6ff] cursor-pointer transition-colors"
+                        >
+                            {loading ? (
+                                <span className="font-bold text-[#c9d1d9] animate-pulse bg-[#30363d] rounded w-8 h-4 inline-block"></span>
+                            ) : (
+                                <span className="font-bold text-[#c9d1d9]">{following ?? '—'}</span>
+                            )}
+                            {' '}following
+                        </a>
                     </div>
 
                     {/* Contact Info List */}
