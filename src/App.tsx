@@ -1,13 +1,16 @@
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import Home from "./components/Home";
-import BlogList from "./components/BlogList";
-import BlogPost from "./components/BlogPost";
 
-import About from "./components/About";
-import Projects from "./components/Projects";
-import Certificates from "./components/Certificates";
+// Lazy load route components for code splitting
+const Home = lazy(() => import("./components/Home"));
+const BlogList = lazy(() => import("./components/BlogList"));
+const BlogPost = lazy(() => import("./components/BlogPost"));
+const About = lazy(() => import("./components/About"));
+const Projects = lazy(() => import("./components/Projects"));
+const Certificates = lazy(() => import("./components/Certificates"));
+
+// Keep critical components eagerly loaded
 import Loader from "./components/Loader";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";

@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 
 interface ContributionDay {
@@ -194,12 +193,9 @@ export default function ContributionGraph() {
                 <div key={weekIndex} className="flex flex-col gap-[3px]">
                   {week.map((day, dayIndex) =>
                     day ? (
-                      <motion.div
+                      <div
                         key={`${weekIndex}-${dayIndex}`}
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: weekIndex * 0.005 + dayIndex * 0.002, duration: 0.15 }}
-                        className={`w-[11px] h-[11px] rounded-[2px] ${getColor(day.level)} hover:ring-2 hover:ring-green-500/50 transition-all cursor-pointer`}
+                        className={`w-[11px] h-[11px] rounded-[2px] ${getColor(day.level)} hover:ring-2 hover:ring-green-500/50 transition-all duration-150 cursor-pointer`}
                         title={`${day.date}: ${day.count} contributions`}
                       />
                     ) : (

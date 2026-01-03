@@ -1,5 +1,5 @@
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -23,7 +23,8 @@ import GitHubDashboard from "./GitHubDashboard"
 import LazyImage from "./LazyImage"
 import certificates from "@/certifications/certifications.json"
 import { useProjects } from "./ProjectsContext"
-import { fetchGitHubProfile, fetchAllLanguages, calculateExperienceYears, categorizeSkills, GitHubProfile } from "@/utils/github"
+import { useGitHubData } from "./GitHubContext"
+import { calculateExperienceYears, categorizeSkills } from "@/utils/github"
 
 // Timeline data
 interface TimelineItem {
@@ -90,42 +91,29 @@ export default function About() {
     const [activeTab, setActiveTab] = useState<"overview" | "timeline" | "skills">("overview")
     const { allProjects } = useProjects()
 
-    // GitHub data state
-    const [githubProfile, setGithubProfile] = useState<GitHubProfile | null>(null)
-    const [skills, setSkills] = useState(defaultSkills)
-    const [experienceYears, setExperienceYears] = useState(3)
-    const [uniqueLanguages, setUniqueLanguages] = useState<string[]>([])
+    // Use shared GitHub context instead of local fetching
+    const { profile: githubProfile, languages } = useGitHubData()
 
-    // Fetch GitHub data on mount
-    useEffect(() => {
-        const fetchGitHubData = async () => {
-            try {
-                const [profile, languages] = await Promise.all([
-                    fetchGitHubProfile('Jefino9488'),
-                    fetchAllLanguages('Jefino9488')
-                ])
+    // Calculate derived values from GitHub data
+    const experienceYears = useMemo(() => {
+        return githubProfile?.created_at ? calculateExperienceYears(githubProfile.created_at) : 3
+    }, [githubProfile?.created_at])
 
-                if (profile) {
-                    setGithubProfile(profile)
-                    setExperienceYears(calculateExperienceYears(profile.created_at))
-                }
-
-                if (languages.length > 0) {
-                    const categorized = categorizeSkills(languages)
-                    setSkills(prev => ({
-                        frontend: categorized.frontend.length > 0 ? categorized.frontend : prev.frontend,
-                        backend: categorized.backend.length > 0 ? categorized.backend : prev.backend,
-                        tools: categorized.tools.length > 0 ? categorized.tools : prev.tools
-                    }))
-                    setUniqueLanguages(languages.map(([lang]) => lang))
-                }
-            } catch (error) {
-                console.error('Error fetching GitHub data:', error)
+    const skills = useMemo(() => {
+        if (languages.length > 0) {
+            const categorized = categorizeSkills(languages)
+            return {
+                frontend: categorized.frontend.length > 0 ? categorized.frontend : defaultSkills.frontend,
+                backend: categorized.backend.length > 0 ? categorized.backend : defaultSkills.backend,
+                tools: categorized.tools.length > 0 ? categorized.tools : defaultSkills.tools
             }
         }
+        return defaultSkills
+    }, [languages])
 
-        fetchGitHubData()
-    }, [])
+    const uniqueLanguages = useMemo(() => {
+        return languages.map(([lang]) => lang)
+    }, [languages])
 
     // Contact form state
     const [formData, setFormData] = useState({
@@ -293,23 +281,23 @@ export default function About() {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-xl font-semibold text-primary">Quick Stats</CardTitle>
                     </CardHeader>
-                    <CardContent className="p-6">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-secondary/50 p-4 rounded-xl">
-                                <p className="text-sm text-muted-foreground">Experience</p>
-                                <p className="text-2xl font-bold text-primary">{experienceYears}+ Years</p>
+                    <CardContent className="p-4 sm:p-6">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                            <div className="bg-secondary/50 p-3 sm:p-4 rounded-xl">
+                                <p className="text-xs sm:text-sm text-muted-foreground">Experience</p>
+                                <p className="text-xl sm:text-2xl font-bold text-primary">{experienceYears}+ Years</p>
                             </div>
-                            <div className="bg-secondary/50 p-4 rounded-xl">
-                                <p className="text-sm text-muted-foreground">Repositories</p>
-                                <p className="text-2xl font-bold text-primary">{githubProfile?.public_repos || allProjects.length}+</p>
+                            <div className="bg-secondary/50 p-3 sm:p-4 rounded-xl">
+                                <p className="text-xs sm:text-sm text-muted-foreground">Repositories</p>
+                                <p className="text-xl sm:text-2xl font-bold text-primary">{githubProfile?.public_repos || allProjects.length}+</p>
                             </div>
-                            <div className="bg-secondary/50 p-4 rounded-xl">
-                                <p className="text-sm text-muted-foreground">Certifications</p>
-                                <p className="text-2xl font-bold text-primary">{certificates.length}</p>
+                            <div className="bg-secondary/50 p-3 sm:p-4 rounded-xl">
+                                <p className="text-xs sm:text-sm text-muted-foreground">Certifications</p>
+                                <p className="text-xl sm:text-2xl font-bold text-primary">{certificates.length}</p>
                             </div>
-                            <div className="bg-secondary/50 p-4 rounded-xl">
-                                <p className="text-sm text-muted-foreground">Languages</p>
-                                <p className="text-2xl font-bold text-primary">{uniqueLanguages.length || '10'}+</p>
+                            <div className="bg-secondary/50 p-3 sm:p-4 rounded-xl">
+                                <p className="text-xs sm:text-sm text-muted-foreground">Languages</p>
+                                <p className="text-xl sm:text-2xl font-bold text-primary">{uniqueLanguages.length || '10'}+</p>
                             </div>
                         </div>
                     </CardContent>
