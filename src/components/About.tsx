@@ -1,5 +1,5 @@
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -23,6 +23,7 @@ import GitHubDashboard from "./GitHubDashboard"
 import LazyImage from "./LazyImage"
 import certificates from "@/certifications/certifications.json"
 import { useProjects } from "./ProjectsContext"
+import { fetchGitHubProfile, fetchAllLanguages, calculateExperienceYears, categorizeSkills, GitHubProfile } from "@/utils/github"
 
 // Timeline data
 interface TimelineItem {
@@ -37,40 +38,48 @@ interface TimelineItem {
 const timelineItems: TimelineItem[] = [
     {
         id: "timeline1",
-        title: "Full Stack Developer",
+        title: "AI & Data Science Undergrad",
         date: "2022 - Present",
-        description: "Working on various web development projects using React, Node.js, and other modern technologies.",
-        icon: Code,
-        category: "work",
-    },
-    {
-        id: "timeline2",
-        title: "Bachelor's in Computer Science",
-        date: "2018 - 2022",
-        description: "Studied computer science with a focus on software development and algorithms.",
+        description: "Pursuing Bachelor's in AI & Data Science with focus on machine learning and full-stack development.",
         icon: GraduationCap,
         category: "education",
     },
     {
+        id: "timeline2",
+        title: "Open Source Contributor",
+        date: "2021 - Present",
+        description: "Active contributor to open source projects including FrameworkPatcher, Android ROM development, and automation tools.",
+        icon: Code,
+        category: "work",
+    },
+    {
         id: "timeline3",
-        title: "Freelance Developer",
-        date: "2020 - 2022",
-        description: "Worked on various freelance projects for clients across different industries.",
+        title: "Full Stack Developer",
+        date: "2021 - Present",
+        description: "Building web applications using React, TypeScript, Python, and modern cloud technologies.",
         icon: Briefcase,
         category: "work",
     },
     {
         id: "timeline4",
-        title: "AWS Certification",
-        date: "January 2023",
-        description: "Obtained AWS Certified Developer certification.",
+        title: "DeepLearning.AI TensorFlow Developer",
+        date: "February 2024",
+        description: "Professional certification in TensorFlow for AI, Machine Learning, and Deep Learning.",
+        icon: Award,
+        category: "award",
+    },
+    {
+        id: "timeline5",
+        title: "Cisco CCNA Certified",
+        date: "May 2025",
+        description: "Completed CCNA certification covering networking fundamentals, routing, switching, and automation.",
         icon: Award,
         category: "award",
     },
 ]
 
-// Skills data
-const skills = {
+// Default skills (will be overridden by GitHub data)
+const defaultSkills = {
     frontend: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Next.js"],
     backend: ["Node.js", "Python", "Flask", "Express", "MongoDB", "MySQL"],
     tools: ["Git", "Docker", "AWS", "Firebase", "VS Code", "Figma"],
@@ -80,6 +89,43 @@ const skills = {
 export default function About() {
     const [activeTab, setActiveTab] = useState<"overview" | "timeline" | "skills">("overview")
     const { allProjects } = useProjects()
+
+    // GitHub data state
+    const [githubProfile, setGithubProfile] = useState<GitHubProfile | null>(null)
+    const [skills, setSkills] = useState(defaultSkills)
+    const [experienceYears, setExperienceYears] = useState(3)
+    const [uniqueLanguages, setUniqueLanguages] = useState<string[]>([])
+
+    // Fetch GitHub data on mount
+    useEffect(() => {
+        const fetchGitHubData = async () => {
+            try {
+                const [profile, languages] = await Promise.all([
+                    fetchGitHubProfile('Jefino9488'),
+                    fetchAllLanguages('Jefino9488')
+                ])
+
+                if (profile) {
+                    setGithubProfile(profile)
+                    setExperienceYears(calculateExperienceYears(profile.created_at))
+                }
+
+                if (languages.length > 0) {
+                    const categorized = categorizeSkills(languages)
+                    setSkills(prev => ({
+                        frontend: categorized.frontend.length > 0 ? categorized.frontend : prev.frontend,
+                        backend: categorized.backend.length > 0 ? categorized.backend : prev.backend,
+                        tools: categorized.tools.length > 0 ? categorized.tools : prev.tools
+                    }))
+                    setUniqueLanguages(languages.map(([lang]) => lang))
+                }
+            } catch (error) {
+                console.error('Error fetching GitHub data:', error)
+            }
+        }
+
+        fetchGitHubData()
+    }, [])
 
     // Contact form state
     const [formData, setFormData] = useState({
@@ -186,9 +232,9 @@ export default function About() {
                             <div className="flex-shrink-0">
                                 <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-primary/20">
                                     <LazyImage
-                                        src="https://avatars.githubusercontent.com/u/9488?v=4"
+                                        src="/profile/profile.jpg"
                                         alt="Jefino"
-                                        className="object-cover w-full h-full"
+                                        className="object-cover w-full h-full scale-110 object-top"
                                         priority={true}
                                         width={128}
                                         height={128}
@@ -197,10 +243,14 @@ export default function About() {
                             </div>
                             <div className="flex-grow text-center md:text-left">
                                 <h1 className="text-3xl font-bold mb-2 text-primary">Jefino</h1>
-                                <p className="text-xl text-muted-foreground mb-4">Full Stack Developer</p>
+                                <p className="text-xl text-muted-foreground mb-2">
+                                    AI & Data Science Undergrad | Full-Stack Developer
+                                </p>
+                                {githubProfile?.location && (
+                                    <p className="text-sm text-muted-foreground mb-4">{githubProfile.location}</p>
+                                )}
                                 <p className="text-foreground mb-4 max-w-2xl">
-                                    Passionate developer with experience in creating modern, dynamic, and efficient web applications.
-                                    Focused on delivering clean, maintainable code and intuitive user experiences.
+                                    {githubProfile?.bio || "Open Source & Automation Enthusiast passionate about building modern, dynamic, and efficient applications. Focused on delivering clean, maintainable code and intuitive user experiences."}
                                 </p>
                                 <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-4">
                                     <a
@@ -247,11 +297,11 @@ export default function About() {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="bg-secondary/50 p-4 rounded-xl">
                                 <p className="text-sm text-muted-foreground">Experience</p>
-                                <p className="text-2xl font-bold text-primary">3+ Years</p>
+                                <p className="text-2xl font-bold text-primary">{experienceYears}+ Years</p>
                             </div>
                             <div className="bg-secondary/50 p-4 rounded-xl">
-                                <p className="text-sm text-muted-foreground">Projects</p>
-                                <p className="text-2xl font-bold text-primary">{allProjects.length}+</p>
+                                <p className="text-sm text-muted-foreground">Repositories</p>
+                                <p className="text-2xl font-bold text-primary">{githubProfile?.public_repos || allProjects.length}+</p>
                             </div>
                             <div className="bg-secondary/50 p-4 rounded-xl">
                                 <p className="text-sm text-muted-foreground">Certifications</p>
@@ -259,7 +309,7 @@ export default function About() {
                             </div>
                             <div className="bg-secondary/50 p-4 rounded-xl">
                                 <p className="text-sm text-muted-foreground">Languages</p>
-                                <p className="text-2xl font-bold text-primary">5+</p>
+                                <p className="text-2xl font-bold text-primary">{uniqueLanguages.length || '10'}+</p>
                             </div>
                         </div>
                     </CardContent>
@@ -312,20 +362,20 @@ export default function About() {
                                         <div>
                                             <h2 className="text-2xl font-bold mb-4 text-primary">About Me</h2>
                                             <p className="text-muted-foreground mb-4">
-                                                Welcome to my portfolio! I am Jefino, a passionate Full Stack Developer with experience in
-                                                creating modern, dynamic, and efficient web applications. This site serves as a showcase for my
-                                                skills, projects, and experience in the software development industry.
+                                                Welcome to my portfolio! I'm Jefino, an AI & Data Science undergraduate and passionate
+                                                Full-Stack Developer based in Chennai, India. I specialize in building modern, dynamic,
+                                                and efficient applications with a focus on automation and open-source contributions.
                                             </p>
                                             <p className="text-muted-foreground mb-4">
-                                                I started my journey in software development with a deep interest in building efficient and
-                                                scalable applications. Over the years, I have honed my skills across various technologies and
-                                                platforms, from backend development with Flask and Python to creating responsive frontends using
-                                                React and Tailwind CSS.
+                                                My journey in software development started with Android ROM development and has evolved into
+                                                full-stack web development. I've worked extensively with technologies like React, TypeScript,
+                                                Python, and Flask. My notable projects include FrameworkPatcher (89 stars), a tool for
+                                                patching Android frameworks, and various automation tools for ROM development.
                                             </p>
                                             <p className="text-muted-foreground">
-                                                I am always eager to learn new things, whether it be the latest development tools, frameworks,
-                                                or programming paradigms. My goal is to combine my love for technology with my passion for
-                                                solving complex problems and delivering seamless user experiences.
+                                                I'm always eager to learn new technologies and contribute to the open-source community.
+                                                With certifications in TensorFlow, Machine Learning, and Cisco Networking, I combine my
+                                                passion for AI with practical software development to solve complex problems.
                                             </p>
                                         </div>
 
