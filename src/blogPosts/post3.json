@@ -1,0 +1,91 @@
+{
+    "id": 3,
+    "title": "FrameworkPatcherV2 Documentation",
+    "excerpt": "Automated Android framework patching system for modifying core framework JAR files.",
+    "date": "2025-01-04",
+    "readTime": "5 min read",
+    "coverImage": "/frameworkpatcher_banner.png",
+    "deepwikiUrl": "https://deepwiki.com/Jefino9488/FrameworkPatcherV2",
+    "content": {
+        "introduction": "FrameworkPatcherV2 is an advanced automated Android framework patching system that modifies core framework JAR files (framework.jar, services.jar, miui-services.jar) to enable advanced features and bypass system restrictions. It generates flashable modules compatible with Magisk, KernelSU, and SUFS root solutions.",
+        "sections": [
+            {
+                "title": "Purpose and Scope",
+                "content": [
+                    "FrameworkPatcherV2 automates the complex process of decompiling, patching, and recompiling Android framework JAR files to apply user-selected modifications. The system is designed to maintain compatibility across multiple Android versions while providing powerful customization capabilities.",
+                    "This tool is essential for Android enthusiasts and developers who need to modify system behavior without manually editing framework files."
+                ],
+                "list": [
+                    "Signature verification bypass for installing modified APKs",
+                    "MIUI notification delay fixes for China ROM devices",
+                    "Secure flag removal for screenshot/recording support",
+                    "Play Integrity Fix integration via Kaorios Toolbox"
+                ]
+            },
+            {
+                "title": "Supported Platforms",
+                "content": [
+                    "FrameworkPatcherV2 supports a wide range of Android versions and root solutions, ensuring broad compatibility across devices."
+                ],
+                "list": [
+                    "Android 13 (API 33)",
+                    "Android 14 (API 34)",
+                    "Android 15 (API 35)",
+                    "Android 16 (API 36)",
+                    "Root Solutions: Magisk, KernelSU, SUFS"
+                ]
+            },
+            {
+                "title": "System Architecture",
+                "content": [
+                    "The system implements a multi-tier architecture separating user interfaces, orchestration, and core patching logic. This modular design ensures maintainability and extensibility."
+                ],
+                "list": [
+                    "Interface Layer: Four distinct user-facing entry points for device info and feature selection",
+                    "Orchestration Layer: GitHub Actions workflows for environment setup and execution",
+                    "Core Patching Engine: Shell scripts implementing the decompile-patch-recompile pipeline",
+                    "External Tools: Third-party utilities (apktool, d8) invoked through wrapper functions",
+                    "Output: Flashable module packages distributed via GitHub Releases"
+                ],
+                "img_url": "https://deepwiki.com/api/file?repo=jefino9488%2FFrameworkPatcherV2&path=.github%2Fimage.png",
+                "img_description": "Figure 1: FrameworkPatcherV2 System Architecture"
+            },
+            {
+                "title": "Patching Pipeline",
+                "content": [
+                    "The core patching process follows a five-stage pipeline that transforms raw JAR files into patched modules."
+                ],
+                "list": [
+                    "Download & Validation: Supports direct URLs and Google Drive links with automatic size validation",
+                    "Decompilation: Uses apktool to convert JAR files to editable Smali code",
+                    "Patching: Applies feature-specific Smali modifications across target classes",
+                    "Recompilation: Rebuilds JAR files from modified Smali code",
+                    "Optimization: Runs d8 DEX optimizer for better runtime performance",
+                    "Module Creation: Packages patched JARs into MMT-Extended module structure"
+                ]
+            },
+            {
+                "title": "Available Features",
+                "content": [
+                    "FrameworkPatcherV2 provides four primary patching features with version-specific availability."
+                ],
+                "list": [
+                    "Core Patch: Fully disables signature verification for system apps",
+                    "China Notification Fix: Resolves notification issues on CN ROMs",
+                    "Disable Flag Secure: Allows screenshots in apps that normally block them",
+                    "Play Integrity Fix: Integrates Kaorios Toolbox for hardware attestation bypass"
+                ]
+            },
+            {
+                "title": "Full Documentation",
+                "content": [
+                    "For comprehensive documentation including API references, user guides, and advanced configurations, visit the DeepWiki documentation page."
+                ],
+                "externalLink": {
+                    "url": "https://deepwiki.com/Jefino9488/FrameworkPatcherV2",
+                    "label": "View Full Documentation on DeepWiki"
+                }
+            }
+        ]
+    }
+}

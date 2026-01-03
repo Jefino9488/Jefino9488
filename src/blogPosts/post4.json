@@ -1,0 +1,99 @@
+{
+    "id": 4,
+    "title": "Lost-in-the-Middle Analyzer Documentation",
+    "excerpt": "Benchmarking framework for evaluating LLMs on long-context information retrieval.",
+    "date": "2025-01-04",
+    "readTime": "6 min read",
+    "coverImage": "/litm_analyzer_banner.png",
+    "deepwikiUrl": "https://deepwiki.com/Jefino9488/Lost-in-the-Middle-Analyzer",
+    "content": {
+        "introduction": "The Lost-in-the-Middle Analyzer is a comprehensive benchmarking framework for evaluating how large language models (LLMs) handle information distributed across long contexts. The system tests the hypothesis that LLMs exhibit a U-shaped performance curve where accuracy is higher for information at the beginning and end of contexts, but lower for information in the middle.",
+        "sections": [
+            {
+                "title": "System Purpose",
+                "content": [
+                    "This analyzer generates synthetic datasets with embedded answers at controlled positions (start, middle, end), processes them through various retrieval and aggregation methods, and evaluates LLM accuracy as a function of answer position and document length.",
+                    "The core insight being tested is that LLMs may struggle with retrieving information from the middle portions of long contexts, which has significant implications for RAG systems and document processing applications."
+                ]
+            },
+            {
+                "title": "Core Workflow",
+                "content": [
+                    "The system follows a structured evaluation pipeline that enables comprehensive analysis of LLM context handling capabilities."
+                ],
+                "list": [
+                    "Generate datasets with answers at specific positions",
+                    "Process documents using one of 13+ methods (full context, RAG, map-reduce, etc.)",
+                    "Query LLMs through a unified abstraction layer",
+                    "Evaluate using accuracy metrics (exact match, F1, BLEU, hit rate, MRR)",
+                    "Visualize positional decay patterns and export results"
+                ]
+            },
+            {
+                "title": "Architecture Overview",
+                "content": [
+                    "The system follows a layered architecture with clear separation between UI, data generation, method implementation, model abstraction, evaluation, and visualization."
+                ],
+                "list": [
+                    "Streamlit Application (app.py): Main user interface",
+                    "Dataset Generation System: Creates synthetic test datasets",
+                    "Method Abstraction: Supports 13+ retrieval methods",
+                    "LLM Client Abstraction: Unified interface for multiple providers",
+                    "Evaluation Metrics: Comprehensive scoring system",
+                    "Visualization System: Chart generation for analysis"
+                ],
+                "img_url": "https://deepwiki.com/api/file?repo=jefino9488%2FLost-in-the-Middle-Analyzer&path=diagram.png",
+                "img_description": "Figure 1: Lost-in-the-Middle Analyzer Architecture"
+            },
+            {
+                "title": "Evaluation Metrics",
+                "content": [
+                    "The run_single() function computes comprehensive per-item metrics for detailed performance analysis."
+                ],
+                "list": [
+                    "EM (Exact Match): Strict binary accuracy measurement",
+                    "F1 Score: Token-level precision and recall balance",
+                    "BLEU: N-gram overlap scoring",
+                    "Hit Rate: Percentage of correct retrievals",
+                    "MRR (Mean Reciprocal Rank): Position-aware accuracy",
+                    "Decoy Confusion: False positive detection",
+                    "Cost & Latency: Resource usage tracking"
+                ]
+            },
+            {
+                "title": "Visualization System",
+                "content": [
+                    "Three complementary chart types reveal different aspects of performance degradation across document positions."
+                ],
+                "list": [
+                    "Positional Decay Charts: Show accuracy degradation patterns",
+                    "Model Comparison Charts: Compare multiple LLMs side-by-side",
+                    "Statistical Charts: Display confidence intervals and significance"
+                ]
+            },
+            {
+                "title": "Key Features",
+                "content": [
+                    "The analyzer provides powerful features for comprehensive LLM evaluation."
+                ],
+                "list": [
+                    "Support for multiple LLM providers (OpenAI, Anthropic, Google, etc.)",
+                    "13+ retrieval methods including RAG, map-reduce, and hierarchical",
+                    "Real-time progress tracking and experiment management",
+                    "JSONL and CSV export for further analysis",
+                    "Docker deployment support for easy setup"
+                ]
+            },
+            {
+                "title": "Full Documentation",
+                "content": [
+                    "For comprehensive documentation including setup guides, API references, and advanced usage examples, visit the DeepWiki documentation page."
+                ],
+                "externalLink": {
+                    "url": "https://deepwiki.com/Jefino9488/Lost-in-the-Middle-Analyzer",
+                    "label": "View Full Documentation on DeepWiki"
+                }
+            }
+        ]
+    }
+}
