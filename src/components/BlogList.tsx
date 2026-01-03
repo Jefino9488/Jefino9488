@@ -137,51 +137,78 @@ export default function BlogList() {
                 <main>
                     {filteredPosts.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {filteredPosts.map((post, index) => (
-                                <motion.div
-                                    key={post.id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                                    className="h-full"
-                                >
-                                    <a href={post.url} target="_blank" rel="noopener noreferrer" className="block h-full">
-                                        <Card className="group relative bg-card border-border text-card-foreground hover:border-primary/50 transition-all duration-300 rounded-2xl shadow-lg transform hover:-translate-y-1 h-full flex flex-col overflow-hidden">
-                                            {post.cover_image && (
-                                                <div className="overflow-hidden">
-                                                    <img
-                                                        src={post.cover_image}
-                                                        alt={post.title}
-                                                        className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
-                                                    />
-                                                </div>
-                                            )}
-                                            <CardHeader>
-                                                <CardTitle className="text-xl font-semibold mb-2 text-primary group-hover:text-primary/80 transition-colors">{post.title}</CardTitle>
-                                            </CardHeader>
-                                            <CardContent className="flex-grow flex flex-col pt-0">
-                                                <p className="text-muted-foreground mb-4 flex-grow">{post.description}</p>
-                                                {post.tag_list && post.tag_list.length > 0 && (
-                                                    <div className="flex flex-wrap gap-2 mb-4">
-                                                        {/* FIX: Explicitly type 'tag' as string */}
-                                                        {post.tag_list.slice(0, 3).map((tag: string) => (
-                                                            <Badge key={tag} className="bg-secondary text-xs font-medium text-foreground border-none">
-                                                                #{tag}
-                                                            </Badge>
-                                                        ))}
+                            {filteredPosts.map((post, index) => {
+                                const CardWrapper = ({ children }: { children: React.ReactNode }) => (
+                                    post.isLocal ? (
+                                        <Link to={`/blog/${post.localId}`} className="block h-full">
+                                            {children}
+                                        </Link>
+                                    ) : (
+                                        <a href={post.url} target="_blank" rel="noopener noreferrer" className="block h-full">
+                                            {children}
+                                        </a>
+                                    )
+                                );
+
+                                return (
+                                    <motion.div
+                                        key={post.id}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                                        className="h-full"
+                                    >
+                                        <CardWrapper>
+                                            <Card className="group relative bg-card border-border text-card-foreground hover:border-primary/50 transition-all duration-300 rounded-2xl shadow-lg transform hover:-translate-y-1 h-full flex flex-col overflow-hidden">
+                                                {post.cover_image && (
+                                                    <div className="overflow-hidden relative">
+                                                        <img
+                                                            src={post.cover_image}
+                                                            alt={post.title}
+                                                            className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                                                        />
+                                                        {post.isLocal && (
+                                                            <div className="absolute top-2 right-2">
+                                                                <Badge className="bg-primary text-primary-foreground text-xs font-semibold">
+                                                                    Documentation
+                                                                </Badge>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 )}
-                                                <div className="flex items-center text-sm text-muted-foreground mt-auto pt-4 border-t border-border/50">
-                                                    <Calendar className="mr-2 h-4 w-4 text-primary" />
-                                                    <span className="mr-4">{formatDate(post.published_at)}</span>
-                                                    <Clock className="mr-2 h-4 w-4 text-primary" />
-                                                    <span>{post.reading_time_minutes} min read</span>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-                                    </a>
-                                </motion.div>
-                            ))}
+                                                {!post.cover_image && post.isLocal && (
+                                                    <div className="p-4 pt-4">
+                                                        <Badge className="bg-primary text-primary-foreground text-xs font-semibold">
+                                                            Documentation
+                                                        </Badge>
+                                                    </div>
+                                                )}
+                                                <CardHeader>
+                                                    <CardTitle className="text-xl font-semibold mb-2 text-primary group-hover:text-primary/80 transition-colors">{post.title}</CardTitle>
+                                                </CardHeader>
+                                                <CardContent className="flex-grow flex flex-col pt-0">
+                                                    <p className="text-muted-foreground mb-4 flex-grow">{post.description}</p>
+                                                    {post.tag_list && post.tag_list.length > 0 && (
+                                                        <div className="flex flex-wrap gap-2 mb-4">
+                                                            {post.tag_list.slice(0, 3).map((tag: string) => (
+                                                                <Badge key={tag} className="bg-secondary text-xs font-medium text-foreground border-none">
+                                                                    #{tag}
+                                                                </Badge>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                    <div className="flex items-center text-sm text-muted-foreground mt-auto pt-4 border-t border-border/50">
+                                                        <Calendar className="mr-2 h-4 w-4 text-primary" />
+                                                        <span className="mr-4">{formatDate(post.published_at)}</span>
+                                                        <Clock className="mr-2 h-4 w-4 text-primary" />
+                                                        <span>{post.reading_time_minutes} min read</span>
+                                                    </div>
+                                                </CardContent>
+                                            </Card>
+                                        </CardWrapper>
+                                    </motion.div>
+                                );
+                            })}
                         </div>
                     ) : (
                         <motion.div

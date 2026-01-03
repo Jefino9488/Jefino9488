@@ -5,7 +5,11 @@ import { ArrowLeft, Calendar, Clock, Copy, Check } from "lucide-react"
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
 
-const blogPosts = [() => import("@/blogPosts/post1.json"), () => import("@/blogPosts/post2.json")]
+// Map of post IDs to their import functions (for local documentation posts)
+const blogPosts: Record<number, () => Promise<any>> = {
+    3: () => import("@/blogPosts/post3.json"),
+    4: () => import("@/blogPosts/post4.json")
+}
 
 const CodeBlock = ({ code }: { code: string }) => {
     const [copiedLines, setCopiedLines] = useState<Record<number, boolean>>({})
@@ -79,11 +83,11 @@ export default function BlogPost() {
     useEffect(() => {
         const loadPost = async () => {
             const postId = Number(id)
-            if (isNaN(postId) || postId < 1 || postId > blogPosts.length) {
+            if (isNaN(postId) || !blogPosts[postId]) {
                 setPost(null)
                 return
             }
-            const loadedPost = await blogPosts[postId - 1]()
+            const loadedPost = await blogPosts[postId]()
             setPost(loadedPost.default)
         }
 
@@ -105,6 +109,15 @@ export default function BlogPost() {
                     </Link>
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                         <Card className="bg-card border-none text-card-foreground rounded-2xl shadow-lg overflow-hidden">
+                            {post.coverImage && (
+                                <div className="w-full overflow-hidden">
+                                    <img
+                                        src={post.coverImage}
+                                        alt={post.title}
+                                        className="w-full h-48 sm:h-64 object-cover"
+                                    />
+                                </div>
+                            )}
                             <CardHeader className="bg-muted/30 border-b border-border p-6 sm:p-8">
                                 <CardTitle className="text-2xl sm:text-4xl font-bold mb-4 text-primary">{post.title}</CardTitle>
                                 <div className="flex flex-wrap items-center text-sm text-muted-foreground">
@@ -124,10 +137,10 @@ export default function BlogPost() {
                                     <div key={index} className="mb-6">
                                         {section.title && <h2 className="text-2xl font-bold mb-2 text-primary">{section.title}</h2>}
                                         {section.content && <p className="text-muted-foreground mb-4">{section.content}</p>}
-                                        {section.image && (
+                                        {(section.image || section.img_url) && (
                                             <div className="my-4">
-                                                <img src={section.image} alt={section.title || "Section image"} className="w-full rounded-lg" />
-                                                {section.caption && <p className="text-sm text-muted-foreground mt-2 text-center">{section.caption}</p>}
+                                                <img src={section.image || section.img_url} alt={section.title || "Section image"} className="w-full rounded-lg" />
+                                                {(section.caption || section.img_description) && <p className="text-sm text-muted-foreground mt-2 text-center">{section.caption || section.img_description}</p>}
                                             </div>
                                         )}
                                         {section.list && (
@@ -138,6 +151,21 @@ export default function BlogPost() {
                                             </ul>
                                         )}
                                         {section.code && <CodeBlock code={section.code} />}
+                                        {section.externalLink && (
+                                            <a
+                                                href={section.externalLink.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                                            >
+                                                {section.externalLink.label}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                                    <polyline points="15 3 21 3 21 9" />
+                                                    <line x1="10" y1="14" x2="21" y2="3" />
+                                                </svg>
+                                            </a>
+                                        )}
                                     </div>
                                 ))}
                             </CardContent>
