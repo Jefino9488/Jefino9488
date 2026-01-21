@@ -31,3 +31,4 @@ dist-ssr
 /.venv/lib64/
 /digest.txt
 /get-refresh-token.js
+/.agent/

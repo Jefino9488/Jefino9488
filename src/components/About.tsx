@@ -199,7 +199,7 @@ export default function About() {
     };
 
     return (
-        <div className="min-h-screen bg-background text-foreground">
+        <div className="min-h-screen text-foreground">
             <div className="container mx-auto px-4 py-16">
                 <div className="flex justify-between items-center mb-8">
                     <Link to="/">
@@ -214,7 +214,7 @@ export default function About() {
                     </a>
                 </div>
 
-                <Card className="bg-card border-border border text-card-foreground rounded-2xl shadow-lg overflow-hidden mb-8">
+                <Card className="glass-crystal border-0 text-card-foreground rounded-3xl shadow-lg overflow-hidden mb-8">
                     <CardContent className="p-6 md:p-8">
                         <div className="flex flex-col md:flex-row items-center gap-8">
                             <div className="flex-shrink-0">
@@ -277,7 +277,7 @@ export default function About() {
                     </CardContent>
                 </Card>
 
-                <Card className="bg-card border-border border text-card-foreground rounded-2xl shadow-lg overflow-hidden mb-8">
+                <Card className="glass-crystal border-0 text-card-foreground rounded-3xl shadow-lg overflow-hidden mb-8">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-xl font-semibold text-primary">Quick Stats</CardTitle>
                     </CardHeader>
@@ -344,7 +344,7 @@ export default function About() {
                 <div className="mb-8">
                     {activeTab === "overview" && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                            <Card className="bg-card border-border border text-card-foreground rounded-2xl shadow-lg overflow-hidden">
+                            <Card className="glass-crystal border-0 text-card-foreground rounded-3xl shadow-lg overflow-hidden">
                                 <CardContent className="p-6">
                                     <div className="space-y-6">
                                         <div>
@@ -379,7 +379,7 @@ export default function About() {
 
                     {activeTab === "timeline" && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                            <Card className="bg-card border-border border text-card-foreground rounded-2xl shadow-lg overflow-hidden">
+                            <Card className="glass-crystal border-0 text-card-foreground rounded-3xl shadow-lg overflow-hidden">
                                 <CardContent className="p-6">
                                     <h2 className="text-2xl font-bold mb-6 text-primary">My Journey</h2>
                                     <div className="relative">
@@ -421,7 +421,7 @@ export default function About() {
 
                     {activeTab === "skills" && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                            <Card className="bg-card border-border border text-card-foreground rounded-2xl shadow-lg overflow-hidden">
+                            <Card className="glass-crystal border-0 text-card-foreground rounded-3xl shadow-lg overflow-hidden">
                                 <CardContent className="p-6">
                                     <h2 className="text-2xl font-bold mb-6 text-primary">Technical Skills</h2>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -431,11 +431,11 @@ export default function About() {
                                             </h3>
                                             <div className="space-y-3">
                                                 {skills.frontend.map((skill, index) => (
-                                                    <div key={index} className="bg-secondary/50 rounded-lg p-3">
+                                                    <div key={index} className="glass-chip rounded-lg p-3 bg-white/5 border border-white/10">
                                                         <div className="flex justify-between items-center mb-1">
-                                                            <span className="font-medium">{skill}</span>
+                                                            <span className="font-medium text-foreground">{skill}</span>
                                                         </div>
-                                                        <div className="w-full bg-muted rounded-full h-2">
+                                                        <div className="w-full bg-white/10 rounded-full h-2">
                                                             <div
                                                                 className="bg-gradient-to-r from-primary to-primary/60 h-2 rounded-full"
                                                                 style={{ width: `${90 - index * 10}%` }}
@@ -452,11 +452,11 @@ export default function About() {
                                             </h3>
                                             <div className="space-y-3">
                                                 {skills.backend.map((skill, index) => (
-                                                    <div key={index} className="bg-secondary/50 rounded-lg p-3">
+                                                    <div key={index} className="glass-chip rounded-lg p-3 bg-white/5 border border-white/10">
                                                         <div className="flex justify-between items-center mb-1">
-                                                            <span className="font-medium">{skill}</span>
+                                                            <span className="font-medium text-foreground">{skill}</span>
                                                         </div>
-                                                        <div className="w-full bg-muted rounded-full h-2">
+                                                        <div className="w-full bg-white/10 rounded-full h-2">
                                                             <div
                                                                 className="bg-gradient-to-r from-primary to-primary/60 h-2 rounded-full"
                                                                 style={{ width: `${85 - index * 8}%` }}
@@ -473,11 +473,11 @@ export default function About() {
                                             </h3>
                                             <div className="space-y-3">
                                                 {skills.tools.map((skill, index) => (
-                                                    <div key={index} className="bg-secondary/50 rounded-lg p-3">
+                                                    <div key={index} className="glass-chip rounded-lg p-3 bg-white/5 border border-white/10">
                                                         <div className="flex justify-between items-center mb-1">
-                                                            <span className="font-medium">{skill}</span>
+                                                            <span className="font-medium text-foreground">{skill}</span>
                                                         </div>
-                                                        <div className="w-full bg-muted rounded-full h-2">
+                                                        <div className="w-full bg-white/10 rounded-full h-2">
                                                             <div
                                                                 className="bg-gradient-to-r from-primary to-primary/60 h-2 rounded-full"
                                                                 style={{ width: `${88 - index * 9}%` }}
@@ -501,7 +501,7 @@ export default function About() {
                     transition={{ duration: 0.5 }}
                     className="mt-8"
                 >
-                    <Card className="bg-card border-border border text-card-foreground rounded-xl shadow-lg overflow-hidden">
+                    <Card className="glass-crystal border-0 text-card-foreground rounded-3xl shadow-lg overflow-hidden">
                         <CardContent className="p-4">
                             <div className="flex items-center gap-3 mb-4">
                                 <div className="p-2 bg-primary rounded-lg">
@@ -532,7 +532,7 @@ export default function About() {
                                         name="name"
                                         value={formData.name}
                                         onChange={handleInputChange}
-                                        className={`w-full px-3 py-2 bg-input border rounded-lg text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${errors.name ? 'border-destructive' : 'border-border'
+                                        className={`w-full px-3 py-2 bg-white/5 backdrop-blur-sm border rounded-lg text-sm text-foreground placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${errors.name ? 'border-destructive' : 'border-white/10'
                                             }`}
                                         placeholder="Your name"
                                     />
@@ -541,7 +541,7 @@ export default function About() {
                                         name="email"
                                         value={formData.email}
                                         onChange={handleInputChange}
-                                        className={`w-full px-3 py-2 bg-input border rounded-lg text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${errors.email ? 'border-destructive' : 'border-border'
+                                        className={`w-full px-3 py-2 bg-white/5 backdrop-blur-sm border rounded-lg text-sm text-foreground placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${errors.email ? 'border-destructive' : 'border-white/10'
                                             }`}
                                         placeholder="your.email@example.com"
                                     />
@@ -552,7 +552,7 @@ export default function About() {
                                     name="subject"
                                     value={formData.subject}
                                     onChange={handleInputChange}
-                                    className={`w-full px-3 py-2 bg-input border rounded-lg text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${errors.subject ? 'border-destructive' : 'border-border'
+                                    className={`w-full px-3 py-2 bg-white/5 backdrop-blur-sm border rounded-lg text-sm text-foreground placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors ${errors.subject ? 'border-destructive' : 'border-white/10'
                                         }`}
                                     placeholder="What's this about?"
                                 />
@@ -562,7 +562,7 @@ export default function About() {
                                     value={formData.message}
                                     onChange={handleInputChange}
                                     rows={3}
-                                    className={`w-full px-3 py-2 bg-input border rounded-lg text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-none ${errors.message ? 'border-destructive' : 'border-border'
+                                    className={`w-full px-3 py-2 bg-white/5 backdrop-blur-sm border rounded-lg text-sm text-foreground placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-none ${errors.message ? 'border-destructive' : 'border-white/10'
                                         }`}
                                     placeholder="Your message..."
                                 />

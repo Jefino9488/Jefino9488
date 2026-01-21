@@ -76,7 +76,7 @@ export default function BlogList() {
     }
 
     return (
-        <div className="min-h-screen bg-background text-foreground">
+        <div className="min-h-screen text-foreground">
             <div className="container mx-auto px-4 py-16">
                 {/* Redesigned Header */}
                 <header className="mb-12">
@@ -101,7 +101,7 @@ export default function BlogList() {
                                 placeholder="Search articles..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
+                                className="w-full pl-10 pr-4 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg text-foreground placeholder-white/40 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all shadow-inner"
                             />
                         </div>
                     </motion.div>
@@ -159,7 +159,7 @@ export default function BlogList() {
                                         className="h-full"
                                     >
                                         <CardWrapper>
-                                            <Card className="group relative bg-card border-border text-card-foreground hover:border-primary/50 transition-all duration-300 rounded-2xl shadow-lg transform hover:-translate-y-1 h-full flex flex-col overflow-hidden">
+                                            <Card className="glass-crystal group relative border-0 text-card-foreground transition-all duration-300 rounded-3xl shadow-lg transform hover:-translate-y-1 h-full flex flex-col overflow-hidden">
                                                 {post.cover_image && (
                                                     <div className="overflow-hidden relative">
                                                         <img
@@ -191,7 +191,7 @@ export default function BlogList() {
                                                     {post.tag_list && post.tag_list.length > 0 && (
                                                         <div className="flex flex-wrap gap-2 mb-4">
                                                             {post.tag_list.slice(0, 3).map((tag: string) => (
-                                                                <Badge key={tag} className="bg-secondary text-xs font-medium text-foreground border-none">
+                                                                <Badge key={tag} className="glass-chip text-xs font-medium text-foreground px-3 py-1 bg-white/5 hover:bg-white/10 border-0">
                                                                     #{tag}
                                                                 </Badge>
                                                             ))}

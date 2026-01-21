@@ -35,8 +35,8 @@ export default function GitHubDashboard() {
     };
 
     return (
-        <Card className="bg-card border-border border text-card-foreground rounded-2xl shadow-lg overflow-hidden w-full">
-            <CardHeader className="py-4 px-4 border-b border-border">
+        <Card className="glass-crystal w-full border-0">
+            <CardHeader className="py-4 px-4 border-b border-white/10">
                 <div className="flex flex-col items-center">
 
                     <CardTitle className="flex items-center justify-center">
@@ -58,7 +58,7 @@ export default function GitHubDashboard() {
                             <motion.div
                                 key={index}
                                 variants={itemVariants}
-                                className="flex flex-col items-center p-3 bg-secondary/50 rounded-xl hover:bg-secondary transition-all duration-300"
+                                className="flex flex-col items-center p-3 bg-white/5 border border-white/5 rounded-xl hover:bg-white/10 hover:border-white/20 backdrop-blur-sm transition-all duration-300"
                             >
                                 <item.icon className="h-6 w-6 text-primary mb-2" />
                                 <span className="text-base font-bold text-foreground">{item.value}</span>

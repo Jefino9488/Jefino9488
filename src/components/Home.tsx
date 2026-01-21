@@ -81,10 +81,10 @@ export default function Home() {
     )
 
     return (
-        <div className="min-h-screen bg-background text-foreground">
+        <div className="min-h-screen text-foreground">
             <div className="flex-grow w-full py-12">
                 <header className="mb-8 sm:mb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <Card className="bg-card border-border text-card-foreground rounded-3xl shadow-lg overflow-hidden">
+                    <Card className="glass-crystal rounded-3xl overflow-hidden border-0">
                         <CardContent className="p-4 md:p-6">
                             <div className="flex flex-col items-center md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-8">
                                 <motion.div
@@ -136,9 +136,9 @@ export default function Home() {
                                             ripple={false}
                                         >
                                             <Button
-                                                variant="outline"
+                                                variant="ghost"
                                                 size="icon"
-                                                className="bg-secondary hover:bg-secondary/80 transition-colors border-border min-h-[44px] min-w-[44px]"
+                                                className="hover:bg-primary/20 hover:text-primary transition-all border border-transparent min-h-[44px] min-w-[44px]"
                                                 aria-label="GitHub"
                                             >
                                                 <Github className="h-5 w-5 text-foreground" />
@@ -149,9 +149,9 @@ export default function Home() {
                                             ripple={false}
                                         >
                                             <Button
-                                                variant="outline"
+                                                variant="ghost"
                                                 size="icon"
-                                                className="bg-secondary hover:bg-secondary/80 transition-colors border-border min-h-[44px] min-w-[44px]"
+                                                className="hover:bg-primary/20 hover:text-primary transition-all border border-transparent min-h-[44px] min-w-[44px]"
                                                 aria-label="Email"
                                             >
                                                 <Mail className="h-5 w-5 text-foreground" />
@@ -164,9 +164,9 @@ export default function Home() {
                                             ripple={false}
                                         >
                                             <Button
-                                                variant="outline"
+                                                variant="ghost"
                                                 size="icon"
-                                                className="bg-secondary hover:bg-secondary/80 transition-colors border-border min-h-[44px] min-w-[44px]"
+                                                className="hover:bg-primary/20 hover:text-primary transition-all border border-transparent min-h-[44px] min-w-[44px]"
                                                 aria-label="LinkedIn"
                                             >
                                                 <Linkedin className="h-5 w-5 text-foreground" />
@@ -177,9 +177,9 @@ export default function Home() {
                                             ripple={false}
                                         >
                                             <Button
-                                                variant="outline"
+                                                variant="ghost"
                                                 size="icon"
-                                                className="bg-secondary hover:bg-secondary/80 transition-colors border-border min-h-[44px] min-w-[44px]"
+                                                className="hover:bg-primary/20 hover:text-primary transition-all border border-transparent min-h-[44px] min-w-[44px]"
                                                 aria-label="Telegram"
                                             >
                                                 <Send className="h-5 w-5 text-foreground" />
@@ -195,7 +195,7 @@ export default function Home() {
                     {/* Things I've Learnt & I know Section - Infinite Circular Flow */}
                     <section className="overflow-hidden relative">
                         {/* Row 1 - Moves Left (items exit right, enter from left) */}
-                        <div className="relative overflow-hidden mb-4">
+                        <div className="relative overflow-hidden mb-4 py-4">
                             <motion.div
                                 className="flex gap-6"
                                 animate={{
@@ -215,7 +215,7 @@ export default function Home() {
                                 {[...techStack, ...techStack].map((tech, index) => (
                                     <div
                                         key={`row1-${index}`}
-                                        className="flex items-center gap-3 px-6 py-3 bg-card/50 backdrop-blur border border-border rounded-xl min-w-fit hover:border-primary/50 transition-colors"
+                                        className="glass-chip min-w-fit"
                                     >
                                         <div className="flex-shrink-0">{tech.icon}</div>
                                         <span className="font-medium text-sm text-foreground whitespace-nowrap">{tech.name}</span>
@@ -225,7 +225,7 @@ export default function Home() {
                         </div>
 
                         {/* Row 2 - Moves Right (items exit left, enter from right) - Reversed order for circular flow */}
-                        <div className="relative overflow-hidden">
+                        <div className="relative overflow-hidden py-4">
                             <motion.div
                                 className="flex gap-6"
                                 animate={{
@@ -245,7 +245,7 @@ export default function Home() {
                                 {[...[...techStack].reverse(), ...[...techStack].reverse()].map((tech, index) => (
                                     <div
                                         key={`row2-${index}`}
-                                        className="flex items-center gap-3 px-6 py-3 bg-card/50 backdrop-blur border border-border rounded-xl min-w-fit hover:border-primary/50 transition-colors"
+                                        className="glass-chip min-w-fit"
                                     >
                                         <div className="flex-shrink-0">{tech.icon}</div>
                                         <span className="font-medium text-sm text-foreground whitespace-nowrap">{tech.name}</span>
@@ -291,7 +291,7 @@ export default function Home() {
                     <section className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
                             <ContributionGraph />
-                            <div className="bg-card border border-border rounded-3xl p-6 flex flex-col items-center justify-center min-h-[200px]">
+                            <div className="glass-crystal border-0 rounded-3xl p-6 flex flex-col items-center justify-center min-h-[200px]">
                                 <h3 className="text-lg font-bold text-foreground mb-4 self-start">GitHub Streak</h3>
                                 <div className="flex-grow flex items-center justify-center w-full">
                                     <a href="https://git.io/streak-stats" target="_blank" rel="noopener noreferrer" className="w-full">
@@ -307,7 +307,7 @@ export default function Home() {
                     </section>
 
                     <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Card className="bg-card border-border border text-card-foreground hover:bg-accent transition-colors rounded-3xl shadow-lg overflow-hidden hover-lift">
+                        <Card variant="glass" className="hover:bg-accent/10 transition-colors rounded-3xl overflow-hidden hover-lift">
                             <Link to="/blog" className="block">
                                 <CardHeader className="pb-2">
                                     <CardTitle className="flex items-center text-lg sm:text-2xl font-bold text-foreground">
@@ -327,7 +327,7 @@ export default function Home() {
                             </Link>
                         </Card>
 
-                        <Card className="bg-card border-border border text-card-foreground hover:bg-accent transition-colors rounded-3xl shadow-lg overflow-hidden hover-lift">
+                        <Card variant="glass" className="hover:bg-accent/10 transition-colors rounded-3xl overflow-hidden hover-lift">
                             <Link to="/certificates" className="block">
                                 <CardHeader className="pb-2">
                                     <CardTitle className="flex items-center text-lg sm:text-2xl font-bold text-foreground">
@@ -362,7 +362,7 @@ export default function Home() {
                         ) : error ? (
                             <div className="text-center text-destructive py-12">{error}</div>
                         ) : (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 p-4 pt-6">
                                 {displayedProjects.map((project) => (
                                     <motion.div
                                         key={project.title}
@@ -379,36 +379,33 @@ export default function Home() {
                                             ripple={true}
                                             className="h-full"
                                         >
-                                            <div className="group relative h-full cursor-pointer">
-                                                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                                                <div className="relative backdrop-blur-xl bg-card rounded-3xl p-6 border border-border transition-all duration-300 group-hover:border-primary/50 h-full flex flex-col">
-                                                    <h3 className="text-xl font-semibold mb-3 text-card-foreground">{project.title}</h3>
-                                                    <p className="text-muted-foreground mb-4 text-sm line-clamp-2">{project.description}</p>
-                                                    <div className="flex flex-wrap gap-2 mb-4">
-                                                        {project.tech.map((tech) => (
-                                                            <span
-                                                                key={tech}
-                                                                className="px-3 py-1 bg-secondary rounded-full text-xs text-secondary-foreground"
-                                                            >
-                                                                {tech}
-                                                            </span>
-                                                        ))}
+                                            <Card className="glass-crystal relative p-6 border-0 transition-all duration-300 h-full flex flex-col rounded-3xl hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                                                <h3 className="text-xl font-semibold mb-3 text-card-foreground line-clamp-1">{project.title}</h3>
+                                                <p className="text-muted-foreground mb-4 text-sm line-clamp-2">{project.description}</p>
+                                                <div className="flex flex-wrap gap-2 mb-4">
+                                                    {project.tech.map((tech) => (
+                                                        <span
+                                                            key={tech}
+                                                            className="px-3 py-1 bg-secondary/50 border border-white/5 rounded-full text-xs text-secondary-foreground"
+                                                        >
+                                                            {tech}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                                <div className="flex justify-between items-center mt-auto">
+                                                    <div className="flex gap-4 text-sm text-muted-foreground">
+                                                        <span className="flex items-center gap-1">
+                                                            <Star className="w-4 h-4 text-primary" /> {project.stats.stars}
+                                                        </span>
+                                                        <span className="flex items-center gap-1">
+                                                            <GitFork className="w-4 h-4 text-primary" /> {project.stats.forks}
+                                                        </span>
                                                     </div>
-                                                    <div className="flex justify-between items-center mt-auto">
-                                                        <div className="flex gap-4 text-sm text-muted-foreground">
-                                                            <span className="flex items-center gap-1">
-                                                                <Star className="w-4 h-4 text-primary" /> {project.stats.stars}
-                                                            </span>
-                                                            <span className="flex items-center gap-1">
-                                                                <GitFork className="w-4 h-4 text-primary" /> {project.stats.forks}
-                                                            </span>
-                                                        </div>
-                                                        <div className="p-2 text-muted-foreground hover:text-primary transition-colors">
-                                                            <ExternalLink className="w-5 h-5 text-primary" />
-                                                        </div>
+                                                    <div className="p-2 text-muted-foreground hover:text-primary transition-colors">
+                                                        <ExternalLink className="w-5 h-5 text-primary" />
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </Card>
                                         </TouchFeedback>
                                     </motion.div>
                                 ))}
@@ -416,7 +413,7 @@ export default function Home() {
                         )}
                     </section>
                 </main>
-            </div>
+            </div >
             <motion.div
                 drag="y"
                 onDragEnd={handleDragEnd}
@@ -445,6 +442,6 @@ export default function Home() {
                     ></motion.div>
                 </div>
             </motion.div>
-        </div>
+        </div >
     )
 }

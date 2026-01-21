@@ -22,19 +22,22 @@ import FloatingActionButton from "@/components/ChatBot/FloatingActionButton.tsx"
 import ChatBot from "@/components/ChatBot/ChatBot.tsx";
 import { ChatProvider } from "@/components/ChatBot/ChatContext.tsx";
 import { GitHubProvider } from "@/components/GitHubContext.tsx";
+
 import ErrorBoundary from "./components/ErrorBoundary";
 import NetworkErrorBoundary from "./components/NetworkErrorBoundary";
+import Background from "./components/Background";
 
 function AppContent() {
     useSmoothScroll();
 
     return (
-        <div className="flex min-h-screen bg-[#000000]">
-            {/* Sidebar - Desktop Only (25% width) */}
+        <div className="flex min-h-screen relative selection:bg-primary/30 selection:text-white">
+            <Background />
+            {/* Sidebar - Desktop Only (Fixed 20rem/320px) */}
             <Sidebar />
 
-            {/* Main Content Area - Full width on mobile, 75% on desktop */}
-            <div className="flex flex-col min-h-screen w-full lg:ml-[25%]">
+            {/* Main Content Area - Full width on mobile, offset by sidebar width on desktop */}
+            <div className="flex flex-col min-h-screen w-full lg:pl-80 transition-all duration-300">
                 {/* Navbar - Mobile Only */}
                 <Navbar />
 

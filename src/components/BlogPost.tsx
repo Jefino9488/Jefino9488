@@ -22,8 +22,8 @@ const CodeBlock = ({ code }: { code: string }) => {
     }
 
     return (
-        <div className="relative bg-card rounded-lg my-4 overflow-hidden">
-            <div className="flex items-center justify-between px-4 py-2 bg-muted/50">
+        <div className="relative bg-white/5 backdrop-blur-md rounded-lg my-4 overflow-hidden border border-white/10">
+            <div className="flex items-center justify-between px-4 py-2 bg-white/5 border-b border-white/5">
                 <span className="text-sm font-medium text-muted-foreground">Code</span>
                 <button
                     onClick={() => handleCopy(code, -1)}
@@ -108,7 +108,7 @@ export default function BlogPost() {
                         </Button>
                     </Link>
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-                        <Card className="bg-card border-none text-card-foreground rounded-2xl shadow-lg overflow-hidden">
+                        <Card className="glass-crystal border-0 text-card-foreground rounded-3xl shadow-lg overflow-hidden">
                             {post.coverImage && (
                                 <div className="w-full overflow-hidden">
                                     <img

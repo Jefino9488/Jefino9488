@@ -153,7 +153,7 @@ export default function ContributionGraph() {
   }
 
   return (
-    <div className="bg-card border border-border rounded-3xl p-6 h-full flex flex-col">
+    <div className="glass-crystal rounded-3xl p-6 h-full flex flex-col border-0">
       <h3 className="text-lg font-bold text-foreground mb-4">Contribution Graph</h3>
       <div className="contribution-graph-scroll overflow-x-auto flex-grow flex items-center">
         <div className="min-w-fit mx-auto">

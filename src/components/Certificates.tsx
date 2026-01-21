@@ -42,7 +42,7 @@ export default function Certificates() {
     }, [selectedCert, handleKeyDown])
 
     return (
-        <div className="min-h-screen bg-background text-foreground">
+        <div className="min-h-screen text-foreground">
             {/* Header Section - Full Width */}
             <section className="w-full py-10">
                 <div className="container mx-auto px-4">
@@ -73,7 +73,8 @@ export default function Certificates() {
                             transition={{ duration: 0.5, delay: index * 0.05 }}
                         >
                             <Card
-                                className="bg-card border-border border text-card-foreground rounded-2xl shadow-lg overflow-hidden hover:border-primary/50 hover:shadow-xl transition-all duration-300 h-full flex flex-col cursor-pointer group"
+                                variant="default"
+                                className="glass-crystal border-0 text-card-foreground rounded-3xl shadow-lg overflow-hidden transition-all duration-300 h-full flex flex-col cursor-pointer group hover:shadow-xl hover:-translate-y-1"
                                 onClick={() => setSelectedCert(cert)}
                             >
                                 <CardHeader className="pb-2">
@@ -163,11 +164,11 @@ export default function Certificates() {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
                             transition={{ duration: 0.3, ease: "easeOut" }}
-                            className="relative max-w-5xl w-full max-h-[90vh] overflow-auto bg-card rounded-2xl shadow-2xl"
+                            className="relative max-w-5xl w-full max-h-[90vh] overflow-auto glass-crystal rounded-3xl shadow-2xl border-0 ring-1 ring-white/10"
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Modal Header */}
-                            <div className="sticky top-0 z-10 bg-card/95 backdrop-blur-sm border-b border-border p-4 sm:p-6">
+                            <div className="sticky top-0 z-10 bg-black/60 backdrop-blur-xl border-b border-white/10 p-4 sm:p-6">
                                 <h2 className="text-xl sm:text-2xl font-bold text-primary pr-8">{selectedCert.title}</h2>
                                 <div className="flex flex-wrap items-center gap-4 mt-2 text-sm text-muted-foreground">
                                     <span className="flex items-center">
