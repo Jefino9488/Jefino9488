@@ -17,7 +17,7 @@ export default function SpotifyWidget({ className = '', showDetails = true }: Sp
             <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className={`group relative bg-card rounded-full shadow-lg border border-border transition-all hover:scale-105 hover:shadow-xl ${className}`}
+                className={`group relative glass-crystal rounded-full shadow-lg transition-all hover:scale-105 hover:shadow-xl ${className}`}
             >
                 <div className="flex items-center gap-2 px-3 py-1.5">
                     <Music2 className="w-4 h-4 text-muted-foreground" />
@@ -32,7 +32,7 @@ export default function SpotifyWidget({ className = '', showDetails = true }: Sp
             <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className={`group relative bg-card rounded-full shadow-lg border border-border transition-all hover:scale-105 ${className}`}
+                className={`group relative glass-crystal rounded-full shadow-lg transition-all hover:scale-105 ${className}`}
             >
                 <div className="flex items-center gap-2 px-3 py-1.5">
                     <Headphones className="w-4 h-4 text-muted-foreground" />
@@ -65,7 +65,7 @@ export default function SpotifyWidget({ className = '', showDetails = true }: Sp
             onMouseLeave={() => setShowTooltip(false)}
         >
             {/* Main widget with home theme gradient background */}
-            <div className="relative bg-card rounded-full shadow-lg border border-border transition-all group-hover:border-primary/50 group-hover:shadow-xl">
+            <div className="relative glass-crystal rounded-full shadow-lg transition-all group-hover:shadow-xl">
                 <div className="flex items-center gap-2 pl-2 pr-3 py-1.5">
                     {/* Music icon with subtle indication */}
                     <div className="relative">
@@ -117,10 +117,10 @@ export default function SpotifyWidget({ className = '', showDetails = true }: Sp
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 10 }}
                         transition={{ type: "spring", damping: 20, stiffness: 300 }}
-                        className="absolute left-0 top-full mt-3 bg-card rounded-2xl shadow-2xl border border-border w-72 p-4 z-50 backdrop-blur-xl"
+                        className="absolute left-0 top-full mt-3 glass-crystal rounded-2xl shadow-2xl w-72 p-4 z-50"
                     >
                         {/* Fixed tooltip arrow */}
-                        <div className="absolute bottom-full left-4 w-0 h-0 border-l-[6px] border-r-[6px] border-b-[8px] border-l-transparent border-r-transparent border-b-border" />
+                        <div className="absolute bottom-full left-4 w-0 h-0 border-l-[6px] border-r-[6px] border-b-[8px] border-l-transparent border-r-transparent border-b-white/10" />
 
                         <div className="flex items-start gap-4">
                             {/* Album art with loading state */}
@@ -134,7 +134,7 @@ export default function SpotifyWidget({ className = '', showDetails = true }: Sp
                                     <img
                                         src={track.albumArt}
                                         alt={`${track.name} album art`}
-                                        className="w-16 h-16 rounded-lg object-cover shadow-lg border border-border"
+                                        className="w-16 h-16 rounded-lg object-cover shadow-lg border border-white/10"
                                         onError={(e) => {
                                             const target = e.target as HTMLImageElement;
                                             target.style.display = 'none';
