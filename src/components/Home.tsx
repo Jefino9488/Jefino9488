@@ -98,7 +98,7 @@ export default function Home() {
                                     <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 border-4 border-white/10 shadow-2xl relative rounded-full overflow-hidden">
                                         <LazyImage
                                             src="/profile/profile.jpg"
-                                            alt="Jefino Jacob - Full Stack Developer"
+                                            alt="Jefino - Full Stack Developer"
                                             className="w-full h-full object-cover type-module"
                                             style={{ objectPosition: "center 20%" }}
                                             priority={true}
@@ -361,9 +361,9 @@ export default function Home() {
                                             ripple={true}
                                             className="h-full block"
                                         >
-                                            <Card className="glass-crystal relative p-4 border-0 transition-all duration-300 h-full flex flex-col rounded-[1.25rem] hover:shadow-2xl hover:-translate-y-1 cursor-pointer group group-hover:bg-white/[0.03]">
+                                            <Card className="glass-crystal relative p-4 border-0 transition-all duration-300 h-full flex flex-col rounded-[1.25rem] cursor-pointer group group-hover:bg-white/[0.03]">
                                                 <div className="flex justify-between items-start mb-2.5">
-                                                    <div className="p-2 bg-white/5 rounded-lg group-hover:scale-110 transition-transform duration-300">
+                                                    <div className="p-2 bg-white/5 rounded-lg transition-transform duration-300">
                                                         <GitFork className="w-4 h-4 text-primary" />
                                                     </div>
                                                     <div className="p-1 text-muted-foreground/50 group-hover:text-primary transition-colors">

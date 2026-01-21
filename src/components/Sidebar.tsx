@@ -226,10 +226,10 @@ export default function Sidebar() {
             {/* Footer */}
             <div className="p-4 bg-transparent border-t border-sidebar-border/30">
                 <div className="flex items-center justify-between text-xs text-sidebar-foreground/40">
-                    <p>© 2025 Jefino Jacob</p>
+                    <p>© 2025 Jefino</p>
                     <div className="flex gap-2">
                         <div className="w-2 h-2 rounded-full bg-green-500/50 animate-pulse" title="System Operational" />
-                        <span>v1.0.0</span>
+                        <span>v2.0.0</span>
                     </div>
                 </div>
             </div>

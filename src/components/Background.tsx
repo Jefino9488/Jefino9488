@@ -7,19 +7,22 @@ import { Points, PointMaterial } from "@react-three/drei"
 import * as random from "maath/random/dist/maath-random.esm"
 import * as THREE from "three"
 
+import { useScreenSize } from "@/hooks/useScreenSize"
+
 // -----------------------------------------------------------------------------
 // Component: StarField
 // -----------------------------------------------------------------------------
-const StarField = (props: any) => {
+const StarField = ({ count = 6000, ...props }: any) => {
     const ref = useRef<THREE.Points>(null!)
 
-    // Generate positions and colors once
-    const [sphere] = useState(() => random.inSphere(new Float32Array(6000), { radius: 1.5 }))
+    // Generate positions and colors based on count
+    // using useMemo so it regenerates if count changes (e.g. resize across breakpoint)
+    const sphere = useMemo(() => random.inSphere(new Float32Array(count), { radius: 1.5 }), [count])
 
     // Natural star colors (slight blue/yellow tints + white)
     const colors = useMemo(() => {
-        const data = new Float32Array(6000 * 3) // 6000 stars * 3 components (r,g,b)
-        for (let i = 0; i < 6000 * 3; i += 3) {
+        const data = new Float32Array(count * 3) // count stars * 3 components (r,g,b)
+        for (let i = 0; i < count * 3; i += 3) {
             const colorType = Math.random()
             let r = 1, g = 1, b = 1
 
@@ -38,7 +41,7 @@ const StarField = (props: any) => {
             data[i + 2] = b
         }
         return data
-    }, [])
+    }, [count])
 
     useFrame((_state, delta) => {
         // Very slow, natural rotation
@@ -146,14 +149,18 @@ const ShootingStar = () => {
 // Component: Background Main
 // -----------------------------------------------------------------------------
 const Background: React.FC = () => {
+    const { isMobile } = useScreenSize() // Use global screen size hook
+    const starCount = isMobile ? 3000 : 6000 // Reduce stars by 50% on mobile
+    const dpr = isMobile ? [1, 1.5] : [1, 2] // Cap DPR at 1.5 on mobile for performance
+
     return (
         <div className="fixed inset-0 z-[-1] bg-[#000000]">
             <Canvas
                 camera={{ position: [0, 0, 1], fov: 45 }}
-                dpr={[1, 2]} // Optimization: Limit pixel ratio
+                dpr={dpr as any} // Optimization: Limit pixel ratio
                 gl={{ antialias: false, alpha: false, powerPreference: "high-performance" }} // Optimization flags
             >
-                <StarField />
+                <StarField count={starCount} />
                 <ShootingStar />
                 <ShootingStar />
                 <CameraRig />
