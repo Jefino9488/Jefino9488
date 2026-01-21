@@ -117,10 +117,10 @@ export default function SpotifyWidget({ className = '', showDetails = true }: Sp
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 10 }}
                         transition={{ type: "spring", damping: 20, stiffness: 300 }}
-                        className="absolute left-0 top-full mt-3 glass-crystal rounded-2xl shadow-2xl w-72 p-4 z-50"
+                        className="absolute -left-24 top-full mt-3 glass-crystal rounded-2xl shadow-2xl w-72 p-4 z-50"
                     >
                         {/* Fixed tooltip arrow */}
-                        <div className="absolute bottom-full left-4 w-0 h-0 border-l-[6px] border-r-[6px] border-b-[8px] border-l-transparent border-r-transparent border-b-white/10" />
+                        <div className="absolute bottom-full left-28 w-0 h-0 border-l-[6px] border-r-[6px] border-b-[8px] border-l-transparent border-r-transparent border-b-white/10" />
 
                         <div className="flex items-start gap-4">
                             {/* Album art with loading state */}

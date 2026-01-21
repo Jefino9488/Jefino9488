@@ -162,8 +162,10 @@ export default function Home() {
 
                 <main className="space-y-6 sm:space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Things I've Learnt & I know Section - Infinite Circular Flow */}
-                    <section className="overflow-hidden relative py-3">
-                        <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background z-10 pointer-events-none" />
+                    <section
+                        className="overflow-hidden relative py-3"
+                        style={{ maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)" }}
+                    >
 
                         {/* Row 1 - Moves Left */}
                         <div className="relative overflow-hidden mb-3">
