@@ -1,161 +1,169 @@
 "use client"
 
 import type React from "react"
-import { useEffect, useRef } from "react"
+import { useState, useRef, useMemo } from "react"
+import { Canvas, useFrame, useThree } from "@react-three/fiber"
+import { Points, PointMaterial } from "@react-three/drei"
+import * as random from "maath/random/dist/maath-random.esm"
+import * as THREE from "three"
 
-const Background: React.FC = () => {
-    const canvasRef = useRef<HTMLCanvasElement>(null)
+// -----------------------------------------------------------------------------
+// Component: StarField
+// -----------------------------------------------------------------------------
+const StarField = (props: any) => {
+    const ref = useRef<THREE.Points>(null!)
 
-    useEffect(() => {
-        const canvas = canvasRef.current
-        if (!canvas) return
+    // Generate positions and colors once
+    const [sphere] = useState(() => random.inSphere(new Float32Array(6000), { radius: 1.5 }))
 
-        const ctx = canvas.getContext("2d")
-        if (!ctx) return
+    // Natural star colors (slight blue/yellow tints + white)
+    const colors = useMemo(() => {
+        const data = new Float32Array(6000 * 3) // 6000 stars * 3 components (r,g,b)
+        for (let i = 0; i < 6000 * 3; i += 3) {
+            const colorType = Math.random()
+            let r = 1, g = 1, b = 1
 
-        let animationFrameId: number
-        let particles: Particle[] = []
-        const connectionDistance = 150
-        const mouseDistance = 200
-
-        // Set canvas size
-        const handleResize = () => {
-            canvas.width = window.innerWidth
-            canvas.height = window.innerHeight
-            initParticles()
-        }
-
-        // Mouse position
-        const mouse = {
-            x: -1000, // Start off-screen
-            y: -1000,
-        }
-
-        const handleMouseMove = (event: MouseEvent) => {
-            mouse.x = event.clientX
-            mouse.y = event.clientY
-        }
-
-        class Particle {
-            x: number
-            y: number
-            vx: number
-            vy: number
-            size: number
-            color: string
-
-            constructor() {
-                this.x = Math.random() * canvas!.width
-                this.y = Math.random() * canvas!.height
-                this.vx = (Math.random() - 0.5) * 1 // Increased speed
-                this.vy = (Math.random() - 0.5) * 1
-                this.size = Math.random() * 2.5 + 1.5 // Bigger particles
-                // Brighter particles
-                this.color = `rgba(255, 255, 255, ${Math.random() * 0.5 + 0.3})`
+            if (colorType > 0.9) { // Blue giants (Cool Blue)
+                r = 0.5; g = 0.7; b = 1
+            } else if (colorType > 0.75) { // Yellow/Orange dwarfs (Warm Yellow)
+                r = 1; g = 0.9; b = 0.4
+            } else if (colorType > 0.6) { // Tinted (Cyan/Aquamarine)
+                r = 0.6; g = 1; b = 0.9
+            } else if (colorType > 0.5) { // Tinted (Rose/Purple)
+                r = 1; g = 0.6; b = 0.8
             }
 
-            update() {
-                this.x += this.vx
-                this.y += this.vy
-
-                // Bounce off edges
-                if (this.x < 0 || this.x > canvas!.width) this.vx *= -1
-                if (this.y < 0 || this.y > canvas!.height) this.vy *= -1
-
-                // Mouse interaction
-                const dx = mouse.x - this.x
-                const dy = mouse.y - this.y
-                const distance = Math.sqrt(dx * dx + dy * dy)
-
-                if (distance < mouseDistance) {
-                    const forceDirectionX = dx / distance
-                    const forceDirectionY = dy / distance
-                    const force = (mouseDistance - distance) / mouseDistance
-                    const directionX = forceDirectionX * force * 0.6
-                    const directionY = forceDirectionY * force * 0.6
-
-                    this.vx -= directionX * 0.05
-                    this.vy -= directionY * 0.05
-                }
-            }
-
-            draw() {
-                if (!ctx) return
-                ctx.beginPath()
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
-                ctx.fillStyle = this.color
-                ctx.fill()
-            }
+            data[i] = r
+            data[i + 1] = g
+            data[i + 2] = b
         }
-
-        const initParticles = () => {
-            particles = []
-            const numberOfParticles = Math.floor((canvas.width * canvas.height) / 12000) // More particles
-            for (let i = 0; i < numberOfParticles; i++) {
-                particles.push(new Particle())
-            }
-        }
-
-        const animate = () => {
-            if (!ctx) return
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-            // Draw Deep Dark Background
-            // We can do this in CSS, but doing it here ensures the clearing matches
-            // ctx.fillStyle = "#05050A" // Very dark blue/black
-            // ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-            particles.forEach((particle) => {
-                particle.update()
-                particle.draw()
-            })
-
-            // Draw connections
-            particles.forEach((a, index) => {
-                // Optimized: only check particles after current index to avoid double checking pairs
-                for (let i = index + 1; i < particles.length; i++) {
-                    const b = particles[i]
-                    const dx = a.x - b.x
-                    const dy = a.y - b.y
-                    const distance = Math.sqrt(dx * dx + dy * dy)
-
-                    if (distance < connectionDistance) {
-                        const opacity = 1 - distance / connectionDistance
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.2})` // More visible lines
-                        ctx.lineWidth = 1
-                        ctx.beginPath()
-                        ctx.moveTo(a.x, a.y)
-                        ctx.lineTo(b.x, b.y)
-                        ctx.stroke()
-                    }
-                }
-            })
-
-            animationFrameId = requestAnimationFrame(animate)
-        }
-
-        window.addEventListener("resize", handleResize)
-        window.addEventListener("mousemove", handleMouseMove)
-
-        // Initial setup
-        handleResize()
-        animate()
-
-        return () => {
-            window.removeEventListener("resize", handleResize)
-            window.removeEventListener("mousemove", handleMouseMove)
-            cancelAnimationFrame(animationFrameId)
-        }
+        return data
     }, [])
 
+    useFrame((state, delta) => {
+        // Very slow, natural rotation
+        ref.current.rotation.x -= delta / 30
+        ref.current.rotation.y -= delta / 40
+    })
+
     return (
-        <canvas
-            ref={canvasRef}
-            className="fixed inset-0 z-[-1] w-full h-full pointer-events-none"
-            style={{
-                background: "radial-gradient(circle at 50% 50%, #0a0a15 0%, #000000 100%)", // Deep Nebula Gradient
-            }}
-        />
+        <group rotation={[0, 0, Math.PI / 4]}>
+            <Points ref={ref} positions={sphere as Float32Array} colors={colors} stride={3} frustumCulled={false} {...props}>
+                <PointMaterial
+                    transparent
+                    vertexColors
+                    size={0.002}
+                    sizeAttenuation={true}
+                    depthWrite={false}
+                    blending={THREE.AdditiveBlending}
+                />
+            </Points>
+        </group>
+    )
+}
+
+// -----------------------------------------------------------------------------
+// Component: CameraRig
+// -----------------------------------------------------------------------------
+const CameraRig = () => {
+    const { camera } = useThree()
+    const [lastScrollY, setLastScrollY] = useState(0)
+
+    useFrame((state, delta) => {
+        const scrollY = window.scrollY
+        // Smoothly interpolate scroll influence
+        // Mapping: 0px -> Z=1, 5000px -> Z=0 or deeper
+        // We act like we are traveling 'into' the screen
+        const targetZ = 1 - (scrollY * 0.0005)
+
+        // Use Frame-independent damping
+        // step = 1 - exp(-lambda * dt)
+        const damp = 1 - Math.exp(-5 * delta)
+
+        camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, damp)
+
+        // Subtle mouse parallax (Exploring feel)
+        const mouseX = (state.pointer.x * 0.1)
+        const mouseY = (state.pointer.y * 0.1)
+        camera.position.x = THREE.MathUtils.lerp(camera.position.x, mouseX, damp)
+        camera.position.y = THREE.MathUtils.lerp(camera.position.y, mouseY, damp)
+
+        setLastScrollY(scrollY)
+    })
+
+    return null
+}
+
+// -----------------------------------------------------------------------------
+// Component: Shooting Star (Visual Trail)
+// -----------------------------------------------------------------------------
+const ShootingStar = () => {
+    const ref = useRef<THREE.Group>(null!)
+    const [active, setActive] = useState(false)
+
+    // Reusing geometry/material is better done at parent, but React handles automatic instancing for primitives often enough.
+    // For a single trail, we can use a simple Mesh with a gradient texture or just scaling.
+
+    useFrame((state, delta) => {
+        if (!active) {
+            if (Math.random() < 0.003) {
+                setActive(true)
+                ref.current.position.set(
+                    (Math.random() - 0.5) * 4,
+                    (Math.random() - 0.5) * 4,
+                    -1 + Math.random() * 2
+                )
+                // Randomize trajectory
+                ref.current.rotation.z = Math.random() * Math.PI
+            }
+        } else {
+            // Move fast along local X
+            ref.current.translateX(delta * 4)
+
+            // Kill if too far
+            if (Math.abs(ref.current.position.x) > 3 || Math.abs(ref.current.position.y) > 3) {
+                setActive(false)
+            }
+        }
+    })
+
+    return (
+        <group ref={ref} visible={active}>
+            {/* The Head */}
+            <mesh>
+                <sphereGeometry args={[0.005, 8, 8]} />
+                <meshBasicMaterial color="white" toneMapped={false} />
+            </mesh>
+            {/* The Tail (scaled sphere) */}
+            <mesh position={[-0.2, 0, 0]} scale={[10, 0.8, 0.8]}>
+                <sphereGeometry args={[0.005, 8, 8]} />
+                <meshBasicMaterial color="white" transparent opacity={0.3} toneMapped={false} />
+            </mesh>
+        </group>
+    )
+}
+
+// -----------------------------------------------------------------------------
+// Component: Background Main
+// -----------------------------------------------------------------------------
+const Background: React.FC = () => {
+    return (
+        <div className="fixed inset-0 z-[-1] bg-[#000000]">
+            <Canvas
+                camera={{ position: [0, 0, 1], fov: 45 }}
+                dpr={[1, 2]} // Optimization: Limit pixel ratio
+                gl={{ antialias: false, alpha: false, powerPreference: "high-performance" }} // Optimization flags
+            >
+                <StarField />
+                <ShootingStar />
+                <ShootingStar />
+                <CameraRig />
+            </Canvas>
+
+            {/* Cinematic Overlay - adds depth without webgl cost */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-blue-950/20 via-transparent to-purple-950/20 pointer-events-none mix-blend-screen" />
+            <div className="absolute inset-0 bg-black/40 pointer-events-none" /> {/* Vignette feel via CSS if needed, or just darken */}
+        </div>
     )
 }
 

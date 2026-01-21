@@ -82,45 +82,46 @@ export default function Home() {
 
     return (
         <div className="min-h-screen text-foreground">
-            <div className="flex-grow w-full py-12">
-                <header className="mb-8 sm:mb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <Card className="glass-crystal rounded-3xl overflow-hidden border-0">
-                        <CardContent className="p-4 md:p-6">
-                            <div className="flex flex-col items-center md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-8">
+            <div className="flex-grow w-full py-4 sm:py-6">
+                <header className="mb-6 sm:mb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <Card className="glass-crystal rounded-[2rem] overflow-hidden border-0 relative group">
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
+                        <CardContent className="p-5 sm:p-6 relative z-10">
+                            <div className="flex flex-col items-center md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-8">
                                 <motion.div
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
                                     transition={{ duration: 0.5 }}
                                     className="flex-shrink-0 relative"
                                 >
-                                    <div className="absolute inset-0 bg-primary/20 rounded-full filter blur-xl opacity-100"></div>
-                                    <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 border-4 border-border shadow-lg relative rounded-full overflow-hidden">
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-primary to-secondary rounded-full blur-2xl opacity-40 animate-pulse"></div>
+                                    <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 border-4 border-white/10 shadow-2xl relative rounded-full overflow-hidden">
                                         <LazyImage
                                             src="/profile/profile.jpg"
                                             alt="Jefino Jacob - Full Stack Developer"
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full object-cover type-module"
                                             style={{ objectPosition: "center 20%" }}
                                             priority={true}
-                                            width={128}
-                                            height={128}
+                                            width={160}
+                                            height={160}
                                         />
                                     </div>
                                 </motion.div>
-                                <div className="flex-grow text-center md:text-left">
+                                <div className="flex-grow text-center md:text-left space-y-2">
                                     <motion.div
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.5, delay: 0.2 }}
                                     >
-                                        <h1 className="font-poppins text-2xl sm:text-3xl md:text-4xl font-bold mb-2 tracking-tight text-foreground">
+                                        <h1 className="font-poppins text-2xl sm:text-3xl md:text-4xl font-bold mb-1 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-white/90 to-white/70">
                                             Jefino
                                         </h1>
-                                        <p className="orbitron-regular text-lg sm:text-xl md:text-2xl text-muted-foreground font-light mb-4">
+                                        <p className="orbitron-regular text-base sm:text-lg text-primary/90 font-medium tracking-wide mb-2">
                                             Fullstack Developer
                                         </p>
-                                        <div className="flex flex-col space-y-2 mb-6">
-                                            <p className="font-inter flex items-center justify-center md:justify-start text-muted-foreground">
-                                                <MapPin className="mr-2 h-5 w-5 text-primary" />
+                                        <div className="flex flex-col items-center md:items-start space-y-1">
+                                            <p className="font-inter flex items-center text-muted-foreground/80 bg-white/5 py-0.5 px-2.5 rounded-full text-xs sm:text-sm">
+                                                <MapPin className="mr-1.5 h-3 w-3 text-primary" />
                                                 Based in Chennai, India
                                             </p>
                                         </div>
@@ -129,126 +130,80 @@ export default function Home() {
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         transition={{ duration: 0.5, delay: 0.4 }}
-                                        className="flex justify-center md:justify-start space-x-4"
+                                        className="flex flex-wrap justify-center md:justify-start gap-2"
                                     >
-                                        <TouchFeedback
-                                            onTap={() => window.open("https://github.com/Jefino9488", "_blank", "noopener,noreferrer")}
-                                            ripple={false}
-                                        >
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                className="hover:bg-primary/20 hover:text-primary transition-all border border-transparent min-h-[44px] min-w-[44px]"
-                                                aria-label="GitHub"
+                                        {[
+                                            { icon: Github, link: "https://github.com/Jefino9488", label: "GitHub" },
+                                            { icon: Mail, link: "mailto:jefinojacob9488@gmail.com", label: "Email" },
+                                            { icon: Linkedin, link: "https://www.linkedin.com/in/jefino9488/", label: "LinkedIn" },
+                                            { icon: Send, link: "https://telegram.me/jefino9488", label: "Telegram" }
+                                        ].map((item, index) => (
+                                            <TouchFeedback
+                                                key={index}
+                                                onTap={() => window.open(item.link, "_blank", "noopener,noreferrer")}
+                                                ripple={false}
                                             >
-                                                <Github className="h-5 w-5 text-foreground" />
-                                            </Button>
-                                        </TouchFeedback>
-                                        <TouchFeedback
-                                            onTap={() => window.open("mailto:jefinojacob9488@gmail.com", "_blank")}
-                                            ripple={false}
-                                        >
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                className="hover:bg-primary/20 hover:text-primary transition-all border border-transparent min-h-[44px] min-w-[44px]"
-                                                aria-label="Email"
-                                            >
-                                                <Mail className="h-5 w-5 text-foreground" />
-                                            </Button>
-                                        </TouchFeedback>
-                                        <TouchFeedback
-                                            onTap={() =>
-                                                window.open("https://www.linkedin.com/in/jefino9488/", "_blank", "noopener,noreferrer")
-                                            }
-                                            ripple={false}
-                                        >
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                className="hover:bg-primary/20 hover:text-primary transition-all border border-transparent min-h-[44px] min-w-[44px]"
-                                                aria-label="LinkedIn"
-                                            >
-                                                <Linkedin className="h-5 w-5 text-foreground" />
-                                            </Button>
-                                        </TouchFeedback>
-                                        <TouchFeedback
-                                            onTap={() => window.open("https://telegram.me/jefino9488", "_blank", "noopener,noreferrer")}
-                                            ripple={false}
-                                        >
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                className="hover:bg-primary/20 hover:text-primary transition-all border border-transparent min-h-[44px] min-w-[44px]"
-                                                aria-label="Telegram"
-                                            >
-                                                <Send className="h-5 w-5 text-foreground" />
-                                            </Button>
-                                        </TouchFeedback>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 hover:scale-110 active:scale-95 transition-all duration-300 border border-white/5"
+                                                    aria-label={item.label}
+                                                >
+                                                    <item.icon className="h-4 w-4 text-foreground/90" />
+                                                </Button>
+                                            </TouchFeedback>
+                                        ))}
                                     </motion.div>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
                 </header>
-                <main className="space-y-8 sm:space-y-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <main className="space-y-6 sm:space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Things I've Learnt & I know Section - Infinite Circular Flow */}
-                    <section className="overflow-hidden relative">
-                        {/* Row 1 - Moves Left (items exit right, enter from left) */}
-                        <div className="relative overflow-hidden mb-4 py-4">
+                    <section className="overflow-hidden relative py-3">
+                        <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background z-10 pointer-events-none" />
+
+                        {/* Row 1 - Moves Left */}
+                        <div className="relative overflow-hidden mb-3">
                             <motion.div
-                                className="flex gap-6"
-                                animate={{
-                                    x: ["0%", "-50%"],
-                                }}
+                                className="flex gap-3 sm:gap-4"
+                                animate={{ x: ["0%", "-50%"] }}
                                 transition={{
-                                    x: {
-                                        repeat: Number.POSITIVE_INFINITY,
-                                        repeatType: "loop",
-                                        duration: 30,
-                                        ease: "linear",
-                                    },
+                                    x: { repeat: Number.POSITIVE_INFINITY, repeatType: "loop", duration: 40, ease: "linear" },
                                 }}
                                 style={{ width: "fit-content" }}
                             >
-                                {/* Full tech stack duplicated - items flow in circular order */}
                                 {[...techStack, ...techStack].map((tech, index) => (
                                     <div
                                         key={`row1-${index}`}
-                                        className="glass-chip min-w-fit"
+                                        className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/5 bg-white/5"
                                     >
-                                        <div className="flex-shrink-0">{tech.icon}</div>
-                                        <span className="font-medium text-sm text-foreground whitespace-nowrap">{tech.name}</span>
+                                        <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center">{tech.icon}</div>
+                                        <span className="font-medium text-xs text-foreground/90 whitespace-nowrap">{tech.name}</span>
                                     </div>
                                 ))}
                             </motion.div>
                         </div>
 
-                        {/* Row 2 - Moves Right (items exit left, enter from right) - Reversed order for circular flow */}
-                        <div className="relative overflow-hidden py-4">
+                        {/* Row 2 - Moves Right */}
+                        <div className="relative overflow-hidden">
                             <motion.div
-                                className="flex gap-6"
-                                animate={{
-                                    x: ["-50%", "0%"],
-                                }}
+                                className="flex gap-3 sm:gap-4"
+                                animate={{ x: ["-50%", "0%"] }}
                                 transition={{
-                                    x: {
-                                        repeat: Number.POSITIVE_INFINITY,
-                                        repeatType: "loop",
-                                        duration: 30,
-                                        ease: "linear",
-                                    },
+                                    x: { repeat: Number.POSITIVE_INFINITY, repeatType: "loop", duration: 40, ease: "linear" },
                                 }}
                                 style={{ width: "fit-content" }}
                             >
-                                {/* Reversed tech stack - creates circular flow illusion */}
                                 {[...[...techStack].reverse(), ...[...techStack].reverse()].map((tech, index) => (
                                     <div
                                         key={`row2-${index}`}
-                                        className="glass-chip min-w-fit"
+                                        className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/5 bg-white/5"
                                     >
-                                        <div className="flex-shrink-0">{tech.icon}</div>
-                                        <span className="font-medium text-sm text-foreground whitespace-nowrap">{tech.name}</span>
+                                        <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center">{tech.icon}</div>
+                                        <span className="font-medium text-xs text-foreground/90 whitespace-nowrap">{tech.name}</span>
                                     </div>
                                 ))}
                             </motion.div>
@@ -257,11 +212,11 @@ export default function Home() {
 
                     {/* Latest Modified Project */}
                     <section>
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                             {(() => {
                                 const latestProject = allProjects.find(
                                     (project) => !["jefino9488", "myprofileviews"].includes(project.title.toLowerCase()),
-                                ) // Exclude portfolio repo & profile views repo
+                                )
                                 if (!latestProject) return null
 
                                 const lastUpdatedDate = latestProject.updatedAt
@@ -288,88 +243,115 @@ export default function Home() {
                     </section>
 
                     {/* GitHub Stats & Graph Section */}
-                    <section className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                    <section className="space-y-4">
+                        <div className="flex flex-col gap-4">
                             <ContributionGraph />
-                            <div className="glass-crystal border-0 rounded-3xl p-6 flex flex-col items-center justify-center min-h-[200px]">
-                                <h3 className="text-lg font-bold text-foreground mb-4 self-start">GitHub Streak</h3>
-                                <div className="flex-grow flex items-center justify-center w-full">
-                                    <a href="https://git.io/streak-stats" target="_blank" rel="noopener noreferrer" className="w-full">
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="glass-crystal border border-white/5 rounded-xl p-4 flex flex-col items-center justify-center min-h-[160px] hover:bg-white/5 transition-colors">
+                                    <h3 className="text-base font-bold text-foreground mb-3 self-start flex items-center gap-1.5">
+                                        <Star className="w-4 h-4 text-amber-500" />
+                                        GitHub Streak
+                                    </h3>
+                                    <div className="w-full flex justify-center">
+                                        <a href="https://git.io/streak-stats" target="_blank" rel="noopener noreferrer" className="block w-full max-w-[400px]">
+                                            <img
+                                                src="https://github-readme-streak-stats-beta-one.vercel.app?user=Jefino9488&theme=neon-dark&hide_border=true&background=00000000"
+                                                alt="GitHub Streak"
+                                                className="w-full h-auto drop-shadow-xl"
+                                            />
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div className="glass-crystal border border-white/5 rounded-xl p-4 flex flex-col items-center justify-center min-h-[160px] hover:bg-white/5 transition-colors">
+                                    <h3 className="text-base font-bold text-foreground mb-3 self-start flex items-center gap-1.5">
+                                        <GitFork className="w-4 h-4 text-blue-500" />
+                                        Top Languages
+                                    </h3>
+                                    <div className="w-full flex justify-center">
                                         <img
-                                            src="https://github-readme-streak-stats-beta-one.vercel.app?user=Jefino9488&theme=neon-dark&hide_border=true"
-                                            alt="GitHub Streak"
-                                            className="h-auto w-full max-w-[495px] mx-auto rounded-2xl"
+                                            src="https://github-readme-stats.vercel.app/api/top-langs/?username=Jefino9488&layout=compact&theme=tokyonight&hide_border=true&bg_color=00000000"
+                                            alt="Top Languages"
+                                            className="w-full max-w-[300px] h-auto drop-shadow-xl"
                                         />
-                                    </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </section>
 
-                    <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Card variant="glass" className="hover:bg-accent/10 transition-colors rounded-3xl overflow-hidden hover-lift">
-                            <Link to="/blog" className="block">
+                    <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Link to="/blog" className="block h-full group">
+                            <Card className="glass-crystal h-full border-0 transition-all duration-300 rounded-[1.25rem] hover:shadow-2xl hover:-translate-y-1 cursor-pointer group-hover:bg-white/[0.03] overflow-hidden">
                                 <CardHeader className="pb-2">
-                                    <CardTitle className="flex items-center text-lg sm:text-2xl font-bold text-foreground">
-                                        <BookOpen className="h-8 w-8 mr-3 text-primary" />
+                                    <CardTitle className="flex items-center text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                                        <div className="p-2 bg-white/5 rounded-lg mr-3 group-hover:scale-110 transition-transform duration-300">
+                                            <BookOpen className="h-5 w-5 text-primary" />
+                                        </div>
                                         Explore My Blogs
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <p className="text-lg sm:text-xl text-muted-foreground mb-4">
+                                    <p className="text-sm text-muted-foreground/80 mb-3 leading-relaxed">
                                         Dive into my latest thoughts and insights on technology, development, and more.
                                     </p>
-                                    <div className="flex items-center text-primary hover:text-primary/80 transition-colors">
-                                        <span className="mr-2 font-semibold">Read latest posts</span>
-                                        <ArrowRight className="h-5 w-5" />
+                                    <div className="flex items-center text-primary font-medium group-hover:translate-x-2 transition-transform text-xs">
+                                        <span className="mr-1.5">Read latest posts</span>
+                                        <ArrowRight className="h-3 w-3" />
                                     </div>
                                 </CardContent>
-                            </Link>
-                        </Card>
+                            </Card>
+                        </Link>
 
-                        <Card variant="glass" className="hover:bg-accent/10 transition-colors rounded-3xl overflow-hidden hover-lift">
-                            <Link to="/certificates" className="block">
+                        <Link to="/certificates" className="block h-full group">
+                            <Card className="glass-crystal h-full border-0 transition-all duration-300 rounded-[1.25rem] hover:shadow-2xl hover:-translate-y-1 cursor-pointer group-hover:bg-white/[0.03] overflow-hidden">
                                 <CardHeader className="pb-2">
-                                    <CardTitle className="flex items-center text-lg sm:text-2xl font-bold text-foreground">
-                                        <Award className="h-8 w-8 mr-3 text-primary" />
-                                        View My Certificates
+                                    <CardTitle className="flex items-center text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                                        <div className="p-2 bg-white/5 rounded-lg mr-3 group-hover:scale-110 transition-transform duration-300">
+                                            <Award className="h-5 w-5 text-primary" />
+                                        </div>
+                                        View Certificates
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <p className="text-lg sm:text-xl text-muted-foreground mb-4">
+                                    <p className="text-sm text-muted-foreground/80 mb-3 leading-relaxed">
                                         Check out my professional certifications and achievements in various technologies.
                                     </p>
-                                    <div className="flex items-center text-primary hover:text-primary/80 transition-colors">
-                                        <span className="mr-2 font-semibold">See certificates</span>
-                                        <ArrowRight className="h-5 w-5" />
+                                    <div className="flex items-center text-primary font-medium group-hover:translate-x-2 transition-transform text-xs">
+                                        <span className="mr-1.5">See achievements</span>
+                                        <ArrowRight className="h-3 w-3" />
                                     </div>
                                 </CardContent>
-                            </Link>
-                        </Card>
+                            </Card>
+                        </Link>
                     </section>
 
                     <section>
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-2xl sm:text-3xl font-bold text-foreground">Featured Projects</h2>
-                            <Link to="/projects" className="text-primary hover:text-primary/80 transition-colors flex items-center">
-                                <span className="mr-2">View all</span>
-                                <ArrowRight className="h-5 w-5" />
+                        <div className="flex justify-between items-end mb-4">
+                            <div>
+                                <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-1">Featured Projects</h2>
+                                <p className="text-muted-foreground text-xs">Selected works from my portfolio</p>
+                            </div>
+                            <Link to="/projects" className="group flex items-center text-primary hover:text-primary/80 transition-colors bg-secondary/30 px-3 py-1 rounded-full backdrop-blur-sm text-xs">
+                                <span className="mr-1 font-medium">View all</span>
+                                <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
                             </Link>
                         </div>
 
                         {loading ? (
-                            <div className="text-center text-muted-foreground py-12">Loading projects...</div>
+                            <div className="text-center text-muted-foreground py-8">Loading projects...</div>
                         ) : error ? (
-                            <div className="text-center text-destructive py-12">{error}</div>
+                            <div className="text-center text-destructive py-8">{error}</div>
                         ) : (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 p-4 pt-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                                 {displayedProjects.map((project) => (
                                     <motion.div
                                         key={project.title}
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.5 }}
-                                        className="hover-lift"
+                                        className="h-full"
                                     >
                                         <TouchFeedback
                                             onTap={() => window.open(project.link, "_blank", "noopener,noreferrer")}
@@ -377,33 +359,42 @@ export default function Home() {
                                                 navigator.clipboard.writeText(project.link)
                                             }}
                                             ripple={true}
-                                            className="h-full"
+                                            className="h-full block"
                                         >
-                                            <Card className="glass-crystal relative p-6 border-0 transition-all duration-300 h-full flex flex-col rounded-3xl hover:shadow-xl hover:-translate-y-1 cursor-pointer">
-                                                <h3 className="text-xl font-semibold mb-3 text-card-foreground line-clamp-1">{project.title}</h3>
-                                                <p className="text-muted-foreground mb-4 text-sm line-clamp-2">{project.description}</p>
-                                                <div className="flex flex-wrap gap-2 mb-4">
-                                                    {project.tech.map((tech) => (
+                                            <Card className="glass-crystal relative p-4 border-0 transition-all duration-300 h-full flex flex-col rounded-[1.25rem] hover:shadow-2xl hover:-translate-y-1 cursor-pointer group group-hover:bg-white/[0.03]">
+                                                <div className="flex justify-between items-start mb-2.5">
+                                                    <div className="p-2 bg-white/5 rounded-lg group-hover:scale-110 transition-transform duration-300">
+                                                        <GitFork className="w-4 h-4 text-primary" />
+                                                    </div>
+                                                    <div className="p-1 text-muted-foreground/50 group-hover:text-primary transition-colors">
+                                                        <ExternalLink className="w-3.5 h-3.5" />
+                                                    </div>
+                                                </div>
+
+                                                <h3 className="text-base font-bold mb-1.5 text-foreground line-clamp-1 group-hover:text-primary transition-colors">{project.title}</h3>
+                                                <p className="text-muted-foreground/80 mb-3 text-xs line-clamp-3 leading-relaxed flex-grow">{project.description}</p>
+
+                                                <div className="flex flex-wrap gap-1.5 mb-3">
+                                                    {project.tech.slice(0, 3).map((tech) => (
                                                         <span
                                                             key={tech}
-                                                            className="px-3 py-1 bg-secondary/50 border border-white/5 rounded-full text-xs text-secondary-foreground"
+                                                            className="px-2 py-0.5 bg-white/5 border border-white/5 rounded-full text-[10px] font-medium text-muted-foreground group-hover:border-primary/20 group-hover:text-primary/80 transition-colors"
                                                         >
                                                             {tech}
                                                         </span>
                                                     ))}
+                                                    {project.tech.length > 3 && (
+                                                        <span className="px-1.5 py-0.5 text-[10px] text-muted-foreground/50">+{project.tech.length - 3}</span>
+                                                    )}
                                                 </div>
-                                                <div className="flex justify-between items-center mt-auto">
-                                                    <div className="flex gap-4 text-sm text-muted-foreground">
-                                                        <span className="flex items-center gap-1">
-                                                            <Star className="w-4 h-4 text-primary" /> {project.stats.stars}
-                                                        </span>
-                                                        <span className="flex items-center gap-1">
-                                                            <GitFork className="w-4 h-4 text-primary" /> {project.stats.forks}
-                                                        </span>
-                                                    </div>
-                                                    <div className="p-2 text-muted-foreground hover:text-primary transition-colors">
-                                                        <ExternalLink className="w-5 h-5 text-primary" />
-                                                    </div>
+
+                                                <div className="flex items-center gap-3 text-[10px] text-muted-foreground/70 pt-2.5 border-t border-white/5">
+                                                    <span className="flex items-center gap-1">
+                                                        <Star className="w-3 h-3 text-amber-500" /> {project.stats.stars}
+                                                    </span>
+                                                    <span className="flex items-center gap-1">
+                                                        <GitFork className="w-3 h-3 text-blue-500" /> {project.stats.forks}
+                                                    </span>
                                                 </div>
                                             </Card>
                                         </TouchFeedback>
@@ -428,7 +419,7 @@ export default function Home() {
                 className="cursor-grab active:cursor-grabbing transition-all ease-in-out"
             >
                 <div className="flex flex-col items-center justify-center">
-                    <p className="text-muted-foreground text-xs sm:text-sm mb-2 animate-pulse text-center">
+                    <p className="text-muted-foreground text-[10px] sm:text-xs mb-1 animate-pulse text-center">
                         Pull up for Github Overview
                     </p>
                     <motion.div
@@ -438,7 +429,7 @@ export default function Home() {
                             repeat: Number.POSITIVE_INFINITY,
                             ease: "easeInOut",
                         }}
-                        className="w-8 h-1.5 sm:w-12 sm:h-2 bg-muted-foreground rounded-full"
+                        className="w-8 h-1 sm:w-10 sm:h-1.5 bg-muted-foreground rounded-full"
                     ></motion.div>
                 </div>
             </motion.div>

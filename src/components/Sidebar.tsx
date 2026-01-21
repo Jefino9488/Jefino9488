@@ -173,7 +173,6 @@ export default function Sidebar() {
 
             {/* Navigation Section */}
             <nav className="px-3 pb-6 flex-1 overflow-y-auto hide-scrollbar">
-                <p className="px-4 text-xs font-semibold text-muted-foreground/50 uppercase tracking-wider mb-2 mt-2">Menu</p>
                 <div className="space-y-1">
                     {navItems.map((item) => {
                         const isActive =
