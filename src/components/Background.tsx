@@ -40,7 +40,7 @@ const StarField = (props: any) => {
         return data
     }, [])
 
-    useFrame((state, delta) => {
+    useFrame((_state, delta) => {
         // Very slow, natural rotation
         ref.current.rotation.x -= delta / 30
         ref.current.rotation.y -= delta / 40
@@ -67,7 +67,6 @@ const StarField = (props: any) => {
 // -----------------------------------------------------------------------------
 const CameraRig = () => {
     const { camera } = useThree()
-    const [lastScrollY, setLastScrollY] = useState(0)
 
     useFrame((state, delta) => {
         const scrollY = window.scrollY
@@ -88,7 +87,7 @@ const CameraRig = () => {
         camera.position.x = THREE.MathUtils.lerp(camera.position.x, mouseX, damp)
         camera.position.y = THREE.MathUtils.lerp(camera.position.y, mouseY, damp)
 
-        setLastScrollY(scrollY)
+        // setLastScrollY(scrollY) - Removed unread state update
     })
 
     return null
@@ -104,7 +103,7 @@ const ShootingStar = () => {
     // Reusing geometry/material is better done at parent, but React handles automatic instancing for primitives often enough.
     // For a single trail, we can use a simple Mesh with a gradient texture or just scaling.
 
-    useFrame((state, delta) => {
+    useFrame((_state, delta) => {
         if (!active) {
             if (Math.random() < 0.003) {
                 setActive(true)
