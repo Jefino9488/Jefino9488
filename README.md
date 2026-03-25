@@ -38,7 +38,7 @@ if __name__ == "__main__":
   </div>
   <div align="center">
     <a href="https://skillicons.dev">
-      <img src="https://skillicons.dev/icons?i=git,docker,python,pycharm,java,html,react,vite&perline="  alt=""/>
+      <img src="https://skillicons.dev/icons?i=git,docker,python,java,html,react,vite&perline="  alt=""/>
     </a>
   </div>
 </div>
