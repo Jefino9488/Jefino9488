@@ -1,5 +1,4 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { motion } from 'framer-motion';
 import { AlertTriangle, RefreshCw, Home, Bug } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -86,22 +85,12 @@ class ErrorBoundary extends Component<Props, State> {
 
       return (
         <div className="min-h-screen bg-[#020203] flex items-center justify-center p-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="w-full max-w-2xl"
-          >
+          <div className="w-full max-w-2xl">
             <Card className="bg-[#0C0810] border-[#f38ba8] border-2 text-[#cdd6f4] rounded-2xl shadow-lg overflow-hidden">
               <CardHeader className="text-center pb-4">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                  className="mx-auto mb-4 w-16 h-16 bg-[#f38ba8]/20 rounded-full flex items-center justify-center"
-                >
+                <div className="mx-auto mb-4 w-16 h-16 bg-[#f38ba8]/20 rounded-full flex items-center justify-center">
                   <AlertTriangle className="w-8 h-8 text-[#f38ba8]" />
-                </motion.div>
+                </div>
                 <CardTitle className="text-2xl font-bold text-[#f38ba8] mb-2">
                   Oops! Something went wrong
                 </CardTitle>
@@ -112,12 +101,7 @@ class ErrorBoundary extends Component<Props, State> {
 
               <CardContent className="space-y-6">
                 {import.meta.env.DEV && this.state.error && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    transition={{ delay: 0.3 }}
-                    className="bg-[#1e1e2e] rounded-lg p-4 border border-[#45475a]"
-                  >
+                  <div className="bg-[#1e1e2e] rounded-lg p-4 border border-[#45475a]">
                     <div className="flex items-center gap-2 mb-3">
                       <Bug className="w-4 h-4 text-[#cba6f7]" />
                       <span className="text-sm font-medium text-[#f5c2e7]">Development Error Details</span>
@@ -138,7 +122,7 @@ class ErrorBoundary extends Component<Props, State> {
                         </div>
                       )}
                     </div>
-                  </motion.div>
+                  </div>
                 )}
 
                 {this.state.eventId && (
@@ -180,7 +164,7 @@ class ErrorBoundary extends Component<Props, State> {
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
         </div>
       );
     }

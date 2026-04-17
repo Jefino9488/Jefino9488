@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { WifiOff, RefreshCw, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -66,16 +65,9 @@ export default function NetworkErrorBoundary({ children, onRetry }: NetworkError
   return (
     <>
       {children}
-      
-      <AnimatePresence>
-        {isNetworkError && showError && (
-          <motion.div
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 100 }}
-            transition={{ duration: 0.3 }}
-            className="fixed bottom-4 left-4 right-4 z-50 sm:left-auto sm:right-4 sm:w-96"
-          >
+
+      {isNetworkError && showError && (
+          <div className="fixed bottom-4 left-4 right-4 z-50 sm:left-auto sm:right-4 sm:w-96 network-toast-enter">
             <div className="bg-[#0C0810] border border-[#f38ba8] rounded-xl shadow-lg p-4">
               <div className="flex items-start gap-3">
                 <div className="flex-shrink-0">
@@ -119,25 +111,17 @@ export default function NetworkErrorBoundary({ children, onRetry }: NetworkError
                 </div>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+      )}
 
       {/* Connection status indicator */}
-      <AnimatePresence>
-        {!networkStatus.isOnline && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0 }}
-            className="fixed top-4 right-4 z-40"
-          >
+      {!networkStatus.isOnline && (
+          <div className="fixed top-4 right-4 z-40 network-indicator-enter">
             <div className="bg-[#f38ba8] text-white rounded-full p-2 shadow-lg">
               <WifiOff className="w-4 h-4" />
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+      )}
     </>
   );
 }

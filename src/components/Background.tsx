@@ -150,7 +150,13 @@ const ShootingStar = () => {
 // -----------------------------------------------------------------------------
 const Background: React.FC = () => {
     const { isMobile } = useScreenSize() // Use global screen size hook
-    const starCount = isMobile ? 3000 : 6000 // Reduce stars by 50% on mobile
+    const isSmallMobile = typeof window !== 'undefined' ? window.innerWidth < 480 : false
+    const connection = (typeof navigator !== 'undefined' ? (navigator as Navigator & {
+        connection?: { saveData?: boolean }
+    }).connection : undefined)
+    const saveData = Boolean(connection?.saveData)
+
+    const starCount = saveData ? 1000 : isMobile ? (isSmallMobile ? 1400 : 2200) : 6000
     const dpr = isMobile ? [1, 1.5] : [1, 2] // Cap DPR at 1.5 on mobile for performance
 
     return (

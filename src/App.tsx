@@ -1,6 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
 
 // Lazy load route components for code splitting
 const Home = lazy(() => import("./components/Home"));
@@ -35,7 +34,15 @@ function DeferredBackground() {
 
     useEffect(() => {
         const hasReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
         const deferredWindow = window as IdleWindow;
+        const connection = (navigator as Navigator & {
+            connection?: { saveData?: boolean; effectiveType?: string };
+        }).connection;
+        const shouldDelayForNetwork = Boolean(connection?.saveData) || connection?.effectiveType === '2g' || connection?.effectiveType === 'slow-2g';
+
+        const fallbackDelay = isMobile || shouldDelayForNetwork ? 2200 : 700;
+        const idleTimeout = isMobile || shouldDelayForNetwork ? 2600 : 1200;
 
         if (hasReducedMotion) {
             setReady(true);
@@ -43,7 +50,7 @@ function DeferredBackground() {
         }
 
         if (typeof deferredWindow.requestIdleCallback === 'function') {
-            const id = deferredWindow.requestIdleCallback(() => setReady(true), { timeout: 1200 });
+            const id = deferredWindow.requestIdleCallback(() => setReady(true), { timeout: idleTimeout });
             return () => {
                 if (typeof deferredWindow.cancelIdleCallback === 'function') {
                     deferredWindow.cancelIdleCallback(id);
@@ -51,7 +58,7 @@ function DeferredBackground() {
             };
         }
 
-        const timeoutId = window.setTimeout(() => setReady(true), 700);
+        const timeoutId = window.setTimeout(() => setReady(true), fallbackDelay);
         return () => window.clearTimeout(timeoutId);
     }, []);
 
@@ -79,67 +86,65 @@ function AppContent() {
                 <Navbar />
 
                 <main className="flex-grow pt-16 lg:pt-0 overflow-x-hidden">
-                    <AnimatePresence mode="wait">
-                        <Routes>
-                            <Route
-                                path="/"
-                                element={
-                                    <TransitionWrapper>
-                                        <Home />
-                                    </TransitionWrapper>
-                                }
-                            />
-                            <Route
-                                path="/blog"
-                                element={
-                                    <TransitionWrapper>
-                                        <BlogList />
-                                    </TransitionWrapper>
-                                }
-                            />
-                            <Route
-                                path="/blog/:id"
-                                element={
-                                    <TransitionWrapper>
-                                        <BlogPost />
-                                    </TransitionWrapper>
-                                }
-                            />
+                    <Routes>
+                        <Route
+                            path="/"
+                            element={
+                                <TransitionWrapper>
+                                    <Home />
+                                </TransitionWrapper>
+                            }
+                        />
+                        <Route
+                            path="/blog"
+                            element={
+                                <TransitionWrapper>
+                                    <BlogList />
+                                </TransitionWrapper>
+                            }
+                        />
+                        <Route
+                            path="/blog/:id"
+                            element={
+                                <TransitionWrapper>
+                                    <BlogPost />
+                                </TransitionWrapper>
+                            }
+                        />
 
-                            <Route
-                                path="/about"
-                                element={
-                                    <TransitionWrapper>
-                                        <About />
-                                    </TransitionWrapper>
-                                }
-                            />
-                            <Route
-                                path="/projects"
-                                element={
-                                    <TransitionWrapper>
-                                        <Projects />
-                                    </TransitionWrapper>
-                                }
-                            />
-                            <Route
-                                path="/projects/:name"
-                                element={
-                                    <TransitionWrapper>
-                                        <ProjectDetail />
-                                    </TransitionWrapper>
-                                }
-                            />
-                            <Route
-                                path="/certificates"
-                                element={
-                                    <TransitionWrapper>
-                                        <Certificates />
-                                    </TransitionWrapper>
-                                }
-                            />
-                        </Routes>
-                    </AnimatePresence>
+                        <Route
+                            path="/about"
+                            element={
+                                <TransitionWrapper>
+                                    <About />
+                                </TransitionWrapper>
+                            }
+                        />
+                        <Route
+                            path="/projects"
+                            element={
+                                <TransitionWrapper>
+                                    <Projects />
+                                </TransitionWrapper>
+                            }
+                        />
+                        <Route
+                            path="/projects/:name"
+                            element={
+                                <TransitionWrapper>
+                                    <ProjectDetail />
+                                </TransitionWrapper>
+                            }
+                        />
+                        <Route
+                            path="/certificates"
+                            element={
+                                <TransitionWrapper>
+                                    <Certificates />
+                                </TransitionWrapper>
+                            }
+                        />
+                    </Routes>
                 </main>
                 <div className="lg:hidden">
                     <Footer />

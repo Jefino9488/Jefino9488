@@ -80,7 +80,7 @@ export default function Home() {
                         </div>
 
                         {/* Left Side: Text and Actions */}
-                        <div className="flex-1 relative z-10">
+                        <div className="flex-1 relative z-10" style={{ contain: "layout paint style" }}>
                             <div>
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="h-px bg-primary w-12" />
@@ -91,7 +91,7 @@ export default function Home() {
                                     <br />
                                     <span className="text-gradient font-light">Experiences.</span>
                                 </h1>
-                                <p className="font-inter text-muted-foreground text-lg sm:text-xl max-w-xl leading-relaxed mb-8">
+                                <p className="mobile-hero-copy font-sans sm:font-inter text-muted-foreground text-lg sm:text-xl max-w-xl leading-relaxed mb-8">
                                     I build accessible, performant products and digital experiences for the web. Specialized in modern frontend architecture and scalable backends.
                                 </p>
 
