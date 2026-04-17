@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useRef, useMemo } from "react"
+import { useRef, useMemo, useEffect } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { Points, PointMaterial } from "@react-three/drei"
 import * as random from "maath/random/dist/maath-random.esm"
@@ -12,6 +12,7 @@ import { useScreenSize } from "@/hooks/useScreenSize"
 // -----------------------------------------------------------------------------
 // Component: StarField
 // -----------------------------------------------------------------------------
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const StarField = ({ count = 6000, ...props }: any) => {
     const ref = useRef<THREE.Points>(null!)
 
@@ -26,14 +27,14 @@ const StarField = ({ count = 6000, ...props }: any) => {
             const colorType = Math.random()
             let r = 1, g = 1, b = 1
 
-            if (colorType > 0.9) { // Blue giants (Cool Blue)
-                r = 0.5; g = 0.7; b = 1
-            } else if (colorType > 0.75) { // Yellow/Orange dwarfs (Warm Yellow)
-                r = 1; g = 0.9; b = 0.4
-            } else if (colorType > 0.6) { // Tinted (Cyan/Aquamarine)
-                r = 0.6; g = 1; b = 0.9
-            } else if (colorType > 0.5) { // Tinted (Rose/Purple)
-                r = 1; g = 0.6; b = 0.8
+            if (colorType > 0.9) { // Blue Violet
+                r = 0.4; g = 0.43; b = 0.73
+            } else if (colorType > 0.75) { // Half Baked
+                r = 0.54; g = 0.72; b = 0.81
+            } else if (colorType > 0.6) { // Pigeon Post
+                r = 0.7; g = 0.73; b = 0.85
+            } else if (colorType > 0.5) { // White-ish Blue
+                r = 0.9; g = 0.9; b = 0.95
             }
 
             data[i] = r
@@ -70,27 +71,29 @@ const StarField = ({ count = 6000, ...props }: any) => {
 // -----------------------------------------------------------------------------
 const CameraRig = () => {
     const { camera } = useThree()
+    // Store scroll position in a ref — updated by a passive scroll listener
+    // This avoids window.scrollY reads inside useFrame which force layout recalc
+    const scrollYRef = useRef(0)
+
+    useEffect(() => {
+        scrollYRef.current = typeof window !== 'undefined' ? window.scrollY : 0
+        const handleScroll = () => {
+            scrollYRef.current = window.scrollY
+        }
+        window.addEventListener('scroll', handleScroll, { passive: true })
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
 
     useFrame((state, delta) => {
-        const scrollY = window.scrollY
-        // Smoothly interpolate scroll influence
-        // Mapping: 0px -> Z=1, 5000px -> Z=0 or deeper
-        // We act like we are traveling 'into' the screen
-        const targetZ = 1 - (scrollY * 0.0005)
-
-        // Use Frame-independent damping
-        // step = 1 - exp(-lambda * dt)
+        const targetZ = 1 - (scrollYRef.current * 0.0005)
         const damp = 1 - Math.exp(-5 * delta)
 
         camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, damp)
 
-        // Subtle mouse parallax (Exploring feel)
         const mouseX = (state.pointer.x * 0.1)
         const mouseY = (state.pointer.y * 0.1)
         camera.position.x = THREE.MathUtils.lerp(camera.position.x, mouseX, damp)
         camera.position.y = THREE.MathUtils.lerp(camera.position.y, mouseY, damp)
-
-        // setLastScrollY(scrollY) - Removed unread state update
     })
 
     return null
@@ -101,36 +104,33 @@ const CameraRig = () => {
 // -----------------------------------------------------------------------------
 const ShootingStar = () => {
     const ref = useRef<THREE.Group>(null!)
-    const [active, setActive] = useState(false)
-
-    // Reusing geometry/material is better done at parent, but React handles automatic instancing for primitives often enough.
-    // For a single trail, we can use a simple Mesh with a gradient texture or just scaling.
+    // Use a ref instead of useState to avoid React reconciler overhead inside rAF
+    const activeRef = useRef(false)
 
     useFrame((_state, delta) => {
-        if (!active) {
+        if (!activeRef.current) {
             if (Math.random() < 0.003) {
-                setActive(true)
+                activeRef.current = true
+                ref.current.visible = true
                 ref.current.position.set(
                     (Math.random() - 0.5) * 4,
                     (Math.random() - 0.5) * 4,
                     -1 + Math.random() * 2
                 )
-                // Randomize trajectory
                 ref.current.rotation.z = Math.random() * Math.PI
             }
         } else {
-            // Move fast along local X
             ref.current.translateX(delta * 4)
 
-            // Kill if too far
             if (Math.abs(ref.current.position.x) > 3 || Math.abs(ref.current.position.y) > 3) {
-                setActive(false)
+                activeRef.current = false
+                ref.current.visible = false
             }
         }
     })
 
     return (
-        <group ref={ref} visible={active}>
+        <group ref={ref} visible={false}>
             {/* The Head */}
             <mesh>
                 <sphereGeometry args={[0.005, 8, 8]} />
@@ -157,8 +157,9 @@ const Background: React.FC = () => {
         <div className="fixed inset-0 z-[-1] bg-[#000000]">
             <Canvas
                 camera={{ position: [0, 0, 1], fov: 45 }}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 dpr={dpr as any} // Optimization: Limit pixel ratio
-                gl={{ antialias: false, alpha: false, powerPreference: "high-performance" }} // Optimization flags
+                gl={{ antialias: false, powerPreference: "high-performance" }} // Optimization flags
             >
                 <StarField count={starCount} />
                 <ShootingStar />

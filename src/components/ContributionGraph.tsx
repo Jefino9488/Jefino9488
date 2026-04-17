@@ -14,7 +14,39 @@ export default function ContributionGraph() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Fetch GitHub contribution data
+    const CACHE_KEY = 'gh_contributions_cache'
+    const CACHE_TTL = 60 * 60 * 1000 // 1 hour
+
+    const loadFromCache = (): boolean => {
+      try {
+        const cached = sessionStorage.getItem(CACHE_KEY)
+        if (!cached) return false
+        const { data, ts } = JSON.parse(cached)
+        if (Date.now() - ts > CACHE_TTL) {
+          sessionStorage.removeItem(CACHE_KEY)
+          return false
+        }
+        setContributions(data.contributions)
+        setTotalContributions(data.total)
+        setLoading(false)
+        return true
+      } catch {
+        return false
+      }
+    }
+
+    const saveToCache = (contributions: ContributionDay[], total: number) => {
+      try {
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify({
+          data: { contributions, total },
+          ts: Date.now(),
+        }))
+      } catch { /* quota exceeded — ignore */ }
+    }
+
+    // Return early if cache hit
+    if (loadFromCache()) return
+
     const fetchContributions = async () => {
       try {
         const username = "Jefino9488"
@@ -23,19 +55,21 @@ export default function ContributionGraph() {
         const data = await response.json()
 
         if (data && data.contributions) {
-          const contributionDays: ContributionDay[] = data.contributions.map((day: any) => ({
+          const contributionDays: ContributionDay[] = data.contributions.map((day: { date: string, count: number }) => ({
             date: day.date,
             count: day.count,
             level: getLevel(day.count),
           }))
 
-          setContributions(contributionDays)
           const yearKey = Object.keys(data.total)[0]
-          setTotalContributions(data.total[yearKey] || 0)
+          const total = data.total[yearKey] || 0
+
+          setContributions(contributionDays)
+          setTotalContributions(total)
+          saveToCache(contributionDays, total)
         }
       } catch (error) {
         console.error("Failed to fetch GitHub contributions:", error)
-        // Fallback to mock data if API fails
         generateMockData()
       } finally {
         setLoading(false)
@@ -153,8 +187,9 @@ export default function ContributionGraph() {
   }
 
   return (
-    <div className="glass-crystal rounded-3xl p-6 h-full flex flex-col border-0">
-      <h3 className="text-lg font-bold text-foreground mb-4">Contribution Graph</h3>
+    <div className="glass-crystal rounded-3xl p-6 h-full flex flex-col border border-white/5 border-l-2 border-l-primary/40 bg-[#0a0a0a]/60 relative overflow-hidden group hover:border-l-primary hover:shadow-[0_0_30px_-10px_rgba(102,111,188,0.4)] transition-all duration-500">
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <h3 className="text-lg font-mono tracking-tight font-bold text-white mb-4 relative z-10 group-hover:text-primary transition-colors">CONTRIBUTION_GRAPH</h3>
       <div className="contribution-graph-scroll overflow-x-auto flex-grow flex items-center">
         <div className="min-w-fit mx-auto">
           {/* Months Header */}
@@ -207,20 +242,20 @@ export default function ContributionGraph() {
             </div>
           </div>
 
-          <div className="flex justify-between items-center mt-2 text-xs text-muted-foreground">
+          <div className="flex justify-between items-center mt-2 text-[10px] font-mono tracking-widest uppercase text-[#b3bad9] relative z-10">
             <span>
-              {totalContributions} contributions in {new Date().getFullYear()}
+              {totalContributions} contributions // {new Date().getFullYear()}
             </span>
             <div className="flex items-center gap-2">
-              <span className="text-[10px]">Less</span>
+              <span className="text-[9px]">Less</span>
               <div className="flex gap-1">
-                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#161b22]"></div>
-                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#0e4429]"></div>
-                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#006d32]"></div>
-                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#26a641]"></div>
-                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#39d353]"></div>
+                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#161b22] border border-white/5"></div>
+                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#0e4429] drop-shadow-[0_0_2px_#0e4429]"></div>
+                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#006d32] drop-shadow-[0_0_4px_#006d32]"></div>
+                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#26a641] drop-shadow-[0_0_6px_#26a641]"></div>
+                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#39d353] drop-shadow-[0_0_8px_#39d353]"></div>
               </div>
-              <span className="text-[10px]">More</span>
+              <span className="text-[9px]">More</span>
             </div>
           </div>
         </div>
