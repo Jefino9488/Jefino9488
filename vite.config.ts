@@ -64,15 +64,7 @@ export default defineConfig({
           if (id.includes('@radix-ui') || id.includes('lucide-react')) {
             return 'ui-vendor';
           }
-          // Markdown rendering (blog pages only — defer)
-          if (
-            id.includes('react-markdown') ||
-            id.includes('rehype') ||
-            id.includes('remark') ||
-            id.includes('react-syntax-highlighter')
-          ) {
-            return 'markdown-vendor';
-          }
+
           // Google Generative AI (Chatbot only — defer)
           if (id.includes('@google/genai')) {
             return 'ai-vendor';

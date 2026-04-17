@@ -53,18 +53,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="format-detection" content="telephone=no" />
 
-    <!--
-      Preload self-hosted fonts (same-origin, no external round-trips).
-      Critical: Inter is used for body text; Poppins for headings.
-    -->
-    <link rel="preload" href="/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin />
 
-    <!--
-      Preload the LCP image (hero profile image, above-the-fold on desktop).
-      fetchpriority=high tells the browser to start this immediately.
-    -->
-    <link rel="preload" href="/profile/profile_anime.webp" as="image" fetchpriority="high" />
 
     <!-- DNS prefetch for third-party services -->
     <link rel="dns-prefetch" href="//github.com" />
