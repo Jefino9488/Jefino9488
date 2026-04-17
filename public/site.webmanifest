@@ -1,7 +1,7 @@
 {
-  "name": "Jefino Jacob - Full Stack Developer",
+  "name": "Jefino Jacob | Full Stack Developer & AI Enthusiast",
   "short_name": "Jefino",
-  "description": "Portfolio of Jefino Jacob, a passionate Full Stack Developer specializing in React, Python, and Machine Learning",
+  "description": "Portfolio of Jefino Jacob, a Full Stack Developer specializing in React, Python, and Machine Learning.",
   "icons": [
     {
       "src": "/favicon-16x16.png",
@@ -30,7 +30,7 @@
     }
   ],
   "theme_color": "#cba6f7",
-  "background_color": "#020203",
+  "background_color": "#05050A",
   "display": "standalone",
   "start_url": "/",
   "scope": "/",
