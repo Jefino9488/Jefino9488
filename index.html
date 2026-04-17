@@ -6,14 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 
     <!-- Favicon and App Icons -->
-    <link rel="icon" type="image/png" href="/logo-new.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/logo-new.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#cba6f7" />
 
     <!-- Primary Meta Tags -->
-    <title>Jefino | Full Stack Developer & AI Enthusiast</title>
-    <meta name="title" content="Jefino | Full Stack Developer & AI Enthusiast" />
+    <title>Jefino | Full Stack Developer &amp; AI Enthusiast</title>
+    <meta name="title" content="Jefino | Full Stack Developer &amp; AI Enthusiast" />
     <meta name="description"
         content="Passionate Full Stack Developer from Chennai, India. Specializing in React, Python, Machine Learning, and modern web technologies. Explore my projects, certifications, and technical insights." />
     <meta name="keywords"
@@ -26,7 +27,7 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://jefino.is-a.dev/" />
-    <meta property="og:title" content="Jefino | Full Stack Developer & AI Enthusiast" />
+    <meta property="og:title" content="Jefino | Full Stack Developer &amp; AI Enthusiast" />
     <meta property="og:description"
         content="Passionate Full Stack Developer from Chennai, India. Specializing in React, Python, Machine Learning, and modern web technologies. Explore my projects, certifications, and technical insights." />
     <meta property="og:image" content="https://jefino.is-a.dev/og-image.png" />
@@ -38,7 +39,7 @@
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://jefino.is-a.dev/" />
-    <meta name="twitter:title" content="Jefino | Full Stack Developer & AI Enthusiast" />
+    <meta name="twitter:title" content="Jefino | Full Stack Developer &amp; AI Enthusiast" />
     <meta name="twitter:description"
         content="Passionate Full Stack Developer from Chennai, India. Specializing in React, Python, Machine Learning, and modern web technologies." />
     <meta name="twitter:image" content="https://jefino.is-a.dev/og-image.png" />
@@ -52,27 +53,38 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="format-detection" content="telephone=no" />
 
-    <!-- Preconnect to external domains -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://api.github.com" />
+    <!--
+      Preload self-hosted fonts (same-origin, no external round-trips).
+      Critical: Inter is used for body text; Poppins for headings.
+    -->
+    <link rel="preload" href="/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin />
 
-    <!-- Preload critical fonts for faster render -->
-    <link rel="preload"
-        href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff2"
-        as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="https://fonts.gstatic.com/s/poppins/v21/pxiEyp8kv8JHgFVrJJfecg.woff2" as="font"
-        type="font/woff2" crossorigin />
+    <!--
+      Preload the LCP image (hero profile image, above-the-fold on desktop).
+      fetchpriority=high tells the browser to start this immediately.
+    -->
+    <link rel="preload" href="/profile/profile_anime.webp" as="image" fetchpriority="high" />
 
-    <!-- DNS prefetch for performance -->
+    <!-- DNS prefetch for third-party services -->
     <link rel="dns-prefetch" href="//github.com" />
-    <link rel="dns-prefetch" href="//api.spotify.com" />
+    <link rel="dns-prefetch" href="//api.github.com" />
     <link rel="dns-prefetch" href="//github-contributions-api.jogruber.de" />
+    <link rel="dns-prefetch" href="//api.spotify.com" />
 </head>
 
 <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Register service worker for offline support and asset caching -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                    .catch((err) => console.warn('SW registration failed:', err));
+            });
+        }
+    </script>
 </body>
 
 </html>

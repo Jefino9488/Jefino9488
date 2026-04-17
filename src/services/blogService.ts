@@ -26,6 +26,7 @@ import post3 from '@/blogPosts/post3.json';
 import post4 from '@/blogPosts/post4.json';
 
 // Convert local post format to BlogPost format
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const convertLocalPost = (post: any): BlogPost => ({
     id: `local-${post.id}`,
     title: post.title,

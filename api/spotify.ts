@@ -1,6 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
         const clientId = process.env.SPOTIFY_CLIENT_ID!;
         const clientSecret = process.env.SPOTIFY_CLIENT_SECRET!;
