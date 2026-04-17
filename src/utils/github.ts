@@ -22,6 +22,7 @@ interface GitHubRepo {
     name: string;
     stargazers_count: number;
     language: string;
+    pushed_at?: string;
 }
 
 export interface GitHubStats {
@@ -37,6 +38,51 @@ const axiosInstance = axios.create({
         'Accept': 'application/vnd.github.v3+json'
     }
 });
+
+const REPOS_CACHE_TTL = 10 * 60 * 1000;
+const COMMIT_SCAN_LIMIT = 12;
+const COMMIT_SCAN_CONCURRENCY = 4;
+
+let reposCache: { username: string; timestamp: number; repos: GitHubRepo[] } | null = null;
+
+const fetchUserRepos = async (username: string): Promise<GitHubRepo[]> => {
+    if (
+        reposCache &&
+        reposCache.username === username &&
+        Date.now() - reposCache.timestamp < REPOS_CACHE_TTL
+    ) {
+        return reposCache.repos;
+    }
+
+    const reposResponse = await axiosInstance.get<GitHubRepo[]>(`${GITHUB_API_URL}/${username}/repos?per_page=100`);
+    reposCache = {
+        username,
+        timestamp: Date.now(),
+        repos: reposResponse.data,
+    };
+
+    return reposResponse.data;
+};
+
+const mapWithConcurrency = async <T, R>(
+    items: T[],
+    limit: number,
+    mapper: (item: T) => Promise<R>
+): Promise<R[]> => {
+    const results: R[] = [];
+    let index = 0;
+
+    const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+        while (index < items.length) {
+            const current = index;
+            index += 1;
+            results[current] = await mapper(items[current]);
+        }
+    });
+
+    await Promise.all(workers);
+    return results;
+};
 
 export const fetchTotalPullRequests = async (username: string): Promise<number> => {
     try {
@@ -81,16 +127,26 @@ const fetchCommitCountForRepo = async (username: string, repoName: string): Prom
 
 export const fetchGitHubStats = async (username: string): Promise<GitHubStats | null> => {
     try {
-        const reposResponse = await axiosInstance.get<GitHubRepo[]>(`${GITHUB_API_URL}/${username}/repos?per_page=100`);
-        const repos = reposResponse.data;
+        const repos = await fetchUserRepos(username);
 
         const totalStars = repos.reduce((acc, repo) => acc + repo.stargazers_count, 0);
 
-        // Fetch commit counts in parallel, but limit concurrency if needed
-        const commitCounts = await Promise.all(
-            repos.map(repo => fetchCommitCountForRepo(username, repo.name))
-        );
-        const totalCommits = commitCounts.reduce((sum, count) => sum + count, 0);
+        // Sample recently pushed repositories to reduce API fan-out while preserving a useful estimate.
+        const reposByActivity = [...repos]
+            .sort((a, b) => new Date(b.pushed_at || 0).getTime() - new Date(a.pushed_at || 0).getTime());
+        const reposForCommitScan = reposByActivity.slice(0, COMMIT_SCAN_LIMIT);
+
+        let totalCommits = 0;
+        if (reposForCommitScan.length > 0) {
+            const commitCounts = await mapWithConcurrency(
+                reposForCommitScan,
+                COMMIT_SCAN_CONCURRENCY,
+                (repo) => fetchCommitCountForRepo(username, repo.name)
+            );
+            const sampledTotal = commitCounts.reduce((sum, count) => sum + count, 0);
+            const scalingFactor = repos.length / reposForCommitScan.length;
+            totalCommits = Math.round(sampledTotal * scalingFactor);
+        }
 
         const languageMap = repos.reduce((acc, repo) => {
             if (repo.language) {
@@ -163,8 +219,7 @@ export const categorizeSkills = (languages: [string, number][]): {
 // Fetch all languages from repos (with counts)
 export const fetchAllLanguages = async (username: string): Promise<[string, number][]> => {
     try {
-        const reposResponse = await axiosInstance.get<GitHubRepo[]>(`${GITHUB_API_URL}/${username}/repos?per_page=100`);
-        const repos = reposResponse.data;
+        const repos = await fetchUserRepos(username);
 
         const languageMap = repos.reduce((acc, repo) => {
             if (repo.language) {

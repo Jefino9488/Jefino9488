@@ -43,15 +43,18 @@ export default function ContributionGraph() {
 
   useEffect(() => {
     const CACHE_KEY = 'gh_contributions_cache'
+    const LEGACY_CACHE_KEY = 'gh_contributions_cache_legacy'
     const CACHE_TTL = 60 * 60 * 1000 // 1 hour
 
     const loadFromCache = (): boolean => {
       try {
-        const cached = sessionStorage.getItem(CACHE_KEY)
+        const cached = localStorage.getItem(CACHE_KEY) || sessionStorage.getItem(CACHE_KEY)
         if (!cached) return false
         const { data, ts } = JSON.parse(cached)
         if (Date.now() - ts > CACHE_TTL) {
+          localStorage.removeItem(CACHE_KEY)
           sessionStorage.removeItem(CACHE_KEY)
+          localStorage.removeItem(LEGACY_CACHE_KEY)
           return false
         }
         setContributions(data.contributions)
@@ -65,10 +68,12 @@ export default function ContributionGraph() {
 
     const saveToCache = (contributions: ContributionDay[], total: number) => {
       try {
-        sessionStorage.setItem(CACHE_KEY, JSON.stringify({
+        const payload = JSON.stringify({
           data: { contributions, total },
           ts: Date.now(),
-        }))
+        })
+        localStorage.setItem(CACHE_KEY, payload)
+        sessionStorage.setItem(CACHE_KEY, payload)
       } catch { /* quota exceeded — ignore */ }
     }
 
@@ -104,7 +109,22 @@ export default function ContributionGraph() {
       }
     }
 
-    fetchContributions()
+    const deferredWindow = window as Window & {
+      requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number
+      cancelIdleCallback?: (id: number) => void
+    }
+
+    if (typeof deferredWindow.requestIdleCallback === 'function') {
+      const id = deferredWindow.requestIdleCallback(() => fetchContributions(), { timeout: 1000 })
+      return () => {
+        if (typeof deferredWindow.cancelIdleCallback === 'function') {
+          deferredWindow.cancelIdleCallback(id)
+        }
+      }
+    }
+
+    const timeoutId = window.setTimeout(() => fetchContributions(), 250)
+    return () => window.clearTimeout(timeoutId)
   }, [generateMockData, getLevel])
 
   const getColor = (level: number) => {

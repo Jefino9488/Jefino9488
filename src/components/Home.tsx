@@ -72,7 +72,11 @@ export default function Home() {
                 <header className="mb-12 sm:mb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 md:pt-16">
                     <div className="flex flex-col-reverse md:flex-row items-start justify-between gap-8 md:gap-16 relative">
                         {/* Abstract Watermark Text */}
-                        <div className="absolute top-0 -left-10 hidden md:block select-none pointer-events-none opacity-[0.02] text-[180px] font-black font-poppins text-white leading-none right-0 overflow-hidden whitespace-nowrap">
+                        <div
+                            aria-hidden="true"
+                            className="absolute top-0 -left-10 hidden md:block select-none pointer-events-none opacity-[0.02] text-[180px] font-black font-poppins text-white leading-none right-0 overflow-hidden whitespace-nowrap"
+                            style={{ contentVisibility: "auto", containIntrinsicSize: "180px 1px" }}
+                        >
                             //JEFINO
                         </div>
 
@@ -117,11 +121,10 @@ export default function Home() {
                                                 href={item.link}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="group"
+                                                aria-label={`Visit ${item.label}`}
+                                                className="group inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:bg-white/10 transition-colors"
                                             >
-                                                <Button variant="ghost" size="icon" className="w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:bg-white/10 transition-colors" aria-label={item.label}>
-                                                    <item.icon className="h-5 w-5 text-muted-foreground group-hover:text-foreground" />
-                                                </Button>
+                                                <item.icon className="h-5 w-5 text-muted-foreground group-hover:text-foreground" />
                                             </a>
                                         ))}
                                     </div>
@@ -290,9 +293,9 @@ export default function Home() {
                                         <img
                                             src="https://github-readme-stats.vercel.app/api/top-langs/?username=Jefino9488&layout=compact&theme=tokyonight&hide_border=true&bg_color=00000000"
                                             alt="Top Languages"
-                                            className="w-full max-w-[300px] h-auto drop-shadow-xl"
+                                            className="w-full max-w-[300px] h-auto aspect-[20/11] drop-shadow-xl"
                                             width="300"
-                                            height="170"
+                                            height="165"
                                             loading="lazy"
                                             decoding="async"
                                         />

@@ -1,6 +1,5 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { motion, useScroll, useTransform } from "framer-motion"
 import { ArrowLeft } from "lucide-react"
 
 interface PageHeaderProps {
@@ -20,26 +19,12 @@ export default function PageHeader({
     meta,
     rightAction
 }: PageHeaderProps) {
-    const { scrollY } = useScroll()
-    
-    // As you scroll down, the nav pill gets slightly more opaque and casts a deeper shadow
-    const bgOpacity = useTransform(scrollY, [0, 100], [0.4, 0.8])
-    const backdropBlur = useTransform(scrollY, [0, 100], ["blur(8px)", "blur(24px)"])
-    const scale = useTransform(scrollY, [0, 100], [1, 0.98])
-    const yOffset = useTransform(scrollY, [0, 100], [0, 5])
-
     return (
-        <motion.div 
+        <div
             className="fixed top-4 sm:top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none"
-            style={{ y: yOffset, scale }}
         >
-            <motion.div 
-                className="flex items-center gap-2 sm:gap-4 p-1.5 sm:p-2 bg-[#0a0a0a]/60 border border-white/10 rounded-full shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] pointer-events-auto relative overflow-hidden"
-                style={{ 
-                    backdropFilter: backdropBlur,
-                    WebkitBackdropFilter: backdropBlur,
-                    backgroundColor: `rgba(10, 10, 10, ${bgOpacity.get()})` 
-                }}
+            <div
+                className="flex items-center gap-2 sm:gap-4 p-1.5 sm:p-2 bg-[#0a0a0a]/75 border border-white/10 rounded-full shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] pointer-events-auto relative overflow-hidden backdrop-blur-xl will-change-transform"
             >
                 {/* Subtle internal glow */}
                 <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
@@ -79,7 +64,7 @@ export default function PageHeader({
                         </div>
                     </>
                 )}
-            </motion.div>
-        </motion.div>
+            </div>
+        </div>
     )
 }

@@ -12,6 +12,11 @@ interface CachedData {
     timestamp: number;
 }
 
+interface CacheLookupResult {
+    data: CachedData | null;
+    isFresh: boolean;
+}
+
 interface GitHubContextType {
     profile: GitHubProfile | null;
     stats: GitHubStats | null;
@@ -31,19 +36,16 @@ const GitHubContext = createContext<GitHubContextType>({
 });
 
 // Cache helpers
-const getCachedData = (): CachedData | null => {
+const getCachedData = (): CacheLookupResult => {
     try {
         const cached = localStorage.getItem(CACHE_KEY);
-        if (!cached) return null;
+        if (!cached) return { data: null, isFresh: false };
 
         const data: CachedData = JSON.parse(cached);
-        if (Date.now() - data.timestamp > CACHE_TTL) {
-            localStorage.removeItem(CACHE_KEY);
-            return null;
-        }
-        return data;
+        const isFresh = Date.now() - data.timestamp <= CACHE_TTL;
+        return { data, isFresh };
     } catch {
-        return null;
+        return { data: null, isFresh: false };
     }
 };
 
@@ -65,20 +67,34 @@ export const GitHubProvider = ({ children }: { children: React.ReactNode }) => {
 
     const fetchData = useCallback(async (retryCount = 0, skipCache = false) => {
         try {
-            // Check cache first
+            // Show cached data immediately. If stale, refresh in background.
             if (!skipCache) {
                 const cached = getCachedData();
-                if (cached) {
-                    setProfile(cached.profile);
-                    setStats(cached.stats);
-                    setLanguages(cached.languages);
-                    setLoading(false);
-                    return;
+                if (cached.data) {
+                    setProfile(cached.data.profile);
+                    setStats(cached.data.stats);
+                    setLanguages(cached.data.languages);
+                    setLoading(!cached.isFresh);
+                    if (cached.isFresh) {
+                        return;
+                    }
+                } else {
+                    setLoading(true);
                 }
+
+                if (cached.data && !cached.isFresh) {
+                    // Keep stale content visible while revalidating in the background.
+                    setLoading(false);
+                }
+            } else {
+                setLoading(true);
             }
 
-            setLoading(true);
-            setError(null);
+            if (skipCache && retryCount === 0) {
+                setError(null);
+            } else if (retryCount === 0) {
+                setError(null);
+            }
 
             const maxRetries = 3;
             const retryDelay = Math.min(1000 * Math.pow(2, retryCount), 5000);

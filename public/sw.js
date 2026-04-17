@@ -7,11 +7,13 @@ const CACHE_VERSION = 'v1';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
+const RUNTIME_CACHE = `runtime-${CACHE_VERSION}`;
 
 // Assets to pre-cache on install (critical path)
 const PRECACHE_ASSETS = [
   '/',
-  '/fonts/inter-var.woff2',
+  '/fonts/inter-400.woff2',
+  '/fonts/inter-600.woff2',
   '/fonts/poppins-400.woff2',
   '/fonts/poppins-600.woff2',
   '/fonts/poppins-700.woff2',
@@ -33,7 +35,7 @@ self.addEventListener('install', (event) => {
 
 // Activate: clean up stale caches from old versions
 self.addEventListener('activate', (event) => {
-  const CURRENT_CACHES = [STATIC_CACHE, FONT_CACHE, IMAGE_CACHE];
+  const CURRENT_CACHES = [STATIC_CACHE, FONT_CACHE, IMAGE_CACHE, RUNTIME_CACHE];
   event.waitUntil(
     caches.keys().then((cacheNames) =>
       Promise.all(
@@ -53,12 +55,31 @@ self.addEventListener('fetch', (event) => {
   // Skip non-GET and cross-origin API requests (Spotify, GitHub API)
   if (request.method !== 'GET') return;
 
-  // GitHub API and Spotify API — Network-only (real-time data)
+  // GitHub and widget endpoints — stale-while-revalidate for faster repeat visits
   if (
-    url.hostname === 'api.github.com' ||
-    url.hostname.includes('spotify') ||
     url.hostname.includes('github-contributions-api') ||
     url.hostname.includes('github-readme')
+  ) {
+    event.respondWith(
+      caches.open(RUNTIME_CACHE).then(async (cache) => {
+        const cached = await cache.match(request);
+        const networkPromise = fetch(request)
+          .then((response) => {
+            if (response.ok) cache.put(request, response.clone());
+            return response;
+          })
+          .catch(() => cached);
+
+        return cached || networkPromise;
+      })
+    );
+    return;
+  }
+
+  // GitHub core API and Spotify API — Network-only (real-time data)
+  if (
+    url.hostname === 'api.github.com' ||
+    url.hostname.includes('spotify')
   ) {
     return; // Let fetch fall through to network
   }

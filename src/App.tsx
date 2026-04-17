@@ -1,4 +1,4 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
@@ -23,14 +23,53 @@ import { GitHubProvider } from "@/components/GitHubContext.tsx";
 
 import ErrorBoundary from "./components/ErrorBoundary";
 import NetworkErrorBoundary from "./components/NetworkErrorBoundary";
-import Background from "./components/Background";
+const Background = lazy(() => import("./components/Background"));
+
+type IdleWindow = Window & {
+    requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
+    cancelIdleCallback?: (id: number) => void;
+};
+
+function DeferredBackground() {
+    const [ready, setReady] = useState(false);
+
+    useEffect(() => {
+        const hasReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const deferredWindow = window as IdleWindow;
+
+        if (hasReducedMotion) {
+            setReady(true);
+            return;
+        }
+
+        if (typeof deferredWindow.requestIdleCallback === 'function') {
+            const id = deferredWindow.requestIdleCallback(() => setReady(true), { timeout: 1200 });
+            return () => {
+                if (typeof deferredWindow.cancelIdleCallback === 'function') {
+                    deferredWindow.cancelIdleCallback(id);
+                }
+            };
+        }
+
+        const timeoutId = window.setTimeout(() => setReady(true), 700);
+        return () => window.clearTimeout(timeoutId);
+    }, []);
+
+    if (!ready) return null;
+
+    return (
+        <Suspense fallback={null}>
+            <Background />
+        </Suspense>
+    );
+}
 
 function AppContent() {
     useSmoothScroll();
 
     return (
         <div className="flex min-h-screen relative selection:bg-primary/30 selection:text-white">
-            <Background />
+            <DeferredBackground />
             {/* Sidebar - Desktop Only (Fixed 20rem/320px) */}
             <Sidebar />
 
