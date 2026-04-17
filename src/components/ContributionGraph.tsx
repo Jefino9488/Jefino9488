@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 interface ContributionDay {
   date: string
@@ -12,6 +12,34 @@ export default function ContributionGraph() {
   const [contributions, setContributions] = useState<ContributionDay[]>([])
   const [totalContributions, setTotalContributions] = useState(0)
   const [loading, setLoading] = useState(true)
+
+  const getLevel = useCallback((count: number): 0 | 1 | 2 | 3 | 4 => {
+    if (count === 0) return 0
+    if (count < 3) return 1
+    if (count < 6) return 2
+    if (count < 9) return 3
+    return 4
+  }, [])
+
+  const generateMockData = useCallback(() => {
+    const days: ContributionDay[] = []
+    const today = new Date()
+    const oneYearAgo = new Date(today)
+    oneYearAgo.setFullYear(today.getFullYear() - 1)
+
+    let total = 0
+    for (let d = new Date(oneYearAgo); d <= today; d.setDate(d.getDate() + 1)) {
+      const count = Math.random() > 0.7 ? Math.floor(Math.random() * 15) : 0
+      total += count
+      days.push({
+        date: d.toISOString().split("T")[0],
+        count,
+        level: getLevel(count),
+      })
+    }
+    setContributions(days)
+    setTotalContributions(total)
+  }, [getLevel])
 
   useEffect(() => {
     const CACHE_KEY = 'gh_contributions_cache'
@@ -77,35 +105,7 @@ export default function ContributionGraph() {
     }
 
     fetchContributions()
-  }, [])
-
-  const getLevel = (count: number): 0 | 1 | 2 | 3 | 4 => {
-    if (count === 0) return 0
-    if (count < 3) return 1
-    if (count < 6) return 2
-    if (count < 9) return 3
-    return 4
-  }
-
-  const generateMockData = () => {
-    const days: ContributionDay[] = []
-    const today = new Date()
-    const oneYearAgo = new Date(today)
-    oneYearAgo.setFullYear(today.getFullYear() - 1)
-
-    let total = 0
-    for (let d = new Date(oneYearAgo); d <= today; d.setDate(d.getDate() + 1)) {
-      const count = Math.random() > 0.7 ? Math.floor(Math.random() * 15) : 0
-      total += count
-      days.push({
-        date: d.toISOString().split("T")[0],
-        count,
-        level: getLevel(count),
-      })
-    }
-    setContributions(days)
-    setTotalContributions(total)
-  }
+  }, [generateMockData, getLevel])
 
   const getColor = (level: number) => {
     switch (level) {

@@ -33,8 +33,8 @@ export function useSpotify(options: UseSpotifyOptions | number = {}) {
     const [error, setError] = useState<string | null>(null);
     const [retryCount, setRetryCount] = useState(0);
 
-    const intervalRef = useRef<NodeJS.Timeout | null>(null);
-    const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const abortControllerRef = useRef<AbortController | null>(null);
 
     const fetchSpotifyTrack = useCallback(async (isRetry = false) => {
@@ -60,12 +60,24 @@ export function useSpotify(options: UseSpotifyOptions | number = {}) {
             });
 
             if (response.ok) {
-                const trackData = await response.json();
+                const contentType = response.headers.get('content-type') || '';
+                if (!contentType.includes('application/json')) {
+                    const preview = (await response.text()).slice(0, 120);
+                    throw new Error(`Spotify API did not return JSON. Preview: ${preview}`);
+                }
+
+                let trackData: SpotifyTrack;
+                try {
+                    trackData = await response.json() as SpotifyTrack;
+                } catch {
+                    throw new Error('Spotify API returned invalid JSON');
+                }
+
                 setTrack(trackData);
                 setRetryCount(0); // Reset retry count on success
 
                 // Log for debugging in development
-                if (process.env.NODE_ENV === 'development') {
+                if (import.meta.env.DEV) {
                     console.log('Spotify track fetched:', trackData);
                 }
             } else {
@@ -108,6 +120,21 @@ export function useSpotify(options: UseSpotifyOptions | number = {}) {
 
             const errorMessage = err instanceof Error ? err.message : 'Unknown error';
             console.error('Error fetching Spotify track:', err);
+
+            const isApiRouteUnavailable = errorMessage.includes('did not return JSON') || errorMessage.includes('invalid JSON');
+            if (isApiRouteUnavailable && import.meta.env.DEV) {
+                setError('Spotify API route is unavailable in Vite dev mode. Use Vercel dev or deploy API routes.');
+                setTrack({
+                    isPlaying: false,
+                    name: 'Spotify unavailable in local dev',
+                    artist: 'Run with vercel dev or deploy',
+                    albumArt: '',
+                    url: '',
+                    error: errorMessage,
+                });
+                setRetryCount(maxRetries);
+                return;
+            }
 
             // Determine if we should retry
             const shouldRetry = retryCount < maxRetries && !isRetry;

@@ -32,7 +32,7 @@ export default function TouchFeedback({
   const [ripples, setRipples] = useState<Array<{ id: string; x: number; y: number }>>([]);
   const [touchStart, setTouchStart] = useState<{ x: number; y: number; time: number } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const longPressTimer = useRef<NodeJS.Timeout | null>(null);
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const generateRipple = (x: number, y: number) => {
     if (!ripple || !containerRef.current) return;

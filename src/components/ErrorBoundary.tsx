@@ -47,7 +47,7 @@ class ErrorBoundary extends Component<Props, State> {
     });
 
     // Log error to console in development
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       console.error('ErrorBoundary caught an error:', error, errorInfo);
     }
 
@@ -111,7 +111,7 @@ class ErrorBoundary extends Component<Props, State> {
               </CardHeader>
 
               <CardContent className="space-y-6">
-                {process.env.NODE_ENV === 'development' && this.state.error && (
+                {import.meta.env.DEV && this.state.error && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
@@ -190,6 +190,7 @@ class ErrorBoundary extends Component<Props, State> {
 }
 
 // Hook for functional components to catch errors
+// eslint-disable-next-line react-refresh/only-export-components
 export function useErrorHandler() {
   return (error: Error, errorInfo?: ErrorInfo) => {
     console.error('Error caught by useErrorHandler:', error, errorInfo);
@@ -198,6 +199,7 @@ export function useErrorHandler() {
 }
 
 // Higher-order component for easier error boundary wrapping
+// eslint-disable-next-line react-refresh/only-export-components
 export function withErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,
   errorBoundaryProps?: Omit<Props, 'children'>

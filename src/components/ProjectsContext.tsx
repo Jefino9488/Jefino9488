@@ -25,6 +25,7 @@ const ProjectsContext = createContext<{
   error: null,
 });
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useProjects = () => useContext(ProjectsContext);
 
 const getPinnedProjectsQuery = `
