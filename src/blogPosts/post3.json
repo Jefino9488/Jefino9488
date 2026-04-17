@@ -1,7 +1,7 @@
 {
     "id": 3,
     "title": "FrameworkPatcherV2 Documentation",
-    "excerpt": "Automated Android framework patching system for modifying core framework JAR files.",
+    "excerpt": "Automation-focused Android framework patching toolkit for modifying core JARs and packaging reproducible flashable modules.",
     "date": "2025-01-04",
     "readTime": "5 min read",
     "coverImage": "/frameworkpatcher_banner.png",

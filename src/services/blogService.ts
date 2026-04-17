@@ -37,7 +37,7 @@ const convertLocalPost = (post: any): BlogPost => ({
     cover_image: post.coverImage || null,
     tag_list: ['documentation', 'project'],
     user: {
-        name: 'Jefino Jacob'
+        name: 'Jefino'
     },
     isLocal: true,
     localId: post.id

@@ -1,7 +1,7 @@
 {
     "id": 4,
     "title": "Lost-in-the-Middle Analyzer Documentation",
-    "excerpt": "Benchmarking framework for evaluating LLMs on long-context information retrieval.",
+    "excerpt": "Evaluation framework for measuring long-context retrieval reliability in LLMs across answer positions and context lengths.",
     "date": "2025-01-04",
     "readTime": "6 min read",
     "coverImage": "/litm_analyzer_banner.png",
