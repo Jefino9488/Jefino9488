@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
 
 interface Project {
   title: string;
@@ -114,15 +115,9 @@ async function fetchGitHubProjects(query: string): Promise<{ projects: Project[]
       return { projects: [], error: data.errors.map((error: any) => error.message).join(', ') };
     }
 
-    let repositories: any[] = [];
-    if (query.includes("pinnedItems")) {
-      repositories = data.data.user.pinnedItems.nodes;
-    } else if (query.includes("repositories")) {
-      repositories = data.data.user.repositories.nodes;
-    }
-
-    // Map repositories to Project objects
-    const projects = repositories.map((repo: any) => ({
+     
+    const items = data.data.user.pinnedItems || data.data.user.repositories;
+    const projects: Project[] = items.nodes.map((repo: any) => ({
       title: repo.name.toLowerCase(),
       description: repo.description || '',
       tech: [
@@ -143,6 +138,37 @@ async function fetchGitHubProjects(query: string): Promise<{ projects: Project[]
   }
 }
 
+const PROJECTS_CACHE_KEY = 'portfolio_projects_cache';
+const PROJECTS_CACHE_TTL = 15 * 60 * 1000; // 15 minutes
+
+interface ProjectsCache {
+  pinnedProjects: Project[];
+  allProjects: Project[];
+  timestamp: number;
+}
+
+function getProjectsCache(): ProjectsCache | null {
+  try {
+    const raw = localStorage.getItem(PROJECTS_CACHE_KEY);
+    if (!raw) return null;
+    const cache: ProjectsCache = JSON.parse(raw);
+    if (Date.now() - cache.timestamp > PROJECTS_CACHE_TTL) {
+      localStorage.removeItem(PROJECTS_CACHE_KEY);
+      return null;
+    }
+    return cache;
+  } catch {
+    return null;
+  }
+}
+
+function setProjectsCache(pinnedProjects: Project[], allProjects: Project[]) {
+  try {
+    const cache: ProjectsCache = { pinnedProjects, allProjects, timestamp: Date.now() };
+    localStorage.setItem(PROJECTS_CACHE_KEY, JSON.stringify(cache));
+  } catch { /* Ignore storage quota errors */ }
+}
+
 export const ProjectsProvider = ({ children }: { children: React.ReactNode }) => {
   const [pinnedProjects, setPinnedProjects] = useState<Project[]>([]);
   const [allProjects, setAllProjects] = useState<Project[]>([]);
@@ -150,35 +176,58 @@ export const ProjectsProvider = ({ children }: { children: React.ReactNode }) =>
   const [error, setError] = useState<string | null>(null);
   const fetched = useRef(false);
 
+  const fetchProjects = useCallback(async () => {
+    // Check cache first — avoids 2 GraphQL round-trips on repeat visits
+    const cached = getProjectsCache();
+    if (cached) {
+      setPinnedProjects(cached.pinnedProjects);
+      setAllProjects(cached.allProjects);
+      setLoading(false);
+      fetched.current = true;
+      return;
+    }
+
+    try {
+      const [pinnedResult, allResult] = await Promise.allSettled([
+        fetchGitHubProjects(getPinnedProjectsQuery),
+        fetchGitHubProjects(getAllProjectsQuery),
+      ]);
+
+      let pinnedData: Project[] = [];
+      let allData: Project[] = [];
+
+      if (pinnedResult.status === 'fulfilled') {
+        const { projects, error: pinnedError } = pinnedResult.value;
+        if (pinnedError) setError(pinnedError);
+        else pinnedData = projects;
+      }
+
+      if (allResult.status === 'fulfilled') {
+        const { projects, error: allError } = allResult.value;
+        if (allError) setError(allError);
+        else allData = projects;
+      }
+
+      setPinnedProjects(pinnedData);
+      setAllProjects(allData);
+
+      // Cache successful responses
+      if (pinnedData.length > 0 || allData.length > 0) {
+        setProjectsCache(pinnedData, allData);
+      }
+    } catch (err) {
+      console.error('Error fetching projects:', err);
+      setError('Failed to load projects');
+    } finally {
+      setLoading(false);
+      fetched.current = true;
+    }
+  }, []);
+
   useEffect(() => {
     if (fetched.current) return;
-
-    fetchGitHubProjects(getPinnedProjectsQuery)
-      .then(({ projects: pinned, error: pinnedError }) => {
-        if (pinnedError) {
-          setError(pinnedError);
-        } else {
-          setPinnedProjects(pinned);
-        }
-      });
-
-    fetchGitHubProjects(getAllProjectsQuery)
-      .then(({ projects: all, error: allError }) => {
-        if (allError) {
-          setError(allError);
-        } else {
-          setAllProjects(all);
-        }
-        setLoading(false);
-        fetched.current = true;
-      })
-      .catch((err) => {
-        console.error('Error fetching all projects:', err);
-        setError('Failed to fetch all projects');
-        setLoading(false);
-        fetched.current = true;
-      });
-  }, []);
+    fetchProjects();
+  }, [fetchProjects]);
 
   return (
     <ProjectsContext.Provider value={{ pinnedProjects, allProjects, loading, error }}>

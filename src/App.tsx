@@ -8,6 +8,7 @@ const BlogList = lazy(() => import("./components/BlogList"));
 const BlogPost = lazy(() => import("./components/BlogPost"));
 const About = lazy(() => import("./components/About"));
 const Projects = lazy(() => import("./components/Projects"));
+const ProjectDetail = lazy(() => import("./components/ProjectDetail"));
 const Certificates = lazy(() => import("./components/Certificates"));
 
 // Keep critical components eagerly loaded
@@ -82,6 +83,14 @@ function AppContent() {
                                 element={
                                     <TransitionWrapper>
                                         <Projects />
+                                    </TransitionWrapper>
+                                }
+                            />
+                            <Route
+                                path="/projects/:name"
+                                element={
+                                    <TransitionWrapper>
+                                        <ProjectDetail />
                                     </TransitionWrapper>
                                 }
                             />
