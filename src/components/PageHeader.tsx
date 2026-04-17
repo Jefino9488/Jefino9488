@@ -21,7 +21,7 @@ export default function PageHeader({
 }: PageHeaderProps) {
     return (
         <div
-            className="fixed top-4 sm:top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none"
+            className="hidden md:flex fixed top-4 sm:top-6 left-0 right-0 z-50 justify-center px-4 pointer-events-none"
         >
             <div
                 className="flex items-center gap-2 sm:gap-4 p-1.5 sm:p-2 bg-[#0a0a0a]/75 border border-white/10 rounded-full shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] pointer-events-auto relative overflow-hidden backdrop-blur-xl will-change-transform"
