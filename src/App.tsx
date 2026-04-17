@@ -19,9 +19,6 @@ import Footer from "./components/Footer";
 import TransitionWrapper from "./components/TransitionWrapper";
 import { ProjectsProvider } from "./components/ProjectsContext";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
-import FloatingActionButton from "@/components/ChatBot/FloatingActionButton.tsx";
-import ChatBot from "@/components/ChatBot/ChatBot.tsx";
-import { ChatProvider } from "@/components/ChatBot/ChatContext.tsx";
 import { GitHubProvider } from "@/components/GitHubContext.tsx";
 
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -108,8 +105,6 @@ function AppContent() {
                 <div className="lg:hidden">
                     <Footer />
                 </div>
-                <FloatingActionButton />
-                <ChatBot />
             </div>
         </div>
     );
@@ -120,7 +115,7 @@ function App() {
         <ErrorBoundary
             onError={(error, errorInfo) => {
                 // Log error to console in development
-                if (process.env.NODE_ENV === 'development') {
+                if (import.meta.env.DEV) {
                     console.error('App Error Boundary caught an error:', error, errorInfo);
                 }
                 // In production, you might want to send this to an error reporting service
@@ -130,13 +125,11 @@ function App() {
             <NetworkErrorBoundary>
                 <Router>
                     <ProjectsProvider>
-                        <ChatProvider>
-                            <GitHubProvider>
-                                <Suspense fallback={<Loader />}>
-                                    <AppContent />
-                                </Suspense>
-                            </GitHubProvider>
-                        </ChatProvider>
+                        <GitHubProvider>
+                            <Suspense fallback={<Loader />}>
+                                <AppContent />
+                            </Suspense>
+                        </GitHubProvider>
                     </ProjectsProvider>
                 </Router>
             </NetworkErrorBoundary>
