@@ -418,6 +418,39 @@ html {
   width: 6px;
 }
 
+@keyframes marquee-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.marquee-track {
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.marquee-left {
+  animation: marquee-left 40s linear infinite;
+}
+
+.marquee-right {
+  animation: marquee-right 40s linear infinite;
+}
+
 .contribution-graph-scroll::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;

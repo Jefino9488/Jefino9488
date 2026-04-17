@@ -23,11 +23,17 @@ export default function ExperienceCard({ company, role, date, location, logo, st
                 </div>
                 <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <h3 className="text-lg sm:text-xl font-mono tracking-tight font-bold text-white group-hover:text-primary transition-colors truncate pr-8 sm:pr-0">
+                        <h2 className="text-lg sm:text-xl font-mono tracking-tight font-bold text-white group-hover:text-primary transition-colors truncate pr-8 sm:pr-0">
                             {company}
-                        </h3>
+                        </h2>
                         {link && (
-                            <a href={link} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors flex-shrink-0 absolute top-5 right-5 sm:static sm:top-auto sm:right-auto">
+                            <a
+                                href={link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={`Open ${company} repository`}
+                                className="text-muted-foreground hover:text-primary transition-colors flex-shrink-0 absolute top-5 right-5 sm:static sm:top-auto sm:right-auto"
+                            >
                                 <ExternalLink className="w-5 h-5 sm:w-4 sm:h-4" />
                             </a>
                         )}

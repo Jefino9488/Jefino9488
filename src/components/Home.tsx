@@ -14,7 +14,6 @@ import {
     GitFork,
     Award,
 } from "lucide-react"
-import { motion } from "framer-motion"
 import { useProjects } from "./ProjectsContext"
 import { useScreenSize } from "@/hooks/useScreenSize"
 
@@ -82,11 +81,7 @@ export default function Home() {
 
                         {/* Left Side: Text and Actions */}
                         <div className="flex-1 relative z-10">
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5 }}
-                            >
+                            <div>
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="h-px bg-primary w-12" />
                                     <p className="orbitron-regular text-sm tracking-widest text-primary uppercase">Full Stack Developer</p>
@@ -129,16 +124,11 @@ export default function Home() {
                                         ))}
                                     </div>
                                 </div>
-                            </motion.div>
+                            </div>
                         </div>
 
                             {/* Right Side: Profile / Abstract Frame */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.7, delay: 0.2 }}
-                            className="relative w-full md:w-auto flex justify-center md:block flex-shrink-0 z-10"
-                        >
+                        <div className="relative w-full md:w-auto flex justify-center md:block flex-shrink-0 z-10">
                             {/* Accent box behind */}
                             <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full" />
 
@@ -163,7 +153,7 @@ export default function Home() {
                                     </div>
                                 </div>
                             </div>
-                        </motion.div>
+                        </div>
                     </div>
                 </header>
 
@@ -176,14 +166,7 @@ export default function Home() {
 
                         {/* Row 1 - Moves Left */}
                         <div className="relative overflow-hidden mb-3">
-                            <motion.div
-                                className="flex gap-3 sm:gap-4"
-                                animate={{ x: ["0%", "-50%"] }}
-                                transition={{
-                                    x: { repeat: Number.POSITIVE_INFINITY, repeatType: "loop", duration: 40, ease: "linear" },
-                                }}
-                                style={{ width: "fit-content" }}
-                            >
+                            <div className="flex gap-3 sm:gap-4 marquee-track marquee-left" style={{ width: "fit-content" }}>
                                 {[...techStack, ...techStack].map((tech, index) => (
                                     <div
                                         key={`row1-${index}`}
@@ -193,19 +176,12 @@ export default function Home() {
                                         <span className="font-medium text-xs text-foreground/90 whitespace-nowrap">{tech.name}</span>
                                     </div>
                                 ))}
-                            </motion.div>
+                            </div>
                         </div>
 
                         {/* Row 2 - Moves Right */}
                         <div className="relative overflow-hidden">
-                            <motion.div
-                                className="flex gap-3 sm:gap-4"
-                                animate={{ x: ["-50%", "0%"] }}
-                                transition={{
-                                    x: { repeat: Number.POSITIVE_INFINITY, repeatType: "loop", duration: 40, ease: "linear" },
-                                }}
-                                style={{ width: "fit-content" }}
-                            >
+                            <div className="flex gap-3 sm:gap-4 marquee-track marquee-right" style={{ width: "fit-content" }}>
                                 {[...[...techStack].reverse(), ...[...techStack].reverse()].map((tech, index) => (
                                     <div
                                         key={`row2-${index}`}
@@ -215,7 +191,7 @@ export default function Home() {
                                         <span className="font-medium text-xs text-foreground/90 whitespace-nowrap">{tech.name}</span>
                                     </div>
                                 ))}
-                            </motion.div>
+                            </div>
                         </div>
                     </section>
 
@@ -289,11 +265,11 @@ export default function Home() {
                                         TOP_LANGUAGES
                                     </h3>
                                     {/* Reserve height to prevent CLS */}
-                                    <div className="w-full flex justify-center relative z-10 hover:scale-[1.02] transition-transform duration-500" style={{ minHeight: 170 }}>
+                                    <div className="w-full flex justify-center relative z-10 hover:scale-[1.02] transition-transform duration-500" style={{ minHeight: 165 }}>
                                         <img
                                             src="https://github-readme-stats.vercel.app/api/top-langs/?username=Jefino9488&layout=compact&theme=tokyonight&hide_border=true&bg_color=00000000"
                                             alt="Top Languages"
-                                            className="w-full max-w-[300px] h-auto aspect-[20/11] drop-shadow-xl"
+                                            className="w-full max-w-[300px] h-auto drop-shadow-xl"
                                             width="300"
                                             height="165"
                                             loading="lazy"
@@ -372,13 +348,7 @@ export default function Home() {
                         ) : (
                             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
                                 {displayedProjects.map((project) => (
-                                    <motion.div
-                                        key={project.title}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.5 }}
-                                        className="h-full"
-                                    >
+                                    <div key={project.title} className="h-full">
                                         <a
                                             href={project.link}
                                             target="_blank"
@@ -424,7 +394,7 @@ export default function Home() {
                                                 </div>
                                             </Card>
                                         </a>
-                                    </motion.div>
+                                    </div>
                                 ))}
                             </div>
                         )}
