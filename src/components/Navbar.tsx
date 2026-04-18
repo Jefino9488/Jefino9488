@@ -29,7 +29,6 @@ function normalizeRoute(pathname: string): string {
 type NavState = "home-base" | "home-floating" | "menu-open" | "non-home"
 
 export default function Navbar() {
-    const [scrolled, setScrolled] = useState(false)
     const [scrollY, setScrollY] = useState(0)
     const [menuOpen, setMenuOpen] = useState(false)
     const location = useLocation()
@@ -67,7 +66,6 @@ export default function Navbar() {
             ticking.current = true
             window.requestAnimationFrame(() => {
                 const y = window.scrollY
-                setScrolled(y > 20)
                 setScrollY(y)
                 ticking.current = false
             })
@@ -79,7 +77,6 @@ export default function Navbar() {
     // Close menu on route change
     useEffect(() => {
         const y = window.scrollY
-        setScrolled(y > 20)
         setScrollY(y)
         setMenuOpen(false)
     }, [location.pathname])
