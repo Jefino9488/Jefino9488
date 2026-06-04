@@ -142,7 +142,7 @@ export default function Home() {
                                         className="w-full h-full object-cover filter contrast-125 mix-blend-screen opacity-60"
                                         width="256"
                                         height="320"
-                                        fetchpriority="high"
+                                        fetchPriority="high"
                                         decoding="async"
                                     />
                                 </picture>
