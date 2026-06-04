@@ -119,8 +119,6 @@ export function useSpotify(options: UseSpotifyOptions | number = {}) {
             }
 
             const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-            console.error('Error fetching Spotify track:', err);
-
             const isApiRouteUnavailable = errorMessage.includes('did not return JSON') || errorMessage.includes('invalid JSON');
             if (isApiRouteUnavailable && import.meta.env.DEV) {
                 setError('Spotify API route is unavailable in Vite dev mode. Use Vercel dev or deploy API routes.');
@@ -135,6 +133,8 @@ export function useSpotify(options: UseSpotifyOptions | number = {}) {
                 setRetryCount(maxRetries);
                 return;
             }
+
+            console.error('Error fetching Spotify track:', err);
 
             // Determine if we should retry
             const shouldRetry = retryCount < maxRetries && !isRetry;

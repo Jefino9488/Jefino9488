@@ -121,12 +121,12 @@ async function fetchGitHubProjects(query: string): Promise<{ projects: Project[]
     const projects: Project[] = items.nodes.map((repo: any) => ({
       title: repo.name.toLowerCase(),
       description: repo.description || '',
-      tech: [
+      tech: Array.from(new Set([
         repo.primaryLanguage?.name,
         ...repo.repositoryTopics.nodes.slice(0, 2).map((topic: any) =>
           topic.topic.name.replace(/-/g, ' ').replace(/\b\w/g, (char: string) => char.toUpperCase())
         ),
-      ].filter((tech: string) => tech), // Filter out undefined/null values
+      ].filter((tech: string) => tech))),
       stats: { stars: repo.stargazers.totalCount, forks: repo.forks.totalCount },
       link: repo.url,
       updatedAt: repo.updatedAt,

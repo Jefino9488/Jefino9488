@@ -83,20 +83,16 @@ export default function Navbar() {
 
     // Animation constants
     const contentVariants = {
-        initial: { opacity: 0, scale: 0.95, y: 10, filter: "blur(4px)" },
-        animate: { 
-            opacity: 1, 
-            scale: 1, 
-            y: 0, 
-            filter: "blur(0px)",
-            transition: { type: "spring", stiffness: 300, damping: 24, delay: 0.1 } 
+        initial: { opacity: 0, scale: 0.96 },
+        animate: {
+            opacity: 1,
+            scale: 1,
+            transition: { type: "spring", stiffness: 240, damping: 28, mass: 1.15 }
         },
-        exit: { 
-            opacity: 0, 
-            scale: 0.95, 
-            y: -10, 
-            filter: "blur(4px)",
-            transition: { duration: 0.2, ease: "easeOut" } 
+        exit: {
+            opacity: 0,
+            scale: 0.98,
+            transition: { type: "spring", stiffness: 300, damping: 34, mass: 0.95 }
         }
     }
 
@@ -109,7 +105,14 @@ export default function Navbar() {
                 animate={{
                     borderRadius: navState === "home-base" ? 0 : navState === "menu-open" ? 24 : 9999,
                 }}
-                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                transition={{
+                    type: "spring",
+                    stiffness: 220,
+                    damping: 28,
+                    mass: 1.2,
+                    bounce: 0.06,
+                    layout: { type: "spring", stiffness: 220, damping: 28, mass: 1.2, bounce: 0.06 }
+                }}
                 className={`pointer-events-auto overflow-hidden border backdrop-blur-xl transition-colors duration-500 will-change-transform flex flex-col justify-center ${
                     navState === "menu-open"
                         ? "w-[min(92vw,340px)] bg-[#07070b]/95 p-3 mt-4 border-white/20 shadow-[0_24px_55px_-24px_rgba(0,0,0,0.95)]"
@@ -127,7 +130,7 @@ export default function Navbar() {
                             initial="initial"
                             animate="animate"
                             exit="exit"
-                            className="flex items-center justify-between w-full px-2"
+                            className="flex items-center justify-between w-full px-2 will-change-[transform,opacity]"
                         >
                             <div className="inline-flex items-center gap-2 rounded-full py-1 min-w-0">
                                 <span className="text-[10px] font-mono tracking-[0.2em] text-white uppercase truncate">
@@ -152,7 +155,7 @@ export default function Navbar() {
                             initial="initial"
                             animate="animate"
                             exit="exit"
-                            className="flex items-center gap-1 w-max px-1"
+                            className="flex items-center gap-1 w-max px-1 will-change-[transform,opacity]"
                         >
                             <div className="inline-flex items-center gap-2 rounded-full px-2 py-1 min-w-0">
                                 <CurrentIcon className="w-3.5 h-3.5 text-primary" />
@@ -168,14 +171,6 @@ export default function Navbar() {
                                 {nextItem.label}
                                 <ArrowRight className="w-3.5 h-3.5" />
                             </Link>
-                            <button
-                                type="button"
-                                onClick={() => setMenuOpen(true)}
-                                className="inline-flex items-center justify-center rounded-full p-1.5 text-[#b3bad9] hover:text-white hover:bg-white/10 transition-all duration-300 hover:scale-105"
-                                aria-label="Open navigation island"
-                            >
-                                <Menu className="w-4 h-4" />
-                            </button>
                         </motion.div>
                     )}
 
@@ -186,7 +181,7 @@ export default function Navbar() {
                             initial="initial"
                             animate="animate"
                             exit="exit"
-                            className="flex items-center gap-1 w-max px-1"
+                            className="flex items-center gap-1 w-max px-1 will-change-[transform,opacity]"
                         >
                             <Link
                                 to={previousItem.path}
@@ -220,7 +215,7 @@ export default function Navbar() {
                             initial="initial"
                             animate="animate"
                             exit="exit"
-                            className="flex flex-col w-full"
+                            className="flex flex-col w-full will-change-[transform,opacity]"
                         >
                             <div className="flex items-center justify-between mb-3 px-1">
                                 <span className="text-[10px] font-mono tracking-[0.2em] text-white uppercase">Jefino</span>

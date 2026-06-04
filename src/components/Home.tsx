@@ -111,8 +111,8 @@ export default function Home() {
                                             { icon: Linkedin, link: "https://www.linkedin.com/in/jefino9488/", label: "LinkedIn" },
                                             { icon: Send, link: "https://telegram.me/jefino9488", label: "Telegram" }
                                         ].map((item, index) => (
-                                            <a 
-                                                key={index} 
+                                            <a
+                                                key={index}
                                                 href={item.link}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
@@ -127,7 +127,7 @@ export default function Home() {
                             </div>
                         </div>
 
-                            {/* Right Side: Profile / Abstract Frame */}
+                        {/* Right Side: Profile / Abstract Frame */}
                         <div className="relative w-full md:w-auto flex justify-center md:block flex-shrink-0 z-10">
                             {/* Accent box behind */}
                             <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full" />
@@ -142,7 +142,7 @@ export default function Home() {
                                         className="w-full h-full object-cover filter contrast-125 mix-blend-screen opacity-60"
                                         width="256"
                                         height="320"
-                                        fetchPriority="high"
+                                        fetchpriority="high"
                                         decoding="async"
                                     />
                                 </picture>
@@ -357,7 +357,7 @@ export default function Home() {
                                         >
                                             <Card className="glass-crystal relative p-5 transition-all duration-500 h-full flex flex-col rounded-[1.25rem] border border-white/5 bg-[#0a0a0a]/60 shadow-lg hover:shadow-[0_0_25px_-5px_rgba(102,111,188,0.4)] hover:border-primary/40">
                                                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-[1.25rem]" />
-                                                
+
                                                 <div className="flex justify-between items-start mb-4 relative z-10">
                                                     <div className="p-2.5 bg-primary/10 rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary/20 border border-primary/20">
                                                         <GitFork className="w-4 h-4 text-primary" />

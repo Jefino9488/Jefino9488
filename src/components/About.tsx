@@ -239,10 +239,7 @@ export default function About() {
 
                         {/* Info Column */}
                         <div className="flex-grow text-center md:text-left">
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/5 mb-6">
-                                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                                <span className="text-[10px] font-mono text-emerald-400/80 uppercase tracking-[0.2em]">{githubProfile?.location || 'Kerala, India'}</span>
-                            </div>
+
 
                             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-poppins font-bold text-white mb-4 tracking-tight drop-shadow-md">
                                 I'm Jefino<span className="text-primary animate-pulse">_</span>

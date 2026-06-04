@@ -4,7 +4,7 @@ import type React from "react"
 import { useRef, useMemo, useEffect } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { Points, PointMaterial } from "@react-three/drei"
-import * as random from "maath/random/dist/maath-random.esm"
+
 import * as THREE from "three"
 
 import { useScreenSize } from "@/hooks/useScreenSize"
@@ -18,7 +18,22 @@ const StarField = ({ count = 6000, ...props }: any) => {
 
     // Generate positions and colors based on count
     // using useMemo so it regenerates if count changes (e.g. resize across breakpoint)
-    const sphere = useMemo(() => random.inSphere(new Float32Array(count), { radius: 1.5 }), [count])
+    const sphere = useMemo(() => {
+        const data = new Float32Array(count * 3)
+        for (let i = 0; i < count * 3; i += 3) {
+            // Generate points in a sphere manually to be 100% safe from NaNs
+            const u = Math.random()
+            const v = Math.random()
+            const theta = 2 * Math.PI * u
+            const phi = Math.acos(2 * v - 1)
+            const r = 1.5 * Math.cbrt(Math.random())
+            
+            data[i] = r * Math.sin(phi) * Math.cos(theta)
+            data[i + 1] = r * Math.sin(phi) * Math.sin(theta)
+            data[i + 2] = r * Math.cos(phi)
+        }
+        return data
+    }, [count])
 
     // Natural star colors (slight blue/yellow tints + white)
     const colors = useMemo(() => {
@@ -167,7 +182,7 @@ const Background: React.FC = () => {
                 dpr={dpr as any} // Optimization: Limit pixel ratio
                 gl={{ antialias: false, powerPreference: "high-performance" }} // Optimization flags
             >
-                <StarField count={starCount} />
+                <StarField key={starCount} count={starCount} />
                 <ShootingStar />
                 <ShootingStar />
                 <CameraRig />
