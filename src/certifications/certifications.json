@@ -15,7 +15,14 @@
     "issuer": "DeepLearning.AI",
     "date": "February 2024",
     "description": "Validated expertise in building and deploying deep learning solutions with TensorFlow.",
-    "skills": ["Dropouts", "Augmentation", "TensorFlow", "Convolutional Neural Networks", "Machine Learning", "Tokenization"],
+    "skills": [
+      "Dropouts",
+      "Augmentation",
+      "TensorFlow",
+      "Convolutional Neural Networks",
+      "Machine Learning",
+      "Tokenization"
+    ],
     "credentialUrl": "https://www.coursera.org/account/accomplishments/specialization/2Q4PC88HVSHX",
     "imageUrl": "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~2Q4PC88HVSHX/CERTIFICATE_LANDING_PAGE~2Q4PC88HVSHX.jpeg"
   },
@@ -25,7 +32,13 @@
     "issuer": "DeepLearning.AI",
     "date": "February 2024",
     "description": "Applied time-series modeling techniques to build and evaluate practical forecasting systems.",
-    "skills": ["TensorFlow", "Forecasting", "Machine Learning", "Prediction", "Time Series"],
+    "skills": [
+      "TensorFlow",
+      "Forecasting",
+      "Machine Learning",
+      "Prediction",
+      "Time Series"
+    ],
     "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/X4XMLNJ354NR",
     "imageUrl": "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~X4XMLNJ354NR/CERTIFICATE_LANDING_PAGE~X4XMLNJ354NR.jpeg"
   },
@@ -35,7 +48,14 @@
     "issuer": "DeepLearning.AI",
     "date": "January 2024",
     "description": "Built production-style computer vision pipelines using CNNs, transfer learning, and data augmentation.",
-    "skills": ["Dropouts", "Transfer Learning", "TensorFlow", "Data Augmentation", "CNN", "Machine Learning"],
+    "skills": [
+      "Dropouts",
+      "Transfer Learning",
+      "TensorFlow",
+      "Data Augmentation",
+      "CNN",
+      "Machine Learning"
+    ],
     "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/BGJ54L5H24S3",
     "imageUrl": "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~BGJ54L5H24S3/CERTIFICATE_LANDING_PAGE~BGJ54L5H24S3.jpeg"
   },
@@ -45,7 +65,11 @@
     "issuer": "DeepLearning.AI",
     "date": "January 2024",
     "description": "Developed NLP pipelines in TensorFlow for tokenization, text vectorization, and model training.",
-    "skills": ["Natural Language Processing", "Machine Learning", "Text Vectorization"],
+    "skills": [
+      "Natural Language Processing",
+      "Machine Learning",
+      "Text Vectorization"
+    ],
     "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/MRKGVRG3D35C",
     "imageUrl": "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~MRKGVRG3D35C/CERTIFICATE_LANDING_PAGE~MRKGVRG3D35C.jpeg"
   },
@@ -55,7 +79,12 @@
     "issuer": "IBM",
     "date": "February 2024",
     "description": "Demonstrated practical machine learning implementation in Python, from model training to evaluation.",
-    "skills": ["Python Programming", "Regression", "Human Learning", "Algorithms"],
+    "skills": [
+      "Python Programming",
+      "Regression",
+      "Human Learning",
+      "Algorithms"
+    ],
     "credentialUrl": "https://www.coursera.org/account/accomplishments/verify/MBJAM645FQR3",
     "imageUrl": "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~MBJAM645FQR3/CERTIFICATE_LANDING_PAGE~MBJAM645FQR3.jpeg"
   },
@@ -85,7 +114,12 @@
     "issuer": "Cisco",
     "date": "2025-05-26",
     "description": "Established core networking competency across protocols, IP addressing, and layered architecture.",
-    "skills": ["Networking Fundamentals", "IP Addressing", "Network Protocols", "OSI Model"],
+    "skills": [
+      "Networking Fundamentals",
+      "IP Addressing",
+      "Network Protocols",
+      "OSI Model"
+    ],
     "filename": "CCNA1",
     "credentialUrl": "https://www.netacad.com/certificates?issuanceId=0c0c65eb-b3bc-4a0e-b8c2-4ea16d89a43d",
     "imageUrl": "/certificates/CCNA1-1.jpg"
@@ -96,7 +130,13 @@
     "issuer": "Cisco",
     "date": "2025-05-26",
     "description": "Demonstrated routing, switching, and wireless configuration capabilities for enterprise-style networks.",
-    "skills": ["Switching", "Routing", "Wireless Networking", "VLANs", "Network Security Basics"],
+    "skills": [
+      "Switching",
+      "Routing",
+      "Wireless Networking",
+      "VLANs",
+      "Network Security Basics"
+    ],
     "filename": "CCNA2",
     "credentialUrl": "https://www.netacad.com/certificates?issuanceId=b3e40e69-989b-4a4d-b24d-4f2f9f85404c",
     "imageUrl": "/certificates/CCNA2-1.jpg"
@@ -107,7 +147,12 @@
     "issuer": "Cisco",
     "date": "2025-05-26",
     "description": "Applied network security and automation fundamentals to build scalable and resilient network operations.",
-    "skills": ["Enterprise Networking", "Network Security", "Automation", "WAN Technologies"],
+    "skills": [
+      "Enterprise Networking",
+      "Network Security",
+      "Automation",
+      "WAN Technologies"
+    ],
     "filename": "CCNA3",
     "credentialUrl": "https://www.netacad.com/certificates?issuanceId=408f6804-cd78-49b9-b4b8-66f1425b7656",
     "imageUrl": "/certificates/CCNA3-1.jpg"
@@ -118,7 +163,12 @@
     "issuer": "Cisco Networking Academy",
     "date": "2025-05-15",
     "description": "Built a strong Python foundation in syntax, data structures, and control-flow problem solving.",
-    "skills": ["Python Programming", "Basic Syntax", "Data Types", "Control Structures"],
+    "skills": [
+      "Python Programming",
+      "Basic Syntax",
+      "Data Types",
+      "Control Structures"
+    ],
     "filename": "PE1",
     "credentialUrl": "https://www.netacad.com/certificates?issuanceId=7eab2915-abf3-4e83-9c68-71c4af0d3b56",
     "imageUrl": "/certificates/PE1-1.jpg"
@@ -129,7 +179,13 @@
     "issuer": "Cisco",
     "date": "2025-05-15",
     "description": "Advanced Python proficiency with OOP, modules, exception handling, and file-system operations.",
-    "skills": ["Python Programming", "Object-Oriented Programming", "File Handling", "Modules", "Exception Handling"],
+    "skills": [
+      "Python Programming",
+      "Object-Oriented Programming",
+      "File Handling",
+      "Modules",
+      "Exception Handling"
+    ],
     "filename": "PE2",
     "credentialUrl": "https://www.netacad.com/certificates?issuanceId=02ab3e93-1d43-486d-9dc2-f996df8b8021",
     "imageUrl": "/certificates/PE2-1.jpg"

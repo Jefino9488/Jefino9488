@@ -1,7 +1,10 @@
-import { useState, useRef, useEffect, ImgHTMLAttributes } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useRef, useEffect, ImgHTMLAttributes } from "react";
+import { motion } from "framer-motion";
 
-interface LazyImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'onLoad' | 'onError'> {
+interface LazyImageProps extends Omit<
+  ImgHTMLAttributes<HTMLImageElement>,
+  "onLoad" | "onError"
+> {
   src: string;
   alt: string;
   placeholder?: string;
@@ -17,9 +20,9 @@ interface LazyImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'onLo
 export default function LazyImage({
   src,
   alt,
-  placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjI0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkxvYWRpbmcuLi48L3RleHQ+PC9zdmc+',
-  fallback = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjI0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkVycm9yPC90ZXh0Pjwvc3ZnPg==',
-  className = '',
+  placeholder = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjI0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkxvYWRpbmcuLi48L3RleHQ+PC9zdmc+",
+  fallback = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjI0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkVycm9yPC90ZXh0Pjwvc3ZnPg==",
+  className = "",
   width,
   height,
   priority = false,
@@ -27,7 +30,9 @@ export default function LazyImage({
   onError,
   ...props
 }: LazyImageProps) {
-  const [imageSrc, setImageSrc] = useState<string>(priority ? src : placeholder);
+  const [imageSrc, setImageSrc] = useState<string>(
+    priority ? src : placeholder,
+  );
   const [isLoaded, setIsLoaded] = useState(priority);
   const [isInView, setIsInView] = useState(priority);
   const [hasError, setHasError] = useState(false);
@@ -45,8 +50,8 @@ export default function LazyImage({
       },
       {
         threshold: 0.1,
-        rootMargin: '50px',
-      }
+        rootMargin: "50px",
+      },
     );
 
     if (imgRef.current) {
@@ -87,10 +92,10 @@ export default function LazyImage({
   return (
     <motion.div
       ref={imgRef}
-      className={`relative ${className.includes('w-full') ? 'w-full' : ''} ${className.includes('h-full') ? 'h-full' : ''}`}
+      className={`relative ${className.includes("w-full") ? "w-full" : ""} ${className.includes("h-full") ? "h-full" : ""}`}
       style={{
-        width: className.includes('w-full') ? undefined : width,
-        height: className.includes('h-full') ? undefined : height
+        width: className.includes("w-full") ? undefined : width,
+        height: className.includes("h-full") ? undefined : height,
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: isLoaded ? 1 : 0.7 }}
@@ -104,9 +109,10 @@ export default function LazyImage({
         height={height}
         onLoad={handleImageLoad}
         onError={handleImageError}
-        className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-70'
-          } ${className || ''}`}
-        loading={priority ? 'eager' : 'lazy'}
+        className={`transition-opacity duration-300 ${
+          isLoaded ? "opacity-100" : "opacity-70"
+        } ${className || ""}`}
+        loading={priority ? "eager" : "lazy"}
         decoding="async"
       />
 

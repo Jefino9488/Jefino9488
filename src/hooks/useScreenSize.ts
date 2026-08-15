@@ -1,38 +1,42 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useScreenSize() {
-    const [isXlScreen, setIsXlScreen] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
+  const [isXlScreen, setIsXlScreen] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(min-width: 1280px)").matches
+      : false,
+  );
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(max-width: 768px)").matches
+      : false,
+  );
 
-    useEffect(() => {
-        // Tailwind's xl breakpoint is 1280px by default
-        const xlMediaQuery = window.matchMedia('(min-width: 1280px)');
+  useEffect(() => {
+    // Tailwind's xl breakpoint is 1280px by default
+    const xlMediaQuery = window.matchMedia("(min-width: 1280px)");
 
-        // Mobile breakpoint (typically md is 768px, so < 768px is mobile)
-        const mobileMediaQuery = window.matchMedia('(max-width: 768px)');
+    // Mobile breakpoint (typically md is 768px, so < 768px is mobile)
+    const mobileMediaQuery = window.matchMedia("(max-width: 768px)");
 
-        // Set initial state
-        setIsXlScreen(xlMediaQuery.matches);
-        setIsMobile(mobileMediaQuery.matches);
+    // Add event listener for changes
+    const handleXlChange = (e: MediaQueryListEvent) => {
+      setIsXlScreen(e.matches);
+    };
 
-        // Add event listener for changes
-        const handleXlChange = (e: MediaQueryListEvent) => {
-            setIsXlScreen(e.matches);
-        };
+    const handleMobileChange = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
+    };
 
-        const handleMobileChange = (e: MediaQueryListEvent) => {
-            setIsMobile(e.matches);
-        };
+    xlMediaQuery.addEventListener("change", handleXlChange);
+    mobileMediaQuery.addEventListener("change", handleMobileChange);
 
-        xlMediaQuery.addEventListener('change', handleXlChange);
-        mobileMediaQuery.addEventListener('change', handleMobileChange);
+    // Cleanup
+    return () => {
+      xlMediaQuery.removeEventListener("change", handleXlChange);
+      mobileMediaQuery.removeEventListener("change", handleMobileChange);
+    };
+  }, []);
 
-        // Cleanup
-        return () => {
-            xlMediaQuery.removeEventListener('change', handleXlChange);
-            mobileMediaQuery.removeEventListener('change', handleMobileChange);
-        };
-    }, []);
-
-    return { isXlScreen, isMobile };
+  return { isXlScreen, isMobile };
 }

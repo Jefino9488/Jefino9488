@@ -1,234 +1,265 @@
-"use client"
+"use client";
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react";
 
 interface ContributionDay {
-  date: string
-  count: number
-  level: 0 | 1 | 2 | 3 | 4
+  date: string;
+  count: number;
+  level: 0 | 1 | 2 | 3 | 4;
 }
 
 export default function ContributionGraph() {
-  const [contributions, setContributions] = useState<ContributionDay[]>([])
-  const [totalContributions, setTotalContributions] = useState(0)
-  const [loading, setLoading] = useState(true)
+  const [contributions, setContributions] = useState<ContributionDay[]>([]);
+  const [totalContributions, setTotalContributions] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const getLevel = useCallback((count: number): 0 | 1 | 2 | 3 | 4 => {
-    if (count === 0) return 0
-    if (count < 3) return 1
-    if (count < 6) return 2
-    if (count < 9) return 3
-    return 4
-  }, [])
+    if (count === 0) return 0;
+    if (count < 3) return 1;
+    if (count < 6) return 2;
+    if (count < 9) return 3;
+    return 4;
+  }, []);
 
   const generateMockData = useCallback(() => {
-    const days: ContributionDay[] = []
-    const today = new Date()
-    const oneYearAgo = new Date(today)
-    oneYearAgo.setFullYear(today.getFullYear() - 1)
+    const days: ContributionDay[] = [];
+    const today = new Date();
+    const oneYearAgo = new Date(today);
+    oneYearAgo.setFullYear(today.getFullYear() - 1);
 
-    let total = 0
+    let total = 0;
     for (let d = new Date(oneYearAgo); d <= today; d.setDate(d.getDate() + 1)) {
-      const count = Math.random() > 0.7 ? Math.floor(Math.random() * 15) : 0
-      total += count
+      const count = Math.random() > 0.7 ? Math.floor(Math.random() * 15) : 0;
+      total += count;
       days.push({
         date: d.toISOString().split("T")[0],
         count,
         level: getLevel(count),
-      })
+      });
     }
-    setContributions(days)
-    setTotalContributions(total)
-  }, [getLevel])
+    setContributions(days);
+    setTotalContributions(total);
+  }, [getLevel]);
 
   useEffect(() => {
-    const CACHE_KEY = 'gh_contributions_cache'
-    const LEGACY_CACHE_KEY = 'gh_contributions_cache_legacy'
-    const CACHE_TTL = 60 * 60 * 1000 // 1 hour
+    const CACHE_KEY = "gh_contributions_cache";
+    const LEGACY_CACHE_KEY = "gh_contributions_cache_legacy";
+    const CACHE_TTL = 60 * 60 * 1000; // 1 hour
 
     const loadFromCache = (): boolean => {
       try {
-        const cached = localStorage.getItem(CACHE_KEY) || sessionStorage.getItem(CACHE_KEY)
-        if (!cached) return false
-        const { data, ts } = JSON.parse(cached)
+        const cached =
+          localStorage.getItem(CACHE_KEY) || sessionStorage.getItem(CACHE_KEY);
+        if (!cached) return false;
+        const { data, ts } = JSON.parse(cached);
         if (Date.now() - ts > CACHE_TTL) {
-          localStorage.removeItem(CACHE_KEY)
-          sessionStorage.removeItem(CACHE_KEY)
-          localStorage.removeItem(LEGACY_CACHE_KEY)
-          return false
+          localStorage.removeItem(CACHE_KEY);
+          sessionStorage.removeItem(CACHE_KEY);
+          localStorage.removeItem(LEGACY_CACHE_KEY);
+          return false;
         }
-        setContributions(data.contributions)
-        setTotalContributions(data.total)
-        setLoading(false)
-        return true
+        setContributions(data.contributions);
+        setTotalContributions(data.total);
+        setLoading(false);
+        return true;
       } catch {
-        return false
+        return false;
       }
-    }
+    };
 
     const saveToCache = (contributions: ContributionDay[], total: number) => {
       try {
         const payload = JSON.stringify({
           data: { contributions, total },
           ts: Date.now(),
-        })
-        localStorage.setItem(CACHE_KEY, payload)
-        sessionStorage.setItem(CACHE_KEY, payload)
-      } catch { /* quota exceeded — ignore */ }
-    }
+        });
+        localStorage.setItem(CACHE_KEY, payload);
+        sessionStorage.setItem(CACHE_KEY, payload);
+      } catch {
+        /* quota exceeded — ignore */
+      }
+    };
 
     // Return early if cache hit
-    if (loadFromCache()) return
+    if (loadFromCache()) return;
 
     const fetchContributions = async () => {
       try {
-        const username = "Jefino9488"
-        const currentYear = new Date().getFullYear()
-        const response = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=${currentYear}`)
-        const data = await response.json()
+        const username = "Jefino9488";
+        const currentYear = new Date().getFullYear();
+        const response = await fetch(
+          `https://github-contributions-api.jogruber.de/v4/${username}?y=${currentYear}`,
+        );
+        const data = await response.json();
 
         if (data && data.contributions) {
-          const contributionDays: ContributionDay[] = data.contributions.map((day: { date: string, count: number }) => ({
-            date: day.date,
-            count: day.count,
-            level: getLevel(day.count),
-          }))
+          const contributionDays: ContributionDay[] = data.contributions.map(
+            (day: { date: string; count: number }) => ({
+              date: day.date,
+              count: day.count,
+              level: getLevel(day.count),
+            }),
+          );
 
-          const yearKey = Object.keys(data.total)[0]
-          const total = data.total[yearKey] || 0
+          const yearKey = Object.keys(data.total)[0];
+          const total = data.total[yearKey] || 0;
 
-          setContributions(contributionDays)
-          setTotalContributions(total)
-          saveToCache(contributionDays, total)
+          setContributions(contributionDays);
+          setTotalContributions(total);
+          saveToCache(contributionDays, total);
         }
       } catch (error) {
-        console.error("Failed to fetch GitHub contributions:", error)
-        generateMockData()
+        console.error("Failed to fetch GitHub contributions:", error);
+        generateMockData();
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
     const deferredWindow = window as Window & {
-      requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number
-      cancelIdleCallback?: (id: number) => void
-    }
+      requestIdleCallback?: (
+        callback: () => void,
+        options?: { timeout: number },
+      ) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
 
-    if (typeof deferredWindow.requestIdleCallback === 'function') {
-      const id = deferredWindow.requestIdleCallback(() => fetchContributions(), { timeout: 1000 })
+    if (typeof deferredWindow.requestIdleCallback === "function") {
+      const id = deferredWindow.requestIdleCallback(
+        () => fetchContributions(),
+        { timeout: 1000 },
+      );
       return () => {
-        if (typeof deferredWindow.cancelIdleCallback === 'function') {
-          deferredWindow.cancelIdleCallback(id)
+        if (typeof deferredWindow.cancelIdleCallback === "function") {
+          deferredWindow.cancelIdleCallback(id);
         }
-      }
+      };
     }
 
-    const timeoutId = window.setTimeout(() => fetchContributions(), 250)
-    return () => window.clearTimeout(timeoutId)
-  }, [generateMockData, getLevel])
+    const timeoutId = window.setTimeout(() => fetchContributions(), 250);
+    return () => window.clearTimeout(timeoutId);
+  }, [generateMockData, getLevel]);
 
   const getColor = (level: number) => {
     switch (level) {
       case 4:
-        return "bg-[#39d353]" // Brightest green
+        return "bg-[#39d353]"; // Brightest green
       case 3:
-        return "bg-[#26a641]" // Bright green
+        return "bg-[#26a641]"; // Bright green
       case 2:
-        return "bg-[#006d32]" // Medium green
+        return "bg-[#006d32]"; // Medium green
       case 1:
-        return "bg-[#0e4429]" // Light green
+        return "bg-[#0e4429]"; // Light green
       default:
-        return "bg-[#161b22]" // Dark gray for no contributions
+        return "bg-[#161b22]"; // Dark gray for no contributions
     }
-  }
+  };
 
   // Organize contributions into weeks properly (GitHub style)
   // Each column is a week, each row is a day of the week (0=Sun, 6=Sat)
   const organizeIntoWeeks = () => {
-    if (contributions.length === 0) return []
+    if (contributions.length === 0) return [];
 
-    const weeks: (ContributionDay | null)[][] = []
-    const contributionMap = new Map(contributions.map((c) => [c.date, c]))
+    const weeks: (ContributionDay | null)[][] = [];
+    const contributionMap = new Map(contributions.map((c) => [c.date, c]));
 
     // Get the first day (start of year)
-    const firstDate = new Date(contributions[0].date)
-    const lastDate = new Date(contributions[contributions.length - 1].date)
+    const firstDate = new Date(contributions[0].date);
+    const lastDate = new Date(contributions[contributions.length - 1].date);
 
     // Start from the beginning of the week containing the first date
-    const startDate = new Date(firstDate)
-    startDate.setDate(startDate.getDate() - startDate.getDay()) // Go back to Sunday
+    const startDate = new Date(firstDate);
+    startDate.setDate(startDate.getDate() - startDate.getDay()); // Go back to Sunday
 
-    const currentDate = new Date(startDate)
-    let currentWeek: (ContributionDay | null)[] = []
+    const currentDate = new Date(startDate);
+    let currentWeek: (ContributionDay | null)[] = [];
 
     while (currentDate <= lastDate || currentWeek.length > 0) {
-      const dayOfWeek = currentDate.getDay()
+      const dayOfWeek = currentDate.getDay();
 
       if (dayOfWeek === 0 && currentWeek.length > 0) {
-        weeks.push(currentWeek)
-        currentWeek = []
+        weeks.push(currentWeek);
+        currentWeek = [];
       }
 
-      const dateStr = currentDate.toISOString().split("T")[0]
-      const contribution = contributionMap.get(dateStr)
+      const dateStr = currentDate.toISOString().split("T")[0];
+      const contribution = contributionMap.get(dateStr);
 
       if (contribution) {
-        currentWeek.push(contribution)
+        currentWeek.push(contribution);
       } else if (currentDate >= firstDate && currentDate <= lastDate) {
-        currentWeek.push({ date: dateStr, count: 0, level: 0 })
+        currentWeek.push({ date: dateStr, count: 0, level: 0 });
       } else {
-        currentWeek.push(null)
+        currentWeek.push(null);
       }
 
-      currentDate.setDate(currentDate.getDate() + 1)
+      currentDate.setDate(currentDate.getDate() + 1);
 
       if (currentDate > lastDate && currentWeek.length > 0) {
         // Fill remaining days in the last week with nulls
         while (currentWeek.length < 7) {
-          currentWeek.push(null)
+          currentWeek.push(null);
         }
-        weeks.push(currentWeek)
-        break
+        weeks.push(currentWeek);
+        break;
       }
     }
 
-    return weeks
-  }
+    return weeks;
+  };
 
-  const weeks = organizeIntoWeeks()
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  const weeks = organizeIntoWeeks();
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 
   if (loading) {
     return (
       <div className="bg-card border border-border rounded-3xl p-6 h-full flex items-center justify-center">
-        <div className="text-center text-muted-foreground">Loading contributions...</div>
+        <div className="text-center text-muted-foreground">
+          Loading contributions...
+        </div>
       </div>
-    )
+    );
   }
 
   return (
     <div className="glass-crystal rounded-3xl p-6 h-full flex flex-col border border-white/5 border-l-2 border-l-primary/40 bg-[#0a0a0a]/60 relative overflow-hidden group hover:border-l-primary hover:shadow-[0_0_30px_-10px_rgba(102,111,188,0.4)] transition-all duration-500">
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-      <h3 className="text-lg font-mono tracking-tight font-bold text-white mb-4 relative z-10 group-hover:text-primary transition-colors">CONTRIBUTION_GRAPH</h3>
+      <h3 className="text-lg font-mono tracking-tight font-bold text-white mb-4 relative z-10 group-hover:text-primary transition-colors">
+        CONTRIBUTION_GRAPH
+      </h3>
       <div className="contribution-graph-scroll overflow-x-auto flex-grow flex items-center">
         <div className="min-w-fit mx-auto">
           {/* Months Header */}
           <div className="flex mb-2 text-xs text-muted-foreground">
             {months.map((month, i) => {
               // Calculate approximate week position for each month
-              const weekPosition = Math.floor((i / 12) * weeks.length)
+              const weekPosition = Math.floor((i / 12) * weeks.length);
               return (
                 <div
                   key={i}
                   className="flex-shrink-0"
                   style={{
-                    width: weekPosition < weeks.length ? `${100 / 12}%` : "auto",
+                    width:
+                      weekPosition < weeks.length ? `${100 / 12}%` : "auto",
                     minWidth: "40px",
                   }}
                 >
                   {month}
                 </div>
-              )
+              );
             })}
           </div>
 
@@ -254,7 +285,10 @@ export default function ContributionGraph() {
                         title={`${day.date}: ${day.count} contributions`}
                       />
                     ) : (
-                      <div key={`${weekIndex}-${dayIndex}`} className="w-[11px] h-[11px]" />
+                      <div
+                        key={`${weekIndex}-${dayIndex}`}
+                        className="w-[11px] h-[11px]"
+                      />
                     ),
                   )}
                 </div>
@@ -281,5 +315,5 @@ export default function ContributionGraph() {
         </div>
       </div>
     </div>
-  )
+  );
 }

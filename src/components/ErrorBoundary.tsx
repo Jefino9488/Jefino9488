@@ -1,7 +1,7 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertTriangle, RefreshCw, Home, Bug } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { Component, ErrorInfo, ReactNode } from "react";
+import { AlertTriangle, RefreshCw, Home, Bug } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Props {
   children: ReactNode;
@@ -38,7 +38,7 @@ class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     const eventId = this.generateEventId();
-    
+
     this.setState({
       error,
       errorInfo,
@@ -47,7 +47,7 @@ class ErrorBoundary extends Component<Props, State> {
 
     // Log error to console in development
     if (import.meta.env.DEV) {
-      console.error('ErrorBoundary caught an error:', error, errorInfo);
+      console.error("ErrorBoundary caught an error:", error, errorInfo);
     }
 
     // Call custom error handler if provided
@@ -73,7 +73,7 @@ class ErrorBoundary extends Component<Props, State> {
   };
 
   handleGoHome = () => {
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   render() {
@@ -95,7 +95,8 @@ class ErrorBoundary extends Component<Props, State> {
                   Oops! Something went wrong
                 </CardTitle>
                 <p className="text-[#a6adc8]">
-                  We encountered an unexpected error. Don't worry, we're working to fix it.
+                  We encountered an unexpected error. Don't worry, we're working
+                  to fix it.
                 </p>
               </CardHeader>
 
@@ -104,7 +105,9 @@ class ErrorBoundary extends Component<Props, State> {
                   <div className="bg-[#1e1e2e] rounded-lg p-4 border border-[#45475a]">
                     <div className="flex items-center gap-2 mb-3">
                       <Bug className="w-4 h-4 text-[#cba6f7]" />
-                      <span className="text-sm font-medium text-[#f5c2e7]">Development Error Details</span>
+                      <span className="text-sm font-medium text-[#f5c2e7]">
+                        Development Error Details
+                      </span>
                     </div>
                     <div className="space-y-2 text-xs">
                       <div>
@@ -128,7 +131,10 @@ class ErrorBoundary extends Component<Props, State> {
                 {this.state.eventId && (
                   <div className="text-center">
                     <p className="text-sm text-[#a6adc8] mb-2">
-                      Error ID: <code className="bg-[#313244] px-2 py-1 rounded text-[#cba6f7]">{this.state.eventId}</code>
+                      Error ID:{" "}
+                      <code className="bg-[#313244] px-2 py-1 rounded text-[#cba6f7]">
+                        {this.state.eventId}
+                      </code>
                     </p>
                   </div>
                 )}
@@ -153,7 +159,7 @@ class ErrorBoundary extends Component<Props, State> {
 
                 <div className="text-center">
                   <p className="text-xs text-[#a6adc8]">
-                    If this problem persists, please{' '}
+                    If this problem persists, please{" "}
                     <a
                       href="mailto:jefinojacob9488@gmail.com"
                       className="text-[#89b4fa] hover:text-[#f5c2e7] underline"
@@ -177,7 +183,7 @@ class ErrorBoundary extends Component<Props, State> {
 // eslint-disable-next-line react-refresh/only-export-components
 export function useErrorHandler() {
   return (error: Error, errorInfo?: ErrorInfo) => {
-    console.error('Error caught by useErrorHandler:', error, errorInfo);
+    console.error("Error caught by useErrorHandler:", error, errorInfo);
     // You can add additional error reporting logic here
   };
 }
@@ -186,7 +192,7 @@ export function useErrorHandler() {
 // eslint-disable-next-line react-refresh/only-export-components
 export function withErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,
-  errorBoundaryProps?: Omit<Props, 'children'>
+  errorBoundaryProps?: Omit<Props, "children">,
 ) {
   const WrappedComponent = (props: P) => (
     <ErrorBoundary {...errorBoundaryProps}>
@@ -195,7 +201,7 @@ export function withErrorBoundary<P extends object>(
   );
 
   WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name})`;
-  
+
   return WrappedComponent;
 }
 

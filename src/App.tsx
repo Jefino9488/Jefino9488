@@ -25,160 +25,176 @@ import NetworkErrorBoundary from "./components/NetworkErrorBoundary";
 const Background = lazy(() => import("./components/Background"));
 
 type IdleWindow = Window & {
-    requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
-    cancelIdleCallback?: (id: number) => void;
+  requestIdleCallback?: (
+    callback: () => void,
+    options?: { timeout: number },
+  ) => number;
+  cancelIdleCallback?: (id: number) => void;
 };
 
 function DeferredBackground() {
-    const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(false);
 
-    useEffect(() => {
-        const hasReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const isMobile = window.matchMedia('(max-width: 768px)').matches;
-        const deferredWindow = window as IdleWindow;
-        const connection = (navigator as Navigator & {
-            connection?: { saveData?: boolean; effectiveType?: string };
-        }).connection;
-        const shouldDelayForNetwork = Boolean(connection?.saveData) || connection?.effectiveType === '2g' || connection?.effectiveType === 'slow-2g';
+  useEffect(() => {
+    const hasReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const deferredWindow = window as IdleWindow;
+    const connection = (
+      navigator as Navigator & {
+        connection?: { saveData?: boolean; effectiveType?: string };
+      }
+    ).connection;
+    const shouldDelayForNetwork =
+      Boolean(connection?.saveData) ||
+      connection?.effectiveType === "2g" ||
+      connection?.effectiveType === "slow-2g";
 
-        const fallbackDelay = isMobile || shouldDelayForNetwork ? 2200 : 700;
-        const idleTimeout = isMobile || shouldDelayForNetwork ? 2600 : 1200;
+    const fallbackDelay = isMobile || shouldDelayForNetwork ? 2200 : 700;
+    const idleTimeout = isMobile || shouldDelayForNetwork ? 2600 : 1200;
 
-        if (hasReducedMotion) {
-            setReady(true);
-            return;
+    if (hasReducedMotion) {
+      setReady(true);
+      return;
+    }
+
+    if (typeof deferredWindow.requestIdleCallback === "function") {
+      const id = deferredWindow.requestIdleCallback(() => setReady(true), {
+        timeout: idleTimeout,
+      });
+      return () => {
+        if (typeof deferredWindow.cancelIdleCallback === "function") {
+          deferredWindow.cancelIdleCallback(id);
         }
+      };
+    }
 
-        if (typeof deferredWindow.requestIdleCallback === 'function') {
-            const id = deferredWindow.requestIdleCallback(() => setReady(true), { timeout: idleTimeout });
-            return () => {
-                if (typeof deferredWindow.cancelIdleCallback === 'function') {
-                    deferredWindow.cancelIdleCallback(id);
-                }
-            };
-        }
+    const timeoutId = window.setTimeout(() => setReady(true), fallbackDelay);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
 
-        const timeoutId = window.setTimeout(() => setReady(true), fallbackDelay);
-        return () => window.clearTimeout(timeoutId);
-    }, []);
+  if (!ready) return null;
 
-    if (!ready) return null;
-
-    return (
-        <Suspense fallback={null}>
-            <Background />
-        </Suspense>
-    );
+  return (
+    <Suspense fallback={null}>
+      <Background />
+    </Suspense>
+  );
 }
 
 function AppContent() {
-    useSmoothScroll();
+  useSmoothScroll();
 
-    return (
-        <div className="flex min-h-screen relative selection:bg-primary/30 selection:text-white">
-            <DeferredBackground />
-            {/* Sidebar - Desktop Only (Fixed 20rem/320px) */}
-            <Sidebar />
+  return (
+    <div className="flex min-h-screen relative selection:bg-primary/30 selection:text-white">
+      <DeferredBackground />
+      {/* Sidebar - Desktop Only (Fixed 20rem/320px) */}
+      <Sidebar />
 
-            {/* Main Content Area - Full width on mobile, offset by sidebar width on desktop */}
-            <div className="flex flex-col min-h-screen w-full lg:pl-80 transition-all duration-300">
-                {/* Navbar - Mobile Only */}
-                <Navbar />
+      {/* Main Content Area - Full width on mobile, offset by sidebar width on desktop */}
+      <div className="flex flex-col min-h-screen w-full lg:pl-80 transition-all duration-300">
+        {/* Navbar - Mobile Only */}
+        <Navbar />
 
-                <main className="flex-grow pt-16 lg:pt-0 overflow-x-hidden">
-                    <Routes>
-                        <Route
-                            path="/"
-                            element={
-                                <TransitionWrapper>
-                                    <Home />
-                                </TransitionWrapper>
-                            }
-                        />
-                        <Route
-                            path="/blog"
-                            element={
-                                <TransitionWrapper>
-                                    <BlogList />
-                                </TransitionWrapper>
-                            }
-                        />
-                        <Route
-                            path="/blog/:id"
-                            element={
-                                <TransitionWrapper>
-                                    <BlogPost />
-                                </TransitionWrapper>
-                            }
-                        />
+        <main className="flex-grow pt-16 lg:pt-0 overflow-x-hidden">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <TransitionWrapper>
+                  <Home />
+                </TransitionWrapper>
+              }
+            />
+            <Route
+              path="/blog"
+              element={
+                <TransitionWrapper>
+                  <BlogList />
+                </TransitionWrapper>
+              }
+            />
+            <Route
+              path="/blog/:id"
+              element={
+                <TransitionWrapper>
+                  <BlogPost />
+                </TransitionWrapper>
+              }
+            />
 
-                        <Route
-                            path="/about"
-                            element={
-                                <TransitionWrapper>
-                                    <About />
-                                </TransitionWrapper>
-                            }
-                        />
-                        <Route
-                            path="/projects"
-                            element={
-                                <TransitionWrapper>
-                                    <Projects />
-                                </TransitionWrapper>
-                            }
-                        />
-                        <Route
-                            path="/projects/:name"
-                            element={
-                                <TransitionWrapper>
-                                    <ProjectDetail />
-                                </TransitionWrapper>
-                            }
-                        />
-                        <Route
-                            path="/certificates"
-                            element={
-                                <TransitionWrapper>
-                                    <Certificates />
-                                </TransitionWrapper>
-                            }
-                        />
-                    </Routes>
-                </main>
-                <div className="lg:hidden">
-                    <Footer />
-                </div>
-            </div>
+            <Route
+              path="/about"
+              element={
+                <TransitionWrapper>
+                  <About />
+                </TransitionWrapper>
+              }
+            />
+            <Route
+              path="/projects"
+              element={
+                <TransitionWrapper>
+                  <Projects />
+                </TransitionWrapper>
+              }
+            />
+            <Route
+              path="/projects/:name"
+              element={
+                <TransitionWrapper>
+                  <ProjectDetail />
+                </TransitionWrapper>
+              }
+            />
+            <Route
+              path="/certificates"
+              element={
+                <TransitionWrapper>
+                  <Certificates />
+                </TransitionWrapper>
+              }
+            />
+          </Routes>
+        </main>
+        <div className="lg:hidden">
+          <Footer />
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 function App() {
-    return (
-        <ErrorBoundary
-            onError={(error, errorInfo) => {
-                // Log error to console in development
-                if (import.meta.env.DEV) {
-                    console.error('App Error Boundary caught an error:', error, errorInfo);
-                }
-                // In production, you might want to send this to an error reporting service
-                // Example: Sentry.captureException(error, { extra: errorInfo });
-            }}
-        >
-            <NetworkErrorBoundary>
-                <Router>
-                    <ProjectsProvider>
-                        <GitHubProvider>
-                            <Suspense fallback={<Loader />}>
-                                <AppContent />
-                            </Suspense>
-                        </GitHubProvider>
-                    </ProjectsProvider>
-                </Router>
-            </NetworkErrorBoundary>
-        </ErrorBoundary>
-    );
+  return (
+    <ErrorBoundary
+      onError={(error, errorInfo) => {
+        // Log error to console in development
+        if (import.meta.env.DEV) {
+          console.error(
+            "App Error Boundary caught an error:",
+            error,
+            errorInfo,
+          );
+        }
+        // In production, you might want to send this to an error reporting service
+        // Example: Sentry.captureException(error, { extra: errorInfo });
+      }}
+    >
+      <NetworkErrorBoundary>
+        <Router>
+          <ProjectsProvider>
+            <GitHubProvider>
+              <Suspense fallback={<Loader />}>
+                <AppContent />
+              </Suspense>
+            </GitHubProvider>
+          </ProjectsProvider>
+        </Router>
+      </NetworkErrorBoundary>
+    </ErrorBoundary>
+  );
 }
 
 export default App;

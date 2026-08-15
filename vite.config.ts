@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 import { compression } from 'vite-plugin-compression2'
 
@@ -7,6 +8,7 @@ import { compression } from 'vite-plugin-compression2'
 export default defineConfig({
   plugins: [
     react(),
+    tailwindcss(),
     // Brotli compression for all JS/CSS assets (modern browsers prefer it)
     compression({
       algorithms: ['brotliCompress'],

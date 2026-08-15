@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface TouchFeedbackProps {
   children: React.ReactNode;
@@ -9,7 +9,10 @@ interface TouchFeedbackProps {
   hapticFeedback?: boolean;
   onTap?: () => void;
   onLongPress?: () => void;
-  onSwipe?: (direction: 'up' | 'down' | 'left' | 'right', distance: number) => void;
+  onSwipe?: (
+    direction: "up" | "down" | "left" | "right",
+    distance: number,
+  ) => void;
   tapDelay?: number;
   longPressDelay?: number;
   swipeThreshold?: number;
@@ -17,7 +20,7 @@ interface TouchFeedbackProps {
 
 export default function TouchFeedback({
   children,
-  className = '',
+  className = "",
   disabled = false,
   ripple = true,
   hapticFeedback = true,
@@ -29,8 +32,14 @@ export default function TouchFeedback({
   swipeThreshold = 50,
 }: TouchFeedbackProps) {
   const [isPressed, setIsPressed] = useState(false);
-  const [ripples, setRipples] = useState<Array<{ id: string; x: number; y: number }>>([]);
-  const [touchStart, setTouchStart] = useState<{ x: number; y: number; time: number } | null>(null);
+  const [ripples, setRipples] = useState<
+    Array<{ id: string; x: number; y: number }>
+  >([]);
+  const [touchStart, setTouchStart] = useState<{
+    x: number;
+    y: number;
+    time: number;
+  } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -47,16 +56,16 @@ export default function TouchFeedback({
       y: relativeY,
     };
 
-    setRipples(prev => [...prev, newRipple]);
+    setRipples((prev) => [...prev, newRipple]);
 
     // Remove ripple after animation
     setTimeout(() => {
-      setRipples(prev => prev.filter(r => r.id !== newRipple.id));
+      setRipples((prev) => prev.filter((r) => r.id !== newRipple.id));
     }, 600);
   };
 
   const triggerHapticFeedback = () => {
-    if (hapticFeedback && 'vibrate' in navigator) {
+    if (hapticFeedback && "vibrate" in navigator) {
       navigator.vibrate(10); // Light haptic feedback
     }
   };
@@ -121,12 +130,12 @@ export default function TouchFeedback({
 
     // Determine if it's a swipe
     if (distance > swipeThreshold && duration < 300) {
-      let direction: 'up' | 'down' | 'left' | 'right';
-      
+      let direction: "up" | "down" | "left" | "right";
+
       if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        direction = deltaX > 0 ? 'right' : 'left';
+        direction = deltaX > 0 ? "right" : "left";
       } else {
-        direction = deltaY > 0 ? 'down' : 'up';
+        direction = deltaY > 0 ? "down" : "up";
       }
 
       if (onSwipe) {
@@ -146,14 +155,14 @@ export default function TouchFeedback({
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (disabled) return;
-    
+
     setIsPressed(true);
     generateRipple(e.clientX, e.clientY);
   };
 
   const handleMouseUp = () => {
     if (disabled) return;
-    
+
     setIsPressed(false);
     if (onTap) {
       setTimeout(() => {
@@ -185,10 +194,10 @@ export default function TouchFeedback({
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
-      style={{ touchAction: 'manipulation' }}
+      style={{ touchAction: "manipulation" }}
     >
       {children}
-      
+
       {/* Press feedback */}
       <AnimatePresence>
         {isPressed && (
@@ -210,7 +219,7 @@ export default function TouchFeedback({
             initial={{ scale: 0, opacity: 0.6 }}
             animate={{ scale: 4, opacity: 0 }}
             exit={{ scale: 4, opacity: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className="absolute bg-white/30 rounded-full pointer-events-none"
             style={{
               left: ripple.x - 10,

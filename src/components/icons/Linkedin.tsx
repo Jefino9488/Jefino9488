@@ -1,6 +1,9 @@
-import type React from "react"
+import type React from "react";
 
-export const Linkedin = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
+export const Linkedin = ({
+  className,
+  ...props
+}: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -18,6 +21,6 @@ export const Linkedin = ({ className, ...props }: React.SVGProps<SVGSVGElement>)
     <rect width="4" height="12" x="2" y="9" />
     <circle cx="4" cy="4" r="2" />
   </svg>
-)
+);
 
-export default Linkedin
+export default Linkedin;

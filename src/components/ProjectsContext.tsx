@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
 
 interface Project {
   title: string;
@@ -88,41 +95,56 @@ const getAllProjectsQuery = `
     }
 `;
 
-async function fetchGitHubProjects(query: string): Promise<{ projects: Project[]; error?: string }> {
-  const GITHUB_API_URL = 'https://api.github.com/graphql';
+async function fetchGitHubProjects(
+  query: string,
+): Promise<{ projects: Project[]; error?: string }> {
+  const GITHUB_API_URL = "https://api.github.com/graphql";
   const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
 
   try {
     const response = await fetch(GITHUB_API_URL, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GITHUB_TOKEN}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${GITHUB_TOKEN}`,
       },
       body: JSON.stringify({ query }),
     });
 
     if (!response.ok) {
-      return { projects: [], error: `Failed to fetch repositories: ${response.statusText}` };
+      return {
+        projects: [],
+        error: `Failed to fetch repositories: ${response.statusText}`,
+      };
     }
 
     const data = await response.json();
 
     if (data.errors) {
-      return { projects: [], error: data.errors.map((error: any) => error.message).join(', ') };
+      return {
+        projects: [],
+        error: data.errors.map((error: any) => error.message).join(", "),
+      };
     }
 
-     
     const items = data.data.user.pinnedItems || data.data.user.repositories;
     const projects: Project[] = items.nodes.map((repo: any) => ({
       title: repo.name.toLowerCase(),
-      description: repo.description || '',
-      tech: Array.from(new Set([
-        repo.primaryLanguage?.name,
-        ...repo.repositoryTopics.nodes.slice(0, 2).map((topic: any) =>
-          topic.topic.name.replace(/-/g, ' ').replace(/\b\w/g, (char: string) => char.toUpperCase())
+      description: repo.description || "",
+      tech: Array.from(
+        new Set(
+          [
+            repo.primaryLanguage?.name,
+            ...repo.repositoryTopics.nodes
+              .slice(0, 2)
+              .map((topic: any) =>
+                topic.topic.name
+                  .replace(/-/g, " ")
+                  .replace(/\b\w/g, (char: string) => char.toUpperCase()),
+              ),
+          ].filter((tech: string) => tech),
         ),
-      ].filter((tech: string) => tech))),
+      ),
       stats: { stars: repo.stargazerCount || 0, forks: repo.forks.totalCount },
       link: repo.url,
       updatedAt: repo.updatedAt,
@@ -130,12 +152,15 @@ async function fetchGitHubProjects(query: string): Promise<{ projects: Project[]
 
     return { projects, error: undefined };
   } catch (error) {
-    console.error('Error fetching GitHub repos:', error instanceof Error ? error.message : String(error));
-    return { projects: [], error: 'Failed to load projects' };
+    console.error(
+      "Error fetching GitHub repos:",
+      error instanceof Error ? error.message : String(error),
+    );
+    return { projects: [], error: "Failed to load projects" };
   }
 }
 
-const PROJECTS_CACHE_KEY = 'portfolio_projects_cache';
+const PROJECTS_CACHE_KEY = "portfolio_projects_cache";
 const PROJECTS_CACHE_TTL = 15 * 60 * 1000; // 15 minutes
 
 interface ProjectsCache {
@@ -161,12 +186,22 @@ function getProjectsCache(): ProjectsCache | null {
 
 function setProjectsCache(pinnedProjects: Project[], allProjects: Project[]) {
   try {
-    const cache: ProjectsCache = { pinnedProjects, allProjects, timestamp: Date.now() };
+    const cache: ProjectsCache = {
+      pinnedProjects,
+      allProjects,
+      timestamp: Date.now(),
+    };
     localStorage.setItem(PROJECTS_CACHE_KEY, JSON.stringify(cache));
-  } catch { /* Ignore storage quota errors */ }
+  } catch {
+    /* Ignore storage quota errors */
+  }
 }
 
-export const ProjectsProvider = ({ children }: { children: React.ReactNode }) => {
+export const ProjectsProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [pinnedProjects, setPinnedProjects] = useState<Project[]>([]);
   const [allProjects, setAllProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -193,13 +228,13 @@ export const ProjectsProvider = ({ children }: { children: React.ReactNode }) =>
       let pinnedData: Project[] = [];
       let allData: Project[] = [];
 
-      if (pinnedResult.status === 'fulfilled') {
+      if (pinnedResult.status === "fulfilled") {
         const { projects, error: pinnedError } = pinnedResult.value;
         if (pinnedError) setError(pinnedError);
         else pinnedData = projects;
       }
 
-      if (allResult.status === 'fulfilled') {
+      if (allResult.status === "fulfilled") {
         const { projects, error: allError } = allResult.value;
         if (allError) setError(allError);
         else allData = projects;
@@ -213,8 +248,8 @@ export const ProjectsProvider = ({ children }: { children: React.ReactNode }) =>
         setProjectsCache(pinnedData, allData);
       }
     } catch (err) {
-      console.error('Error fetching projects:', err);
-      setError('Failed to load projects');
+      console.error("Error fetching projects:", err);
+      setError("Failed to load projects");
     } finally {
       setLoading(false);
       fetched.current = true;
@@ -227,7 +262,9 @@ export const ProjectsProvider = ({ children }: { children: React.ReactNode }) =>
   }, [fetchProjects]);
 
   return (
-    <ProjectsContext.Provider value={{ pinnedProjects, allProjects, loading, error }}>
+    <ProjectsContext.Provider
+      value={{ pinnedProjects, allProjects, loading, error }}
+    >
       {children}
     </ProjectsContext.Provider>
   );
