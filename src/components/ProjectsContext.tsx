@@ -38,9 +38,7 @@ const getPinnedProjectsQuery = `
               description
               url
               updatedAt
-              stargazers {
-                totalCount
-              }
+              stargazerCount
               forks {
                 totalCount
               }
@@ -70,9 +68,7 @@ const getAllProjectsQuery = `
             description
             url
             updatedAt
-            stargazers {
-              totalCount
-            }
+            stargazerCount
             forks {
               totalCount
             }
@@ -127,7 +123,7 @@ async function fetchGitHubProjects(query: string): Promise<{ projects: Project[]
           topic.topic.name.replace(/-/g, ' ').replace(/\b\w/g, (char: string) => char.toUpperCase())
         ),
       ].filter((tech: string) => tech))),
-      stats: { stars: repo.stargazers.totalCount, forks: repo.forks.totalCount },
+      stats: { stars: repo.stargazerCount || 0, forks: repo.forks.totalCount },
       link: repo.url,
       updatedAt: repo.updatedAt,
     }));

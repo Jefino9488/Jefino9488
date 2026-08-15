@@ -1,13 +1,14 @@
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import { Link, useLocation } from "react-router-dom"
-import { ArrowLeft, ArrowRight, Home, BookOpen, Award, Github, User, Menu, X } from "lucide-react"
+import { ArrowLeft, ArrowRight, Home, BookOpen, Award, User, Menu, X } from "lucide-react"
+import { Github } from "./icons/Github"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface NavItem {
     path: string
     label: string
-    icon: React.ElementType
+    icon: React.ComponentType<{ className?: string }>
 }
 
 const navItems: NavItem[] = [
@@ -87,12 +88,12 @@ export default function Navbar() {
         animate: {
             opacity: 1,
             scale: 1,
-            transition: { type: "spring", stiffness: 240, damping: 28, mass: 1.15 }
+            transition: { type: "spring" as const, stiffness: 240, damping: 28, mass: 1.15 }
         },
         exit: {
             opacity: 0,
             scale: 0.98,
-            transition: { type: "spring", stiffness: 300, damping: 34, mass: 0.95 }
+            transition: { type: "spring" as const, stiffness: 300, damping: 34, mass: 0.95 }
         }
     }
 

@@ -2,7 +2,6 @@ import { useParams, Link } from "react-router-dom"
 import {
     ArrowLeft,
     ExternalLink,
-    Github,
     Star,
     GitFork,
     Calendar,
@@ -11,6 +10,7 @@ import {
     Tag,
     Eye,
 } from "lucide-react"
+import { Github } from "./icons/Github"
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
 import { useProjects } from "./ProjectsContext"

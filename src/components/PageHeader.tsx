@@ -6,7 +6,7 @@ interface PageHeaderProps {
     title: string
     backTo?: string
     backLabel?: string
-    icon?: React.ElementType
+    icon?: React.ComponentType<{ className?: string }>
     meta?: React.ReactNode
     rightAction?: React.ReactNode
 }

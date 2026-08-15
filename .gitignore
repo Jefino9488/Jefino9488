@@ -32,3 +32,4 @@ dist-ssr
 /digest.txt
 /get-refresh-token.js
 /.agent/
+.agents

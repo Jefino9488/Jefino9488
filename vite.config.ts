@@ -9,18 +9,18 @@ export default defineConfig({
     react(),
     // Brotli compression for all JS/CSS assets (modern browsers prefer it)
     compression({
-      algorithm: 'brotliCompress',
+      algorithms: ['brotliCompress'],
       exclude: [/\.(png|jpg|jpeg|webp|gif|svg|ico|woff|woff2)$/],
     }),
     // Gzip as fallback for older CDN/servers
     compression({
-      algorithm: 'gzip',
+      algorithms: ['gzip'],
       exclude: [/\.(png|jpg|jpeg|webp|gif|svg|ico|woff|woff2)$/],
     }),
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(import.meta.dirname, './src'),
     },
   },
   server: {

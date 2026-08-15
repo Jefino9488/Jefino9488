@@ -1,6 +1,7 @@
 import { useProjects } from "./ProjectsContext"
 import { Link } from "react-router-dom"
-import { ExternalLink, Github, ArrowRight } from "lucide-react"
+import { ExternalLink, ArrowRight } from "lucide-react"
+import { Github } from "./icons/Github"
 import PageHeader from "./PageHeader"
 import { motion } from "framer-motion"
 import GitHubDashboard from "@/components/GitHubDashboard.tsx"

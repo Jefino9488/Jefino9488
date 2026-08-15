@@ -9,12 +9,12 @@ import {
     Briefcase,
     GraduationCap,
     Award,
-    Github,
     Mail,
-    Linkedin,
     Send,
     Loader2,
 } from "lucide-react"
+import { Github } from "./icons/Github"
+import { Linkedin } from "./icons/Linkedin"
 
 import GitHubDashboard from "./GitHubDashboard"
 import LazyImage from "./LazyImage"
@@ -30,7 +30,7 @@ interface TimelineItem {
     title: string
     date: string
     description: string
-    icon: React.ElementType
+    icon: React.ComponentType<{ className?: string }>
     category: "work" | "education" | "project" | "award"
 }
 

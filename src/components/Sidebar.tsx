@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom"
-import { Home, BookOpen, Award, Github, User, MapPin, Mail, Link as LinkIcon, Users, Star } from "lucide-react"
+import { Home, BookOpen, Award, User, MapPin, Mail, Link as LinkIcon, Users, Star } from "lucide-react"
+import { Github } from "./icons/Github"
 import SpotifyWidget from "./SpotifyWidget"
 import { useGitHubData } from "./GitHubContext"
 import { cn } from "@/lib/utils"
@@ -7,7 +8,7 @@ import { cn } from "@/lib/utils"
 interface NavItem {
     path: string
     label: string
-    icon: React.ElementType
+    icon: React.ComponentType<{ className?: string }>
     description: string
 }
 

@@ -4,8 +4,6 @@ import { Link } from "react-router-dom"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import {
-    Github,
-    Linkedin,
     ExternalLink,
     Send,
     BookOpen,
@@ -14,6 +12,8 @@ import {
     GitFork,
     Award,
 } from "lucide-react"
+import { Github } from "./icons/Github"
+import { Linkedin } from "./icons/Linkedin"
 import { useProjects } from "./ProjectsContext"
 import { useScreenSize } from "@/hooks/useScreenSize"
 
