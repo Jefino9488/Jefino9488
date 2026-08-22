@@ -16,13 +16,24 @@ const navItems: NavItem[] = [
   { path: "/about", label: "About", icon: CircleUser },
 ];
 
+/** Pages that flip to the sage light theme — nav mirrors them. */
+const LIGHT_PAGES = ["/blog", "/certificates"];
+
 export default function Navbar() {
   const location = useLocation();
+  const isLightPage = LIGHT_PAGES.some((p) => location.pathname.startsWith(p));
 
   return (
     <>
       {/* Slim top bar — brand only */}
-      <header className="glass-header fixed inset-x-0 top-0 z-40 lg:hidden">
+      <header
+        className={cn(
+          "fixed inset-x-0 top-0 z-40 border-b lg:hidden",
+          isLightPage
+            ? "glass-header-light theme-light"
+            : "glass-header",
+        )}
+      >
         <div className="mx-auto flex max-w-[90rem] items-center justify-between px-4 py-3 sm:px-8">
           <Link to="/" className="flex items-center gap-2.5" aria-label="Home">
             <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-[0.625rem] border border-line bg-surface">
@@ -54,7 +65,10 @@ export default function Navbar() {
           initial={{ y: 80, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-center gap-1 rounded-2xl border border-line bg-surface/90 p-1.5 shadow-lift backdrop-blur-xl"
+          className={cn(
+            "flex items-center gap-1 rounded-2xl border border-line bg-surface/90 p-1.5 shadow-lift backdrop-blur-xl",
+            isLightPage && "theme-light",
+          )}
           style={{ WebkitBackdropFilter: "blur(20px)" }}
         >
           {navItems.map((item) => {

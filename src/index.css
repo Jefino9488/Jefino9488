@@ -360,6 +360,7 @@
 /* ------------------------------------------------------------------ */
 .theme-light {
   --color-background: transparent;
+  --color-foreground: #161d18;
   --color-surface: #bfc9ba;
   --color-surface-hover: #cdd5c8;
   --color-elevated: #d4dbcf;
@@ -370,7 +371,14 @@
   --color-fg-faint: #6b776c;
 
   color: var(--color-sage-ink);
-  background-color: var(--color-sage);
+}
+
+/* Mobile top-bar glass in the light scope */
+.glass-header-light {
+  background-color: rgb(201 209 195 / 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid #a8b3a2;
 }
 .theme-light h1,
 .theme-light h2,

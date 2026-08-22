@@ -29,13 +29,14 @@ const CodeBlock = ({ code }: { code: string }) => {
   };
 
   return (
-    <div className="my-6 overflow-hidden rounded-xl border border-line bg-inset">
-      <div className="flex items-center justify-between border-b border-line bg-surface px-4 py-2">
-        <span className="font-mono text-[11px] text-fg-faint">code</span>
+    /* Deliberately dark code chip — stays readable on the sage field */
+    <div className="my-6 overflow-hidden rounded-xl border border-[#1d2a24] bg-[#0d1512]">
+      <div className="flex items-center justify-between border-b border-[#1d2a24] bg-[#121c17] px-4 py-2">
+        <span className="font-mono text-[11px] text-[#5f6f66]">code</span>
         <button
           onClick={handleCopy}
           aria-label="Copy code"
-          className="flex items-center gap-1.5 font-mono text-xs text-fg-muted transition-colors hover:text-foreground"
+          className="flex items-center gap-1.5 font-mono text-xs text-[#93a39a] transition-colors hover:text-white"
         >
           {copied ? (
             <>
@@ -51,7 +52,7 @@ const CodeBlock = ({ code }: { code: string }) => {
         </button>
       </div>
       <div className="overflow-x-auto p-4">
-        <pre className="font-mono text-xs leading-relaxed text-foreground sm:text-sm">
+        <pre className="font-mono text-xs leading-relaxed text-[#e9ede7] sm:text-sm">
           <code>{code}</code>
         </pre>
       </div>
@@ -60,17 +61,17 @@ const CodeBlock = ({ code }: { code: string }) => {
 };
 
 const CardNotFound = () => (
-  <div className="flex min-h-[60vh] items-center justify-center p-4 pb-24 lg:pb-4">
+  <div className="theme-light flex min-h-[60vh] items-center justify-center bg-sage p-4 pb-24 lg:pb-4">
     <div className="tile max-w-md space-y-4 p-8 text-center sm:p-12">
       <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">404</p>
-      <h1 className="text-2xl font-semibold text-foreground">Article not found</h1>
+      <h1 className="text-2xl font-semibold">Article not found</h1>
       <p className="text-sm leading-relaxed text-fg-muted">
         The documentation or publication you&apos;re looking for doesn&apos;t
         exist or has been relocated.
       </p>
       <Link
         to="/blog"
-        className="press inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-xs font-medium text-background transition-all hover:bg-white"
+        className="press inline-flex items-center gap-2 rounded-full bg-sage-ink px-5 py-2.5 text-xs font-medium text-sage transition-all hover:bg-primary hover:text-white"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         Back to writing
@@ -132,7 +133,7 @@ export default function BlogPost() {
   }
 
   return (
-    <div className="min-h-screen text-foreground">
+    <div className="theme-light min-h-screen bg-sage">
       {/* Reading progress */}
       <motion.div
         className="fixed inset-x-0 top-0 z-[60] h-0.5 origin-left bg-primary"

@@ -14,8 +14,12 @@ const navItems: NavItem[] = [
   { path: "/about", label: "About" },
 ];
 
+/** Pages that flip to the sage light theme — nav mirrors them. */
+const LIGHT_PAGES = ["/blog", "/certificates"];
+
 export default function Sidebar() {
   const location = useLocation();
+  const isLightPage = LIGHT_PAGES.some((p) => location.pathname.startsWith(p));
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-0 z-50 hidden lg:block">
@@ -24,14 +28,22 @@ export default function Sidebar() {
         initial={{ y: -28, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-        className="pointer-events-auto border-b border-line/70 bg-background/70 backdrop-blur-xl"
+        className={cn(
+          "pointer-events-auto border-b backdrop-blur-xl",
+          isLightPage
+            ? "theme-light border-line/70 bg-sage/70"
+            : "border-line/70 bg-background/70",
+        )}
         style={{ WebkitBackdropFilter: "blur(20px)" }}
       >
         <div className="mx-auto flex h-[4.75rem] max-w-[90rem] items-center justify-between px-8">
           {/* Brand */}
           <Link
             to="/"
-            className="font-poppins text-[17px] font-semibold tracking-tight text-foreground transition-colors hover:text-white"
+            className={cn(
+              "font-poppins text-[17px] font-semibold tracking-tight text-foreground transition-colors",
+              isLightPage ? "hover:text-primary" : "hover:text-white",
+            )}
           >
             Jefino<span className="text-primary">.</span>
           </Link>

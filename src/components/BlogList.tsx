@@ -52,7 +52,7 @@ export default function BlogList() {
   }, [posts, searchTerm, selectedTag]);
 
   return (
-    <div className="min-h-screen text-foreground">
+    <div className="theme-light min-h-screen">
       <PageHeader title="Writing & Publications" meta={`${posts.length} Articles`} />
 
       <div className="relative mx-auto max-w-[90rem] space-y-12 px-4 pb-24 pt-10 sm:px-8 sm:pt-12">
@@ -93,8 +93,8 @@ export default function BlogList() {
                     aria-pressed={isActive}
                     className={`rounded-full border px-3.5 py-1.5 font-mono text-xs transition-all ${
                       isActive
-                        ? "border-line-strong bg-elevated font-medium text-foreground"
-                        : "border-line bg-transparent text-fg-muted hover:border-line-strong hover:text-foreground"
+                        ? "border-line-strong bg-elevated font-medium text-sage-ink"
+                        : "border-line bg-transparent text-fg-muted hover:border-line-strong hover:text-sage-ink"
                     }`}
                   >
                     {category}
@@ -195,7 +195,7 @@ export default function BlogList() {
                   setSearchTerm("");
                   setSelectedTag("");
                 }}
-                className="press mx-auto block rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
+                className="press mx-auto block rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-sage-ink transition-colors hover:border-line-strong"
               >
                 Clear filters
               </button>

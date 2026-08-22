@@ -78,7 +78,7 @@ export default function Certificates() {
   ];
 
   return (
-    <div className="theme-light min-h-screen">
+    <div className="theme-light min-h-screen bg-sage">
       <PageHeader
         title="Certifications Ledger"
         meta={`${certList.length} Verified`}

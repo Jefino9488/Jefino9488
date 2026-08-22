@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import {
+  ArrowUpRight,
   Download,
   Mail,
   Send,
@@ -119,8 +120,9 @@ const technicalSkills = [
   { category: "Systems & AI", skills: ["Android Internals", "Linux", "TensorFlow", "PyTorch", "Git", "Docker", "Cisco Networking"] },
 ];
 
+/* Editorial underline fields for the sage contact band */
 const inputBase =
-  "w-full rounded-xl border bg-surface/70 px-4 py-3 font-mono text-xs text-foreground backdrop-blur-sm transition-colors placeholder:text-fg-faint focus:border-primary focus:outline-none";
+  "w-full rounded-none border-0 border-b border-line bg-transparent px-0 py-3 font-mono text-xs text-sage-ink transition-colors placeholder:text-fg-faint focus:border-primary focus:outline-none";
 
 export default function About() {
   const [formData, setFormData] = useState({
@@ -308,7 +310,7 @@ export default function About() {
         </section>
 
         {/* ================================================================ */}
-        {/* Timeline                                                         */}
+        {/* Timeline — ledger grid                                           */}
         {/* ================================================================ */}
         <section>
           <Reveal>
@@ -318,23 +320,32 @@ export default function About() {
             <h2 className="type-title mt-2">Milestones</h2>
           </Reveal>
 
-          <div className="mt-9 space-y-0 border-l border-line">
+          <div className="mt-10 border-t border-line">
             {journeyTimeline.map((item, i) => (
               <Reveal key={item.year} delay={Math.min(i * 0.05, 0.25)}>
-                <div className="group relative space-y-2 py-6 pl-7">
-                  <div className="absolute -left-[5px] top-8 h-2.5 w-2.5 rounded-full border border-line-strong bg-background transition-colors group-hover:border-primary group-hover:bg-primary" />
-
-                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[11px]">
-                    <span className="font-semibold tabular-nums text-primary">{item.year}</span>
-                    <span className="uppercase tracking-[0.16em] text-fg-faint">{item.category}</span>
+                <div className="group relative grid gap-x-8 gap-y-2 border-b border-line py-7 transition-colors hover:bg-surface/40 sm:py-8 lg:grid-cols-[7rem_1fr_auto]">
+                  <div className="pt-1 font-mono text-sm font-semibold tabular-nums text-primary">
+                    {item.year}
                   </div>
 
-                  <h3 className="text-base font-medium text-foreground sm:text-lg">
-                    {item.title}
-                  </h3>
-                  <p className="max-w-2xl text-sm leading-relaxed text-fg-muted">
-                    {item.description}
-                  </p>
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-fg-faint">
+                      {item.category}
+                    </p>
+                    <h3 className="pt-1.5 text-xl font-semibold tracking-tight transition-colors duration-300 group-hover:text-primary sm:text-2xl">
+                      {item.title}
+                    </h3>
+                    <p className="max-w-2xl pt-2 text-sm leading-relaxed text-fg-muted">
+                      {item.description}
+                    </p>
+                  </div>
+
+                  <span
+                    aria-hidden
+                    className="index-num hidden self-start pt-1 font-mono text-5xl lg:block"
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
                 </div>
               </Reveal>
             ))}
@@ -401,132 +412,156 @@ export default function About() {
             </div>
           </Reveal>
         </section>
+      </div>
 
-        {/* ================================================================ */}
-        {/* Contact form                                                     */}
-        {/* ================================================================ */}
-        <section>
-          <Reveal>
-            <div className="space-y-2">
-              <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
-                Contact
-              </p>
-              <h2 className="type-title">Get in touch</h2>
-              <p className="max-w-md text-sm leading-relaxed text-fg-muted">
-                Have a project, idea, or open-source inquiry? Send a message and
-                it opens straight in your mail client.
-              </p>
-            </div>
-          </Reveal>
-
-          {isSubmitted && (
-            <div className="mt-6 flex items-center gap-2.5 rounded-xl border border-success/30 bg-success/10 px-4 py-3 text-xs text-success">
-              <CheckCircle2 className="h-4 w-4 shrink-0" />
-              <span>Message prepared. Your default email client will open.</span>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} noValidate className="mt-8 max-w-2xl space-y-5">
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div className="space-y-2">
-                <label htmlFor="contact-name" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
-                  Name
-                </label>
-                <input
-                  id="contact-name"
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  placeholder="Your name"
-                  autoComplete="name"
-                  aria-invalid={!!errors.name}
-                  className={`${inputBase} ${errors.name ? "border-destructive" : "border-line"}`}
-                />
-                {errors.name && (
-                  <p className="font-mono text-[11px] text-destructive">{errors.name}</p>
-                )}
+      {/* ================================================================ */}
+      {/* Contact — full-bleed sage flip band                               */}
+      {/* ================================================================ */}
+      <section className="theme-light bg-sage">
+        <div className="mx-auto max-w-[90rem] px-4 py-20 sm:px-8 sm:py-24">
+          <div className="grid items-start gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
+            {/* Left — statement */}
+            <Reveal>
+              <div className="space-y-6">
+                <p className="label-bracket font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
+                  Contact
+                </p>
+                <h2
+                  className="font-poppins font-semibold leading-[1.02]"
+                  style={{ fontSize: "clamp(2.5rem, 5vw, 4.25rem)", letterSpacing: "-0.04em" }}
+                >
+                  Let&apos;s talk<span className="text-primary">.</span>
+                </h2>
+                <p className="max-w-md text-pretty leading-relaxed text-fg-muted">
+                  Have a project, idea, or open-source inquiry? Send a message
+                  and it opens straight in your mail client — or reach me
+                  directly at the address below.
+                </p>
+                <a
+                  href="mailto:jefinojacob9488@gmail.com"
+                  className="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-sage-ink underline decoration-line-strong underline-offset-8 transition-colors hover:text-primary"
+                >
+                  jefinojacob9488@gmail.com
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </a>
               </div>
+            </Reveal>
 
-              <div className="space-y-2">
-                <label htmlFor="contact-email" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
-                  Email
-                </label>
-                <input
-                  id="contact-email"
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                  aria-invalid={!!errors.email}
-                  className={`${inputBase} ${errors.email ? "border-destructive" : "border-line"}`}
-                />
-                {errors.email && (
-                  <p className="font-mono text-[11px] text-destructive">{errors.email}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="contact-subject" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
-                Subject
-              </label>
-              <input
-                id="contact-subject"
-                type="text"
-                name="subject"
-                value={formData.subject}
-                onChange={handleInputChange}
-                placeholder="Project discussion / collaboration"
-                aria-invalid={!!errors.subject}
-                className={`${inputBase} ${errors.subject ? "border-destructive" : "border-line"}`}
-              />
-              {errors.subject && (
-                <p className="font-mono text-[11px] text-destructive">{errors.subject}</p>
+            {/* Right — form */}
+            <div>
+              {isSubmitted && (
+                <div className="mb-6 flex items-center gap-2.5 rounded-xl border border-sage-ink/15 bg-sage-ink/5 px-4 py-3 text-xs text-sage-ink">
+                  <CheckCircle2 className="h-4 w-4 shrink-0 text-success" />
+                  <span>Message prepared. Your default email client will open.</span>
+                </div>
               )}
+
+              <form onSubmit={handleSubmit} noValidate className="space-y-7">
+                <div className="grid grid-cols-1 gap-7 sm:grid-cols-2">
+                  <div className="space-y-1.5">
+                    <label htmlFor="contact-name" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
+                      Name
+                    </label>
+                    <input
+                      id="contact-name"
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Your name"
+                      autoComplete="name"
+                      aria-invalid={!!errors.name}
+                      className={`${inputBase} ${errors.name ? "border-destructive" : "border-line"}`}
+                    />
+                    {errors.name && (
+                      <p className="pt-1 font-mono text-[11px] text-destructive">{errors.name}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="contact-email" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
+                      Email
+                    </label>
+                    <input
+                      id="contact-email"
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="you@example.com"
+                      autoComplete="email"
+                      aria-invalid={!!errors.email}
+                      className={`${inputBase} ${errors.email ? "border-destructive" : "border-line"}`}
+                    />
+                    {errors.email && (
+                      <p className="pt-1 font-mono text-[11px] text-destructive">{errors.email}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label htmlFor="contact-subject" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
+                    Subject
+                  </label>
+                  <input
+                    id="contact-subject"
+                    type="text"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    placeholder="Project discussion / collaboration"
+                    aria-invalid={!!errors.subject}
+                    className={`${inputBase} ${errors.subject ? "border-destructive" : "border-line"}`}
+                  />
+                  {errors.subject && (
+                    <p className="pt-1 font-mono text-[11px] text-destructive">{errors.subject}</p>
+                  )}
+                </div>
+
+                <div className="space-y-1.5">
+                  <label htmlFor="contact-message" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
+                    Message
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    rows={5}
+                    placeholder="Tell me about your project or inquiry..."
+                    aria-invalid={!!errors.message}
+                    className={`${inputBase} resize-none ${errors.message ? "border-destructive" : "border-line"}`}
+                  />
+                  {errors.message && (
+                    <p className="pt-1 font-mono text-[11px] text-destructive">{errors.message}</p>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="press inline-flex items-center gap-2 rounded-full bg-sage-ink px-6 py-3 text-sm font-medium text-sage transition-all hover:bg-primary hover:text-white disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>Preparing...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-4 w-4" />
+                      <span>Send message</span>
+                    </>
+                  )}
+                </button>
+              </form>
             </div>
+          </div>
+        </div>
+      </section>
 
-            <div className="space-y-2">
-              <label htmlFor="contact-message" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
-                Message
-              </label>
-              <textarea
-                id="contact-message"
-                name="message"
-                value={formData.message}
-                onChange={handleInputChange}
-                rows={5}
-                placeholder="Tell me about your project or inquiry..."
-                aria-invalid={!!errors.message}
-                className={`${inputBase} resize-none ${errors.message ? "border-destructive" : "border-line"}`}
-              />
-              {errors.message && (
-                <p className="font-mono text-[11px] text-destructive">{errors.message}</p>
-              )}
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="press inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background shadow-card transition-all hover:bg-white disabled:opacity-50"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Preparing...</span>
-                </>
-              ) : (
-                <>
-                  <Send className="h-4 w-4" />
-                  <span>Send message</span>
-                </>
-              )}
-            </button>
-          </form>
-        </section>
-
+      {/* Back to dark — next page pointer */}
+      <div className="mx-auto max-w-[90rem] px-4 pb-24 sm:px-8">
         <NextPageLink to="/certificates" title="Credentials" />
       </div>
     </div>
