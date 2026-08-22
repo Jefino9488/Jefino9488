@@ -52,7 +52,7 @@ export default function BlogList() {
   }, [posts, searchTerm, selectedTag]);
 
   return (
-    <div className="theme-light min-h-screen">
+    <div className="theme-light min-h-screen bg-sage">
       <PageHeader title="Writing & Publications" meta={`${posts.length} Articles`} />
 
       <div className="relative mx-auto max-w-[90rem] space-y-12 px-4 pb-24 pt-10 sm:px-8 sm:pt-12">

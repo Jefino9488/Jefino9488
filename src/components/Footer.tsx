@@ -13,7 +13,8 @@ export default function Footer() {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
-    <footer className="mt-24 border-t border-line">
+    /* Sage closing band on every page — token scope flips all colors */
+    <footer className="theme-light mt-24 border-t border-line bg-sage">
       <div className="mx-auto max-w-[90rem] px-4 pb-28 pt-12 sm:px-8 lg:pb-12">
         {/* Columns */}
         <div className="grid gap-10 sm:grid-cols-3">
