@@ -557,13 +557,11 @@ export default function About() {
               </form>
             </div>
           </div>
+
+          {/* Next page pointer lives inside the sage field */}
+          <NextPageLink to="/certificates" title="Credentials" />
         </div>
       </section>
-
-      {/* Back to dark — next page pointer */}
-      <div className="mx-auto max-w-[90rem] px-4 pb-24 sm:px-8">
-        <NextPageLink to="/certificates" title="Credentials" />
-      </div>
     </div>
   );
 }
