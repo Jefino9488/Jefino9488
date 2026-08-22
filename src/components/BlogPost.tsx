@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useParams, Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
   Calendar,
@@ -9,73 +8,51 @@ import {
   Check,
   ExternalLink,
 } from "lucide-react";
-import PageHeader from "./PageHeader";
+import Reveal from "./Reveal";
+import NextPageLink from "./NextPageLink";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { useState, useEffect, useMemo } from "react";
 
-// Map of post IDs to their import functions (for local documentation posts)
 const blogPosts: Record<number, () => Promise<any>> = {
   3: () => import("@/blogPosts/post3.json"),
   4: () => import("@/blogPosts/post4.json"),
 };
 
 const CodeBlock = ({ code }: { code: string }) => {
-  const [copiedLines, setCopiedLines] = useState<Record<number, boolean>>({});
+  const [copied, setCopied] = useState(false);
 
-  const handleCopy = (line: string, index: number) => {
-    navigator.clipboard.writeText(line).then(() => {
-      setCopiedLines((prev) => ({ ...prev, [index]: true }));
-      setTimeout(
-        () => setCopiedLines((prev) => ({ ...prev, [index]: false })),
-        2000,
-      );
+  const handleCopy = () => {
+    navigator.clipboard.writeText(code).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     });
   };
 
   return (
-    <div className="relative bg-[#1e1a33]/40 backdrop-blur-md rounded-2xl my-8 overflow-hidden border border-white/10">
-      <div className="flex items-center justify-between px-6 py-3 bg-[#1e1a33]/80 border-b border-white/5">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-white/10" />
-          <div className="w-3 h-3 rounded-full bg-white/10" />
-          <div className="w-3 h-3 rounded-full bg-white/10" />
-        </div>
+    <div className="my-6 overflow-hidden rounded-xl border border-line bg-inset">
+      <div className="flex items-center justify-between border-b border-line bg-surface px-4 py-2">
+        <span className="font-mono text-[11px] text-fg-faint">code</span>
         <button
-          onClick={() => handleCopy(code, -1)}
-          aria-label="Copy entire code"
-          className="flex items-center gap-2 text-xs font-mono text-[#b3bad9] hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-md"
+          onClick={handleCopy}
+          aria-label="Copy code"
+          className="flex items-center gap-1.5 font-mono text-xs text-fg-muted transition-colors hover:text-[#f2f5f5]"
         >
-          {copiedLines[-1] ? (
-            <Check className="h-3.5 w-3.5" />
+          {copied ? (
+            <>
+              <Check className="h-3.5 w-3.5 text-success" />
+              <span className="text-success">Copied</span>
+            </>
           ) : (
-            <Copy className="h-3.5 w-3.5" />
+            <>
+              <Copy className="h-3.5 w-3.5" />
+              <span>Copy</span>
+            </>
           )}
-          {copiedLines[-1] ? "COPIED" : "COPY"}
         </button>
       </div>
-      <div className="p-6 overflow-x-auto">
-        <pre className="text-sm font-mono text-[#b3bad9] leading-loose">
-          <code>
-            {code.split("\n").map((line, index) => (
-              <div key={index} className="group flex">
-                <span className="mr-6 text-white/20 select-none text-right w-6">
-                  {index + 1}
-                </span>
-                <span>{line}</span>
-                <button
-                  onClick={() => handleCopy(line, index)}
-                  aria-label={`Copy line ${index + 1}`}
-                  className="ml-4 text-white/40 hover:text-white hidden group-hover:inline transition-colors"
-                >
-                  {copiedLines[index] ? (
-                    <Check className="h-4 w-4" />
-                  ) : (
-                    <Copy className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-            ))}
-          </code>
+      <div className="overflow-x-auto p-4">
+        <pre className="font-mono text-xs leading-relaxed text-[#f2f5f5] sm:text-sm">
+          <code>{code}</code>
         </pre>
       </div>
     </div>
@@ -83,19 +60,20 @@ const CodeBlock = ({ code }: { code: string }) => {
 };
 
 const CardNotFound = () => (
-  <div className="min-h-screen flex items-center justify-center text-foreground p-4 relative">
-    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-50" />
-    <div className="text-center relative z-10 bg-white/5 backdrop-blur-xl p-12 rounded-[2rem] border border-white/10">
-      <h1 className="text-3xl sm:text-4xl font-poppins font-bold mb-4 text-white">
-        Post not found
-      </h1>
-      <p className="text-[#b3bad9] mb-8">
-        The article you're looking for doesn't exist or has been moved.
+  <div className="flex min-h-[60vh] items-center justify-center p-4 pb-24 lg:pb-4">
+    <div className="tile max-w-md space-y-4 p-8 text-center sm:p-12">
+      <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">404</p>
+      <h1 className="text-2xl font-semibold text-[#f2f5f5]">Article not found</h1>
+      <p className="text-sm leading-relaxed text-fg-muted">
+        The documentation or publication you&apos;re looking for doesn&apos;t
+        exist or has been relocated.
       </p>
-      <Link to="/blog">
-        <Button className="rounded-full bg-white hover:bg-white/90 text-black px-8 py-6 font-semibold">
-          <ArrowLeft className="mr-2 h-5 w-5" /> Back to Blog
-        </Button>
+      <Link
+        to="/blog"
+        className="press inline-flex items-center gap-2 rounded-full bg-[#f2f5f5] px-5 py-2.5 text-xs font-medium text-[#050708] transition-all hover:bg-white"
+      >
+        <ArrowLeft className="h-3.5 w-3.5" />
+        Back to writing
       </Link>
     </div>
   </div>
@@ -154,237 +132,207 @@ export default function BlogPost() {
   }
 
   return (
-    <div className="min-h-screen text-foreground relative selection:bg-primary/30 selection:text-white">
-      <PageHeader
-        title={post.title}
-        backTo="/blog"
-        backLabel="JOURNAL"
-        meta={`${post.reading_time_minutes} MIN`}
-      />
-
-      {/* Top Reading Progress Bar */}
+    <div className="min-h-screen text-[#f2f5f5]">
+      {/* Reading progress */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-primary/80 origin-left z-[60]"
+        className="fixed inset-x-0 top-0 z-[60] h-0.5 origin-left bg-primary"
         style={{ scaleX }}
       />
 
-      {/* Glowing Orbs */}
-      <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/10 blur-[120px] pointer-events-none" />
-      <div className="fixed top-[40%] right-[-10%] w-[30%] h-[50%] rounded-full bg-[#8ab8d0]/5 blur-[100px] pointer-events-none" />
+      <div className="mx-auto max-w-6xl space-y-14 px-4 pb-24 pt-14 sm:px-8 sm:pt-20">
+        {/* Title header */}
+        <Reveal>
+          <div className="space-y-6">
+            <Link
+              to="/blog"
+              className="group inline-flex items-center gap-2 font-mono text-xs text-fg-muted transition-colors hover:text-[#f2f5f5]"
+            >
+              <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
+              All writing
+            </Link>
 
-      <div className="container mx-auto px-4 sm:px-8 max-w-[1400px] py-24 sm:py-32">
-        {/* Header Title Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-12 max-w-4xl"
-        >
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] font-poppins font-bold text-white mb-8 tracking-tight leading-[1.15]">
-            {post.title}
-          </h1>
-          <p className="text-[#b3bad9] text-xl sm:text-2xl leading-relaxed font-light">
-            {post.content?.introduction || post.excerpt}
-          </p>
-        </motion.div>
+            <div className="space-y-5 border-b border-line pb-10">
+              <div className="flex flex-wrap items-center gap-4 font-mono text-[11px] tabular-nums text-fg-faint">
+                <span className="inline-flex items-center gap-1.5">
+                  <Calendar className="h-3.5 w-3.5" />
+                  {post.date}
+                </span>
+                <span>·</span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Clock className="h-3.5 w-3.5" />
+                  {post.readTime || `${post.reading_time_minutes} min read`}
+                </span>
+              </div>
 
-        {/* Meta Information Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-wrap items-center justify-between border-y border-white/10 py-6 mb-16 sm:mb-24 gap-6"
-        >
-          <div className="flex flex-wrap gap-8 sm:gap-16">
-            <div className="flex flex-col gap-2">
-              <span className="text-[10px] uppercase tracking-widest font-mono text-[#b3bad9]/50">
-                Published
-              </span>
-              <div className="flex items-center gap-2 text-sm text-white/90 font-medium font-mono">
-                <Calendar className="w-3.5 h-3.5 text-primary/80" />
-                {post.date}
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <span className="text-[10px] uppercase tracking-widest font-mono text-[#b3bad9]/50">
-                Last Updated
-              </span>
-              <div className="flex items-center gap-2 text-sm text-white/90 font-medium font-mono">
-                <Calendar className="w-3.5 h-3.5 text-[#8ab8d0]/80" />
-                {post.date}{" "}
-                {/* Currently no distinct update date, use publish date */}
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <span className="text-[10px] uppercase tracking-widest font-mono text-[#b3bad9]/50">
-                Read Time
-              </span>
-              <div className="flex items-center gap-2 text-sm text-white/90 font-medium font-mono">
-                <Clock className="w-3.5 h-3.5 text-[#8ab8d0]/80" />
-                {post.readTime}
-              </div>
+              <h1
+                className="max-w-[20ch] text-balance font-poppins font-semibold leading-[1.06]"
+                style={{ fontSize: "clamp(1.9rem, 4.5vw, 3.25rem)", letterSpacing: "-0.035em" }}
+              >
+                {post.title}
+              </h1>
+
+              <p className="max-w-2xl text-pretty text-base leading-relaxed text-fg-muted sm:text-lg">
+                {post.content?.introduction || post.excerpt}
+              </p>
+
+              <button
+                onClick={handleCopyPageUrl}
+                className="press inline-flex items-center gap-1.5 rounded-full border border-line bg-surface/70 px-3.5 py-1.5 font-mono text-[11px] text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-[#f2f5f5]"
+              >
+                {copyingPage ? (
+                  <>
+                    <Check className="h-3.5 w-3.5 text-success" />
+                    <span className="text-success">Link copied</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-3.5 w-3.5" />
+                    <span>Copy article link</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
+        </Reveal>
 
-          <Button
-            variant="outline"
-            onClick={handleCopyPageUrl}
-            className="rounded-full bg-white/5 border-white/5 hover:bg-white/10 text-xs gap-2 font-mono"
-          >
-            {copyingPage ? (
-              <Check className="w-3.5 h-3.5 text-green-400" />
-            ) : (
-              <Copy className="w-3.5 h-3.5 text-[#b3bad9]" />
-            )}
-            {copyingPage ? "COPIED URL" : "COPY PAGE URL"}
-          </Button>
-        </motion.div>
-
-        {/* Main Content Layout */}
-        <div className="flex flex-col lg:flex-row gap-12 sm:gap-16 relative">
-          {/* Main Article */}
-          <article className="flex-1 w-full max-w-[850px]">
+        {/* Content + TOC */}
+        <div className="relative flex flex-col gap-12 lg:flex-row">
+          <article className="w-full max-w-[65ch] flex-1 space-y-12">
             {post.coverImage && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6 }}
-                className="mb-16 rounded-[2rem] overflow-hidden border border-white/5 relative aspect-[16/9] sm:aspect-[21/9]"
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/80 via-transparent to-transparent z-10" />
-                <img
-                  src={post.coverImage}
-                  alt={post.title}
-                  className="w-full h-full object-cover relative z-0"
-                />
-              </motion.div>
+              <Reveal>
+                <div className="overflow-hidden rounded-3xl border border-line bg-surface">
+                  <img
+                    src={post.coverImage}
+                    alt={post.title}
+                    className="h-auto w-full object-cover"
+                  />
+                </div>
+              </Reveal>
             )}
 
-            <div className="space-y-16">
+            <div className="space-y-14">
               {post.content?.sections?.map((section: any, index: number) => (
-                <motion.section
-                  key={index}
-                  id={`section-${index}`}
-                  className="scroll-mt-32 border-b border-white/5 pb-16 last:border-0 last:pb-0"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.5 }}
-                >
-                  {section.title && (
-                    <div className="flex flex-col mb-8">
-                      <span className="text-[10px] sm:text-xs font-mono tracking-widest text-[#8ab8d0]/80 mb-3">
-                        {String(index + 1).padStart(2, "0")}.
-                      </span>
-                      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-poppins text-white leading-tight tracking-tight">
-                        {section.title}
-                      </h2>
-                    </div>
-                  )}
-
-                  <div className="space-y-6">
-                    {section.content &&
-                      (Array.isArray(section.content) ? (
-                        section.content.map((para: string, i: number) => (
-                          <p
-                            key={i}
-                            className="text-[#b3bad9] text-[17px] sm:text-[19px] leading-[1.8] font-inter font-light"
-                          >
-                            {para}
-                          </p>
-                        ))
-                      ) : (
-                        <p className="text-[#b3bad9] text-[17px] sm:text-[19px] leading-[1.8] font-inter font-light">
-                          {section.content}
+                <Reveal key={index}>
+                  <section
+                    id={`section-${index}`}
+                    className="scroll-mt-28 space-y-5"
+                  >
+                    {section.title && (
+                      <div className="space-y-2">
+                        <p className="font-mono text-[11px] tabular-nums text-primary">
+                          {String(index + 1).padStart(2, "0")}
                         </p>
-                      ))}
-                  </div>
-
-                  {(section.image || section.img_url) && (
-                    <figure className="my-12 flex flex-col">
-                      <div className="rounded-2xl overflow-hidden border border-white/10 bg-white/[0.02]">
-                        <img
-                          src={section.image || section.img_url}
-                          alt={section.title || "Section image"}
-                          className="w-full h-auto rounded-2xl"
-                        />
+                        <h2 className="type-title">{section.title}</h2>
                       </div>
-                      {(section.caption || section.img_description) && (
-                        <figcaption className="mt-4 text-xs font-mono text-[#b3bad9]/60 flex items-center justify-center gap-2">
-                          <span className="w-4 h-px bg-white/20" />
-                          {section.caption || section.img_description}
-                          <span className="w-4 h-px bg-white/20" />
-                        </figcaption>
-                      )}
-                    </figure>
-                  )}
+                    )}
 
-                  {section.list && (
-                    <ul className="flex flex-col gap-4 my-8 pl-2">
-                      {section.list.map((item: string, i: number) => (
-                        <li
-                          key={i}
-                          className="text-[#b3bad9] text-[17px] sm:text-[19px] leading-relaxed font-light flex items-start gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/5"
-                        >
-                          <span className="text-primary/60 mt-1.5 text-xs flex-shrink-0">
-                            ◆
-                          </span>
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                    <div className="space-y-4">
+                      {section.content &&
+                        (Array.isArray(section.content) ? (
+                          section.content.map((para: string, i: number) => (
+                            <p key={i} className="text-pretty text-[15px] leading-[1.75] text-fg-muted sm:text-base">
+                              {para}
+                            </p>
+                          ))
+                        ) : (
+                          <p className="text-pretty text-[15px] leading-[1.75] text-fg-muted sm:text-base">
+                            {section.content}
+                          </p>
+                        ))}
+                    </div>
 
-                  {section.code && <CodeBlock code={section.code} />}
+                    {(section.image || section.img_url) && (
+                      <figure className="my-6">
+                        <div className="overflow-hidden rounded-2xl border border-line bg-inset">
+                          <img
+                            src={section.image || section.img_url}
+                            alt={section.title || "Section illustration"}
+                            className="h-auto w-full"
+                          />
+                        </div>
+                        {(section.caption || section.img_description) && (
+                          <figcaption className="mt-2.5 text-center font-mono text-[11px] text-fg-faint">
+                            {section.caption || section.img_description}
+                          </figcaption>
+                        )}
+                      </figure>
+                    )}
 
-                  {section.externalLink && (
-                    <div className="mt-8">
+                    {section.list && (
+                      <ul className="my-4 space-y-2.5">
+                        {section.list.map((item: string, i: number) => (
+                          <li
+                            key={i}
+                            className="flex items-start gap-3 rounded-xl border border-line bg-surface/60 p-3.5 text-sm leading-relaxed text-fg-muted"
+                          >
+                            <span className="mt-0.5 font-mono text-xs text-primary">›</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {section.code && <CodeBlock code={section.code} />}
+
+                    {section.externalLink && (
                       <a
                         href={section.externalLink.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-3 px-6 py-3.5 bg-primary/10 hover:bg-primary/20 border border-primary/20 text-primary rounded-full transition-all text-sm font-medium"
+                        className="press mt-2 inline-flex items-center gap-2 rounded-full border border-line bg-surface/70 px-4 py-2 font-mono text-xs text-primary backdrop-blur-sm transition-colors hover:border-line-strong"
                       >
-                        <ExternalLink className="w-4 h-4" />
+                        <ExternalLink className="h-3.5 w-3.5" />
                         {section.externalLink.label}
                       </a>
-                    </div>
-                  )}
-                </motion.section>
+                    )}
+                  </section>
+                </Reveal>
               ))}
             </div>
           </article>
 
-          {/* Table of Contents - Right Sidebar */}
-          <aside className="hidden lg:block w-[300px] flex-shrink-0">
-            <div className="sticky top-32 glass-crystal p-6 rounded-2xl border-0 border-l-[3px] border-l-primary/30 shadow-none bg-white/[0.02]">
-              <h3 className="text-xs uppercase tracking-widest font-mono text-white/80 mb-6 flex items-center gap-3">
-                <Copy className="w-3.5 h-3.5 text-primary" /> On this page
-              </h3>
-              <ul className="flex flex-col gap-1 relative">
-                {/* Decorative line behind TOC list */}
-                <div className="absolute left-[3px] top-2 bottom-2 w-px bg-white/5" />
-
-                {toc.map((item, index) => (
-                  <li key={item.id} className="relative">
-                    <a
-                      href={`#${item.id}`}
-                      className="block py-2.5 pl-5 text-sm font-light tracking-wide text-[#b3bad9] hover:text-white transition-colors relative group"
-                    >
-                      {/* Hover dot */}
-                      <div className="absolute left-[-2px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                      <span className="mr-2 text-[10px] font-mono text-[#b3bad9]/40">
-                        {String(index + 1).padStart(2, "0")}.
-                      </span>
-                      {item.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </aside>
+          {/* Table of contents — hairline list */}
+          {toc.length > 0 && (
+            <aside className="hidden w-52 shrink-0 lg:block">
+              <nav
+                aria-label="Table of contents"
+                className="sticky top-24 space-y-3 border-l border-line py-1 pl-5"
+              >
+                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-fg-faint">
+                  Contents
+                </p>
+                <ul className="space-y-2.5 text-xs">
+                  {toc.map((item, index) => (
+                    <li key={item.id}>
+                      <a
+                        href={`#${item.id}`}
+                        className="block leading-snug text-fg-muted transition-colors hover:text-[#f2f5f5]"
+                      >
+                        <span className="mr-1.5 font-mono text-[10px] tabular-nums text-primary">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <span className="line-clamp-2">{item.title}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </aside>
+          )}
         </div>
+
+        {/* Back link */}
+        <div className="border-t border-line pt-8">
+          <Link
+            to="/blog"
+            className="group inline-flex items-center gap-2 font-mono text-xs text-fg-muted transition-colors hover:text-[#f2f5f5]"
+          >
+            <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
+            Back to writing
+          </Link>
+        </div>
+
+        <NextPageLink to="/about" title="About" />
       </div>
     </div>
   );

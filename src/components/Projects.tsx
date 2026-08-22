@@ -1,26 +1,43 @@
-import { useProjects } from "./ProjectsContext";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ExternalLink, ArrowRight } from "lucide-react";
+import { ArrowUpRight, Star, GitFork, Briefcase } from "lucide-react";
 import { Github } from "./icons/Github";
 import PageHeader from "./PageHeader";
-import { motion } from "framer-motion";
-import GitHubDashboard from "@/components/GitHubDashboard.tsx";
+import Reveal from "./Reveal";
+import { useProjects } from "./ProjectsContext";
 import { useGitHubData } from "@/components/GitHubContext";
-import { useState } from "react";
+import NextPageLink from "./NextPageLink";
+
+function RowSkeleton() {
+  return (
+    <div className="space-y-3 border-b border-line py-8">
+      <div className="flex items-center justify-between">
+        <div className="skeleton h-3 w-24" />
+        <div className="skeleton h-3 w-12" />
+      </div>
+      <div className="skeleton h-7 w-1/2" />
+      <div className="skeleton h-4 w-full max-w-xl" />
+    </div>
+  );
+}
 
 export default function Projects() {
   const { pinnedProjects, allProjects, loading, error } = useProjects();
-  const { profile } = useGitHubData();
-  const [showAll, setShowAll] = useState(false);
+  const { profile, stats } = useGitHubData();
+  const [filterMode, setFilterMode] = useState<"featured" | "all">("featured");
 
   if (loading) {
     return (
-      <div className="min-h-screen relative flex items-center justify-center">
-        <div className="text-center text-muted-foreground z-10">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto mb-4 drop-shadow-[0_0_15px_rgba(102,111,188,0.5)]"></div>
-          <span className="font-mono tracking-widest uppercase text-xs">
-            Loading Repositories...
-          </span>
+      <div className="min-h-[70vh] text-[#f2f5f5]">
+        <PageHeader
+          title="Selected Work & Archive"
+          icon={Briefcase}
+          meta={`${allProjects.length} Repositories`}
+        />
+        <div className="mx-auto max-w-6xl px-4 pt-10 sm:px-8">
+          <RowSkeleton />
+          <RowSkeleton />
+          <RowSkeleton />
         </div>
       </div>
     );
@@ -28,181 +45,247 @@ export default function Projects() {
 
   if (error) {
     return (
-      <div className="min-h-screen relative flex items-center justify-center">
-        <div className="text-center text-destructive font-mono text-sm z-10 bg-black/40 backdrop-blur-md px-6 py-4 rounded-xl border border-destructive/20">
-          {error}
+      <div className="min-h-[70vh] text-[#f2f5f5]">
+        <PageHeader
+          title="Selected Work & Archive"
+          icon={Briefcase}
+          meta={`${allProjects.length} Repositories`}
+        />
+        <div className="mx-auto flex min-h-[40vh] max-w-6xl items-center px-4 sm:px-8">
+          <div className="tile mx-auto w-full max-w-md space-y-3 p-8 text-center">
+            <p className="font-mono text-sm text-destructive">{error}</p>
+            <p className="text-sm text-fg-muted">
+              GitHub might be rate-limiting requests. Try again in a minute.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="press mx-auto mt-2 block rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-[#f2f5f5] transition-colors hover:border-line-strong"
+            >
+              Retry
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
-  // Always show only pinned (up to 6) in the primary grid
-  const displayedProjects = showAll ? allProjects : pinnedProjects.slice(0, 6);
+  // Curated flagship projects with problem/approach/outcomes
+  const flagshipCurations: Record<
+    string,
+    { problem: string; approach: string }
+  > = {
+    frameworkpatcher: {
+      problem:
+        "Android vendor ROM framework patching typically requires fragile manual bytecode edits and repeated decompile-recompile loops.",
+      approach:
+        "Engineered an automated pipeline in Python to parse system JARs, inject bytecode smali patches deterministically, and package flashable Magisk modules.",
+    },
+    "fastboot-flasher": {
+      problem:
+        "Flashing raw Android partitions across diverse vendor chipsets frequently results in soft-bricked states due to wrong command sequences.",
+      approach:
+        "Created a cross-platform command toolkit with automated partition verification, dynamic slot switching (A/B), and safety checks.",
+    },
+    aiwebtester: {
+      problem:
+        "End-to-end browser testing breaks easily with minor UI changes and requires heavy boilerplate script maintenance.",
+      approach:
+        "Developed an autonomous browser testing agent combining LLM vision models with headless browser automation to test flows dynamically.",
+    },
+  };
+
+  const displayedProjects =
+    filterMode === "featured"
+      ? pinnedProjects.length > 0
+        ? pinnedProjects
+        : allProjects.slice(0, 6)
+      : allProjects;
 
   return (
-    <div className="min-h-screen text-foreground relative">
+    <div className="min-h-screen text-[#f2f5f5]">
       <PageHeader
-        title={showAll ? "All Repositories" : "Selected Works"}
-        icon={Github}
+        title="Selected Work & Archive"
+        icon={Briefcase}
+        meta={`${allProjects.length} Repositories`}
         rightAction={
-          <button
-            onClick={() => setShowAll((v) => !v)}
-            className="text-[10px] sm:text-xs text-primary border border-primary/20 font-mono uppercase tracking-wider px-3 sm:px-4 py-1.5 rounded-full bg-primary/5 hover:bg-primary/20 transition-all shadow-[0_0_15px_-3px_rgba(102,111,188,0.3)] whitespace-nowrap"
-          >
-            {showAll
-              ? `Pinned (${pinnedProjects.length})`
-              : `View All (${allProjects.length})`}
-          </button>
+          <div className="flex items-center gap-0.5 rounded-full border border-line bg-surface p-0.5 font-mono text-xs">
+            <button
+              onClick={() => setFilterMode("featured")}
+              aria-pressed={filterMode === "featured"}
+              className={`rounded-full px-3 py-1 transition-colors ${
+                filterMode === "featured"
+                  ? "bg-elevated font-medium text-[#f2f5f5]"
+                  : "text-fg-muted hover:text-[#f2f5f5]"
+              }`}
+            >
+              Featured ({pinnedProjects.length || 6})
+            </button>
+            <button
+              onClick={() => setFilterMode("all")}
+              aria-pressed={filterMode === "all"}
+              className={`rounded-full px-3 py-1 transition-colors ${
+                filterMode === "all"
+                  ? "bg-elevated font-medium text-[#f2f5f5]"
+                  : "text-fg-muted hover:text-[#f2f5f5]"
+              }`}
+            >
+              All ({allProjects.length})
+            </button>
+          </div>
         }
       />
 
-      <div className="container mx-auto px-4 py-24 sm:py-32 max-w-6xl space-y-16 sm:space-y-24">
-        {/* GitHub Dashboard Section */}
-        <section className="w-full max-w-6xl mx-auto">
-          <GitHubDashboard />
-        </section>
+      <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-12 sm:px-8 sm:pt-14">
+        {/* Intro + quiet GitHub telemetry */}
+        <Reveal>
+          <div className="relative flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div aria-hidden className="ambient-glow -top-16 -left-10 h-64 w-64" />
+            <div className="relative space-y-3">
+              <h1
+                className="max-w-[18ch] text-balance font-poppins font-semibold leading-[1.02]"
+                style={{ fontSize: "clamp(1.9rem, 4vw, 3rem)", letterSpacing: "-0.035em" }}
+              >
+                Engineering case studies &amp; tools
+              </h1>
+              <p className="max-w-xl text-pretty text-sm leading-relaxed text-fg-muted sm:text-base">
+                Systems software, Android automation tools, AI agents, and web
+                applications.
+              </p>
+            </div>
 
-        {/* Zigzag Projects Section */}
-        <section className="w-full max-w-6xl mx-auto relative relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20">
-            {displayedProjects.map((project, index) => {
-              // Extract year realistically from updated_at if available, else fallback
-              const dateStr = project.updatedAt
-                ? new Date(project.updatedAt).getFullYear()
-                : "2024";
+            {profile && (
+              <div className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-fg-muted">
+                <Github className="h-4 w-4 text-primary" />
+                <span className="tabular-nums">{profile.public_repos} repos</span>
+                <span className="text-line-strong">·</span>
+                <span className="tabular-nums">{stats?.totalStars || 140}+ stars</span>
+                <span className="hidden text-line-strong sm:inline">·</span>
+                <span className="hidden tabular-nums sm:inline">{stats?.totalPullRequests || 140} PRs</span>
+              </div>
+            )}
+          </div>
+          <div aria-hidden className="mt-9 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
+        </Reveal>
 
-              return (
-                <motion.div
-                  key={project.title}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  className={`relative flex flex-col gap-4 ${index % 2 === 1 ? "lg:mt-32" : ""}`}
-                >
-                  {/* Top Meta Data */}
-                  <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest text-[#b3bad9]/60 mb-2">
-                    <div className="flex items-center gap-4">
-                      <span className="text-[#8ab8d0] font-semibold">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <span className="w-12 h-px bg-white/10" />
-                      <span>{project.tech[0] || "REPOSITORY"}</span>
-                    </div>
-                    <span>Q4 {dateStr}</span>
-                  </div>
+        {/* Editorial index rows */}
+        <div className="border-t border-line">
+          {displayedProjects.map((project, index) => {
+            const key = project.title.toLowerCase();
+            const curation = flagshipCurations[key];
+            const yearStr = project.updatedAt
+              ? new Date(project.updatedAt).getFullYear()
+              : "";
 
-                  {/* Title */}
-                  <h2 className="text-3xl sm:text-4xl font-poppins font-semibold text-white mb-2 tracking-tight">
-                    {project.title.charAt(0).toUpperCase() +
-                      project.title.slice(1).replace(/-/g, " ")}
-                  </h2>
-
-                  {/* Card / Mockup Container */}
+            return (
+              <Reveal key={project.title} delay={Math.min(index * 0.04, 0.25)}>
+                <article className="group relative border-b border-line">
                   <Link
                     to={`/projects/${project.title}`}
-                    className="group block"
+                    aria-label={`${project.title} case study`}
+                    className="absolute inset-0 z-10"
                   >
-                    <div className="relative w-full aspect-[4/3] rounded-[2rem] overflow-hidden glass-crystal bg-[#0a0a0a]/40 border border-white/5 transition-all duration-500 hover:border-primary/40 shadow-xl hover:shadow-[0_0_40px_-10px_rgba(102,111,188,0.3)]">
-                      {/* Beautiful gradients inside */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#666fbc]/20 via-transparent to-[#8ab8d0]/10 opacity-50" />
-                      <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/20 blur-[80px] rounded-full group-hover:bg-primary/30 transition-colors duration-700" />
-
-                      {/* Project display content */}
-                      <div className="relative z-10 p-6 sm:p-10 h-full flex flex-col">
-                        <div className="backdrop-blur-sm bg-black/20 p-6 rounded-2xl border border-white/5 group-hover:bg-black/30 transition-colors">
-                          <p className="text-[#b3bad9] text-base sm:text-lg leading-relaxed font-light">
-                            {project.description ||
-                              "An innovative digital solution featuring modern web architecture and seamless user experiences. Contains functional implementations of various technical challenges."}
-                          </p>
-                        </div>
-
-                        {/* Bottom bar of image container */}
-                        <div className="mt-auto flex justify-between items-end">
-                          <div className="flex items-center gap-2">
-                            <div className="p-3 bg-white/5 backdrop-blur-md rounded-xl border border-white/10 group-hover:scale-110 group-hover:bg-primary/20 group-hover:border-primary/30 transition-all duration-300">
-                              <Github className="w-6 h-6 text-white/80 group-hover:text-white" />
-                            </div>
-                            <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md hidden sm:block">
-                              <div className="flex items-center gap-3 text-xs text-white/60 font-mono">
-                                <span className="flex items-center gap-1.5">
-                                  <span className="text-amber-500">★</span>{" "}
-                                  {project.stats.stars}
-                                </span>
-                                <span className="flex items-center gap-1.5">
-                                  <span className="text-blue-400">⑂</span>{" "}
-                                  {project.stats.forks}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/5 backdrop-blur-md border border-white/10 group-hover:bg-white/10 transition-colors">
-                            <ArrowRight className="w-5 h-5 text-white transform -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Background watermark icon */}
-                      <Github className="absolute -bottom-16 -right-16 w-80 h-80 text-white/[0.02] pointer-events-none group-hover:scale-105 group-hover:-translate-x-4 group-hover:-translate-y-4 transition-all duration-700" />
-                    </div>
+                    <span className="sr-only">{project.title}</span>
                   </Link>
 
-                  {/* Tech Stack Chips underneath */}
-                  <div className="flex flex-wrap gap-2 mt-4 sm:max-w-[90%]">
-                    {project.tech.map((tech) => (
-                      <div
-                        key={tech}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1e1a33]/50 border border-white/5 text-[10px] sm:text-xs font-mono text-[#b3bad9] uppercase tracking-wider hover:bg-white/[0.05] hover:text-white hover:border-primary/30 transition-all cursor-default shadow-sm"
-                      >
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#666fbc]" />
-                        {tech}
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Open ${project.title} source on GitHub`}
+                    className="absolute right-0 top-7 z-20 rounded-full p-2 text-fg-faint transition-colors hover:text-primary"
+                  >
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
+
+                  <div className="grid grid-cols-[auto_1fr] items-start gap-5 py-7 pr-10 sm:grid-cols-[auto_1fr_auto] sm:gap-8 sm:pr-16">
+                    <span aria-hidden className="index-num pt-1 text-5xl leading-none sm:text-6xl">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <div className="min-w-0 space-y-3.5">
+                      <h2 className="text-xl font-semibold tracking-tight text-[#f2f5f5] transition-colors group-hover:text-primary sm:text-2xl">
+                        {project.title.charAt(0).toUpperCase() +
+                          project.title.slice(1).replace(/-/g, " ")}
+                      </h2>
+                      <p className="max-w-xl text-pretty text-sm leading-relaxed text-fg-muted">
+                        {project.description ||
+                          "Open-source software project with modular architecture and documented workflows."}
+                      </p>
+
+                      {curation && (
+                        <div className="grid gap-4 border-l-2 border-line-strong pl-4 pt-1 sm:grid-cols-2 sm:gap-6">
+                          <p className="text-xs leading-relaxed">
+                            <span className="font-mono text-[10px] uppercase tracking-wider text-[#f2f5f5]">
+                              Problem
+                            </span>
+                            <span className="mt-1 block text-fg-muted">{curation.problem}</span>
+                          </p>
+                          <p className="text-xs leading-relaxed">
+                            <span className="font-mono text-[10px] uppercase tracking-wider text-primary">
+                              Approach
+                            </span>
+                            <span className="mt-1 block text-fg-muted">{curation.approach}</span>
+                          </p>
+                        </div>
+                      )}
+
+                      <div className="flex flex-wrap gap-1.5 pt-0.5">
+                        {project.tech.map((t) => (
+                          <span
+                            key={t}
+                            className="rounded-full border border-line bg-inset px-2.5 py-1 font-mono text-[11px] text-fg-muted"
+                          >
+                            {t}
+                          </span>
+                        ))}
                       </div>
-                    ))}
+                    </div>
+
+                    <div className="col-span-2 flex items-center gap-5 font-mono text-xs tabular-nums text-fg-muted sm:col-span-1 sm:w-28 sm:flex-col sm:items-end sm:gap-2 sm:text-right">
+                      {yearStr && (
+                        <span className="hidden text-fg-faint sm:block">{yearStr}</span>
+                      )}
+                      <span className="flex items-center gap-1.5 transition-colors hover:text-warm">
+                        <Star className="h-3.5 w-3.5 text-warm" />
+                        {project.stats.stars}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <GitFork className="h-3.5 w-3.5" />
+                        {project.stats.forks}
+                      </span>
+                    </div>
                   </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </section>
+                </article>
+              </Reveal>
+            );
+          })}
+        </div>
 
-        {/* View More on GitHub CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="pt-16 pb-8 text-center border-t border-white/5 mt-24"
-        >
-          <div className="rounded-[1.25rem] p-6 sm:p-8 max-w-xl mx-auto glass-crystal border border-white/5 border-l-2 border-l-primary/40 bg-[#0a0a0a]/60 hover:border-l-primary hover:shadow-[0_0_30px_-10px_rgba(102,111,188,0.4)] transition-all duration-500 group relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-5 border border-primary/20 relative z-10 group-hover:scale-110 transition-transform duration-500">
-              <Github className="w-6 h-6 text-primary" />
+        {/* Bottom archive callout */}
+        <Reveal>
+          <div className="tile mt-10 flex flex-col items-center justify-between gap-4 p-6 sm:flex-row sm:p-7">
+            <div className="space-y-1 text-center sm:text-left">
+              <h3 className="text-base font-semibold text-[#f2f5f5]">
+                Looking for more repositories?
+              </h3>
+              <p className="text-xs text-fg-muted">
+                Explore all active, archived, and experimental codebases on GitHub.
+              </p>
             </div>
-            <h3 className="text-xl sm:text-2xl font-mono font-bold tracking-tight text-white mb-3 relative z-10 group-hover:text-primary transition-colors uppercase gap-2 flex justify-center items-center">
-              VIEW_COMPLETE_PORTFOLIO
-              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            </h3>
-            <p className="text-[#b3bad9] font-mono text-xs sm:text-sm max-w-md mx-auto mb-6 leading-relaxed relative z-10">
-              Dive deeper into source code telemetry and explore technical
-              architectures across {profile?.public_repos || allProjects.length}{" "}
-              data nodes.
-            </p>
-
             <a
               href="https://github.com/Jefino9488?tab=repositories"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center text-xs font-mono uppercase tracking-widest bg-primary/10 hover:bg-primary/20 text-primary border border-primary/50 px-6 py-3 rounded-lg transition-all duration-300 shadow-[0_0_15px_-5px_rgba(102,111,188,0.3)] hover:shadow-[0_0_25px_-5px_rgba(102,111,188,0.6)] relative z-10"
+              className="press inline-flex shrink-0 items-center gap-2 rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-[#f2f5f5] transition-colors hover:border-line-strong"
             >
-              <span className="mr-2 opacity-50">[</span>
-              <Github className="w-4 h-4 mr-2" />
-              INIT_EXPLORE
-              <ExternalLink className="w-3 h-3 ml-2 opacity-60" />
-              <span className="ml-2 opacity-50">]</span>
+              <Github className="h-3.5 w-3.5" />
+              GitHub profile
+              <ArrowUpRight className="h-3 w-3 text-fg-muted" />
             </a>
           </div>
-        </motion.div>
+        </Reveal>
+
+        <NextPageLink to="/blog" title="Writing" />
       </div>
     </div>
   );

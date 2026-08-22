@@ -1,510 +1,651 @@
-"use client";
-
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-  ExternalLink,
-  Send,
-  BookOpen,
-  ArrowRight,
-  Star,
-  GitFork,
-  Award,
-} from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowRight, ArrowUpRight, Star, GitFork } from "lucide-react";
 import { Github } from "./icons/Github";
 import { Linkedin } from "./icons/Linkedin";
 import { useProjects } from "./ProjectsContext";
-import { useScreenSize } from "@/hooks/useScreenSize";
-
-import {
-  ReactIcon,
-  NodeIcon,
-  ExpressIcon,
-  SpringIcon,
-  JavaIcon,
-  NotionIcon,
-  GitIcon,
-  GitHubIcon,
-  VercelIcon,
-  NetlifyIcon,
-  RenderIcon,
-} from "./Icons";
-import ExperienceCard from "./ExperienceCard";
+import { useGitHubData } from "@/components/GitHubContext";
+import { getBlogPosts, type BlogPost } from "@/services/blogService";
+import Reveal from "./Reveal";
+import CountUp from "./CountUp";
 import ContributionGraph from "./ContributionGraph";
 
-export default function Home() {
-  const { pinnedProjects, allProjects, loading, error } = useProjects();
-  const { isXlScreen } = useScreenSize();
+const TECH_MARQUEE = [
+  "Python",
+  "TypeScript",
+  "React",
+  "FastAPI",
+  "Node.js",
+  "PyTorch",
+  "TensorFlow",
+  "Android Internals",
+  "Linux",
+  "Docker",
+  "Tailwind CSS",
+];
 
-  // All tech stack items for the infinite marquee
-  const techStack = [
-    { name: "React", icon: <ReactIcon className="w-8 h-8" /> },
-    { name: "NodeJS", icon: <NodeIcon className="w-8 h-8" /> },
-    { name: "Express", icon: <ExpressIcon className="w-8 h-8" /> },
-    { name: "Spring Boot", icon: <SpringIcon className="w-8 h-8" /> },
-    { name: "Spring Jpa", icon: <SpringIcon className="w-8 h-8" /> },
-    { name: "Java", icon: <JavaIcon className="w-8 h-8" /> },
-    { name: "Vercel", icon: <VercelIcon className="w-8 h-8" /> },
-    { name: "Netlify", icon: <NetlifyIcon className="w-8 h-8" /> },
-    { name: "Render", icon: <RenderIcon className="w-8 h-8" /> },
-    { name: "Notion", icon: <NotionIcon className="w-8 h-8" /> },
-    { name: "Git", icon: <GitIcon className="w-8 h-8" /> },
-    { name: "GitHub", icon: <GitHubIcon className="w-8 h-8" /> },
-  ];
-
-  // Select projects based on screen size
-  const pinnedTitles = new Set(
-    pinnedProjects.map((project) => project.title.toLowerCase()),
+function Kicker({ index, label }: { index: string; label: string }) {
+  return (
+    <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
+      <span className="text-primary">{index}</span>
+      <span className="mx-2 text-line-strong">/</span>
+      {label}
+    </p>
   );
-  const recentNonPinnedProjects = allProjects
-    .filter((project) => !pinnedTitles.has(project.title.toLowerCase()))
-    .slice(0, 6);
+}
 
-  const projectCount = 6;
-  const displayedProjects = [
-    ...pinnedProjects.slice(0, 6),
-    ...(isXlScreen ? recentNonPinnedProjects : []),
-  ].slice(0, projectCount);
+function StaggeredLine({
+  words,
+  muted = false,
+  baseDelay,
+}: {
+  words: string[];
+  muted?: boolean;
+  baseDelay: number;
+}) {
+  const reduceMotion = useReducedMotion();
 
   return (
-    <div className="min-h-screen text-foreground">
-      <div className="flex-grow w-full py-4 sm:py-6">
-        <header className="mb-12 sm:mb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 md:pt-16">
-          <div className="flex flex-col-reverse md:flex-row items-start justify-between gap-8 md:gap-16 relative">
-            {/* Abstract Watermark Text */}
-            <div
-              aria-hidden="true"
-              className="absolute top-0 -left-10 hidden md:block select-none pointer-events-none opacity-[0.02] text-[180px] font-black font-poppins text-white leading-none right-0 overflow-hidden whitespace-nowrap"
-              style={{
-                contentVisibility: "auto",
-                containIntrinsicSize: "180px 1px",
-              }}
-            >
-              //JEFINO
-            </div>
+    <span className="block overflow-hidden pb-1">
+      {words.map((word, wi) => (
+        <motion.span
+          key={wi}
+          className={`inline-block ${muted ? "text-fg-muted" : ""}`}
+          initial={reduceMotion ? false : { y: "112%" }}
+          animate={{ y: 0 }}
+          transition={{
+            delay: baseDelay + wi * 0.055,
+            duration: 0.75,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+        >
+          {word}
+          {" "}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
 
-            {/* Left Side: Text and Actions */}
-            <div
-              className="flex-1 relative z-10"
-              style={{ contain: "layout paint style" }}
-            >
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="h-px bg-primary w-12" />
-                  <p className="orbitron-regular text-sm tracking-widest text-primary uppercase">
-                    Full Stack Developer
-                  </p>
-                </div>
-                <h1 className="font-poppins text-5xl sm:text-6xl md:text-7xl font-semibold tracking-tighter mb-4 text-foreground">
-                  Crafting Digital
-                  <br />
-                  <span className="text-gradient font-light">Experiences.</span>
-                </h1>
-                <p className="mobile-hero-copy font-sans sm:font-inter text-muted-foreground text-lg sm:text-xl max-w-xl leading-relaxed mb-8">
-                  I build accessible, performant products and digital
-                  experiences for the web. Specialized in modern frontend
-                  architecture and scalable backends.
-                </p>
+export default function Home() {
+  const { pinnedProjects, allProjects } = useProjects();
+  const { profile, stats, languages } = useGitHubData();
+  const [latestPosts, setLatestPosts] = useState<BlogPost[]>([]);
 
-                <div className="flex flex-wrap items-center gap-4 mb-4">
-                  <Button
-                    onClick={() => {
-                      const element =
-                        document.getElementById("featured-projects");
-                      element?.scrollIntoView({ behavior: "smooth" });
-                    }}
-                    className="bg-primary hover:bg-white text-primary-foreground hover:text-black rounded-full px-8 py-6 text-sm font-semibold transition-all"
-                  >
-                    View Projects
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                  <div className="flex items-center space-x-2">
-                    {[
-                      {
-                        icon: Github,
-                        link: "https://github.com/Jefino9488",
-                        label: "GitHub",
-                      },
-                      {
-                        icon: Linkedin,
-                        link: "https://www.linkedin.com/in/jefino9488/",
-                        label: "LinkedIn",
-                      },
-                      {
-                        icon: Send,
-                        link: "https://telegram.me/jefino9488",
-                        label: "Telegram",
-                      },
-                    ].map((item, index) => (
-                      <a
-                        key={index}
-                        href={item.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`Visit ${item.label}`}
-                        className="group inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:bg-white/10 transition-colors"
-                      >
-                        <item.icon className="h-5 w-5 text-muted-foreground group-hover:text-foreground" />
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+  useEffect(() => {
+    getBlogPosts().then((posts) => {
+      setLatestPosts(posts.slice(0, 3));
+    });
+  }, []);
 
-            {/* Right Side: Profile / Abstract Frame */}
-            <div className="relative w-full md:w-auto flex justify-center md:block flex-shrink-0 z-10">
-              {/* Accent box behind */}
-              <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full" />
+  const fallbackFlagships = [
+    {
+      title: "frameworkpatcher",
+      name: "FrameworkPatcher",
+      description:
+        "Automated framework for modifying Android system JARs and generating reproducible flashable modules.",
+      tech: ["Python", "Android", "Automation"],
+      stats: { stars: 97, forks: 84 },
+      link: "https://github.com/Jefino9488/FrameworkPatcher",
+      problem:
+        "Vendor ROM patching means fragile manual bytecode edits and endless decompile-recompile loops.",
+    },
+    {
+      title: "fastboot-flasher",
+      name: "Fastboot Flasher",
+      description:
+        "Cross-platform automation utility for device partitioning, flashing, and Android boot recovery workflows.",
+      tech: ["Batch", "Shell", "Android"],
+      stats: { stars: 39, forks: 15 },
+      link: "https://github.com/Jefino9488/Fastboot-Flasher",
+    },
+    {
+      title: "aiwebtester",
+      name: "AIWebTester",
+      description:
+        "AI-assisted automated browser testing suite leveraging vision models and autonomous agent flows.",
+      tech: ["TypeScript", "Python", "AI"],
+      stats: { stars: 12, forks: 4 },
+      link: "https://github.com/Jefino9488",
+    },
+  ];
 
-              <div className="relative w-48 h-64 md:w-64 md:h-80 rounded-2xl overflow-hidden glass-crystal neon-border">
-                {/* Use <picture> for WebP with JPEG fallback — eliminates JS lazy-load overhead for LCP image */}
-                <picture>
-                  <source
-                    srcSet="/profile/profile_anime.webp"
-                    type="image/webp"
-                  />
-                  <img
-                    src="/profile/profile_anime.jpg"
-                    alt="Jefino Abstract"
-                    className="w-full h-full object-cover filter contrast-125 mix-blend-screen opacity-60"
-                    width="256"
-                    height="320"
-                    fetchPriority="high"
-                    decoding="async"
-                  />
-                </picture>
-                <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-[#1e1a33]/90 to-transparent">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[10px] font-mono text-white/80 uppercase tracking-widest">
-                      Available for hire
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
+  const featuredProjects = fallbackFlagships.map((fallback) => {
+    const matched = [...pinnedProjects, ...allProjects].find(
+      (p) =>
+        p.title.toLowerCase() === fallback.title.toLowerCase() ||
+        p.title.toLowerCase().includes(fallback.title.toLowerCase()),
+    );
+    if (matched) {
+      return {
+        ...fallback,
+        title: matched.title,
+        name:
+          matched.title.charAt(0).toUpperCase() +
+          matched.title.slice(1).replace(/-/g, " "),
+        description: matched.description || fallback.description,
+        tech: matched.tech.length > 0 ? matched.tech : fallback.tech,
+        stats: matched.stats.stars > 0 ? matched.stats : fallback.stats,
+        link: matched.link,
+      };
+    }
+    return fallback;
+  });
 
-        <main className="space-y-6 sm:space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Things I've Learnt & I know Section - Infinite Circular Flow */}
-          <section
-            className="overflow-hidden relative py-3"
-            style={{
-              maskImage:
-                "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-              WebkitMaskImage:
-                "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-            }}
+  const skillsList = [
+    { category: "Languages", items: ["Python", "TypeScript", "JavaScript", "Java", "Bash"] },
+    { category: "Frameworks", items: ["React", "Node.js", "Express", "FastAPI", "Tailwind"] },
+    { category: "Systems & AI", items: ["Android Internals", "Linux", "TensorFlow", "PyTorch", "Docker"] },
+  ];
+
+  const totalLangBytes = languages.reduce((sum, [, b]) => sum + b, 0) || 1;
+  const topLanguages = [...languages]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4)
+    .map(([name, bytes]) => ({
+      name,
+      pct: Math.round((bytes / totalLangBytes) * 100),
+    }));
+
+  const exploreLinks = [
+    {
+      to: "/projects",
+      index: "01",
+      title: "Work",
+      description:
+        "Case studies and the full repository archive — systems tools, AI agents, web platforms.",
+    },
+    {
+      to: "/blog",
+      index: "02",
+      title: "Writing",
+      description:
+        "Notes on engineering, AI agents, Android internals, and things I'm building.",
+    },
+    {
+      to: "/about",
+      index: "03",
+      title: "About",
+      description:
+        "Who I am, what I focus on, my journey so far — plus a way to reach me.",
+    },
+    {
+      to: "/certificates",
+      index: "04",
+      title: "Credentials",
+      description:
+        "A verified registry of professional certifications across ML, networking, and automation.",
+    },
+  ];
+
+  return (
+    <div className="pb-16 text-[#f2f5f5]">
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-8">
+        {/* ================================================================ */}
+        {/* Hero                                                             */}
+        {/* ================================================================ */}
+        <div aria-hidden className="ambient-glow -top-40 left-1/3 h-[28rem] w-[28rem]" />
+
+        <section className="relative flex min-h-[88dvh] flex-col justify-center pb-12 pt-32 lg:min-h-[90dvh] lg:pt-32">
+          <Reveal y={10}>
+            <p className="inline-flex items-center gap-2.5 rounded-full border border-line bg-surface/80 py-1.5 pl-3 pr-4 font-mono text-[10px] uppercase tracking-[0.24em] text-fg-muted shadow-card backdrop-blur-sm">
+              <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse-dot" />
+              Open to collaborations · Chennai, IN
+            </p>
+          </Reveal>
+
+          <h1
+            className="mt-9 font-poppins font-semibold leading-[0.98]"
+            style={{ fontSize: "clamp(2.9rem, 7.5vw, 6.75rem)", letterSpacing: "-0.045em" }}
+            aria-label="I build software, automation and tools."
           >
-            {/* Row 1 - Moves Left */}
-            <div className="relative overflow-hidden mb-3">
-              <div
-                className="flex gap-3 sm:gap-4 marquee-track marquee-left"
-                style={{ width: "fit-content" }}
-              >
-                {[...techStack, ...techStack].map((tech, index) => (
-                  <div
-                    key={`row1-${index}`}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/5 bg-white/5"
+            <StaggeredLine words={["I", "build", "software,"]} baseDelay={0.15} />
+            <StaggeredLine
+              words={["automation", "&", "tools."]}
+              muted
+              baseDelay={0.33}
+            />
+          </h1>
+
+          <div className="mt-10 grid items-end gap-12 md:grid-cols-[1fr_auto] md:gap-14">
+            <div>
+              <Reveal delay={0.45}>
+                <p className="max-w-xl text-pretty text-base leading-relaxed text-fg-muted sm:text-lg">
+                  Full-stack developer focused on AI, Android systems tooling,
+                  and open-source software — building fast, reliable,
+                  maintainable architectures.
+                </p>
+              </Reveal>
+
+              <Reveal delay={0.52}>
+                <div className="mt-7 flex flex-wrap items-center gap-3">
+                  <Link
+                    to="/projects"
+                    className="press inline-flex items-center gap-2 rounded-full bg-[#f2f5f5] px-6 py-3 text-sm font-medium text-[#050708] shadow-card transition-all hover:bg-white"
                   >
-                    <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
-                      {tech.icon}
-                    </div>
-                    <span className="font-medium text-xs text-foreground/90 whitespace-nowrap">
-                      {tech.name}
-                    </span>
-                  </div>
-                ))}
-              </div>
+                    View work
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+
+                  <a
+                    href="https://github.com/Jefino9488"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub profile"
+                    className="press inline-flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface/60 text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-[#f2f5f5]"
+                  >
+                    <Github className="h-4 w-4" />
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/jefino9488/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn profile"
+                    className="press inline-flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface/60 text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-[#f2f5f5]"
+                  >
+                    <Linkedin className="h-4 w-4" />
+                  </a>
+                  <a
+                    href="mailto:jefinojacob9488@gmail.com"
+                    aria-label="Email Jefino"
+                    className="press inline-flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface/60 font-mono text-xs text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-[#f2f5f5]"
+                  >
+                    @
+                  </a>
+                </div>
+              </Reveal>
             </div>
 
-            {/* Row 2 - Moves Right */}
-            <div className="relative overflow-hidden">
-              <div
-                className="flex gap-3 sm:gap-4 marquee-track marquee-right"
-                style={{ width: "fit-content" }}
-              >
-                {[...[...techStack].reverse(), ...[...techStack].reverse()].map(
-                  (tech, index) => (
-                    <div
-                      key={`row2-${index}`}
-                      className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/5 bg-white/5"
-                    >
-                      <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
-                        {tech.icon}
-                      </div>
-                      <span className="font-medium text-xs text-foreground/90 whitespace-nowrap">
-                        {tech.name}
-                      </span>
-                    </div>
+            {/* Portrait — offset frame + technical corner ticks */}
+            <Reveal delay={0.55} y={26} className="justify-self-start md:justify-self-end">
+              <div className="relative">
+                <div
+                  aria-hidden
+                  className="absolute -right-3 -top-3 h-full w-full rounded-4xl border border-line-strong transition-colors duration-500"
+                />
+                {["-left-4 -top-4 border-l border-t", "-right-4 -top-4 border-r border-t", "-bottom-4 -left-4 border-b border-l", "-bottom-4 -right-4 border-b border-r"].map(
+                  (pos) => (
+                    <span
+                      key={pos}
+                      aria-hidden
+                      className={`absolute ${pos} h-3 w-3 border-primary/50`}
+                    />
                   ),
                 )}
-              </div>
-            </div>
-          </section>
-
-          {/* Latest Modified Project */}
-          <section>
-            <div className="space-y-3">
-              {(() => {
-                const latestProject = allProjects.find(
-                  (project) =>
-                    !["jefino9488", "myprofileviews"].includes(
-                      project.title.toLowerCase(),
-                    ),
-                );
-                if (!latestProject) return null;
-
-                const lastUpdatedDate = latestProject.updatedAt
-                  ? new Date(latestProject.updatedAt).toLocaleDateString(
-                      "en-US",
-                      {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      },
-                    )
-                  : "Recently";
-
-                return (
-                  <ExperienceCard
-                    company={latestProject.title}
-                    role={latestProject.description}
-                    date={`Updated: ${lastUpdatedDate}`}
-                    location="Open Source"
-                    status="Latest Update"
-                    link={latestProject.link}
-                    logo={<GitFork className="w-8 h-8" />}
+                <div className="relative h-40 w-40 overflow-hidden rounded-4xl border border-line bg-surface shadow-lift sm:h-48 sm:w-48">
+                  <img
+                    src="/profile/profile_anime.jpg"
+                    alt="Jefino"
+                    className="h-full w-full object-cover grayscale-[35%] transition-all duration-700 hover:scale-[1.03] hover:grayscale-0"
+                    width="192"
+                    height="192"
                   />
-                );
-              })()}
-            </div>
-          </section>
-
-          <section className="space-y-4">
-            <div className="flex flex-col gap-4">
-              <ContributionGraph />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="glass-crystal border border-white/5 border-l-2 border-l-primary/40 bg-[#0a0a0a]/60 rounded-[1.25rem] p-5 flex flex-col items-center justify-center min-h-[160px] cursor-default group relative overflow-hidden hover:border-l-primary hover:shadow-[0_0_30px_-10px_rgba(102,111,188,0.4)] transition-all duration-500">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-[1.25rem]" />
-                  <h3 className="text-sm font-mono tracking-tight font-bold text-white mb-4 self-start flex items-center gap-2 group-hover:text-primary transition-colors relative z-10 w-full uppercase">
-                    <div className="p-1.5 bg-primary/10 rounded-md border border-primary/20">
-                      <Star className="w-4 h-4 text-amber-500" />
-                    </div>
-                    GITHUB_STREAK
-                  </h3>
-                  {/* Reserve height to prevent CLS — image is 195px tall on vercel stat cards */}
-                  <div
-                    className="w-full flex justify-center relative z-10 hover:scale-[1.02] transition-transform duration-500"
-                    style={{ minHeight: 195 }}
-                  >
-                    <a
-                      href="https://git.io/streak-stats"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block w-full max-w-[400px]"
-                    >
-                      <img
-                        src="https://github-readme-streak-stats-beta-one.vercel.app?user=Jefino9488&theme=neon-dark&hide_border=true&background=00000000"
-                        alt="GitHub Streak"
-                        className="w-full h-auto drop-shadow-xl"
-                        width="400"
-                        height="195"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </a>
-                  </div>
-                </div>
-
-                <div className="glass-crystal border border-white/5 border-l-2 border-l-primary/40 bg-[#0a0a0a]/60 rounded-[1.25rem] p-5 flex flex-col items-center justify-center min-h-[160px] cursor-default group relative overflow-hidden hover:border-l-primary hover:shadow-[0_0_30px_-10px_rgba(102,111,188,0.4)] transition-all duration-500">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-[1.25rem]" />
-                  <h3 className="text-sm font-mono tracking-tight font-bold text-white mb-4 self-start flex items-center gap-2 group-hover:text-primary transition-colors relative z-10 w-full uppercase">
-                    <div className="p-1.5 bg-primary/10 rounded-md border border-primary/20">
-                      <GitFork className="w-4 h-4 text-blue-500" />
-                    </div>
-                    TOP_LANGUAGES
-                  </h3>
-                  {/* Reserve height to prevent CLS */}
-                  <div
-                    className="w-full flex justify-center relative z-10 hover:scale-[1.02] transition-transform duration-500"
-                    style={{ minHeight: 165 }}
-                  >
-                    <img
-                      src="https://github-readme-stats.vercel.app/api/top-langs/?username=Jefino9488&layout=compact&theme=tokyonight&hide_border=true&bg_color=00000000"
-                      alt="Top Languages"
-                      className="w-full max-w-[300px] h-auto drop-shadow-xl"
-                      width="300"
-                      height="165"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
                 </div>
               </div>
-            </div>
-          </section>
+            </Reveal>
+          </div>
 
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Link to="/blog" className="block h-full group">
-              <Card className="glass-crystal h-full border border-white/5 border-l-2 border-l-primary/40 transition-all duration-500 rounded-[1.25rem] hover:shadow-[0_0_30px_-10px_rgba(102,111,188,0.4)] hover:-translate-y-1 hover:border-l-primary cursor-pointer group-hover:bg-[#0a0a0a]/60 overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <CardHeader className="pb-2 relative z-10">
-                  <CardTitle className="flex items-center text-lg font-mono font-bold text-white group-hover:text-primary transition-colors tracking-tight">
-                    <div className="p-2 bg-primary/10 rounded-lg mr-3 group-hover:scale-110 transition-transform duration-300 border border-primary/20">
-                      <BookOpen className="h-5 w-5 text-primary" />
-                    </div>
-                    EXPLORE_MY_BLOGS
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="relative z-10">
-                  <p className="text-sm font-mono text-[#b3bad9] mb-4 leading-relaxed font-light">
-                    Dive into my latest thoughts and insights on technology,
-                    development, and more.
-                  </p>
-                  <div className="flex items-center text-primary font-mono tracking-widest uppercase transition-transform text-[10px]">
-                    <span className="mr-1.5 group-hover:translate-x-2 transition-transform duration-300">
-                      Read latest posts
-                    </span>
-                    <ArrowRight className="h-3 w-3 group-hover:translate-x-2 transition-transform duration-300" />
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-
-            <Link to="/certificates" className="block h-full group">
-              <Card className="glass-crystal h-full border border-white/5 border-l-2 border-l-primary/40 transition-all duration-500 rounded-[1.25rem] hover:shadow-[0_0_30px_-10px_rgba(102,111,188,0.4)] hover:-translate-y-1 hover:border-l-primary cursor-pointer group-hover:bg-[#0a0a0a]/60 overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <CardHeader className="pb-2 relative z-10">
-                  <CardTitle className="flex items-center text-lg font-mono font-bold text-white group-hover:text-primary transition-colors tracking-tight">
-                    <div className="p-2 bg-primary/10 rounded-lg mr-3 group-hover:scale-110 transition-transform duration-300 border border-primary/20">
-                      <Award className="h-5 w-5 text-primary" />
-                    </div>
-                    VIEW_CERTIFICATES
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="relative z-10">
-                  <p className="text-sm font-mono text-[#b3bad9] mb-4 leading-relaxed font-light">
-                    Check out my professional certifications and achievements in
-                    various technologies.
-                  </p>
-                  <div className="flex items-center text-primary font-mono tracking-widest uppercase transition-transform text-[10px]">
-                    <span className="mr-1.5 group-hover:translate-x-2 transition-transform duration-300">
-                      See achievements
-                    </span>
-                    <ArrowRight className="h-3 w-3 group-hover:translate-x-2 transition-transform duration-300" />
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          </section>
-
-          <section id="featured-projects">
-            <div className="flex justify-between items-end mb-4">
-              <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-1">
-                  Featured Projects
-                </h2>
-                <p className="text-muted-foreground text-xs">
-                  Selected works from my portfolio
-                </p>
-              </div>
-              <Link
-                to="/projects"
-                className="group flex items-center text-primary hover:text-primary/80 transition-colors bg-secondary/30 px-3 py-1 rounded-full backdrop-blur-sm text-xs"
-              >
-                <span className="mr-1 font-medium">View all</span>
-                <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-
-            {loading ? (
-              <div className="text-center text-muted-foreground py-8">
-                Loading projects...
-              </div>
-            ) : error ? (
-              <div className="text-center text-destructive py-8">{error}</div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                {displayedProjects.map((project) => (
-                  <div key={project.title} className="h-full">
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="h-full block cursor-pointer group"
-                    >
-                      <Card className="glass-crystal relative p-5 transition-all duration-500 h-full flex flex-col rounded-[1.25rem] border border-white/5 bg-[#0a0a0a]/60 shadow-lg hover:shadow-[0_0_25px_-5px_rgba(102,111,188,0.4)] hover:border-primary/40">
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-[1.25rem]" />
-
-                        <div className="flex justify-between items-start mb-4 relative z-10">
-                          <div className="p-2.5 bg-primary/10 rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary/20 border border-primary/20">
-                            <GitFork className="w-4 h-4 text-primary" />
-                          </div>
-                          <div className="p-1 text-muted-foreground/50 group-hover:text-primary transition-colors">
-                            <ExternalLink className="w-4 h-4" />
-                          </div>
-                        </div>
-
-                        <h3 className="text-lg font-bold mb-2 text-white line-clamp-1 group-hover:text-primary transition-colors relative z-10">
-                          {project.title}
-                        </h3>
-                        <p className="text-[#b3bad9] mb-4 text-sm line-clamp-3 leading-relaxed flex-grow relative z-10 font-light">
-                          {project.description}
-                        </p>
-
-                        <div className="flex flex-wrap gap-2 mb-4 relative z-10">
-                          {project.tech.slice(0, 3).map((tech) => (
-                            <span
-                              key={tech}
-                              className="px-2 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-mono tracking-widest uppercase text-muted-foreground group-hover:border-primary/30 group-hover:text-primary/90 transition-colors"
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                          {project.tech.length > 3 && (
-                            <span className="px-2 py-1 bg-transparent text-[10px] font-mono tracking-widest text-muted-foreground/50">
-                              +{project.tech.length - 3} MORE
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="flex items-center gap-4 text-[10px] font-mono tracking-widest text-[#b3bad9]/50 pt-3 border-t border-white/5 relative z-10">
-                          <span className="flex items-center gap-1 group-hover:text-amber-500 transition-colors">
-                            <Star className="w-3.5 h-3.5 text-amber-500/70 group-hover:text-amber-500" />{" "}
-                            {project.stats.stars}
-                          </span>
-                          <span className="flex items-center gap-1 group-hover:text-blue-400 transition-colors">
-                            <GitFork className="w-3.5 h-3.5 text-blue-500/70 group-hover:text-blue-500" />{" "}
-                            {project.stats.forks}
-                          </span>
-                        </div>
-                      </Card>
-                    </a>
-                  </div>
+          {/* Tech ticker */}
+          <Reveal delay={0.62} className="mt-16">
+            <div className="relative overflow-hidden border-y border-line py-4" aria-hidden>
+              <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-background to-transparent" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-background to-transparent" />
+              <div className="marquee-track items-center gap-12">
+                {[...TECH_MARQUEE, ...TECH_MARQUEE].map((tech, i) => (
+                  <span
+                    key={i}
+                    className="flex shrink-0 items-center gap-12 whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.28em] text-fg-faint"
+                  >
+                    {tech}
+                    <span className="h-1 w-1 rounded-full bg-primary/60" />
+                  </span>
                 ))}
               </div>
-            )}
-          </section>
-        </main>
-      </div>
-      {/* Page Transition CTA */}
-      <div className="py-12 mt-12 flex justify-center items-center border-t border-white/5 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Link to="/projects" className="group">
-          <div className="flex flex-col items-center justify-center gap-3">
-            <p className="text-xs sm:text-sm font-mono tracking-widest text-muted-foreground uppercase group-hover:text-primary transition-colors">
-              Continue Exploring
-            </p>
-            <div className="flex items-center gap-3 text-2xl sm:text-3xl font-poppins font-semibold text-foreground group-hover:text-primary transition-colors">
-              GitHub Overview
-              <ArrowRight className="w-6 h-6 sm:w-8 sm:h-8 group-hover:translate-x-2 transition-transform duration-300" />
             </div>
+          </Reveal>
+        </section>
+
+        {/* ================================================================ */}
+        {/* 01 — Bento board                                                 */}
+        {/* ================================================================ */}
+        <section className="pb-24 pt-4">
+          <Reveal>
+            <Kicker index="01" label="Selected work & telemetry" />
+            <div aria-hidden className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
+          </Reveal>
+
+          <div className="mt-8 grid grid-cols-1 gap-4 md:auto-rows-fr md:grid-cols-3">
+            {/* Flagship — large tile */}
+            <Reveal className="md:col-span-2" delay={0.05}>
+              <article className="tile tile-interactive group h-full p-7 sm:p-9">
+                <Link
+                  to={`/projects/${featuredProjects[0].title}`}
+                  aria-label={`${featuredProjects[0].name} case study`}
+                  className="absolute inset-0 z-10 rounded-[1.375rem]"
+                >
+                  <span className="sr-only">{featuredProjects[0].name}</span>
+                </Link>
+                <a
+                  href={featuredProjects[0].link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Open ${featuredProjects[0].name} on GitHub`}
+                  className="absolute right-5 top-5 z-20 rounded-full p-2 text-fg-faint transition-colors hover:text-[#f2f5f5]"
+                >
+                  <ArrowUpRight className="h-4 w-4" />
+                </a>
+
+                <div className="flex h-full flex-col justify-between gap-8">
+                  <div className="space-y-4">
+                    <p className="font-mono text-[11px] tabular-nums text-primary">001 — Flagship</p>
+                    <h2 className="text-2xl font-semibold tracking-tight transition-colors group-hover:text-primary sm:text-3xl">
+                      {featuredProjects[0].name}
+                    </h2>
+                    <p className="max-w-lg text-pretty text-sm leading-relaxed text-fg-muted sm:text-base">
+                      {featuredProjects[0].description}
+                    </p>
+                    <p className="max-w-lg border-l-2 border-line-strong pl-4 text-xs leading-relaxed text-fg-faint sm:text-sm">
+                      {featuredProjects[0].problem}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-end justify-between gap-4">
+                    <div className="flex flex-wrap gap-1.5">
+                      {featuredProjects[0].tech.map((t) => (
+                        <span key={t} className="rounded-full border border-line bg-inset px-2.5 py-1 font-mono text-[10px] text-fg-muted">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-4 font-mono text-xs text-fg-muted">
+                      <span className="flex items-center gap-1.5"><Star className="h-3 w-3 text-warm" /><span className="tabular-nums">{featuredProjects[0].stats.stars}</span></span>
+                      <span className="flex items-center gap-1.5"><GitFork className="h-3 w-3" /><span className="tabular-nums">{featuredProjects[0].stats.forks}</span></span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </Reveal>
+
+            {/* Telemetry */}
+            <Reveal delay={0.1}>
+              <div className="tile flex h-full flex-col justify-between gap-6 p-7">
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-faint">
+                  Live telemetry
+                </p>
+                <dl className="grid grid-cols-3 gap-3">
+                  <div className="space-y-1">
+                    <dd className="font-mono text-xl font-medium">
+                      {typeof profile?.public_repos === "number" ? (
+                        <CountUp value={profile.public_repos} />
+                      ) : (
+                        "—"
+                      )}
+                    </dd>
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-fg-faint">Repos</dt>
+                  </div>
+                  <div className="space-y-1">
+                    <dd className="font-mono text-xl font-medium">
+                      {typeof stats?.totalStars === "number" ? (
+                        <CountUp value={stats.totalStars} suffix="+" />
+                      ) : (
+                        "—"
+                      )}
+                    </dd>
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-fg-faint">Stars</dt>
+                  </div>
+                  <div className="space-y-1">
+                    <dd className="font-mono text-xl font-medium">
+                      {typeof stats?.totalPullRequests === "number" ? (
+                        <CountUp value={stats.totalPullRequests} />
+                      ) : (
+                        "—"
+                      )}
+                    </dd>
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-fg-faint">PRs</dt>
+                  </div>
+                </dl>
+
+                <div className="space-y-2.5">
+                  {topLanguages.length > 0 ? (
+                    topLanguages.map((lang) => (
+                      <div key={lang.name} className="space-y-1.5">
+                        <div className="flex justify-between font-mono text-[10px] text-fg-muted">
+                          <span>{lang.name}</span>
+                          <span className="tabular-nums text-fg-faint">{lang.pct}%</span>
+                        </div>
+                        <div className="h-1 overflow-hidden rounded-full bg-elevated">
+                          <div
+                            className="h-full rounded-full bg-primary/70 transition-all duration-700"
+                            style={{ width: `${lang.pct}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="space-y-2.5">
+                      {[72, 58, 41, 27].map((w) => (
+                        <div key={w} className="h-1 overflow-hidden rounded-full bg-elevated">
+                          <div className="h-full rounded-full bg-primary/30" style={{ width: `${w}%` }} />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Project tiles 2 & 3 */}
+            {featuredProjects.slice(1).map((project, i) => (
+              <Reveal key={project.title} delay={0.12 + i * 0.06}>
+                <article className="tile tile-interactive group h-full p-7">
+                  <Link
+                    to={`/projects/${project.title}`}
+                    aria-label={`${project.name} case study`}
+                    className="absolute inset-0 z-10 rounded-[1.375rem]"
+                  >
+                    <span className="sr-only">{project.name}</span>
+                  </Link>
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Open ${project.name} on GitHub`}
+                    className="absolute right-4 top-4 z-20 rounded-full p-1.5 text-fg-faint transition-colors hover:text-[#f2f5f5]"
+                  >
+                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  </a>
+
+                  <div className="flex h-full flex-col justify-between gap-6">
+                    <div className="space-y-3">
+                      <p className="font-mono text-[11px] tabular-nums text-primary">
+                        00{i + 2}
+                      </p>
+                      <h3 className="text-lg font-semibold tracking-tight transition-colors group-hover:text-primary sm:text-xl">
+                        {project.name}
+                      </h3>
+                      <p className="line-clamp-3 text-sm leading-relaxed text-fg-muted">
+                        {project.description}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.tech.slice(0, 3).map((t) => (
+                          <span key={t} className="rounded-full border border-line bg-inset px-2 py-0.5 font-mono text-[10px] text-fg-muted">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                      <span className="flex items-center gap-1 font-mono text-[11px] tabular-nums text-fg-muted">
+                        <Star className="h-3 w-3 text-warm" />
+                        {project.stats.stars}
+                      </span>
+                    </div>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+
+            {/* Stack tile */}
+            <Reveal delay={0.2}>
+              <div className="tile h-full space-y-5 p-7">
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-faint">
+                  Stack
+                </p>
+                <div className="space-y-4">
+                  {skillsList.map((group) => (
+                    <div key={group.category} className="space-y-2">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-fg-faint">
+                        {group.category}
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {group.items.map((item) => (
+                          <span
+                            key={item}
+                            className="rounded-full border border-line bg-elevated px-2.5 py-1 font-mono text-[11px] text-[#f2f5f5] transition-colors hover:border-line-strong"
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Writing tile */}
+            <Reveal delay={0.24} className="md:col-span-2">
+              <div className="tile flex h-full flex-col gap-4 p-7">
+                <div className="flex items-center justify-between">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-faint">
+                    Recent writing
+                  </p>
+                  <Link to="/blog" className="group/link inline-flex items-center gap-1 font-mono text-[11px] text-fg-muted transition-colors hover:text-[#f2f5f5]">
+                    All articles
+                    <ArrowRight className="h-3 w-3 transition-transform group-hover/link:translate-x-0.5" />
+                  </Link>
+                </div>
+
+                {latestPosts.length > 0 ? (
+                  <ul className="divide-y divide-line">
+                    {latestPosts.map((post) => {
+                      const formattedDate = new Date(post.published_at).toLocaleDateString(
+                        "en-US",
+                        { month: "short", day: "numeric", year: "numeric" },
+                      );
+                      const inner = (
+                        <>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="truncate text-sm font-medium text-[#f2f5f5] transition-colors group-hover:text-primary">
+                              {post.title}
+                            </h3>
+                            <p className="mt-0.5 font-mono text-[10px] tabular-nums text-fg-faint">
+                              {formattedDate} · {post.reading_time_minutes} min read
+                            </p>
+                          </div>
+                          <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-fg-faint transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary" />
+                        </>
+                      );
+                      const rowClass =
+                        "group -mx-2 flex items-center gap-4 rounded-lg px-2 py-3 transition-colors hover:bg-elevated/60";
+
+                      return (
+                        <li key={post.id}>
+                          {post.isLocal ? (
+                            <Link to={`/blog/${post.localId}`} className={rowClass}>{inner}</Link>
+                          ) : (
+                            <a href={post.url} target="_blank" rel="noopener noreferrer" className={rowClass}>{inner}</a>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <div className="space-y-3 py-2">
+                    <div className="skeleton h-4 w-3/4" />
+                    <div className="skeleton h-4 w-1/2" />
+                    <div className="skeleton h-4 w-2/3" />
+                  </div>
+                )}
+              </div>
+            </Reveal>
+
+            {/* About tile */}
+            <Reveal delay={0.28}>
+              <div className="tile flex h-full flex-col justify-between gap-6 p-7">
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-faint">
+                  Background
+                </p>
+                <p className="text-sm leading-relaxed text-fg-muted">
+                  AI &amp; Data Science undergrad in Chennai turning complex,
+                  repetitive technical workflows into fast, reproducible software
+                  — from Android internals to LLM agents.
+                </p>
+                <Link
+                  to="/about"
+                  className="group inline-flex items-center gap-1.5 font-mono text-xs text-primary"
+                >
+                  More about me
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                </Link>
+              </div>
+            </Reveal>
           </div>
-        </Link>
+        </section>
+
+        {/* ================================================================ */}
+        {/* 02 — Activity                                                    */}
+        {/* ================================================================ */}
+        <section className="pb-24">
+          <Reveal>
+            <Kicker index="02" label="Activity" />
+            <div aria-hidden className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
+          </Reveal>
+          <Reveal delay={0.08}>
+            <div className="mt-8">
+              <ContributionGraph />
+            </div>
+          </Reveal>
+        </section>
+
+        {/* ================================================================ */}
+        {/* 03 — Explore — every page                                        */}
+        {/* ================================================================ */}
+        <section className="pb-8">
+          <Reveal>
+            <Kicker index="03" label="Explore" />
+            <div aria-hidden className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
+          </Reveal>
+
+          <div className="border-t border-line">
+            {exploreLinks.map((link, i) => (
+              <Reveal key={link.to} delay={Math.min(i * 0.05, 0.2)}>
+                <Link
+                  to={link.to}
+                  className="group grid grid-cols-[auto_1fr_auto] items-center gap-5 border-b border-line py-7 transition-colors sm:gap-8 sm:py-8"
+                >
+                  <span aria-hidden className="index-num text-4xl leading-none sm:text-5xl">
+                    {link.index}
+                  </span>
+
+                  <span className="min-w-0 space-y-1.5">
+                    <span className="block text-xl font-semibold tracking-tight transition-colors duration-300 group-hover:text-primary sm:text-2xl">
+                      {link.title}
+                    </span>
+                    <span className="block max-w-lg text-sm leading-relaxed text-fg-muted">
+                      {link.description}
+                    </span>
+                  </span>
+
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface transition-all duration-300 group-hover:-rotate-45 group-hover:border-primary group-hover:bg-primary sm:h-12 sm:w-12">
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );

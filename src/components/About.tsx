@@ -1,133 +1,101 @@
 import type React from "react";
-import { useState, useMemo } from "react";
-import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Download,
-  Code,
-  Briefcase,
-  GraduationCap,
-  Award,
   Mail,
   Send,
   Loader2,
+  CheckCircle2,
 } from "lucide-react";
 import { Github } from "./icons/Github";
 import { Linkedin } from "./icons/Linkedin";
-
-import GitHubDashboard from "./GitHubDashboard";
-import LazyImage from "./LazyImage";
-import PageHeader from "./PageHeader";
+import Reveal from "./Reveal";
+import NextPageLink from "./NextPageLink";
 import certificates from "@/certifications/certifications.json";
-import { useProjects } from "./ProjectsContext";
-import { useGitHubData } from "./GitHubContext";
-import { calculateExperienceYears, categorizeSkills } from "@/utils/github";
 
-// Timeline data
-interface TimelineItem {
-  id: string;
+interface TimelineEntry {
+  year: string;
   title: string;
-  date: string;
+  category: string;
   description: string;
-  icon: React.ComponentType<{ className?: string }>;
-  category: "work" | "education" | "project" | "award";
 }
 
-const timelineItems: TimelineItem[] = [
+const journeyTimeline: TimelineEntry[] = [
   {
-    id: "timeline1",
-    title: "AI & Data Science Undergrad",
-    date: "2022 - Present",
+    year: "2021",
+    title: "Android ROM & systems exploration",
+    category: "Systems & Linux",
     description:
-      "Pursuing Bachelor's in AI & Data Science with focus on machine learning and full-stack development.",
-    icon: GraduationCap,
-    category: "education",
+      "Began compiling custom Android kernels and vendor ROMs. Gained in-depth knowledge of Linux internals, partition structures, and system service hooks.",
   },
   {
-    id: "timeline2",
-    title: "Open Source Contributor",
-    date: "2021 - Present",
+    year: "2022",
+    title: "AI & Data Science degree started",
+    category: "Education & Foundations",
     description:
-      "Active contributor to open source projects including FrameworkPatcher, Android ROM development, and automation tools.",
-    icon: Code,
-    category: "work",
+      "Enrolled in Bachelor of Technology in Artificial Intelligence & Data Science. Explored data pipelines, statistics, Python frameworks, and algorithms.",
   },
   {
-    id: "timeline3",
-    title: "Full Stack Developer",
-    date: "2021 - Present",
+    year: "2023",
+    title: "Full-stack web engineering",
+    category: "Full-Stack Development",
     description:
-      "Building web applications using React, TypeScript, Python, and modern cloud technologies.",
-    icon: Briefcase,
-    category: "work",
+      "Expanded into production web engineering with React, TypeScript, FastAPI, and Node.js. Built scalable web architectures and RESTful microservices.",
   },
   {
-    id: "timeline4",
-    title: "DeepLearning.AI TensorFlow Developer",
-    date: "February 2024",
+    year: "2024",
+    title: "FrameworkPatcher & open-source tooling",
+    category: "Automation & Tooling",
     description:
-      "Professional certification in TensorFlow for AI, Machine Learning, and Deep Learning.",
-    icon: Award,
-    category: "award",
+      "Created FrameworkPatcher, an automated framework patcher for OEM Android ROMs. Earned DeepLearning.AI TensorFlow Developer certification.",
   },
   {
-    id: "timeline5",
-    title: "Cisco CCNA Certified",
-    date: "May 2025",
+    year: "2025",
+    title: "AI agents & advanced networking",
+    category: "AI & Systems",
     description:
-      "Completed CCNA certification covering networking fundamentals, routing, switching, and automation.",
-    icon: Award,
-    category: "award",
+      "Developed multimodal browser testing agents and LLM tooling. Earned Cisco CCNA accreditation covering modern routing, switching, and automation.",
   },
 ];
 
-// Default skills (will be overridden by GitHub data)
-const defaultSkills = {
-  frontend: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Next.js"],
-  backend: ["Node.js", "Python", "Flask", "Express", "MongoDB", "MySQL"],
-  tools: ["Git", "Docker", "AWS", "Firebase", "VS Code", "Figma"],
-};
+const focusAreas = [
+  {
+    index: "01",
+    title: "Systems & Android tooling",
+    description:
+      "Custom framework patchers, automated partition flashers, and kernel-level root modules for reproducible Android modifications.",
+  },
+  {
+    index: "02",
+    title: "Full-stack web engineering",
+    description:
+      "Performant, accessible web apps using React, TypeScript, Node.js, and modern CSS systems with clean state management.",
+  },
+  {
+    index: "03",
+    title: "AI & automation",
+    description:
+      "Intelligent automation pipelines, multimodal browser agents, and practical ML applications with TensorFlow & PyTorch.",
+  },
+  {
+    index: "04",
+    title: "Open source & tooling",
+    description:
+      "Publishing developer utilities and maintaining software used by thousands across developer communities.",
+  },
+];
+
+const technicalSkills = [
+  { category: "Languages", skills: ["Python", "TypeScript", "JavaScript", "Java", "Bash / Shell", "SQL"] },
+  { category: "Web & Backend", skills: ["React", "Node.js", "Express", "FastAPI", "Flask", "Tailwind CSS", "REST APIs"] },
+  { category: "Systems & AI", skills: ["Android Internals", "Linux", "TensorFlow", "PyTorch", "Git", "Docker", "Cisco Networking"] },
+];
+
+const inputBase =
+  "w-full rounded-xl border bg-surface/70 px-4 py-3 font-mono text-xs text-[#f2f5f5] backdrop-blur-sm transition-colors placeholder:text-fg-faint focus:border-primary focus:outline-none";
 
 export default function About() {
-  const { allProjects } = useProjects();
-
-  // Use shared GitHub context instead of local fetching
-  const { profile: githubProfile, languages } = useGitHubData();
-
-  // Calculate derived values from GitHub data
-  const experienceYears = useMemo(() => {
-    return githubProfile?.created_at
-      ? calculateExperienceYears(githubProfile.created_at)
-      : 3;
-  }, [githubProfile]);
-
-  const skills = useMemo(() => {
-    if (languages.length > 0) {
-      const categorized = categorizeSkills(languages);
-      return {
-        frontend:
-          categorized.frontend.length > 0
-            ? categorized.frontend
-            : defaultSkills.frontend,
-        backend:
-          categorized.backend.length > 0
-            ? categorized.backend
-            : defaultSkills.backend,
-        tools:
-          categorized.tools.length > 0
-            ? categorized.tools
-            : defaultSkills.tools,
-      };
-    }
-    return defaultSkills;
-  }, [languages]);
-
-  const uniqueLanguages = useMemo(() => {
-    return languages.map(([lang]) => lang);
-  }, [languages]);
-
-  // Contact form state
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -142,20 +110,13 @@ export default function About() {
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
-    }
-
+    if (!formData.name.trim()) newErrors.name = "Name is required";
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Please enter a valid email address";
     }
-
-    if (!formData.subject.trim()) {
-      newErrors.subject = "Subject is required";
-    }
-
+    if (!formData.subject.trim()) newErrors.subject = "Subject is required";
     if (!formData.message.trim()) {
       newErrors.message = "Message is required";
     } else if (formData.message.trim().length < 10) {
@@ -166,34 +127,22 @@ export default function About() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setIsSubmitting(true);
-
     try {
-      // Create mailto link with form data
       const subject = encodeURIComponent(formData.subject);
       const body = encodeURIComponent(
         `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`,
       );
-
       const mailtoLink = `mailto:jefinojacob9488@gmail.com?subject=${subject}&body=${body}`;
-
-      // Open email client
       window.open(mailtoLink, "_blank");
 
       setIsSubmitted(true);
       setFormData({ name: "", email: "", subject: "", message: "" });
-
-      // Reset success message after 5 seconds
       setTimeout(() => setIsSubmitted(false), 5000);
-    } catch (error) {
-      console.error("Error submitting form:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -204,467 +153,347 @@ export default function About() {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
   return (
-    <div className="min-h-screen text-foreground">
-      <PageHeader
-        title="My Journey"
-        rightAction={
-          <a
-            href="https://my-drive.pages.dev/Public/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center text-[10px] sm:text-xs font-mono uppercase tracking-widest px-3 sm:px-4 py-1.5 bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-full transition-colors whitespace-nowrap"
-          >
-            <Download className="mr-1.5 h-3.5 w-3.5" /> Resume
-          </a>
-        }
-      />
-      <div className="container mx-auto px-4 py-24 sm:py-32">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden glass-crystal bg-[#0a0a0a]/60 border border-white/5 border-l-primary/50 shadow-[0_0_50px_-15px_rgba(102,111,188,0.3)] mb-12"
-        >
-          {/* Tech Background Grid Lines */}
-          <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay pointer-events-none" />
+    <div className="min-h-screen text-[#f2f5f5]">
+      <div className="relative mx-auto max-w-6xl space-y-24 px-4 pb-24 pt-14 sm:px-8 sm:pt-20">
+        {/* ================================================================ */}
+        {/* Intro                                                            */}
+        {/* ================================================================ */}
+        <section className="relative">
+          <div aria-hidden className="ambient-glow -top-20 left-1/4 h-80 w-80" />
+          <Reveal>
+            <a
+              href="https://my-drive.pages.dev/Public/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="press mb-8 inline-flex items-center gap-1.5 rounded-full border border-line bg-surface/70 px-3.5 py-1.5 font-mono text-xs text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-[#f2f5f5]"
+            >
+              <Download className="h-3.5 w-3.5" />
+              Resume (PDF)
+            </a>
+          </Reveal>
 
-          {/* Ambient Glows */}
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] pointer-events-none translate-x-1/3 -translate-y-1/3" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#8ab8d0]/10 rounded-full blur-[100px] pointer-events-none -translate-x-1/3 translate-y-1/3" />
+          <div className="flex flex-col-reverse items-start justify-between gap-10 md:flex-row">
+            <div className="flex-1 space-y-6">
+              <Reveal y={12}>
+                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
+                  Biography
+                </p>
+                <h1
+                  className="mt-4 font-poppins font-semibold leading-[1.02]"
+                  style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", letterSpacing: "-0.04em" }}
+                >
+                  I&apos;m Jefino<span className="text-primary">.</span>
+                </h1>
+                <p className="pt-3 font-mono text-xs uppercase tracking-[0.18em] text-fg-muted">
+                  AI &amp; Data Science undergrad · Full-stack engineer
+                </p>
+              </Reveal>
 
-          <div className="relative z-10 p-8 sm:p-12 lg:p-16 flex flex-col md:flex-row items-center gap-10 lg:gap-16">
-            {/* Avatar Column */}
-            <div className="flex-shrink-0 relative group">
-              <div className="absolute inset-0 bg-primary/40 rounded-full blur-2xl group-hover:bg-primary/60 transition-colors duration-500 scale-110" />
-              <div className="relative w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden border border-white/10 p-1 glass-crystal bg-black/40 shadow-2xl">
-                <div className="w-full h-full rounded-full overflow-hidden">
-                  <LazyImage
+              <Reveal delay={0.08}>
+                <p className="max-w-xl text-pretty leading-relaxed text-fg-muted">
+                  Based in Chennai, India — working across systems engineering,
+                  Android automation tooling, and artificial intelligence. I
+                  build software that bridges low-level system interactions with
+                  modern, clean interfaces.
+                </p>
+              </Reveal>
+
+              <Reveal delay={0.14}>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {[
+                    { href: "https://github.com/Jefino9488", label: "GitHub", icon: Github },
+                    { href: "https://www.linkedin.com/in/jefino9488/", label: "LinkedIn", icon: Linkedin },
+                    { href: "mailto:jefinojacob9488@gmail.com", label: "Email", icon: Mail },
+                  ].map(({ href, label, icon: Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target={href.startsWith("mailto") ? undefined : "_blank"}
+                      rel="noopener noreferrer"
+                      className="press inline-flex items-center gap-2 rounded-full border border-line bg-surface/60 px-4 py-2 font-mono text-xs text-[#f2f5f5] backdrop-blur-sm transition-colors hover:border-line-strong hover:bg-elevated"
+                    >
+                      <Icon className="h-3.5 w-3.5 text-fg-muted" />
+                      {label}
+                    </a>
+                  ))}
+                </div>
+              </Reveal>
+            </div>
+
+            {/* Portrait */}
+            <Reveal delay={0.1} y={26} className="shrink-0">
+              <div className="relative">
+                <div
+                  aria-hidden
+                  className="absolute -right-3 -top-3 h-full w-full rounded-4xl border border-line-strong"
+                />
+                <div className="relative h-36 w-36 overflow-hidden rounded-4xl border border-line bg-surface shadow-lift sm:h-44 sm:w-44">
+                  <img
                     src="/profile/profile.jpg"
-                    alt="Jefino"
-                    className="object-cover w-full h-full scale-[1.15] origin-top brightness-110 contrast-110 transition-transform duration-700 group-hover:scale-125"
-                    priority={true}
+                    alt="Jefino portrait"
+                    className="h-full w-full object-cover"
+                    width="176"
+                    height="176"
                   />
                 </div>
               </div>
-            </div>
-
-            {/* Info Column */}
-            <div className="flex-grow text-center md:text-left">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-poppins font-bold text-white mb-4 tracking-tight drop-shadow-md">
-                I'm Jefino<span className="text-primary animate-pulse">_</span>
-              </h1>
-
-              <h2 className="text-lg sm:text-xl text-[#8ab8d0] font-mono tracking-wide mb-6 opacity-90 border-l-2 border-primary/50 pl-3">
-                AI / DATA SCIENCE <span className="text-white/20 mx-2">|</span>{" "}
-                FULL-STACK ENG
-              </h2>
-
-              <p className="text-[#b3bad9] text-base sm:text-lg leading-relaxed font-light max-w-2xl mx-auto md:mx-0 mb-8 selection:bg-primary/30">
-                {githubProfile?.bio ||
-                  "Open Source & Automation Enthusiast passionate about building modern, dynamic, and efficient applications. Focused on delivering clean, maintainable code and intuitive user experiences."}
-              </p>
-
-              <div className="flex flex-wrap justify-center md:justify-start gap-4">
-                <a
-                  href="https://github.com/Jefino9488"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-full text-xs font-mono tracking-widest text-white hover:bg-primary/20 hover:border-primary/40 hover:text-primary-foreground hover:shadow-[0_0_20px_-5px_rgba(102,111,188,0.5)] transition-all duration-300"
-                >
-                  <Github className="h-4 w-4 text-primary group-hover:text-primary-foreground transition-colors" />{" "}
-                  GITHUB
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/jefino9488/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-full text-xs font-mono tracking-widest text-white hover:bg-primary/20 hover:border-primary/40 hover:text-primary-foreground hover:shadow-[0_0_20px_-5px_rgba(102,111,188,0.5)] transition-all duration-300"
-                >
-                  <Linkedin className="h-4 w-4 text-primary group-hover:text-primary-foreground transition-colors" />{" "}
-                  LINKEDIN
-                </a>
-                <a
-                  href="mailto:jefinojacob9488@gmail.com"
-                  className="group flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-full text-xs font-mono tracking-widest text-white hover:bg-primary/20 hover:border-primary/40 hover:text-primary-foreground hover:shadow-[0_0_20px_-5px_rgba(102,111,188,0.5)] transition-all duration-300"
-                >
-                  <Mail className="h-4 w-4 text-primary group-hover:text-primary-foreground transition-colors" />{" "}
-                  EMAIL
-                </a>
-                <a
-                  href="https://telegram.me/jefino9488"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-full text-xs font-mono tracking-widest text-white hover:bg-primary/20 hover:border-primary/40 hover:text-primary-foreground hover:shadow-[0_0_20px_-5px_rgba(102,111,188,0.5)] transition-all duration-300 hidden sm:flex"
-                >
-                  <Send className="h-4 w-4 text-primary group-hover:text-primary-foreground transition-colors" />{" "}
-                  TELEGRAM
-                </a>
-              </div>
-            </div>
+            </Reveal>
           </div>
-        </motion.div>
+        </section>
 
-        {/* Minimalist Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          {[
-            { label: "Experience", value: `${experienceYears}+ Yrs` },
-            {
-              label: "Repositories",
-              value: `${githubProfile?.public_repos || allProjects.length}+`,
-            },
-            { label: "Certifications", value: `${certificates.length}` },
-            { label: "Languages", value: `${uniqueLanguages.length || "10"}+` },
-          ].map((stat, i) => (
-            <div
-              key={i}
-              className="glass-crystal border border-white/5 rounded-2xl p-6 flex flex-col items-center justify-center relative overflow-hidden group transition-all hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-[#666fbc]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <p className="text-3xl sm:text-4xl font-poppins font-light text-foreground mb-1 relative z-10 tracking-tight">
-                {stat.value}
-              </p>
-              <p className="text-[10px] sm:text-xs tracking-widest uppercase font-mono text-muted-foreground relative z-10">
-                {stat.label}
-              </p>
-            </div>
-          ))}
-        </div>
+        {/* ================================================================ */}
+        {/* Focus bento                                                      */}
+        {/* ================================================================ */}
+        <section>
+          <Reveal>
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
+              What I do
+            </p>
+            <div aria-hidden className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
+          </Reveal>
 
-        {/* HUD DASHBOARD GRID */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-          {/* LEFT COLUMN: Bio & Skills */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* DECRYPTED BIO TERMINAL */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="glass-crystal border border-[#666fbc]/20 rounded-3xl p-6 sm:p-8 relative overflow-hidden group">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/50 to-transparent" />
-
-                <div className="flex items-center gap-2 mb-6 border-b border-white/5 pb-4">
-                  <div className="w-2 h-2 bg-primary animate-pulse" />
-                  <h2 className="text-sm font-mono text-primary uppercase tracking-widest">
-                    SYS_LOG :: Overview
+          <div className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {focusAreas.map((area, i) => (
+              <Reveal key={area.index} delay={i * 0.06}>
+                <div className="tile tile-interactive group h-full space-y-3 p-6 sm:p-7">
+                  <p className="font-mono text-[11px] tabular-nums text-primary">{area.index}</p>
+                  <h2 className="text-base font-semibold tracking-tight transition-colors group-hover:text-primary sm:text-lg">
+                    {area.title}
                   </h2>
+                  <p className="text-sm leading-relaxed text-fg-muted">{area.description}</p>
                 </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
 
-                <div className="font-mono text-sm sm:text-base text-[#b3bad9] space-y-4 leading-relaxed">
-                  <p>
-                    <span className="text-white/40 mr-2">{">"}</span>
-                    Welcome to my domain. I'm an AI & Data Science undergraduate
-                    and passionate Full-Stack Developer operating out of
-                    Chennai, India. I specialize in architecting modern,
-                    high-performance systems with a focus on intelligent
-                    automation.
-                  </p>
-                  <p>
-                    <span className="text-white/40 mr-2">{">"}</span>
-                    My engineering journey ignited with custom Android ROM
-                    compiling, evolving into full-stack web architectures. I
-                    actively deploy code across React, TypeScript, Python, and
-                    Flask ecosystems. Notable payloads include{" "}
-                    <span className="text-primary font-bold">
-                      FrameworkPatcher
-                    </span>
-                    , solving intricate Android framework modifications.
-                  </p>
-                  <p>
-                    <span className="text-white/40 mr-2">{">"}</span>
-                    Certified in TensorFlow, Machine Learning, and Cisco
-                    Networking, I fuse data-driven AI capabilities with
-                    functional software environments to solve complex real-world
-                    logic gates.
-                  </p>
-                  <div className="inline-block mt-2 px-2 py-0.5 bg-white/5 text-xs text-white/40 animate-pulse">
-                    _cursor_active
+        {/* ================================================================ */}
+        {/* Timeline                                                         */}
+        {/* ================================================================ */}
+        <section>
+          <Reveal>
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
+              Journey
+            </p>
+            <h2 className="type-title mt-2">Milestones</h2>
+          </Reveal>
+
+          <div className="mt-9 space-y-0 border-l border-line">
+            {journeyTimeline.map((item, i) => (
+              <Reveal key={item.year} delay={Math.min(i * 0.05, 0.25)}>
+                <div className="group relative space-y-2 py-6 pl-7">
+                  <div className="absolute -left-[5px] top-8 h-2.5 w-2.5 rounded-full border border-line-strong bg-background transition-colors group-hover:border-primary group-hover:bg-primary" />
+
+                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[11px]">
+                    <span className="font-semibold tabular-nums text-primary">{item.year}</span>
+                    <span className="uppercase tracking-[0.16em] text-fg-faint">{item.category}</span>
                   </div>
-                </div>
 
-                <div className="mt-8 pt-6 border-t border-white/5">
-                  <h3 className="text-xs font-mono text-white/50 uppercase mb-4 tracking-widest">
-                    Live Activity Metric
+                  <h3 className="text-base font-medium text-[#f2f5f5] sm:text-lg">
+                    {item.title}
                   </h3>
-                  <GitHubDashboard />
-                </div>
-              </div>
-            </motion.div>
-
-            {/* CORE CLUSTERS (Skills) */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <div className="glass-crystal border border-white/5 rounded-3xl p-6 sm:p-8">
-                <div className="flex items-center gap-2 mb-6 border-b border-white/5 pb-4">
-                  <Code className="h-4 w-4 text-primary" />
-                  <h2 className="text-sm font-mono text-primary uppercase tracking-widest">
-                    Core_Clusters
-                  </h2>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
-                  {/* Frontend Node */}
-                  <div>
-                    <h3 className="text-[10px] font-mono text-white/40 mb-3 tracking-[0.2em] uppercase">
-                      Node_FE (Client)
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {skills.frontend.map((skill, index) => (
-                        <div
-                          key={index}
-                          className="px-3 py-1.5 bg-primary/5 hover:bg-primary/20 border border-primary/20 hover:border-primary/50 text-xs font-mono text-[#b3bad9] hover:text-white transition-all cursor-crosshair"
-                        >
-                          {skill}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Backend Node */}
-                  <div>
-                    <h3 className="text-[10px] font-mono text-white/40 mb-3 tracking-[0.2em] uppercase">
-                      Node_BE (Server)
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {skills.backend.map((skill, index) => (
-                        <div
-                          key={index}
-                          className="px-3 py-1.5 bg-emerald-500/5 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/50 text-xs font-mono text-emerald-500/80 hover:text-emerald-400 transition-all cursor-crosshair"
-                        >
-                          {skill}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Tooling Node */}
-                  <div className="md:col-span-2">
-                    <h3 className="text-[10px] font-mono text-white/40 mb-3 tracking-[0.2em] uppercase">
-                      Node_INFRA (DevOps)
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {skills.tools.map((skill, index) => (
-                        <div
-                          key={index}
-                          className="px-3 py-1.5 bg-amber-500/5 hover:bg-amber-500/20 border border-amber-500/20 hover:border-amber-500/50 text-xs font-mono text-amber-500/80 hover:text-amber-400 transition-all cursor-crosshair"
-                        >
-                          {skill}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* RIGHT COLUMN: Timeline Pipeline */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="h-full"
-          >
-            <div className="glass-crystal border border-[#666fbc]/20 rounded-3xl p-6 sm:p-8 relative h-full">
-              <div className="flex items-center gap-2 mb-8 border-b border-white/5 pb-4">
-                <span className="w-1.5 h-1.5 bg-primary/80 rounded block shadow-[0_0_5px_rgba(102,111,188,0.5)] animate-ping" />
-                <h2 className="text-sm font-mono text-primary uppercase tracking-widest">
-                  Chronicle_Pipeline
-                </h2>
-              </div>
-
-              <div className="relative">
-                {/* Glowing Fiber Optic Line */}
-                <div className="absolute left-3.5 top-2 bottom-0 w-px bg-gradient-to-b from-primary via-primary/50 to-transparent shadow-[0_0_10px_rgba(102,111,188,0.8)]"></div>
-
-                <div className="space-y-10 relative z-10">
-                  {timelineItems.map((item) => (
-                    <div key={item.id} className="relative pl-10 group">
-                      {/* Glowing Node Marker */}
-                      <div className="absolute left-[9px] top-1.5 w-2 h-2 rounded-full bg-[#0a0a0a] border border-primary group-hover:bg-primary transition-colors shadow-[0_0_8px_rgba(102,111,188,0.8)] z-10" />
-
-                      <div className="mb-1 flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <item.icon className="w-3.5 h-3.5 text-primary opacity-60" />
-                          <h3 className="text-sm font-bold text-white group-hover:text-primary transition-colors">
-                            {item.title}
-                          </h3>
-                        </div>
-                      </div>
-
-                      <div className="inline-block px-1.5 py-0.5 bg-white/5 border border-white/10 text-[9px] font-mono text-[#b3bad9] uppercase mb-2">
-                        {item.date}
-                      </div>
-
-                      <p className="text-xs text-muted-foreground leading-relaxed font-sans border-l border-white/5 pl-3 py-1 group-hover:border-primary/30 transition-colors">
-                        {item.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Compact Contact Form Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mt-8"
-        >
-          <Card className="glass-crystal neon-border border text-card-foreground rounded-3xl shadow-lg overflow-hidden">
-            <CardContent className="p-6 md:p-8">
-              <div className="max-w-2xl mx-auto">
-                <div className="flex flex-col items-center text-center gap-3 mb-8">
-                  <div className="p-3 bg-primary/10 rounded-full border border-primary/20 relative group">
-                    <div className="absolute inset-0 rounded-full border border-primary/50 animate-ping opacity-20" />
-                    <Mail className="w-6 h-6 text-primary relative z-10" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl sm:text-2xl font-mono font-bold text-foreground tracking-widest uppercase">
-                      SYS_COM{" "}
-                      <span className="text-primary italic">:: UPLINK</span>
-                    </h3>
-                    <p className="text-xs sm:text-sm text-muted-foreground mt-2 font-mono tracking-wide">
-                      Establish direct terminal connection. Awaiting payload.
-                    </p>
-                  </div>
-                </div>
-
-                {isSubmitted && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-xl"
-                  >
-                    <p className="text-green-400 text-sm text-center font-medium">
-                      ✅ Message sent! Your email client should open shortly.
-                    </p>
-                  </motion.div>
-                )}
-
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-mono text-primary/80 ml-1 uppercase tracking-widest">
-                        ID_NAME
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border-l-2 rounded-xl text-sm font-mono text-foreground placeholder-white/20 focus:outline-none focus:bg-primary/5 focus:border-l-primary transition-all ${
-                          errors.name
-                            ? "border-destructive"
-                            : "border-l-white/20 border-transparent"
-                        }`}
-                        placeholder="Enter identifier_"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-mono text-primary/80 ml-1 uppercase tracking-widest">
-                        NET_ADDRESS (EMAIL)
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border-l-2 rounded-xl text-sm font-mono text-foreground placeholder-white/20 focus:outline-none focus:bg-primary/5 focus:border-l-primary transition-all ${
-                          errors.email
-                            ? "border-destructive"
-                            : "border-l-white/20 border-transparent"
-                        }`}
-                        placeholder="user@node.net"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-mono text-primary/80 ml-1 uppercase tracking-widest">
-                      SUBJECT_HEADER
-                    </label>
-                    <input
-                      type="text"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border-l-2 rounded-xl text-sm font-mono text-foreground placeholder-white/20 focus:outline-none focus:bg-primary/5 focus:border-l-primary transition-all ${
-                        errors.subject
-                          ? "border-destructive"
-                          : "border-l-white/20 border-transparent"
-                      }`}
-                      placeholder="Transmission topic"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-mono text-primary/80 ml-1 uppercase tracking-widest">
-                      PAYLOAD_DATA (MESSAGE)
-                    </label>
-                    <textarea
-                      name="message"
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      rows={4}
-                      className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border-l-2 rounded-xl text-sm font-mono text-foreground placeholder-white/20 focus:outline-none focus:bg-primary/5 focus:border-l-primary transition-all resize-none ${
-                        errors.message
-                          ? "border-destructive"
-                          : "border-l-white/20 border-transparent"
-                      }`}
-                      placeholder="Write payload logic here..."
-                    />
-                  </div>
-
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full relative group bg-primary/20 hover:bg-primary border border-primary/50 text-white font-mono tracking-widest py-6 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
-                  >
-                    <div className="absolute inset-x-0 bottom-0 h-1 bg-primary group-hover:bg-white transition-colors" />
-                    {isSubmitting ? (
-                      <div className="flex items-center justify-center gap-2">
-                        <Loader2 className="w-5 h-5 animate-spin" />[
-                        EXECUTING... ]
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-center gap-2 relative z-10">
-                        <Send className="w-5 h-5 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
-                        [ INIT_TRANSMISSION ]
-                      </div>
-                    )}
-                  </Button>
-                </form>
-
-                <div className="mt-8 pt-6 border-t border-white/5">
-                  <p className="text-muted-foreground font-mono text-xs text-center tracking-wide">
-                    FALLBACK SECURE COMM PROTOCOL:{" "}
-                    <a
-                      href="mailto:jefinojacob9488@gmail.com"
-                      className="text-primary hover:text-white transition-colors hover:underline"
-                    >
-                      jefinojacob9488@gmail.com
-                    </a>
+                  <p className="max-w-2xl text-sm leading-relaxed text-fg-muted">
+                    {item.description}
                   </p>
                 </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* ================================================================ */}
+        {/* Skills band                                                      */}
+        {/* ================================================================ */}
+        <section>
+          <Reveal>
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
+              Competencies
+            </p>
+            <h2 className="type-title mt-2">Technical stack</h2>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <div className="tile mt-7 grid grid-cols-1 divide-y divide-line p-2 md:grid-cols-3 md:divide-x md:divide-y-0">
+              {technicalSkills.map((group) => (
+                <div key={group.category} className="space-y-3.5 p-5">
+                  <h3 className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-faint">
+                    {group.category}
+                  </h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {group.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="rounded-full border border-line bg-elevated px-2.5 py-1 font-mono text-[11px] text-[#f2f5f5] transition-colors hover:border-line-strong"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </section>
+
+        {/* ================================================================ */}
+        {/* Credentials                                                       */}
+        {/* ================================================================ */}
+        <section>
+          <Reveal>
+            <div className="tile flex flex-col items-center justify-between gap-4 p-7 sm:flex-row">
+              <div className="space-y-1.5 text-center sm:text-left">
+                <div className="inline-flex items-center justify-center gap-2 sm:justify-start">
+                  <CheckCircle2 className="h-4 w-4 text-success" />
+                  <h2 className="text-base font-semibold text-[#f2f5f5]">
+                    Verified certifications ({certificates.length})
+                  </h2>
+                </div>
+                <p className="text-xs text-fg-muted">
+                  Accreditations from DeepLearning.AI, IBM, Cisco, and TensorFlow.
+                </p>
               </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+              <Link
+                to="/certificates"
+                className="press inline-flex shrink-0 items-center gap-2 rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-[#f2f5f5] transition-colors hover:border-line-strong"
+              >
+                View all credentials
+              </Link>
+            </div>
+          </Reveal>
+        </section>
+
+        {/* ================================================================ */}
+        {/* Contact form                                                     */}
+        {/* ================================================================ */}
+        <section>
+          <Reveal>
+            <div className="space-y-2">
+              <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
+                Contact
+              </p>
+              <h2 className="type-title">Get in touch</h2>
+              <p className="max-w-md text-sm leading-relaxed text-fg-muted">
+                Have a project, idea, or open-source inquiry? Send a message and
+                it opens straight in your mail client.
+              </p>
+            </div>
+          </Reveal>
+
+          {isSubmitted && (
+            <div className="mt-6 flex items-center gap-2.5 rounded-xl border border-success/30 bg-success/10 px-4 py-3 text-xs text-success">
+              <CheckCircle2 className="h-4 w-4 shrink-0" />
+              <span>Message prepared. Your default email client will open.</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} noValidate className="mt-8 max-w-2xl space-y-5">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <div className="space-y-2">
+                <label htmlFor="contact-name" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
+                  Name
+                </label>
+                <input
+                  id="contact-name"
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="Your name"
+                  autoComplete="name"
+                  aria-invalid={!!errors.name}
+                  className={`${inputBase} ${errors.name ? "border-destructive" : "border-line"}`}
+                />
+                {errors.name && (
+                  <p className="font-mono text-[11px] text-destructive">{errors.name}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="contact-email" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
+                  Email
+                </label>
+                <input
+                  id="contact-email"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                  aria-invalid={!!errors.email}
+                  className={`${inputBase} ${errors.email ? "border-destructive" : "border-line"}`}
+                />
+                {errors.email && (
+                  <p className="font-mono text-[11px] text-destructive">{errors.email}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="contact-subject" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
+                Subject
+              </label>
+              <input
+                id="contact-subject"
+                type="text"
+                name="subject"
+                value={formData.subject}
+                onChange={handleInputChange}
+                placeholder="Project discussion / collaboration"
+                aria-invalid={!!errors.subject}
+                className={`${inputBase} ${errors.subject ? "border-destructive" : "border-line"}`}
+              />
+              {errors.subject && (
+                <p className="font-mono text-[11px] text-destructive">{errors.subject}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="contact-message" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
+                Message
+              </label>
+              <textarea
+                id="contact-message"
+                name="message"
+                value={formData.message}
+                onChange={handleInputChange}
+                rows={5}
+                placeholder="Tell me about your project or inquiry..."
+                aria-invalid={!!errors.message}
+                className={`${inputBase} resize-none ${errors.message ? "border-destructive" : "border-line"}`}
+              />
+              {errors.message && (
+                <p className="font-mono text-[11px] text-destructive">{errors.message}</p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="press inline-flex items-center gap-2 rounded-full bg-[#f2f5f5] px-6 py-3 text-sm font-medium text-[#050708] shadow-card transition-all hover:bg-white disabled:opacity-50"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Preparing...</span>
+                </>
+              ) : (
+                <>
+                  <Send className="h-4 w-4" />
+                  <span>Send message</span>
+                </>
+              )}
+            </button>
+          </form>
+        </section>
+
+        <NextPageLink to="/certificates" title="Credentials" />
       </div>
     </div>
   );

@@ -1,5 +1,11 @@
 import { Suspense, lazy, useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
+import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 
 // Lazy load route components for code splitting
 const Home = lazy(() => import("./components/Home"));
@@ -9,6 +15,7 @@ const About = lazy(() => import("./components/About"));
 const Projects = lazy(() => import("./components/Projects"));
 const ProjectDetail = lazy(() => import("./components/ProjectDetail"));
 const Certificates = lazy(() => import("./components/Certificates"));
+const NotFound = lazy(() => import("./components/NotFound"));
 
 // Keep critical components eagerly loaded
 import Loader from "./components/Loader";
@@ -51,8 +58,8 @@ function DeferredBackground() {
       connection?.effectiveType === "2g" ||
       connection?.effectiveType === "slow-2g";
 
-    const fallbackDelay = isMobile || shouldDelayForNetwork ? 2200 : 700;
-    const idleTimeout = isMobile || shouldDelayForNetwork ? 2600 : 1200;
+    const fallbackDelay = isMobile || shouldDelayForNetwork ? 1500 : 400;
+    const idleTimeout = isMobile || shouldDelayForNetwork ? 2000 : 800;
 
     if (hasReducedMotion) {
       setReady(true);
@@ -83,22 +90,46 @@ function DeferredBackground() {
   );
 }
 
-function AppContent() {
-  useSmoothScroll();
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 26,
+    mass: 0.4,
+  });
 
   return (
-    <div className="flex min-h-screen relative selection:bg-primary/30 selection:text-white">
+    <motion.div
+      aria-hidden
+      style={{ scaleX }}
+      className="fixed inset-x-0 top-0 z-[85] h-px origin-left bg-gradient-to-r from-primary/50 via-primary to-primary/50"
+    />
+  );
+}
+
+function AppContent() {
+  useSmoothScroll();
+  const location = useLocation();
+
+  return (
+    <div className="relative flex min-h-dvh selection:bg-primary/20 selection:text-white">
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
+      <div aria-hidden className="grain-overlay" />
+      <ScrollProgress />
       <DeferredBackground />
-      {/* Sidebar - Desktop Only (Fixed 20rem/320px) */}
+      {/* Floating pill nav — desktop */}
       <Sidebar />
 
-      {/* Main Content Area - Full width on mobile, offset by sidebar width on desktop */}
-      <div className="flex flex-col min-h-screen w-full lg:pl-80 transition-all duration-300">
-        {/* Navbar - Mobile Only */}
+      {/* Main Content Area */}
+      <div className="flex min-h-dvh w-full flex-col transition-all duration-300">
+        {/* Mobile top bar + bottom dock */}
         <Navbar />
 
-        <main className="flex-grow pt-16 lg:pt-0 overflow-x-hidden">
-          <Routes>
+        <main id="main-content" className="flex-grow overflow-x-hidden pt-14 lg:pt-[4.75rem]">
+          <AnimatePresence mode="wait" initial={false}>
+            <Routes location={location} key={location.pathname}>
             <Route
               path="/"
               element={
@@ -156,11 +187,18 @@ function AppContent() {
                 </TransitionWrapper>
               }
             />
-          </Routes>
+            <Route
+              path="*"
+              element={
+                <TransitionWrapper>
+                  <NotFound />
+                </TransitionWrapper>
+              }
+            />
+            </Routes>
+          </AnimatePresence>
         </main>
-        <div className="lg:hidden">
-          <Footer />
-        </div>
+        <Footer />
       </div>
     </div>
   );
@@ -170,7 +208,6 @@ function App() {
   return (
     <ErrorBoundary
       onError={(error, errorInfo) => {
-        // Log error to console in development
         if (import.meta.env.DEV) {
           console.error(
             "App Error Boundary caught an error:",
@@ -178,8 +215,6 @@ function App() {
             errorInfo,
           );
         }
-        // In production, you might want to send this to an error reporting service
-        // Example: Sentry.captureException(error, { extra: errorInfo });
       }}
     >
       <NetworkErrorBoundary>

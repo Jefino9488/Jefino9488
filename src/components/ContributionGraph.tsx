@@ -8,10 +8,19 @@ interface ContributionDay {
   level: 0 | 1 | 2 | 3 | 4;
 }
 
+const LEVEL_CLASSES: Record<0 | 1 | 2 | 3 | 4, string> = {
+  0: "bg-elevated",
+  1: "bg-primary/25",
+  2: "bg-primary/50",
+  3: "bg-primary/75",
+  4: "bg-primary",
+};
+
 export default function ContributionGraph() {
   const [contributions, setContributions] = useState<ContributionDay[]>([]);
   const [totalContributions, setTotalContributions] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
 
   const getLevel = useCallback((count: number): 0 | 1 | 2 | 3 | 4 => {
     if (count === 0) return 0;
@@ -21,29 +30,8 @@ export default function ContributionGraph() {
     return 4;
   }, []);
 
-  const generateMockData = useCallback(() => {
-    const days: ContributionDay[] = [];
-    const today = new Date();
-    const oneYearAgo = new Date(today);
-    oneYearAgo.setFullYear(today.getFullYear() - 1);
-
-    let total = 0;
-    for (let d = new Date(oneYearAgo); d <= today; d.setDate(d.getDate() + 1)) {
-      const count = Math.random() > 0.7 ? Math.floor(Math.random() * 15) : 0;
-      total += count;
-      days.push({
-        date: d.toISOString().split("T")[0],
-        count,
-        level: getLevel(count),
-      });
-    }
-    setContributions(days);
-    setTotalContributions(total);
-  }, [getLevel]);
-
   useEffect(() => {
     const CACHE_KEY = "gh_contributions_cache";
-    const LEGACY_CACHE_KEY = "gh_contributions_cache_legacy";
     const CACHE_TTL = 60 * 60 * 1000; // 1 hour
 
     const loadFromCache = (): boolean => {
@@ -55,7 +43,6 @@ export default function ContributionGraph() {
         if (Date.now() - ts > CACHE_TTL) {
           localStorage.removeItem(CACHE_KEY);
           sessionStorage.removeItem(CACHE_KEY);
-          localStorage.removeItem(LEGACY_CACHE_KEY);
           return false;
         }
         setContributions(data.contributions);
@@ -80,7 +67,6 @@ export default function ContributionGraph() {
       }
     };
 
-    // Return early if cache hit
     if (loadFromCache()) return;
 
     const fetchContributions = async () => {
@@ -107,10 +93,12 @@ export default function ContributionGraph() {
           setContributions(contributionDays);
           setTotalContributions(total);
           saveToCache(contributionDays, total);
+        } else {
+          setFailed(true);
         }
       } catch (error) {
         console.error("Failed to fetch GitHub contributions:", error);
-        generateMockData();
+        setFailed(true);
       } finally {
         setLoading(false);
       }
@@ -125,10 +113,9 @@ export default function ContributionGraph() {
     };
 
     if (typeof deferredWindow.requestIdleCallback === "function") {
-      const id = deferredWindow.requestIdleCallback(
-        () => fetchContributions(),
-        { timeout: 1000 },
-      );
+      const id = deferredWindow.requestIdleCallback(() => fetchContributions(), {
+        timeout: 1000,
+      });
       return () => {
         if (typeof deferredWindow.cancelIdleCallback === "function") {
           deferredWindow.cancelIdleCallback(id);
@@ -138,38 +125,20 @@ export default function ContributionGraph() {
 
     const timeoutId = window.setTimeout(() => fetchContributions(), 250);
     return () => window.clearTimeout(timeoutId);
-  }, [generateMockData, getLevel]);
+  }, [getLevel]);
 
-  const getColor = (level: number) => {
-    switch (level) {
-      case 4:
-        return "bg-[#39d353]"; // Brightest green
-      case 3:
-        return "bg-[#26a641]"; // Bright green
-      case 2:
-        return "bg-[#006d32]"; // Medium green
-      case 1:
-        return "bg-[#0e4429]"; // Light green
-      default:
-        return "bg-[#161b22]"; // Dark gray for no contributions
-    }
-  };
-
-  // Organize contributions into weeks properly (GitHub style)
-  // Each column is a week, each row is a day of the week (0=Sun, 6=Sat)
+  // Organize contributions into weeks (GitHub style — column = week, row = weekday)
   const organizeIntoWeeks = () => {
     if (contributions.length === 0) return [];
 
     const weeks: (ContributionDay | null)[][] = [];
     const contributionMap = new Map(contributions.map((c) => [c.date, c]));
 
-    // Get the first day (start of year)
     const firstDate = new Date(contributions[0].date);
     const lastDate = new Date(contributions[contributions.length - 1].date);
 
-    // Start from the beginning of the week containing the first date
     const startDate = new Date(firstDate);
-    startDate.setDate(startDate.getDate() - startDate.getDay()); // Go back to Sunday
+    startDate.setDate(startDate.getDate() - startDate.getDay());
 
     const currentDate = new Date(startDate);
     let currentWeek: (ContributionDay | null)[] = [];
@@ -196,7 +165,6 @@ export default function ContributionGraph() {
       currentDate.setDate(currentDate.getDate() + 1);
 
       if (currentDate > lastDate && currentWeek.length > 0) {
-        // Fill remaining days in the last week with nulls
         while (currentWeek.length < 7) {
           currentWeek.push(null);
         }
@@ -209,85 +177,108 @@ export default function ContributionGraph() {
   };
 
   const weeks = organizeIntoWeeks();
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
 
   if (loading) {
     return (
-      <div className="bg-card border border-border rounded-3xl p-6 h-full flex items-center justify-center">
-        <div className="text-center text-muted-foreground">
-          Loading contributions...
+      <div className="tile p-7" aria-label="Loading activity">
+        <div className="skeleton h-3 w-32" />
+        <div className="mt-5 flex gap-[3px]">
+          {Array.from({ length: 26 }).map((_, i) => (
+            <div key={i} className="flex flex-col gap-[3px]">
+              {Array.from({ length: 7 }).map((_, j) => (
+                <div key={j} className="skeleton h-2.5 w-2.5 rounded-sm" />
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     );
   }
 
+  if (failed || weeks.length === 0) {
+    return (
+      <div className="tile flex flex-col items-start justify-between gap-4 p-7 sm:flex-row sm:items-center">
+        <div className="space-y-1.5">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
+            Activity
+          </p>
+          <p className="text-sm text-fg-muted">
+            Live contribution data is unavailable right now.
+          </p>
+        </div>
+        <a
+          href="https://github.com/Jefino9488"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="press shrink-0 rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-[#f2f5f5] transition-colors hover:border-line-strong"
+        >
+          View profile on GitHub
+        </a>
+      </div>
+    );
+  }
+
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
   return (
-    <div className="glass-crystal rounded-3xl p-6 h-full flex flex-col border border-white/5 border-l-2 border-l-primary/40 bg-[#0a0a0a]/60 relative overflow-hidden group hover:border-l-primary hover:shadow-[0_0_30px_-10px_rgba(102,111,188,0.4)] transition-all duration-500">
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-      <h3 className="text-lg font-mono tracking-tight font-bold text-white mb-4 relative z-10 group-hover:text-primary transition-colors">
-        CONTRIBUTION_GRAPH
-      </h3>
-      <div className="contribution-graph-scroll overflow-x-auto flex-grow flex items-center">
-        <div className="min-w-fit mx-auto">
-          {/* Months Header */}
-          <div className="flex mb-2 text-xs text-muted-foreground">
+    <div className="tile p-6 sm:p-7">
+      {/* Header */}
+      <div className="mb-5 flex flex-wrap items-baseline justify-between gap-2">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
+          Activity
+        </p>
+        <p className="font-mono text-xs tabular-nums text-fg-muted">
+          <span className="font-medium text-[#f2f5f5]">{totalContributions.toLocaleString("en-US")}</span>{" "}
+          contributions in {new Date().getFullYear()}
+        </p>
+      </div>
+
+      {/* Graph */}
+      <div className="hide-scrollbar overflow-x-auto pb-1">
+        <div className="min-w-fit">
+          {/* Month labels */}
+          <div className="mb-1.5 hidden gap-[3px] pl-[26px] text-[10px] text-fg-faint sm:flex">
             {months.map((month, i) => {
-              // Calculate approximate week position for each month
               const weekPosition = Math.floor((i / 12) * weeks.length);
               return (
-                <div
+                <span
                   key={i}
-                  className="flex-shrink-0"
+                  className="shrink-0"
                   style={{
                     width:
                       weekPosition < weeks.length ? `${100 / 12}%` : "auto",
-                    minWidth: "40px",
+                    minWidth: "34px",
                   }}
                 >
                   {month}
-                </div>
+                </span>
               );
             })}
           </div>
 
           <div className="flex gap-[3px]">
             {/* Day labels */}
-            <div className="flex flex-col justify-around text-[10px] text-muted-foreground pr-2 py-1">
-              <span>Sun</span>
-              <span className="invisible">Mon</span>
+            <div className="hidden flex-col justify-around py-px pr-1.5 font-mono text-[9px] leading-none text-fg-faint md:flex">
+              <span>Mon</span>
               <span>Wed</span>
-              <span className="invisible">Thu</span>
               <span>Fri</span>
             </div>
 
             {/* Grid */}
-            <div className="flex gap-[3px] flex-1">
+            <div className="flex gap-[3px]">
               {weeks.map((week, weekIndex) => (
                 <div key={weekIndex} className="flex flex-col gap-[3px]">
                   {week.map((day, dayIndex) =>
                     day ? (
                       <div
                         key={`${weekIndex}-${dayIndex}`}
-                        className={`w-[11px] h-[11px] rounded-[2px] ${getColor(day.level)} hover:ring-2 hover:ring-green-500/50 transition-all duration-150 cursor-pointer`}
                         title={`${day.date}: ${day.count} contributions`}
+                        className={`h-2.5 w-2.5 rounded-[3px] transition-transform duration-150 hover:scale-125 ${LEVEL_CLASSES[day.level]}`}
                       />
                     ) : (
                       <div
                         key={`${weekIndex}-${dayIndex}`}
-                        className="w-[11px] h-[11px]"
+                        className="h-2.5 w-2.5"
                       />
                     ),
                   )}
@@ -295,23 +286,32 @@ export default function ContributionGraph() {
               ))}
             </div>
           </div>
+        </div>
+      </div>
 
-          <div className="flex justify-between items-center mt-2 text-[10px] font-mono tracking-widest uppercase text-[#b3bad9] relative z-10">
-            <span>
-              {totalContributions} contributions // {new Date().getFullYear()}
-            </span>
-            <div className="flex items-center gap-2">
-              <span className="text-[9px]">Less</span>
-              <div className="flex gap-1">
-                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#161b22] border border-white/5"></div>
-                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#0e4429] drop-shadow-[0_0_2px_#0e4429]"></div>
-                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#006d32] drop-shadow-[0_0_4px_#006d32]"></div>
-                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#26a641] drop-shadow-[0_0_6px_#26a641]"></div>
-                <div className="w-[11px] h-[11px] rounded-[2px] bg-[#39d353] drop-shadow-[0_0_8px_#39d353]"></div>
-              </div>
-              <span className="text-[9px]">More</span>
-            </div>
-          </div>
+      {/* Legend */}
+      <div className="mt-4 flex items-center justify-between">
+        <a
+          href={`https://github.com/Jefino9488?tab=overview&from=${new Date().getFullYear()}-01-01`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.18em] text-fg-faint transition-colors hover:text-primary"
+        >
+          github.com/Jefino9488
+        </a>
+        <div className="flex items-center gap-1.5">
+          <span className="mr-1 font-mono text-[9px] uppercase tracking-wider text-fg-faint">
+            Less
+          </span>
+          {([0, 1, 2, 3, 4] as const).map((level) => (
+            <span
+              key={level}
+              className={`h-2.5 w-2.5 rounded-[3px] ${LEVEL_CLASSES[level]}`}
+            />
+          ))}
+          <span className="ml-1 font-mono text-[9px] uppercase tracking-wider text-fg-faint">
+            More
+          </span>
         </div>
       </div>
     </div>
