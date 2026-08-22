@@ -15,7 +15,7 @@ export default function Footer() {
   return (
     /* Sage closing band on every page — flush, no gap above (a margin
        would expose the dark canvas behind light pages) */
-    <footer className="theme-light border-t border-line bg-sage">
+    <footer className="theme-light border-t border-line bg-sage transition-colors duration-500">
       <div className="mx-auto max-w-[90rem] px-4 pb-28 pt-12 sm:px-8 lg:pb-12">
         {/* Columns */}
         <div className="grid gap-10 sm:grid-cols-3">

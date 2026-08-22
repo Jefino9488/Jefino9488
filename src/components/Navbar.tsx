@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { House, BriefcaseBusiness, PenLine, CircleUser } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { isLightRoute } from "@/lib/lightRoutes";
 
 interface NavItem {
   path: string;
@@ -17,18 +18,16 @@ const navItems: NavItem[] = [
 ];
 
 /** Pages that flip to the sage light theme — nav mirrors them. */
-const LIGHT_PAGES = ["/blog", "/certificates"];
-
 export default function Navbar() {
   const location = useLocation();
-  const isLightPage = LIGHT_PAGES.some((p) => location.pathname.startsWith(p));
+  const isLightPage = isLightRoute(location.pathname);
 
   return (
     <>
       {/* Slim top bar — brand only */}
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-40 border-b lg:hidden",
+          "fixed inset-x-0 top-0 z-40 border-b transition-colors duration-500 lg:hidden",
           isLightPage
             ? "glass-header-light theme-light"
             : "glass-header",
@@ -66,7 +65,7 @@ export default function Navbar() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className={cn(
-            "flex items-center gap-1 rounded-2xl border border-line bg-surface/90 p-1.5 shadow-lift backdrop-blur-xl",
+            "flex items-center gap-1 rounded-2xl border border-line bg-surface/90 p-1.5 shadow-lift backdrop-blur-xl transition-colors duration-500",
             isLightPage && "theme-light",
           )}
           style={{ WebkitBackdropFilter: "blur(20px)" }}

@@ -27,6 +27,7 @@ import TransitionWrapper from "./components/TransitionWrapper";
 import { ProjectsProvider } from "./components/ProjectsContext";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
 import { GitHubProvider } from "@/components/GitHubContext.tsx";
+import { isLightRoute } from "@/lib/lightRoutes";
 
 import ErrorBoundary from "./components/ErrorBoundary";
 import NetworkErrorBoundary from "./components/NetworkErrorBoundary";
@@ -124,8 +125,14 @@ function AppContent() {
       {/* Floating pill nav — desktop */}
       <Sidebar />
 
-      {/* Main Content Area */}
-      <div className="flex min-h-dvh w-full flex-col transition-all duration-300">
+      {/* Main Content Area — the light-scope lives HERE (not on each page)
+          so the fixed nav's translucent backdrop blends into sage, not the
+          dark canvas; transition-colors eases the flip between routes */}
+      <div
+        className={`flex min-h-dvh w-full flex-col transition-colors duration-500 ${
+          isLightRoute(location.pathname) ? "theme-light bg-sage" : ""
+        }`}
+      >
         {/* Mobile top bar + bottom dock */}
         <Navbar />
 

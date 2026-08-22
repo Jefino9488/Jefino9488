@@ -9,12 +9,16 @@ interface ContributionDay {
 }
 
 const LEVEL_CLASSES: Record<0 | 1 | 2 | 3 | 4, string> = {
-  0: "bg-elevated",
+  // bg-line stays visible against the tile surface in both dark & sage scopes
+  0: "bg-line",
   1: "bg-primary/25",
   2: "bg-primary/50",
   3: "bg-primary/75",
   4: "bg-primary",
 };
+
+/** Cell pitch: h-2.5/w-2.5 cell (10px) + 3px gap. */
+const WEEK_PX = 13;
 
 export default function ContributionGraph() {
   const [contributions, setContributions] = useState<ContributionDay[]>([]);
@@ -178,6 +182,24 @@ export default function ContributionGraph() {
 
   const weeks = organizeIntoWeeks();
 
+  // Month labels derived from actual week spans so they align with columns
+  const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthLabels = (() => {
+    const out: { name: string; weeks: number }[] = [];
+    for (const week of weeks) {
+      const firstDay = week.find(Boolean);
+      if (!firstDay) continue;
+      const m = new Date(firstDay.date).getMonth();
+      const last = out[out.length - 1];
+      if (!last || MONTHS.indexOf(last.name) !== m) {
+        out.push({ name: MONTHS[m], weeks: 1 });
+      } else {
+        last.weeks += 1;
+      }
+    }
+    return out;
+  })();
+
   if (loading) {
     return (
       <div className="tile p-7" aria-label="Loading activity">
@@ -218,8 +240,6 @@ export default function ContributionGraph() {
     );
   }
 
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
   return (
     <div className="tile p-6 sm:p-7">
       {/* Header */}
@@ -236,24 +256,18 @@ export default function ContributionGraph() {
       {/* Graph */}
       <div className="hide-scrollbar overflow-x-auto pb-1">
         <div className="min-w-fit">
-          {/* Month labels */}
+          {/* Month labels — width tracks real week count so labels sit
+              exactly over their columns (13px pitch = cell + gap) */}
           <div className="mb-1.5 hidden gap-[3px] pl-[26px] text-[10px] text-fg-faint sm:flex">
-            {months.map((month, i) => {
-              const weekPosition = Math.floor((i / 12) * weeks.length);
-              return (
-                <span
-                  key={i}
-                  className="shrink-0"
-                  style={{
-                    width:
-                      weekPosition < weeks.length ? `${100 / 12}%` : "auto",
-                    minWidth: "34px",
-                  }}
-                >
-                  {month}
-                </span>
-              );
-            })}
+            {monthLabels.map((m) => (
+              <span
+                key={m.name}
+                className="shrink-0"
+                style={{ width: `${m.weeks * WEEK_PX}px` }}
+              >
+                {m.name}
+              </span>
+            ))}
           </div>
 
           <div className="flex gap-[3px]">

@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { isLightRoute } from "@/lib/lightRoutes";
 
 interface NavItem {
   path: string;
@@ -14,12 +15,9 @@ const navItems: NavItem[] = [
   { path: "/about", label: "About" },
 ];
 
-/** Pages that flip to the sage light theme — nav mirrors them. */
-const LIGHT_PAGES = ["/blog", "/certificates"];
-
 export default function Sidebar() {
   const location = useLocation();
-  const isLightPage = LIGHT_PAGES.some((p) => location.pathname.startsWith(p));
+  const isLightPage = isLightRoute(location.pathname);
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-0 z-50 hidden lg:block">
@@ -29,7 +27,7 @@ export default function Sidebar() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
         className={cn(
-          "pointer-events-auto border-b backdrop-blur-xl",
+          "pointer-events-auto border-b backdrop-blur-xl transition-colors duration-500",
           isLightPage
             ? "theme-light border-line/70 bg-sage/70"
             : "border-line/70 bg-background/70",
