@@ -1,12 +1,64 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, Star, GitFork, Briefcase } from "lucide-react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { Github } from "./icons/Github";
 import PageHeader from "./PageHeader";
 import Reveal from "./Reveal";
 import { useProjects } from "./ProjectsContext";
 import { useGitHubData } from "@/components/GitHubContext";
 import NextPageLink from "./NextPageLink";
+
+/** Scroll-scrubbed oversized marquee — type too big for the viewport,
+ *  with a live pixel riding inside the words. */
+function MegaMarquee() {
+  const reduceMotion = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const x = useTransform(scrollYProgress, [0, 1], ["6%", "-32%"]);
+
+  const words = ["Systems", "Tooling", "AI Agents", "Web"];
+
+  return (
+    <div ref={ref} aria-hidden className="relative my-12 overflow-hidden sm:my-16">
+      <motion.p
+        style={reduceMotion ? undefined : { x }}
+        className="flex w-max items-center gap-10 whitespace-nowrap font-poppins text-[13vw] font-semibold uppercase leading-none tracking-tight will-change-transform sm:text-[9vw]"
+      >
+        {words.map((word, i) => (
+          <span key={word} className="flex items-center gap-10">
+            <span
+              className={
+                i % 2 === 0
+                  ? "text-foreground"
+                  : "text-transparent [-webkit-text-stroke:1px_var(--color-line-strong)]"
+              }
+            >
+              {word}
+            </span>
+            {i === 1 && (
+              <img
+                src="/profile/profile_anime.jpg"
+                alt=""
+                className="h-[0.62em] w-[1.7em] rounded-full border border-line object-cover"
+                width="120"
+                height="44"
+              />
+            )}
+          </span>
+        ))}
+      </motion.p>
+    </div>
+  );
+}
 
 function RowSkeleton() {
   return (
@@ -28,13 +80,13 @@ export default function Projects() {
 
   if (loading) {
     return (
-      <div className="min-h-[70vh] text-[#f2f5f5]">
+      <div className="min-h-[70vh] text-foreground">
         <PageHeader
           title="Selected Work & Archive"
           icon={Briefcase}
           meta={`${allProjects.length} Repositories`}
         />
-        <div className="mx-auto max-w-6xl px-4 pt-10 sm:px-8">
+        <div className="mx-auto max-w-[90rem] px-4 pt-10 sm:px-8">
           <RowSkeleton />
           <RowSkeleton />
           <RowSkeleton />
@@ -45,13 +97,13 @@ export default function Projects() {
 
   if (error) {
     return (
-      <div className="min-h-[70vh] text-[#f2f5f5]">
+      <div className="min-h-[70vh] text-foreground">
         <PageHeader
           title="Selected Work & Archive"
           icon={Briefcase}
           meta={`${allProjects.length} Repositories`}
         />
-        <div className="mx-auto flex min-h-[40vh] max-w-6xl items-center px-4 sm:px-8">
+        <div className="mx-auto flex min-h-[40vh] max-w-[90rem] items-center px-4 sm:px-8">
           <div className="tile mx-auto w-full max-w-md space-y-3 p-8 text-center">
             <p className="font-mono text-sm text-destructive">{error}</p>
             <p className="text-sm text-fg-muted">
@@ -59,7 +111,7 @@ export default function Projects() {
             </p>
             <button
               onClick={() => window.location.reload()}
-              className="press mx-auto mt-2 block rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-[#f2f5f5] transition-colors hover:border-line-strong"
+              className="press mx-auto mt-2 block rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
             >
               Retry
             </button>
@@ -102,7 +154,7 @@ export default function Projects() {
       : allProjects;
 
   return (
-    <div className="min-h-screen text-[#f2f5f5]">
+    <div className="min-h-screen text-foreground">
       <PageHeader
         title="Selected Work & Archive"
         icon={Briefcase}
@@ -114,8 +166,8 @@ export default function Projects() {
               aria-pressed={filterMode === "featured"}
               className={`rounded-full px-3 py-1 transition-colors ${
                 filterMode === "featured"
-                  ? "bg-elevated font-medium text-[#f2f5f5]"
-                  : "text-fg-muted hover:text-[#f2f5f5]"
+                  ? "bg-elevated font-medium text-foreground"
+                  : "text-fg-muted hover:text-foreground"
               }`}
             >
               Featured ({pinnedProjects.length || 6})
@@ -125,8 +177,8 @@ export default function Projects() {
               aria-pressed={filterMode === "all"}
               className={`rounded-full px-3 py-1 transition-colors ${
                 filterMode === "all"
-                  ? "bg-elevated font-medium text-[#f2f5f5]"
-                  : "text-fg-muted hover:text-[#f2f5f5]"
+                  ? "bg-elevated font-medium text-foreground"
+                  : "text-fg-muted hover:text-foreground"
               }`}
             >
               All ({allProjects.length})
@@ -135,7 +187,7 @@ export default function Projects() {
         }
       />
 
-      <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-12 sm:px-8 sm:pt-14">
+      <div className="relative mx-auto max-w-[90rem] px-4 pb-20 pt-10 sm:px-8 sm:pt-10">
         {/* Intro + quiet GitHub telemetry */}
         <Reveal>
           <div className="relative flex flex-col justify-between gap-6 md:flex-row md:items-end">
@@ -166,6 +218,8 @@ export default function Projects() {
           </div>
           <div aria-hidden className="mt-9 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
         </Reveal>
+
+        <MegaMarquee />
 
         {/* Editorial index rows */}
         <div className="border-t border-line">
@@ -203,7 +257,7 @@ export default function Projects() {
                     </span>
 
                     <div className="min-w-0 space-y-3.5">
-                      <h2 className="text-xl font-semibold tracking-tight text-[#f2f5f5] transition-colors group-hover:text-primary sm:text-2xl">
+                      <h2 className="text-xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-2xl">
                         {project.title.charAt(0).toUpperCase() +
                           project.title.slice(1).replace(/-/g, " ")}
                       </h2>
@@ -215,7 +269,7 @@ export default function Projects() {
                       {curation && (
                         <div className="grid gap-4 border-l-2 border-line-strong pl-4 pt-1 sm:grid-cols-2 sm:gap-6">
                           <p className="text-xs leading-relaxed">
-                            <span className="font-mono text-[10px] uppercase tracking-wider text-[#f2f5f5]">
+                            <span className="font-mono text-[10px] uppercase tracking-wider text-foreground">
                               Problem
                             </span>
                             <span className="mt-1 block text-fg-muted">{curation.problem}</span>
@@ -265,7 +319,7 @@ export default function Projects() {
         <Reveal>
           <div className="tile mt-10 flex flex-col items-center justify-between gap-4 p-6 sm:flex-row sm:p-7">
             <div className="space-y-1 text-center sm:text-left">
-              <h3 className="text-base font-semibold text-[#f2f5f5]">
+              <h3 className="text-base font-semibold text-foreground">
                 Looking for more repositories?
               </h3>
               <p className="text-xs text-fg-muted">
@@ -276,7 +330,7 @@ export default function Projects() {
               href="https://github.com/Jefino9488?tab=repositories"
               target="_blank"
               rel="noopener noreferrer"
-              className="press inline-flex shrink-0 items-center gap-2 rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-[#f2f5f5] transition-colors hover:border-line-strong"
+              className="press inline-flex shrink-0 items-center gap-2 rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
             >
               <Github className="h-3.5 w-3.5" />
               GitHub profile

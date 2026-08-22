@@ -63,53 +63,59 @@
 
 @theme {
   /* ------------------------------------------------------------------ */
-  /* Canvas — one cool-dark family, layered                              */
+  /* Canvas — near-black green field, lit by one warm ember              */
   /* ------------------------------------------------------------------ */
-  --color-background: #050708;
-  --color-foreground: #f2f5f5;
+  --color-background: #0c1310;
+  --color-foreground: #e9ede7;
 
-  --color-surface: #0a0e11;
-  --color-surface-hover: #10161b;
-  --color-elevated: #12181d;
-  --color-inset: #06090b;
+  --color-surface: #101915;
+  --color-surface-hover: #16211c;
+  --color-elevated: #182420;
+  --color-inset: #080f0c;
 
-  --color-line: #182026;
-  --color-line-strong: #2a3640;
+  --color-line: #1d2a24;
+  --color-line-strong: #2e4038;
 
   /* Text tiers */
-  --color-fg-muted: #8b969c;
-  --color-fg-faint: #5d686e;
+  --color-fg-muted: #93a39a;
+  --color-fg-faint: #5f6f66;
 
-  /* Accents */
-  --color-primary: #7c82ff;
+  /* Accents — ember is sparse and loud by contrast */
+  --color-primary: #e2572b;
   --color-primary-foreground: #ffffff;
-  --color-secondary: #10161b;
-  --color-secondary-foreground: #f2f5f5;
-  --color-accent: #7c82ff;
+  --color-secondary: #16211c;
+  --color-secondary-foreground: #e9ede7;
+  --color-accent: #e2572b;
   --color-accent-foreground: #ffffff;
   --color-destructive: #ef4444;
   --color-destructive-foreground: #ffffff;
   --color-success: #35d07f;
   --color-warm: #d89b45;
 
+  /* Sage flip theme (light sections) — mirrored tokens */
+  --color-sage: #c9d1c3;
+  --color-sage-raised: #d4dbcf;
+  --color-sage-ink: #161d18;
+  --color-sage-muted: #4c594f;
+
   /* Cards & popovers (shadcn compatibility) */
-  --color-card: #0a0e11;
-  --color-card-foreground: #f2f5f5;
-  --color-popover: #0a0e11;
-  --color-popover-foreground: #f2f5f5;
-  --color-muted: #10161b;
-  --color-border: #182026;
-  --color-input: #182026;
-  --color-ring: #7c82ff;
+  --color-card: #101915;
+  --color-card-foreground: #e9ede7;
+  --color-popover: #101915;
+  --color-popover-foreground: #e9ede7;
+  --color-muted: #16211c;
+  --color-border: #1d2a24;
+  --color-input: #1d2a24;
+  --color-ring: #e2572b;
 
   /* Sidebar aliases */
-  --color-sidebar: #050708;
-  --color-sidebar-foreground: #f2f5f5;
-  --color-sidebar-primary: #7c82ff;
+  --color-sidebar: #0c1310;
+  --color-sidebar-foreground: #e9ede7;
+  --color-sidebar-primary: #e2572b;
   --color-sidebar-primary-foreground: #ffffff;
-  --color-sidebar-accent: #10161b;
-  --color-sidebar-accent-foreground: #f2f5f5;
-  --color-sidebar-border: #182026;
+  --color-sidebar-accent: #16211c;
+  --color-sidebar-accent-foreground: #e9ede7;
+  --color-sidebar-border: #1d2a24;
 
   --radius-sm: 0.375rem;
   --radius-md: 0.625rem;
@@ -128,11 +134,11 @@
 
   /* Tinted shadow scale — shadows carry the canvas hue, never pure black */
   --shadow-card:
-    inset 0 1px 0 0 rgb(255 255 255 / 0.03), 0 10px 30px -18px rgb(0 0 0 / 0.85);
+    inset 0 1px 0 0 rgb(233 237 231 / 0.03), 0 10px 30px -18px rgb(0 0 0 / 0.85);
   --shadow-lift:
-    inset 0 1px 0 0 rgb(255 255 255 / 0.05), 0 18px 44px -22px rgb(0 0 0 / 0.95),
-    0 0 24px -12px rgb(124 130 255 / 0.14);
-  --shadow-glow: 0 0 32px -8px rgb(124 130 255 / 0.28);
+    inset 0 1px 0 0 rgb(233 237 231 / 0.05), 0 18px 44px -22px rgb(0 0 0 / 0.95),
+    0 0 24px -12px rgb(226 87 43 / 0.12);
+  --shadow-glow: 0 0 32px -8px rgb(226 87 43 / 0.25);
 
   --animate-fade-in: fade-in 0.3s ease-out;
   --animate-fade-in-up: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -221,8 +227,8 @@
   }
 
   html {
-    background-color: #050708;
-    color: #f2f5f5;
+    background-color: #0c1310;
+    color: #e9ede7;
     min-height: 100vh;
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
@@ -231,7 +237,7 @@
 
   body {
     background-color: transparent;
-    color: #f2f5f5;
+    color: #e9ede7;
     font-family:
       "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     overflow-x: hidden;
@@ -247,7 +253,7 @@
     font-family: "Poppins", "Inter", sans-serif;
     letter-spacing: -0.02em;
     text-wrap: balance;
-    color: #f2f5f5;
+    color: #e9ede7;
   }
 
   p,
@@ -267,13 +273,13 @@
 /* Editorial utilities                                                  */
 /* ------------------------------------------------------------------ */
 
-/* Display type scale — hero and section statements */
+/* Display type scale — oversized statements, tight leading */
 .type-display {
   font-family: "Poppins", "Inter", sans-serif;
   font-weight: 600;
-  font-size: clamp(2.5rem, 5.5vw, 4.25rem);
-  line-height: 1.04;
-  letter-spacing: -0.035em;
+  font-size: clamp(2.75rem, 7vw, 6.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
 }
 
 .type-title {
@@ -282,6 +288,32 @@
   font-size: clamp(1.35rem, 2.4vw, 1.75rem);
   line-height: 1.15;
   letter-spacing: -0.025em;
+}
+
+/* Bracketed micro-labels — "( EXPERTISE )" grammar */
+.label-bracket::before {
+  content: "(";
+  margin-right: 0.45em;
+}
+.label-bracket::after {
+  content: ")";
+  margin-left: 0.45em;
+}
+
+/* Section counter — "[ N.00X ]" grammar */
+.section-marker {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.section-marker::before {
+  content: "[ ";
+  letter-spacing: 0;
+}
+.section-marker::after {
+  content: " ]";
+  letter-spacing: 0;
 }
 
 .text-balance {
@@ -297,14 +329,60 @@
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   color: transparent;
-  -webkit-text-stroke: 1px #2a3640;
+  -webkit-text-stroke: 1px #2e4038;
   transition:
     color 0.35s ease,
     -webkit-text-stroke-color 0.35s ease;
 }
 .group:hover .index-num {
-  color: rgb(124 130 255 / 0.92);
+  color: rgb(226 87 43 / 0.92);
   -webkit-text-stroke-color: transparent;
+}
+
+/* Ghost typography — full-screen backdrop words, decorative only */
+.ghost-type {
+  pointer-events: none;
+  user-select: none;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  color: rgb(233 237 231 / 0.045);
+  white-space: pre-line;
+}
+.theme-light .ghost-type {
+  color: rgb(22 29 24 / 0.06);
+}
+
+/* ------------------------------------------------------------------ */
+/* Light-flip sections — sage field                                     */
+/* Scoped variable overrides cascade into every token-based utility     */
+/* ------------------------------------------------------------------ */
+.theme-light {
+  --color-background: transparent;
+  --color-surface: #bfc9ba;
+  --color-surface-hover: #cdd5c8;
+  --color-elevated: #d4dbcf;
+  --color-inset: #b3beae;
+  --color-line: #a8b3a2;
+  --color-line-strong: #8d998a;
+  --color-fg-muted: #4c594f;
+  --color-fg-faint: #6b776c;
+
+  color: var(--color-sage-ink);
+  background-color: var(--color-sage);
+}
+.theme-light h1,
+.theme-light h2,
+.theme-light h3,
+.theme-light h4,
+.theme-light h5,
+.theme-light h6 {
+  color: var(--color-sage-ink);
+}
+.theme-light ::selection {
+  background-color: rgb(22 29 24 / 0.85);
+  color: #c9d1c3;
 }
 
 /* Film grain overlay — breaks digital flatness */
@@ -318,7 +396,7 @@
   background-size: 256px 256px;
 }
 
-/* Ambient radial glow behind key sections */
+/* Ambient radial glow behind key sections — warm ember light */
 .ambient-glow {
   position: absolute;
   pointer-events: none;
@@ -326,17 +404,17 @@
   filter: blur(90px);
   background: radial-gradient(
     closest-side,
-    rgb(124 130 255 / 0.09),
+    rgb(226 87 43 / 0.07),
     transparent
   );
 }
 
 /* Layered card surface — matte */
 .panel {
-  background-color: #0a0e11;
-  border: 1px solid #182026;
+  background-color: #101915;
+  border: 1px solid #1d2a24;
   box-shadow:
-    inset 0 1px 0 0 rgb(255 255 255 / 0.03),
+    inset 0 1px 0 0 rgb(233 237 231 / 0.03),
     0 10px 30px -18px rgb(0 0 0 / 0.85);
   transition:
     border-color 0.25s ease,
@@ -349,14 +427,14 @@
 .tile {
   position: relative;
   border-radius: 1.375rem;
-  border: 1px solid rgb(24 32 38 / 0.9);
+  border: 1px solid rgb(29 42 36 / 0.9);
   background:
-    linear-gradient(180deg, rgb(255 255 255 / 0.025), transparent 32%),
-    rgb(10 14 17 / 0.72);
+    linear-gradient(180deg, rgb(233 237 231 / 0.025), transparent 32%),
+    rgb(16 25 21 / 0.72);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow:
-    inset 0 1px 0 0 rgb(255 255 255 / 0.045),
+    inset 0 1px 0 0 rgb(233 237 231 / 0.045),
     0 14px 40px -22px rgb(0 0 0 / 0.9);
   transition:
     border-color 0.3s ease,
@@ -365,22 +443,22 @@
 }
 
 .tile-interactive:hover {
-  border-color: #2a3640;
+  border-color: #2e4038;
   transform: translateY(-3px);
   box-shadow:
-    inset 0 1px 0 0 rgb(255 255 255 / 0.06),
+    inset 0 1px 0 0 rgb(233 237 231 / 0.06),
     0 22px 52px -24px rgb(0 0 0 / 0.95),
-    0 0 28px -14px rgb(124 130 255 / 0.16);
+    0 0 28px -14px rgb(226 87 43 / 0.15);
 }
 
 .lift:hover {
-  background-color: #0d1317;
-  border-color: #2a3640;
+  background-color: #131e19;
+  border-color: #2e4038;
   transform: translateY(-2px);
   box-shadow:
-    inset 0 1px 0 0 rgb(255 255 255 / 0.05),
+    inset 0 1px 0 0 rgb(233 237 231 / 0.05),
     0 18px 44px -22px rgb(0 0 0 / 0.95),
-    0 0 24px -12px rgb(124 130 255 / 0.14);
+    0 0 24px -12px rgb(226 87 43 / 0.13);
 }
 
 .press:active {
@@ -393,9 +471,9 @@
   background:
     linear-gradient(
       100deg,
-      #0a0e11 40%,
-      #12181d 50%,
-      #0a0e11 60%
+      #101915 40%,
+      #182420 50%,
+      #101915 60%
     );
   background-size: 200% 100%;
   animation: shimmer 1.6s linear infinite;
@@ -403,18 +481,72 @@
 
 /* Sticky header glass */
 .glass-header {
-  background-color: rgb(5 7 8 / 0.78);
+  background-color: rgb(12 19 16 / 0.78);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid #182026;
+  border-bottom: 1px solid #1d2a24;
+}
+
+/* ------------------------------------------------------------------ */
+/* Custom cursor                                                        */
+/* ------------------------------------------------------------------ */
+@media (hover: hover) and (pointer: fine) {
+  html.cursor-active,
+  html.cursor-active * {
+    cursor: none !important;
+  }
+}
+
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 120;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background-color: #e9ede7;
+  mix-blend-mode: difference;
+  pointer-events: none;
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 119;
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  border: 1px solid rgb(233 237 231 / 0.55);
+  mix-blend-mode: difference;
+  pointer-events: none;
+  transition: width 0.25s ease, height 0.25s ease, opacity 0.25s ease,
+    border-color 0.25s ease;
+}
+.cursor-ring[data-hover="true"] {
+  width: 56px;
+  height: 56px;
+  border-color: #e2572b;
+}
+.cursor-ring[data-pressed="true"] {
+  width: 26px;
+  height: 26px;
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
 }
 
 /* Focus and accessibility */
 :focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 2px #7c82ff,
-    0 0 0 4px #050708;
+    0 0 0 2px #e2572b,
+    0 0 0 4px #0c1310;
 }
 
 /* Skip link — visible only for keyboard users */
@@ -425,7 +557,7 @@
   z-index: 100;
   padding: 0.625rem 1rem;
   border-radius: 0.5rem;
-  background: #7c82ff;
+  background: #e2572b;
   color: #fff;
   font-size: 0.8125rem;
   font-weight: 500;
@@ -442,16 +574,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #050708;
+  background: #0c1310;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1f2a30;
+  background: #24332c;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2f3d45;
+  background: #33463d;
 }
 
 .hide-scrollbar {
@@ -464,7 +596,7 @@
 }
 
 ::selection {
-  background-color: rgb(124 130 255 / 0.25);
+  background-color: rgb(226 87 43 / 0.3);
   color: #ffffff;
 }
 

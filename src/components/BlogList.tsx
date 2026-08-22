@@ -52,10 +52,10 @@ export default function BlogList() {
   }, [posts, searchTerm, selectedTag]);
 
   return (
-    <div className="min-h-screen text-[#f2f5f5]">
+    <div className="min-h-screen text-foreground">
       <PageHeader title="Writing & Publications" meta={`${posts.length} Articles`} />
 
-      <div className="relative mx-auto max-w-6xl space-y-12 px-4 pb-24 pt-14 sm:px-8 sm:pt-20">
+      <div className="relative mx-auto max-w-[90rem] space-y-12 px-4 pb-24 pt-10 sm:px-8 sm:pt-12">
         {/* Editorial intro */}
         <Reveal>
           <div aria-hidden className="ambient-glow -top-16 -left-16 h-64 w-64" />
@@ -93,8 +93,8 @@ export default function BlogList() {
                     aria-pressed={isActive}
                     className={`rounded-full border px-3.5 py-1.5 font-mono text-xs transition-all ${
                       isActive
-                        ? "border-line-strong bg-elevated font-medium text-[#f2f5f5]"
-                        : "border-line bg-transparent text-fg-muted hover:border-line-strong hover:text-[#f2f5f5]"
+                        ? "border-line-strong bg-elevated font-medium text-foreground"
+                        : "border-line bg-transparent text-fg-muted hover:border-line-strong hover:text-foreground"
                     }`}
                   >
                     {category}
@@ -111,13 +111,13 @@ export default function BlogList() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 aria-label="Search articles"
-                className="w-full rounded-full border border-line bg-surface/70 py-2 pl-10 pr-9 font-mono text-xs text-[#f2f5f5] backdrop-blur-sm transition-colors placeholder:text-fg-faint focus:border-primary focus:outline-none"
+                className="w-full rounded-full border border-line bg-surface/70 py-2 pl-10 pr-9 font-mono text-xs text-foreground backdrop-blur-sm transition-colors placeholder:text-fg-faint focus:border-primary focus:outline-none"
               />
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm("")}
                   aria-label="Clear search"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-fg-faint transition-colors hover:text-[#f2f5f5]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-fg-faint transition-colors hover:text-foreground"
                 >
                   <X className="h-3.5 w-3.5" />
                 </button>
@@ -156,7 +156,7 @@ export default function BlogList() {
                     <span>{post.reading_time_minutes} min</span>
                   </div>
 
-                  <h2 className="pt-2 text-lg font-semibold tracking-tight text-[#f2f5f5] transition-colors group-hover:text-primary sm:text-xl">
+                  <h2 className="pt-2 text-lg font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-xl">
                     {post.title}
                   </h2>
 
@@ -195,7 +195,7 @@ export default function BlogList() {
                   setSearchTerm("");
                   setSelectedTag("");
                 }}
-                className="press mx-auto block rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-[#f2f5f5] transition-colors hover:border-line-strong"
+                className="press mx-auto block rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
               >
                 Clear filters
               </button>

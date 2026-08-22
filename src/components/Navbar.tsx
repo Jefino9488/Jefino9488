@@ -23,7 +23,7 @@ export default function Navbar() {
     <>
       {/* Slim top bar — brand only */}
       <header className="glass-header fixed inset-x-0 top-0 z-40 lg:hidden">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-8">
+        <div className="mx-auto flex max-w-[90rem] items-center justify-between px-4 py-3 sm:px-8">
           <Link to="/" className="flex items-center gap-2.5" aria-label="Home">
             <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-[0.625rem] border border-line bg-surface">
               <img
@@ -34,14 +34,13 @@ export default function Navbar() {
                 height="32"
               />
             </span>
-            <span className="font-poppins text-sm font-semibold tracking-tight text-[#f2f5f5]">
+            <span className="font-poppins text-sm font-semibold tracking-tight text-foreground">
               Jefino<span className="text-primary">.</span>
             </span>
           </Link>
 
-          <p className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-fg-faint">
-            <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse-dot" />
-            Open to work
+          <p aria-hidden className="section-marker text-fg-faint">
+            N.J
           </p>
         </div>
       </header>
@@ -55,7 +54,7 @@ export default function Navbar() {
           initial={{ y: 80, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-center gap-1 rounded-full border border-line bg-[#0a0e11]/85 p-1.5 shadow-lift backdrop-blur-xl"
+          className="flex items-center gap-1 rounded-2xl border border-line bg-surface/90 p-1.5 shadow-lift backdrop-blur-xl"
           style={{ WebkitBackdropFilter: "blur(20px)" }}
         >
           {navItems.map((item) => {

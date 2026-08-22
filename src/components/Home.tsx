@@ -27,9 +27,9 @@ const TECH_MARQUEE = [
 
 function Kicker({ index, label }: { index: string; label: string }) {
   return (
-    <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
-      <span className="text-primary">{index}</span>
-      <span className="mx-2 text-line-strong">/</span>
+    <p className="label-bracket font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
+      {index}
+      <span className="mx-2 text-primary">·</span>
       {label}
     </p>
   );
@@ -180,32 +180,34 @@ export default function Home() {
   ];
 
   return (
-    <div className="pb-16 text-[#f2f5f5]">
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-8">
+    <div className="pb-16 text-foreground">
+      <div className="relative mx-auto max-w-[90rem] px-4 sm:px-8">
         {/* ================================================================ */}
-        {/* Hero                                                             */}
+        {/* Hero — concrete-poetry manifesto                                  */}
         {/* ================================================================ */}
-        <div aria-hidden className="ambient-glow -top-40 left-1/3 h-[28rem] w-[28rem]" />
+        <div aria-hidden className="ambient-glow -top-40 right-0 h-[30rem] w-[30rem]" />
 
-        <section className="relative flex min-h-[88dvh] flex-col justify-center pb-12 pt-32 lg:min-h-[90dvh] lg:pt-32">
-          <Reveal y={10}>
-            <p className="inline-flex items-center gap-2.5 rounded-full border border-line bg-surface/80 py-1.5 pl-3 pr-4 font-mono text-[10px] uppercase tracking-[0.24em] text-fg-muted shadow-card backdrop-blur-sm">
-              <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse-dot" />
-              Open to collaborations · Chennai, IN
-            </p>
-          </Reveal>
+        <section className="relative flex min-h-[88dvh] flex-col justify-center pb-12 pt-28 lg:min-h-[90dvh] lg:pt-24">
+          <p
+            aria-hidden
+            className="section-marker absolute right-0 top-24 hidden text-fg-faint lg:block"
+          >
+            N.001
+          </p>
 
           <h1
-            className="mt-9 font-poppins font-semibold leading-[0.98]"
+            className="font-poppins font-semibold leading-[0.98]"
             style={{ fontSize: "clamp(2.9rem, 7.5vw, 6.75rem)", letterSpacing: "-0.045em" }}
             aria-label="I build software, automation and tools."
           >
             <StaggeredLine words={["I", "build", "software,"]} baseDelay={0.15} />
-            <StaggeredLine
-              words={["automation", "&", "tools."]}
-              muted
-              baseDelay={0.33}
-            />
+            <span className="block pl-[8vw] sm:pl-[6vw]">
+              <StaggeredLine
+                words={["automation", "&"]}
+                baseDelay={0.33}
+              />
+            </span>
+            <StaggeredLine words={["tools."]} muted baseDelay={0.48} />
           </h1>
 
           <div className="mt-10 grid items-end gap-12 md:grid-cols-[1fr_auto] md:gap-14">
@@ -222,7 +224,7 @@ export default function Home() {
                 <div className="mt-7 flex flex-wrap items-center gap-3">
                   <Link
                     to="/projects"
-                    className="press inline-flex items-center gap-2 rounded-full bg-[#f2f5f5] px-6 py-3 text-sm font-medium text-[#050708] shadow-card transition-all hover:bg-white"
+                    className="press inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background shadow-card transition-all hover:bg-white"
                   >
                     View work
                     <ArrowRight className="h-4 w-4" />
@@ -233,7 +235,7 @@ export default function Home() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="GitHub profile"
-                    className="press inline-flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface/60 text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-[#f2f5f5]"
+                    className="press inline-flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface/60 text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-foreground"
                   >
                     <Github className="h-4 w-4" />
                   </a>
@@ -242,14 +244,14 @@ export default function Home() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="LinkedIn profile"
-                    className="press inline-flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface/60 text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-[#f2f5f5]"
+                    className="press inline-flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface/60 text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-foreground"
                   >
                     <Linkedin className="h-4 w-4" />
                   </a>
                   <a
                     href="mailto:jefinojacob9488@gmail.com"
                     aria-label="Email Jefino"
-                    className="press inline-flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface/60 font-mono text-xs text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-[#f2f5f5]"
+                    className="press inline-flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface/60 font-mono text-xs text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-foreground"
                   >
                     @
                   </a>
@@ -331,7 +333,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Open ${featuredProjects[0].name} on GitHub`}
-                  className="absolute right-5 top-5 z-20 rounded-full p-2 text-fg-faint transition-colors hover:text-[#f2f5f5]"
+                  className="absolute right-5 top-5 z-20 rounded-full p-2 text-fg-faint transition-colors hover:text-foreground"
                 >
                   <ArrowUpRight className="h-4 w-4" />
                 </a>
@@ -451,7 +453,7 @@ export default function Home() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Open ${project.name} on GitHub`}
-                    className="absolute right-4 top-4 z-20 rounded-full p-1.5 text-fg-faint transition-colors hover:text-[#f2f5f5]"
+                    className="absolute right-4 top-4 z-20 rounded-full p-1.5 text-fg-faint transition-colors hover:text-foreground"
                   >
                     <ArrowUpRight className="h-3.5 w-3.5" />
                   </a>
@@ -502,7 +504,7 @@ export default function Home() {
                         {group.items.map((item) => (
                           <span
                             key={item}
-                            className="rounded-full border border-line bg-elevated px-2.5 py-1 font-mono text-[11px] text-[#f2f5f5] transition-colors hover:border-line-strong"
+                            className="rounded-full border border-line bg-elevated px-2.5 py-1 font-mono text-[11px] text-foreground transition-colors hover:border-line-strong"
                           >
                             {item}
                           </span>
@@ -521,7 +523,7 @@ export default function Home() {
                   <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-faint">
                     Recent writing
                   </p>
-                  <Link to="/blog" className="group/link inline-flex items-center gap-1 font-mono text-[11px] text-fg-muted transition-colors hover:text-[#f2f5f5]">
+                  <Link to="/blog" className="group/link inline-flex items-center gap-1 font-mono text-[11px] text-fg-muted transition-colors hover:text-foreground">
                     All articles
                     <ArrowRight className="h-3 w-3 transition-transform group-hover/link:translate-x-0.5" />
                   </Link>
@@ -537,7 +539,7 @@ export default function Home() {
                       const inner = (
                         <>
                           <div className="min-w-0 flex-1">
-                            <h3 className="truncate text-sm font-medium text-[#f2f5f5] transition-colors group-hover:text-primary">
+                            <h3 className="truncate text-sm font-medium text-foreground transition-colors group-hover:text-primary">
                               {post.title}
                             </h3>
                             <p className="mt-0.5 font-mono text-[10px] tabular-nums text-fg-faint">

@@ -199,7 +199,7 @@ export default function ProjectDetail() {
                   {codeLang}
                 </div>
               )}
-              <pre className="p-4 overflow-x-auto text-xs sm:text-sm font-mono text-[#f2f5f5] leading-relaxed">
+              <pre className="p-4 overflow-x-auto text-xs sm:text-sm font-mono text-foreground leading-relaxed">
                 <code>{codeLines.join("\n")}</code>
               </pre>
             </div>,
@@ -219,7 +219,7 @@ export default function ProjectDetail() {
         elements.push(
           <h2
             key={idx}
-            className="mb-3 mt-8 border-b border-line pb-2 text-lg font-semibold text-[#f2f5f5] sm:text-xl"
+            className="mb-3 mt-8 border-b border-line pb-2 text-lg font-semibold text-foreground sm:text-xl"
           >
             {line.slice(3)}
           </h2>,
@@ -287,7 +287,7 @@ export default function ProjectDetail() {
     : "Project";
 
   return (
-    <div className="min-h-screen text-[#f2f5f5]">
+    <div className="min-h-screen text-foreground">
       <PageHeader
         title={displayName}
         backTo="/projects"
@@ -301,16 +301,16 @@ export default function ProjectDetail() {
             }
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full border border-line bg-elevated px-3.5 py-1.5 font-mono text-xs text-[#f2f5f5] transition-colors hover:border-line-strong"
+            className="inline-flex items-center gap-1.5 rounded-full border border-line bg-elevated px-3.5 py-1.5 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
           >
             <Github className="w-3.5 h-3.5" />
             <span>GitHub Source</span>
-            <ExternalLink className="w-3 h-3 text-[#899395]" />
+            <ExternalLink className="w-3 h-3 text-fg-muted" />
           </a>
         }
       />
 
-      <div className="relative mx-auto max-w-4xl space-y-14 px-4 pb-24 pt-12 sm:px-8 sm:pt-16">
+      <div className="relative mx-auto max-w-4xl space-y-14 px-4 pb-24 pt-10 sm:px-8 sm:pt-12">
 
         {/* Case Study Header */}
         <div className="space-y-7">
@@ -380,7 +380,7 @@ export default function ProjectDetail() {
                   <Icon className={`h-3.5 w-3.5 ${color}`} />
                   <span>{label}</span>
                 </div>
-                <p className="truncate font-mono text-lg font-medium tabular-nums text-[#f2f5f5]">
+                <p className="truncate font-mono text-lg font-medium tabular-nums text-foreground">
                   {value}
                 </p>
               </div>
@@ -431,7 +431,7 @@ export default function ProjectDetail() {
                     <span className="shrink-0 font-mono font-semibold tabular-nums text-primary">
                       0{idx + 1}.
                     </span>
-                    <span className="text-[#f2f5f5]">{step}</span>
+                    <span className="text-foreground">{step}</span>
                   </div>
                 ))}
               </div>
@@ -445,7 +445,7 @@ export default function ProjectDetail() {
               </p>
               <div className="tile mt-4 flex items-start gap-3 p-5">
                 <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
-                <p className="text-xs leading-relaxed text-[#f2f5f5] sm:text-sm">
+                <p className="text-xs leading-relaxed text-foreground sm:text-sm">
                   {matchedCaseStudy.results}
                 </p>
               </div>
@@ -479,7 +479,7 @@ export default function ProjectDetail() {
         <div className="flex flex-col items-center justify-between gap-4 border-t border-line pt-10 sm:flex-row">
           <Link
             to="/projects"
-            className="group inline-flex items-center gap-2 font-mono text-xs text-fg-muted transition-colors hover:text-[#f2f5f5]"
+            className="group inline-flex items-center gap-2 font-mono text-xs text-fg-muted transition-colors hover:text-foreground"
           >
             <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
             Back to all projects
@@ -493,7 +493,7 @@ export default function ProjectDetail() {
             }
             target="_blank"
             rel="noopener noreferrer"
-            className="press inline-flex items-center gap-2 rounded-full bg-[#f2f5f5] px-5 py-2.5 font-mono text-xs font-medium text-[#050708] transition-all hover:bg-white"
+            className="press inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 font-mono text-xs font-medium text-background transition-all hover:bg-white"
           >
             <Github className="h-4 w-4" />
             <span>Open in GitHub</span>

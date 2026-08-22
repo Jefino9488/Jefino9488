@@ -34,9 +34,10 @@ const StarField = ({ count = 1200, ...props }: any) => {
     const data = new Float32Array(count * 3);
     for (let i = 0; i < count * 3; i += 3) {
       const shade = 0.6 + Math.random() * 0.4;
-      data[i] = shade * 0.9;
-      data[i + 1] = shade * 0.95;
-      data[i + 2] = shade;
+      // Green-tinted starlight matching the #0c1310 field
+      data[i] = shade * 0.82;
+      data[i + 1] = shade * 0.98;
+      data[i + 2] = shade * 0.88;
     }
     return data;
   }, [count]);
@@ -111,7 +112,7 @@ const Background: React.FC = () => {
   const starCount = isMobile ? 600 : 1400;
 
   return (
-    <div className="fixed inset-0 z-[-1] bg-[#050708] pointer-events-none">
+    <div className="fixed inset-0 z-[-1] bg-[#0c1310] pointer-events-none">
       <Canvas
         camera={{ position: [0, 0, 1], fov: 45 }}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -122,7 +123,7 @@ const Background: React.FC = () => {
         <CameraRig />
       </Canvas>
       {/* Subtle vignette/depth overlay */}
-      <div className="absolute inset-0 bg-radial from-transparent via-[#050708]/50 to-[#050708] pointer-events-none opacity-80" />
+      <div className="absolute inset-0 bg-radial from-transparent via-[#0c1310]/50 to-[#0c1310] pointer-events-none opacity-80" />
     </div>
   );
 };

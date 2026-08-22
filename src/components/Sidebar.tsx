@@ -18,60 +18,60 @@ export default function Sidebar() {
   const location = useLocation();
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-5 z-50 hidden justify-center px-6 lg:flex">
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 hidden lg:block">
       <motion.nav
         aria-label="Primary"
         initial={{ y: -28, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-        className="pointer-events-auto flex items-center gap-1 rounded-full border border-line bg-[#0a0e11]/75 p-1.5 pl-5 shadow-lift backdrop-blur-xl"
+        className="pointer-events-auto border-b border-line/70 bg-background/70 backdrop-blur-xl"
         style={{ WebkitBackdropFilter: "blur(20px)" }}
       >
-        <Link
-          to="/"
-          className="mr-4 font-poppins text-[15px] font-semibold tracking-tight text-[#f2f5f5] transition-colors hover:text-white"
-        >
-          Jefino<span className="text-primary">.</span>
-        </Link>
+        <div className="mx-auto flex h-[4.75rem] max-w-[90rem] items-center justify-between px-8">
+          {/* Brand */}
+          <Link
+            to="/"
+            className="font-poppins text-[17px] font-semibold tracking-tight text-foreground transition-colors hover:text-white"
+          >
+            Jefino<span className="text-primary">.</span>
+          </Link>
 
-        <div className="flex items-center gap-0.5">
-          {navItems.map((item) => {
-            const isActive =
-              item.path === "/"
-                ? location.pathname === "/"
-                : location.pathname.startsWith(item.path);
+          {/* Links */}
+          <div className="flex items-center gap-9">
+            {navItems.map((item) => {
+              const isActive =
+                item.path === "/"
+                  ? location.pathname === "/"
+                  : location.pathname.startsWith(item.path);
 
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                aria-current={isActive ? "page" : undefined}
-                className={cn(
-                  "relative rounded-full px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors duration-300",
-                  isActive
-                    ? "text-[#f2f5f5]"
-                    : "text-fg-muted hover:text-[#f2f5f5]",
-                )}
-              >
-                {isActive && (
-                  <motion.span
-                    layoutId="desktop-nav-pill"
-                    className="absolute inset-0 rounded-full border border-line-strong bg-elevated"
-                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  aria-current={isActive ? "page" : undefined}
+                  className={cn(
+                    "group relative py-2 font-mono text-[11px] uppercase tracking-[0.22em] transition-colors duration-300",
+                    isActive
+                      ? "text-foreground"
+                      : "text-fg-muted hover:text-foreground",
+                  )}
+                >
+                  {item.label}
+                  <span
+                    aria-hidden
+                    className={cn(
+                      "absolute -bottom-0.5 left-0 h-px w-full origin-left bg-primary transition-transform duration-300",
+                      isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+                    )}
                   />
-                )}
-                <span className="relative z-10">{item.label}</span>
-              </Link>
-            );
-          })}
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Spacer to balance brand on the left */}
+          <span aria-hidden className="w-[52px]" />
         </div>
-
-        <span aria-hidden className="mx-3 h-4 w-px bg-line" />
-
-        <span className="mr-2 inline-flex items-center gap-2 pr-1 font-mono text-[10px] uppercase tracking-[0.18em] text-fg-faint">
-          <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse-dot" />
-          Open to work
-        </span>
       </motion.nav>
     </header>
   );

@@ -30,14 +30,14 @@ export default function NotFound() {
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
             <Link
               to="/"
-              className="press inline-flex items-center gap-2 rounded-full bg-[#f2f5f5] px-5 py-2.5 text-sm font-medium text-[#050708] shadow-card transition-all hover:bg-white"
+              className="press inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background shadow-card transition-all hover:bg-white"
             >
               <ArrowLeft className="h-4 w-4" />
               Back home
             </Link>
             <Link
               to="/projects"
-              className="press inline-flex items-center gap-2 rounded-full border border-line bg-surface/60 px-5 py-2.5 text-sm text-[#f2f5f5] backdrop-blur-sm transition-colors hover:border-line-strong hover:bg-elevated"
+              className="press inline-flex items-center gap-2 rounded-full border border-line bg-surface/60 px-5 py-2.5 text-sm text-foreground backdrop-blur-sm transition-colors hover:border-line-strong hover:bg-elevated"
             >
               View work
             </Link>

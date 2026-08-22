@@ -35,7 +35,7 @@ const CodeBlock = ({ code }: { code: string }) => {
         <button
           onClick={handleCopy}
           aria-label="Copy code"
-          className="flex items-center gap-1.5 font-mono text-xs text-fg-muted transition-colors hover:text-[#f2f5f5]"
+          className="flex items-center gap-1.5 font-mono text-xs text-fg-muted transition-colors hover:text-foreground"
         >
           {copied ? (
             <>
@@ -51,7 +51,7 @@ const CodeBlock = ({ code }: { code: string }) => {
         </button>
       </div>
       <div className="overflow-x-auto p-4">
-        <pre className="font-mono text-xs leading-relaxed text-[#f2f5f5] sm:text-sm">
+        <pre className="font-mono text-xs leading-relaxed text-foreground sm:text-sm">
           <code>{code}</code>
         </pre>
       </div>
@@ -63,14 +63,14 @@ const CardNotFound = () => (
   <div className="flex min-h-[60vh] items-center justify-center p-4 pb-24 lg:pb-4">
     <div className="tile max-w-md space-y-4 p-8 text-center sm:p-12">
       <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">404</p>
-      <h1 className="text-2xl font-semibold text-[#f2f5f5]">Article not found</h1>
+      <h1 className="text-2xl font-semibold text-foreground">Article not found</h1>
       <p className="text-sm leading-relaxed text-fg-muted">
         The documentation or publication you&apos;re looking for doesn&apos;t
         exist or has been relocated.
       </p>
       <Link
         to="/blog"
-        className="press inline-flex items-center gap-2 rounded-full bg-[#f2f5f5] px-5 py-2.5 text-xs font-medium text-[#050708] transition-all hover:bg-white"
+        className="press inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-xs font-medium text-background transition-all hover:bg-white"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         Back to writing
@@ -132,20 +132,20 @@ export default function BlogPost() {
   }
 
   return (
-    <div className="min-h-screen text-[#f2f5f5]">
+    <div className="min-h-screen text-foreground">
       {/* Reading progress */}
       <motion.div
         className="fixed inset-x-0 top-0 z-[60] h-0.5 origin-left bg-primary"
         style={{ scaleX }}
       />
 
-      <div className="mx-auto max-w-6xl space-y-14 px-4 pb-24 pt-14 sm:px-8 sm:pt-20">
+      <div className="mx-auto max-w-[90rem] space-y-14 px-4 pb-24 pt-10 sm:px-8 sm:pt-12">
         {/* Title header */}
         <Reveal>
           <div className="space-y-6">
             <Link
               to="/blog"
-              className="group inline-flex items-center gap-2 font-mono text-xs text-fg-muted transition-colors hover:text-[#f2f5f5]"
+              className="group inline-flex items-center gap-2 font-mono text-xs text-fg-muted transition-colors hover:text-foreground"
             >
               <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
               All writing
@@ -177,7 +177,7 @@ export default function BlogPost() {
 
               <button
                 onClick={handleCopyPageUrl}
-                className="press inline-flex items-center gap-1.5 rounded-full border border-line bg-surface/70 px-3.5 py-1.5 font-mono text-[11px] text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-[#f2f5f5]"
+                className="press inline-flex items-center gap-1.5 rounded-full border border-line bg-surface/70 px-3.5 py-1.5 font-mono text-[11px] text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-foreground"
               >
                 {copyingPage ? (
                   <>
@@ -306,7 +306,7 @@ export default function BlogPost() {
                     <li key={item.id}>
                       <a
                         href={`#${item.id}`}
-                        className="block leading-snug text-fg-muted transition-colors hover:text-[#f2f5f5]"
+                        className="block leading-snug text-fg-muted transition-colors hover:text-foreground"
                       >
                         <span className="mr-1.5 font-mono text-[10px] tabular-nums text-primary">
                           {String(index + 1).padStart(2, "0")}
@@ -325,7 +325,7 @@ export default function BlogPost() {
         <div className="border-t border-line pt-8">
           <Link
             to="/blog"
-            className="group inline-flex items-center gap-2 font-mono text-xs text-fg-muted transition-colors hover:text-[#f2f5f5]"
+            className="group inline-flex items-center gap-2 font-mono text-xs text-fg-muted transition-colors hover:text-foreground"
           >
             <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5" />
             Back to writing

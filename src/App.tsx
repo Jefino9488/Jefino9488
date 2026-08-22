@@ -22,6 +22,7 @@ import Loader from "./components/Loader";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
+import Cursor from "./components/Cursor";
 import TransitionWrapper from "./components/TransitionWrapper";
 import { ProjectsProvider } from "./components/ProjectsContext";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
@@ -117,6 +118,7 @@ function AppContent() {
         Skip to content
       </a>
       <div aria-hidden className="grain-overlay" />
+      <Cursor />
       <ScrollProgress />
       <DeferredBackground />
       {/* Floating pill nav — desktop */}

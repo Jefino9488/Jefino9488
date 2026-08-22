@@ -210,7 +210,7 @@ export default function ContributionGraph() {
           href="https://github.com/Jefino9488"
           target="_blank"
           rel="noopener noreferrer"
-          className="press shrink-0 rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-[#f2f5f5] transition-colors hover:border-line-strong"
+          className="press shrink-0 rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
         >
           View profile on GitHub
         </a>
@@ -228,7 +228,7 @@ export default function ContributionGraph() {
           Activity
         </p>
         <p className="font-mono text-xs tabular-nums text-fg-muted">
-          <span className="font-medium text-[#f2f5f5]">{totalContributions.toLocaleString("en-US")}</span>{" "}
+          <span className="font-medium text-foreground">{totalContributions.toLocaleString("en-US")}</span>{" "}
           contributions in {new Date().getFullYear()}
         </p>
       </div>

@@ -78,30 +78,44 @@ export default function Certificates() {
   ];
 
   return (
-    <div className="min-h-screen text-[#f2f5f5]">
+    <div className="theme-light min-h-screen">
       <PageHeader
         title="Certifications Ledger"
         meta={`${certList.length} Verified`}
       />
 
-      <div className="relative mx-auto max-w-6xl space-y-16 px-4 pb-24 pt-14 sm:px-8 sm:pt-20">
-        {/* Intro */}
+      <div className="relative mx-auto max-w-[90rem] space-y-16 overflow-hidden px-4 pb-24 pt-10 sm:px-8 sm:pt-12">
+        {/* Intro — staircase headline over ghost numeral */}
         <Reveal>
-          <div aria-hidden className="ambient-glow -top-16 right-0 h-64 w-64" />
-          <div className="relative space-y-5">
-            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
-              Verified registry
-            </p>
-            <h1
-              className="max-w-[18ch] text-balance font-poppins font-semibold leading-[1.02]"
-              style={{ fontSize: "clamp(2rem, 4.5vw, 3.5rem)", letterSpacing: "-0.04em" }}
+          <div className="relative space-y-8">
+            <p
+              aria-hidden
+              className="ghost-type pointer-events-none absolute -right-6 -top-16 select-none text-[42vw] leading-none sm:text-[30vw]"
             >
-              Professional accreditations.
-            </h1>
-            <p className="max-w-xl text-pretty text-sm leading-relaxed text-fg-muted sm:text-base">
-              A verified registry of professional certifications across machine
-              learning, networking infrastructure, and automation engineering.
+              {certList.length}
             </p>
+
+            <div className="relative flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+              <div>
+                <p className="label-bracket font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
+                  Verified registry
+                </p>
+                <h1
+                  className="mt-5 font-poppins font-semibold leading-[0.98]"
+                  style={{ fontSize: "clamp(2.4rem, 6vw, 5rem)", letterSpacing: "-0.045em" }}
+                >
+                  <span className="block">Verified</span>
+                  <span className="block pl-[7vw]">professional</span>
+                  <span className="block">accreditations.</span>
+                </h1>
+              </div>
+
+              <p className="max-w-xs text-pretty text-sm leading-relaxed text-fg-muted lg:pb-2 lg:text-right">
+                A verified registry of professional certifications across
+                machine learning, networking infrastructure, and automation
+                engineering.
+              </p>
+            </div>
           </div>
         </Reveal>
 
@@ -112,7 +126,7 @@ export default function Certificates() {
               <Reveal delay={Math.min(ci * 0.05, 0.15)}>
                 <div className="space-y-1.5">
                   <p className="font-mono text-[11px] tabular-nums text-primary">
-                    {String(ci + 1).padStart(2, "0")}
+                    ({String(ci + 1).padStart(2, "0")})
                   </p>
                   <h2 className="type-title">{category.name}</h2>
                   <p className="text-xs leading-relaxed text-fg-muted">
@@ -124,28 +138,23 @@ export default function Certificates() {
               <div className="border-t border-line">
                 {category.items.map((cert, i) => (
                   <Reveal key={cert.id} delay={Math.min(i * 0.04, 0.2)}>
-                    <div className="group relative flex flex-col justify-between gap-4 border-b border-line py-6 transition-colors hover:bg-surface/40 sm:flex-row sm:items-center sm:gap-6">
-                      <div className="min-w-0 flex-1 space-y-2 px-1">
-                        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[11px] text-fg-faint">
-                          <span className="inline-flex items-center gap-1 font-medium text-success">
-                            <CheckCircle2 className="h-3 w-3" />
-                            Verified
-                          </span>
-                          <span>·</span>
-                          <span className="font-medium text-[#f2f5f5]">{cert.issuer}</span>
-                          <span>·</span>
-                          <span className="tabular-nums">{cert.date}</span>
-                        </div>
+                    <div className="group relative grid grid-cols-[auto_1fr_auto] items-center gap-x-4 gap-y-3 border-b border-line py-5 transition-colors hover:bg-surface/50 sm:grid-cols-[3rem_1fr_10rem_auto] sm:gap-x-6 sm:py-6">
+                      {/* Count column */}
+                      <span
+                        aria-hidden
+                        className="index-num self-start pt-0.5 text-xl leading-none sm:text-2xl"
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
 
-                        <h3 className="text-base font-semibold tracking-tight text-[#f2f5f5] transition-colors group-hover:text-primary sm:text-lg">
+                      <div className="min-w-0 space-y-1.5 px-1">
+                        <h3 className="text-base font-semibold tracking-tight text-sage-ink transition-colors group-hover:text-primary sm:text-lg">
                           {cert.title}
                         </h3>
-
                         <p className="line-clamp-2 max-w-xl text-sm leading-relaxed text-fg-muted">
                           {cert.description}
                         </p>
-
-                        <div className="flex flex-wrap gap-1.5 pt-1">
+                        <div className="flex flex-wrap gap-1.5 pt-0.5">
                           {cert.skills.slice(0, 4).map((s) => (
                             <span
                               key={s}
@@ -157,10 +166,20 @@ export default function Certificates() {
                         </div>
                       </div>
 
+                      {/* Issuer / date column */}
+                      <div className="hidden space-y-1 text-right font-mono text-[11px] sm:block">
+                        <span className="inline-flex items-center gap-1 font-medium text-success">
+                          <CheckCircle2 className="h-3 w-3" />
+                          Verified
+                        </span>
+                        <p className="font-medium text-sage-ink">{cert.issuer}</p>
+                        <p className="tabular-nums text-fg-faint">{cert.date}</p>
+                      </div>
+
                       <div className="flex shrink-0 items-center gap-2 px-1 sm:self-center">
                         <button
                           onClick={() => setSelectedCert(cert)}
-                          className="press inline-flex items-center gap-1.5 rounded-full border border-line bg-elevated px-3.5 py-1.5 font-mono text-xs text-[#f2f5f5] transition-colors hover:border-line-strong"
+                          className="press inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3.5 py-1.5 font-mono text-xs text-sage-ink transition-colors hover:border-line-strong"
                         >
                           <Award className="h-3.5 w-3.5 text-primary" />
                           <span>Inspect</span>
@@ -172,7 +191,7 @@ export default function Certificates() {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label={`Verify ${cert.title} authenticity`}
-                            className="rounded-full p-2 text-fg-faint transition-colors hover:text-[#f2f5f5]"
+                            className="rounded-full p-2 text-fg-faint transition-colors hover:text-sage-ink"
                           >
                             <ExternalLink className="h-4 w-4" />
                           </a>
@@ -218,7 +237,7 @@ export default function Certificates() {
                 <button
                   onClick={() => setSelectedCert(null)}
                   aria-label="Close dialog"
-                  className="rounded-full p-1.5 text-fg-muted transition-colors hover:bg-elevated hover:text-[#f2f5f5]"
+                  className="rounded-full p-1.5 text-fg-muted transition-colors hover:bg-elevated hover:text-foreground"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -251,7 +270,7 @@ export default function Certificates() {
                   {selectedCert.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="rounded-full border border-line bg-elevated px-2.5 py-1 font-mono text-xs text-[#f2f5f5]"
+                      className="rounded-full border border-line bg-elevated px-2.5 py-1 font-mono text-xs text-foreground"
                     >
                       {skill}
                     </span>
@@ -265,7 +284,7 @@ export default function Certificates() {
                     href={selectedCert.credentialUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="press inline-flex items-center gap-2 rounded-full bg-[#f2f5f5] px-5 py-2.5 font-mono text-xs font-medium text-[#050708] transition-all hover:bg-white"
+                    className="press inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 font-mono text-xs font-medium text-background transition-all hover:bg-white"
                   >
                     <span>Verify authenticity</span>
                     <ExternalLink className="h-3.5 w-3.5" />

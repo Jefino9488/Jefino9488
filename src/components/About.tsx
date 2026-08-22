@@ -1,6 +1,7 @@
 import type React from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import {
   Download,
   Mail,
@@ -13,6 +14,32 @@ import { Linkedin } from "./icons/Linkedin";
 import Reveal from "./Reveal";
 import NextPageLink from "./NextPageLink";
 import certificates from "@/certifications/certifications.json";
+
+/** Full-bleed low-contrast backdrop words that drift against scroll. */
+function GhostBackdrop({ lines }: { lines: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["12%", "-12%"]);
+
+  return (
+    <div
+      ref={ref}
+      aria-hidden
+      className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden"
+    >
+      <motion.p
+        style={reduceMotion ? undefined : { y }}
+        className="ghost-type text-center text-[19vw] sm:text-[15vw]"
+      >
+        {lines}
+      </motion.p>
+    </div>
+  );
+}
 
 interface TimelineEntry {
   year: string;
@@ -93,7 +120,7 @@ const technicalSkills = [
 ];
 
 const inputBase =
-  "w-full rounded-xl border bg-surface/70 px-4 py-3 font-mono text-xs text-[#f2f5f5] backdrop-blur-sm transition-colors placeholder:text-fg-faint focus:border-primary focus:outline-none";
+  "w-full rounded-xl border bg-surface/70 px-4 py-3 font-mono text-xs text-foreground backdrop-blur-sm transition-colors placeholder:text-fg-faint focus:border-primary focus:outline-none";
 
 export default function About() {
   const [formData, setFormData] = useState({
@@ -159,26 +186,33 @@ export default function About() {
   };
 
   return (
-    <div className="min-h-screen text-[#f2f5f5]">
-      <div className="relative mx-auto max-w-6xl space-y-24 px-4 pb-24 pt-14 sm:px-8 sm:pt-20">
+    <div className="min-h-screen text-foreground">
+      <div className="relative mx-auto max-w-[90rem] space-y-24 px-4 pb-24 pt-10 sm:px-8 sm:pt-12">
         {/* ================================================================ */}
-        {/* Intro                                                            */}
+        {/* Intro — ghost backdrop words behind the biography                 */}
         {/* ================================================================ */}
         <section className="relative">
+          <GhostBackdrop lines={"FULL STACK\nENG INEER"} />
+          <p
+            aria-hidden
+            className="section-marker absolute right-0 top-0 hidden text-fg-faint lg:block"
+          >
+            N.002
+          </p>
           <div aria-hidden className="ambient-glow -top-20 left-1/4 h-80 w-80" />
-          <Reveal>
+          <Reveal className="relative z-10">
             <a
               href="https://my-drive.pages.dev/Public/resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="press mb-8 inline-flex items-center gap-1.5 rounded-full border border-line bg-surface/70 px-3.5 py-1.5 font-mono text-xs text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-[#f2f5f5]"
+              className="press mb-8 inline-flex items-center gap-1.5 rounded-full border border-line bg-surface/70 px-3.5 py-1.5 font-mono text-xs text-fg-muted backdrop-blur-sm transition-colors hover:border-line-strong hover:text-foreground"
             >
               <Download className="h-3.5 w-3.5" />
               Resume (PDF)
             </a>
           </Reveal>
 
-          <div className="flex flex-col-reverse items-start justify-between gap-10 md:flex-row">
+          <div className="relative z-10 flex flex-col-reverse items-start justify-between gap-10 md:flex-row">
             <div className="flex-1 space-y-6">
               <Reveal y={12}>
                 <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
@@ -216,7 +250,7 @@ export default function About() {
                       href={href}
                       target={href.startsWith("mailto") ? undefined : "_blank"}
                       rel="noopener noreferrer"
-                      className="press inline-flex items-center gap-2 rounded-full border border-line bg-surface/60 px-4 py-2 font-mono text-xs text-[#f2f5f5] backdrop-blur-sm transition-colors hover:border-line-strong hover:bg-elevated"
+                      className="press inline-flex items-center gap-2 rounded-full border border-line bg-surface/60 px-4 py-2 font-mono text-xs text-foreground backdrop-blur-sm transition-colors hover:border-line-strong hover:bg-elevated"
                     >
                       <Icon className="h-3.5 w-3.5 text-fg-muted" />
                       {label}
@@ -295,7 +329,7 @@ export default function About() {
                     <span className="uppercase tracking-[0.16em] text-fg-faint">{item.category}</span>
                   </div>
 
-                  <h3 className="text-base font-medium text-[#f2f5f5] sm:text-lg">
+                  <h3 className="text-base font-medium text-foreground sm:text-lg">
                     {item.title}
                   </h3>
                   <p className="max-w-2xl text-sm leading-relaxed text-fg-muted">
@@ -329,7 +363,7 @@ export default function About() {
                     {group.skills.map((skill) => (
                       <span
                         key={skill}
-                        className="rounded-full border border-line bg-elevated px-2.5 py-1 font-mono text-[11px] text-[#f2f5f5] transition-colors hover:border-line-strong"
+                        className="rounded-full border border-line bg-elevated px-2.5 py-1 font-mono text-[11px] text-foreground transition-colors hover:border-line-strong"
                       >
                         {skill}
                       </span>
@@ -350,7 +384,7 @@ export default function About() {
               <div className="space-y-1.5 text-center sm:text-left">
                 <div className="inline-flex items-center justify-center gap-2 sm:justify-start">
                   <CheckCircle2 className="h-4 w-4 text-success" />
-                  <h2 className="text-base font-semibold text-[#f2f5f5]">
+                  <h2 className="text-base font-semibold text-foreground">
                     Verified certifications ({certificates.length})
                   </h2>
                 </div>
@@ -360,7 +394,7 @@ export default function About() {
               </div>
               <Link
                 to="/certificates"
-                className="press inline-flex shrink-0 items-center gap-2 rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-[#f2f5f5] transition-colors hover:border-line-strong"
+                className="press inline-flex shrink-0 items-center gap-2 rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
               >
                 View all credentials
               </Link>
@@ -476,7 +510,7 @@ export default function About() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="press inline-flex items-center gap-2 rounded-full bg-[#f2f5f5] px-6 py-3 text-sm font-medium text-[#050708] shadow-card transition-all hover:bg-white disabled:opacity-50"
+              className="press inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background shadow-card transition-all hover:bg-white disabled:opacity-50"
             >
               {isSubmitting ? (
                 <>

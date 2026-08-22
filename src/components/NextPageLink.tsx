@@ -19,9 +19,9 @@ export default function NextPageLink({
         to={to}
         className="group relative mt-20 block border-t border-line pt-10"
       >
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
+        <p className="label-bracket font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
           <span className="text-primary">{kicker}</span>
-          <span className="mx-2 text-line-strong">/</span>
+          <span className="mx-2">·</span>
           Keep exploring
         </p>
 
