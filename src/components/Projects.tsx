@@ -314,32 +314,39 @@ export default function Projects() {
             );
           })}
         </div>
+      </div>
 
-        {/* Bottom archive callout */}
-        <Reveal>
-          <div className="tile mt-10 flex flex-col items-center justify-between gap-4 p-6 sm:flex-row sm:p-7">
-            <div className="space-y-1 text-center sm:text-left">
-              <h3 className="text-base font-semibold text-foreground">
-                Looking for more repositories?
-              </h3>
-              <p className="text-xs text-fg-muted">
-                Explore all active, archived, and experimental codebases on GitHub.
-              </p>
+      {/* ================================================================ */}
+      {/* Sage closer — archive callout + next page                         */}
+      {/* ================================================================ */}
+      <div className="theme-light bg-sage">
+        <div className="mx-auto max-w-[90rem] px-4 pb-20 pt-16 sm:px-8 sm:pb-24 sm:pt-20">
+          {/* Bottom archive callout */}
+          <Reveal>
+            <div className="tile flex flex-col items-center justify-between gap-4 p-6 sm:flex-row sm:p-7">
+              <div className="space-y-1 text-center sm:text-left">
+                <h3 className="text-base font-semibold text-foreground">
+                  Looking for more repositories?
+                </h3>
+                <p className="text-xs text-fg-muted">
+                  Explore all active, archived, and experimental codebases on GitHub.
+                </p>
+              </div>
+              <a
+                href="https://github.com/Jefino9488?tab=repositories"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="press inline-flex shrink-0 items-center gap-2 rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
+              >
+                <Github className="h-3.5 w-3.5" />
+                GitHub profile
+                <ArrowUpRight className="h-3 w-3 text-fg-muted" />
+              </a>
             </div>
-            <a
-              href="https://github.com/Jefino9488?tab=repositories"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="press inline-flex shrink-0 items-center gap-2 rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
-            >
-              <Github className="h-3.5 w-3.5" />
-              GitHub profile
-              <ArrowUpRight className="h-3 w-3 text-fg-muted" />
-            </a>
-          </div>
-        </Reveal>
+          </Reveal>
 
-        <NextPageLink to="/blog" title="Writing" />
+          <NextPageLink to="/blog" title="Writing" />
+        </div>
       </div>
     </div>
   );

@@ -180,7 +180,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="pb-16 text-foreground">
+    <div className="text-foreground">
       <div className="relative mx-auto max-w-[90rem] px-4 sm:px-8">
         {/* ================================================================ */}
         {/* Hero — concrete-poetry manifesto                                  */}
@@ -595,59 +595,62 @@ export default function Home() {
             </Reveal>
           </div>
         </section>
+      </div>
 
-        {/* ================================================================ */}
-        {/* 02 — Activity                                                    */}
-        {/* ================================================================ */}
-        <section className="pb-24">
-          <Reveal>
-            <Kicker index="02" label="Activity" />
-            <div aria-hidden className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
-          </Reveal>
-          <Reveal delay={0.08}>
-            <div className="mt-8">
-              <ContributionGraph />
+      {/* ================================================================ */}
+      {/* Sage closer — 02 Activity + 03 Explore                            */}
+      {/* ================================================================ */}
+      <div className="theme-light bg-sage">
+        <div className="mx-auto max-w-[90rem] px-4 pb-16 pt-16 sm:px-8 sm:pb-20 sm:pt-20">
+          {/* 02 — Activity */}
+          <section>
+            <Reveal>
+              <Kicker index="02" label="Activity" />
+              <div aria-hidden className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
+            </Reveal>
+            <Reveal delay={0.08}>
+              <div className="mt-8">
+                <ContributionGraph />
+              </div>
+            </Reveal>
+          </section>
+
+          {/* 03 — Explore — every page */}
+          <section className="pt-20 sm:pt-24">
+            <Reveal>
+              <Kicker index="03" label="Explore" />
+              <div aria-hidden className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
+            </Reveal>
+
+            <div className="mt-8 border-t border-line">
+              {exploreLinks.map((link, i) => (
+                <Reveal key={link.to} delay={Math.min(i * 0.05, 0.2)}>
+                  <Link
+                    to={link.to}
+                    className="group grid grid-cols-[auto_1fr_auto] items-center gap-5 border-b border-line py-7 transition-colors sm:gap-8 sm:py-8"
+                  >
+                    <span aria-hidden className="index-num text-4xl leading-none sm:text-5xl">
+                      {link.index}
+                    </span>
+
+                    <span className="min-w-0 space-y-1.5">
+                      <span className="block text-xl font-semibold tracking-tight transition-colors duration-300 group-hover:text-primary sm:text-2xl">
+                        {link.title}
+                      </span>
+                      <span className="block max-w-lg text-sm leading-relaxed text-fg-muted">
+                        {link.description}
+                      </span>
+                    </span>
+
+                    <span className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface transition-all duration-300 group-hover:-rotate-45 group-hover:border-primary group-hover:bg-primary group-hover:text-white sm:h-12 sm:w-12">
+                      <ArrowUpRight className="h-4 w-4" />
+                    </span>
+                  </Link>
+                </Reveal>
+              ))}
             </div>
-          </Reveal>
-        </section>
-
-        {/* ================================================================ */}
-        {/* 03 — Explore — every page                                        */}
-        {/* ================================================================ */}
-        <section className="pb-8">
-          <Reveal>
-            <Kicker index="03" label="Explore" />
-            <div aria-hidden className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
-          </Reveal>
-
-          <div className="border-t border-line">
-            {exploreLinks.map((link, i) => (
-              <Reveal key={link.to} delay={Math.min(i * 0.05, 0.2)}>
-                <Link
-                  to={link.to}
-                  className="group grid grid-cols-[auto_1fr_auto] items-center gap-5 border-b border-line py-7 transition-colors sm:gap-8 sm:py-8"
-                >
-                  <span aria-hidden className="index-num text-4xl leading-none sm:text-5xl">
-                    {link.index}
-                  </span>
-
-                  <span className="min-w-0 space-y-1.5">
-                    <span className="block text-xl font-semibold tracking-tight transition-colors duration-300 group-hover:text-primary sm:text-2xl">
-                      {link.title}
-                    </span>
-                    <span className="block max-w-lg text-sm leading-relaxed text-fg-muted">
-                      {link.description}
-                    </span>
-                  </span>
-
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface transition-all duration-300 group-hover:-rotate-45 group-hover:border-primary group-hover:bg-primary sm:h-12 sm:w-12">
-                    <ArrowUpRight className="h-4 w-4" />
-                  </span>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </div>
   );
