@@ -158,9 +158,8 @@ const technicalSkills = [
   },
 ];
 
-/* Editorial underline fields for the sage contact band */
 const inputBase =
-  "w-full rounded-none border-0 border-b border-line bg-transparent px-0 py-3 font-mono text-xs text-sage-ink transition-colors placeholder:text-fg-faint focus:border-primary focus:outline-none";
+  "w-full rounded-none border-0 border-b border-line bg-transparent px-0 py-3 font-mono text-xs text-sage-ink transition-colors placeholder:text-fg-faint focus:border-x-0 focus:border-t-0 focus:border-primary !outline-none focus:!outline-none focus:!ring-0 focus:!shadow-none";
 
 export default function About() {
   const [formData, setFormData] = useState({
