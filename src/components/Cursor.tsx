@@ -7,7 +7,8 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
  * reduced-motion users (CSS also hides it defensively).
  */
 
-const INTERACTIVE = "a, button, [role='button'], input, textarea, select, label, summary";
+const INTERACTIVE =
+  "a, button, [role='button'], input, textarea, select, label, summary";
 
 export default function Cursor() {
   const [enabled, setEnabled] = useState(false);
@@ -21,8 +22,12 @@ export default function Cursor() {
   const ringY = useSpring(y, { stiffness: 260, damping: 26, mass: 0.6 });
 
   useEffect(() => {
-    const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const fine = window.matchMedia(
+      "(hover: hover) and (pointer: fine)",
+    ).matches;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     if (!fine || reduced) return;
 
     setEnabled(true);
@@ -64,7 +69,13 @@ export default function Cursor() {
       <motion.div
         aria-hidden
         className="cursor-dot"
-        style={{ x, y, translateX: "-50%", translateY: "-50%", opacity: visible ? 1 : 0 }}
+        style={{
+          x,
+          y,
+          translateX: "-50%",
+          translateY: "-50%",
+          opacity: visible ? 1 : 0,
+        }}
       />
       <motion.div
         aria-hidden

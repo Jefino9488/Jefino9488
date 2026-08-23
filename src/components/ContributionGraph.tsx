@@ -117,9 +117,12 @@ export default function ContributionGraph() {
     };
 
     if (typeof deferredWindow.requestIdleCallback === "function") {
-      const id = deferredWindow.requestIdleCallback(() => fetchContributions(), {
-        timeout: 1000,
-      });
+      const id = deferredWindow.requestIdleCallback(
+        () => fetchContributions(),
+        {
+          timeout: 1000,
+        },
+      );
       return () => {
         if (typeof deferredWindow.cancelIdleCallback === "function") {
           deferredWindow.cancelIdleCallback(id);
@@ -183,7 +186,20 @@ export default function ContributionGraph() {
   const weeks = organizeIntoWeeks();
 
   // Month labels derived from actual week spans so they align with columns
-  const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const MONTHS = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const monthLabels = (() => {
     const out: { name: string; weeks: number }[] = [];
     for (const week of weeks) {
@@ -204,7 +220,7 @@ export default function ContributionGraph() {
     return (
       <div className="tile p-7" aria-label="Loading activity">
         <div className="skeleton h-3 w-32" />
-        <div className="mt-5 flex gap-[3px]">
+        <div className="mt-5 flex justify-center gap-[3px]">
           {Array.from({ length: 26 }).map((_, i) => (
             <div key={i} className="flex flex-col gap-[3px]">
               {Array.from({ length: 7 }).map((_, j) => (
@@ -248,17 +264,25 @@ export default function ContributionGraph() {
           Activity
         </p>
         <p className="font-mono text-xs tabular-nums text-fg-muted">
-          <span className="font-medium text-foreground">{totalContributions.toLocaleString("en-US")}</span>{" "}
+          <span className="font-medium text-foreground">
+            {totalContributions.toLocaleString("en-US")}
+          </span>{" "}
           contributions in {new Date().getFullYear()}
         </p>
       </div>
 
       {/* Graph */}
-      <div className="hide-scrollbar overflow-x-auto pb-1">
+      <div className="hide-scrollbar flex w-full justify-center overflow-x-auto pb-1">
         <div className="min-w-fit">
-          {/* Month labels — width tracks real week count so labels sit
-              exactly over their columns (13px pitch = cell + gap) */}
-          <div className="mb-1.5 hidden gap-[3px] pl-[26px] text-[10px] text-fg-faint sm:flex">
+          {/* Month labels — symmetric 31px left spacer (28px day labels + 3px gap) */}
+          <div className="mb-1.5 hidden text-[10px] text-fg-faint sm:flex">
+            {/* Left spacer: 31px exactly matches day labels (28px) + flex gap (3px) */}
+            <div
+              aria-hidden
+              className="hidden shrink-0 md:block"
+              style={{ width: "31px" }}
+            />
+
             {monthLabels.map((m) => (
               <span
                 key={m.name}
@@ -268,11 +292,18 @@ export default function ContributionGraph() {
                 {m.name}
               </span>
             ))}
+
+            {/* Right spacer: 31px */}
+            <div
+              aria-hidden
+              className="hidden shrink-0 md:block"
+              style={{ width: "31px" }}
+            />
           </div>
 
-          <div className="flex gap-[3px]">
-            {/* Day labels */}
-            <div className="hidden flex-col justify-around py-px pr-1.5 font-mono text-[9px] leading-none text-fg-faint md:flex">
+          <div className="flex items-center gap-[3px]">
+            {/* Day labels on left (28px wide -> w-7) */}
+            <div className="hidden w-7 flex-col justify-around py-px pr-2 font-mono text-[9px] leading-none text-fg-faint md:flex">
               <span>Mon</span>
               <span>Wed</span>
               <span>Fri</span>
@@ -299,6 +330,9 @@ export default function ContributionGraph() {
                 </div>
               ))}
             </div>
+
+            {/* Balancing spacer on right (28px wide -> w-7) to ensure perfect left/right margin symmetry */}
+            <div aria-hidden className="hidden w-7 md:block" />
           </div>
         </div>
       </div>

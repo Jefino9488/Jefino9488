@@ -49,9 +49,7 @@ export default function ExperienceCard({
               </a>
             )}
           </div>
-          <p className="text-xs text-fg-muted mt-0.5 line-clamp-1">
-            {role}
-          </p>
+          <p className="text-xs text-fg-muted mt-0.5 line-clamp-1">{role}</p>
         </div>
       </div>
 

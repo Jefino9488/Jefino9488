@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Star, GitFork } from "lucide-react";
 import { Github } from "./icons/Github";
 import { Linkedin } from "./icons/Linkedin";
+import DualToneSection from "./DualToneSection";
 import { useProjects } from "./ProjectsContext";
 import { useGitHubData } from "@/components/GitHubContext";
 import { getBlogPosts, type BlogPost } from "@/services/blogService";
@@ -134,9 +135,18 @@ export default function Home() {
   });
 
   const skillsList = [
-    { category: "Languages", items: ["Python", "TypeScript", "JavaScript", "Java", "Bash"] },
-    { category: "Frameworks", items: ["React", "Node.js", "Express", "FastAPI", "Tailwind"] },
-    { category: "Systems & AI", items: ["Android Internals", "Linux", "TensorFlow", "PyTorch", "Docker"] },
+    {
+      category: "Languages",
+      items: ["Python", "TypeScript", "JavaScript", "Java", "Bash"],
+    },
+    {
+      category: "Frameworks",
+      items: ["React", "Node.js", "Express", "FastAPI", "Tailwind"],
+    },
+    {
+      category: "Systems & AI",
+      items: ["Android Internals", "Linux", "TensorFlow", "PyTorch", "Docker"],
+    },
   ];
 
   const totalLangBytes = languages.reduce((sum, [, b]) => sum + b, 0) || 1;
@@ -185,7 +195,10 @@ export default function Home() {
         {/* ================================================================ */}
         {/* Hero — concrete-poetry manifesto                                  */}
         {/* ================================================================ */}
-        <div aria-hidden className="ambient-glow -top-40 right-0 h-[30rem] w-[30rem]" />
+        <div
+          aria-hidden
+          className="ambient-glow -top-40 right-0 h-[30rem] w-[30rem]"
+        />
 
         <section className="relative flex min-h-[88dvh] flex-col justify-center pb-12 pt-28 lg:min-h-[90dvh] lg:pt-24">
           <p
@@ -197,15 +210,18 @@ export default function Home() {
 
           <h1
             className="font-poppins font-semibold leading-[0.98]"
-            style={{ fontSize: "clamp(2.9rem, 7.5vw, 6.75rem)", letterSpacing: "-0.045em" }}
+            style={{
+              fontSize: "clamp(2.9rem, 7.5vw, 6.75rem)",
+              letterSpacing: "-0.045em",
+            }}
             aria-label="I build software, automation and tools."
           >
-            <StaggeredLine words={["I", "build", "software,"]} baseDelay={0.15} />
+            <StaggeredLine
+              words={["I", "build", "software,"]}
+              baseDelay={0.15}
+            />
             <span className="block pl-[8vw] sm:pl-[6vw]">
-              <StaggeredLine
-                words={["automation", "&"]}
-                baseDelay={0.33}
-              />
+              <StaggeredLine words={["automation", "&"]} baseDelay={0.33} />
             </span>
             <StaggeredLine words={["tools."]} muted baseDelay={0.48} />
           </h1>
@@ -260,21 +276,28 @@ export default function Home() {
             </div>
 
             {/* Portrait — offset frame + technical corner ticks */}
-            <Reveal delay={0.55} y={26} className="justify-self-start md:justify-self-end">
+            <Reveal
+              delay={0.55}
+              y={26}
+              className="justify-self-start md:justify-self-end"
+            >
               <div className="relative">
                 <div
                   aria-hidden
                   className="absolute -right-3 -top-3 h-full w-full rounded-4xl border border-line-strong transition-colors duration-500"
                 />
-                {["-left-4 -top-4 border-l border-t", "-right-4 -top-4 border-r border-t", "-bottom-4 -left-4 border-b border-l", "-bottom-4 -right-4 border-b border-r"].map(
-                  (pos) => (
-                    <span
-                      key={pos}
-                      aria-hidden
-                      className={`absolute ${pos} h-3 w-3 border-primary/50`}
-                    />
-                  ),
-                )}
+                {[
+                  "-left-4 -top-4 border-l border-t",
+                  "-right-4 -top-4 border-r border-t",
+                  "-bottom-4 -left-4 border-b border-l",
+                  "-bottom-4 -right-4 border-b border-r",
+                ].map((pos) => (
+                  <span
+                    key={pos}
+                    aria-hidden
+                    className={`absolute ${pos} h-3 w-3 border-primary/50`}
+                  />
+                ))}
                 <div className="relative h-40 w-40 overflow-hidden rounded-4xl border border-line bg-surface shadow-lift sm:h-48 sm:w-48">
                   <img
                     src="/profile/profile_anime.jpg"
@@ -290,7 +313,10 @@ export default function Home() {
 
           {/* Tech ticker */}
           <Reveal delay={0.62} className="mt-16">
-            <div className="relative overflow-hidden border-y border-line py-4" aria-hidden>
+            <div
+              className="relative overflow-hidden border-y border-line py-4"
+              aria-hidden
+            >
               <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-background to-transparent" />
               <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-background to-transparent" />
               <div className="marquee-track items-center gap-12">
@@ -314,7 +340,10 @@ export default function Home() {
         <section className="pb-24 pt-4">
           <Reveal>
             <Kicker index="01" label="Selected work & telemetry" />
-            <div aria-hidden className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
+            <div
+              aria-hidden
+              className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent"
+            />
           </Reveal>
 
           <div className="mt-8 grid grid-cols-1 gap-4 md:auto-rows-fr md:grid-cols-3">
@@ -340,7 +369,9 @@ export default function Home() {
 
                 <div className="flex h-full flex-col justify-between gap-8">
                   <div className="space-y-4">
-                    <p className="font-mono text-[11px] tabular-nums text-primary">001 — Flagship</p>
+                    <p className="font-mono text-[11px] tabular-nums text-primary">
+                      001 — Flagship
+                    </p>
                     <h2 className="text-2xl font-semibold tracking-tight transition-colors group-hover:text-primary sm:text-3xl">
                       {featuredProjects[0].name}
                     </h2>
@@ -355,14 +386,27 @@ export default function Home() {
                   <div className="flex flex-wrap items-end justify-between gap-4">
                     <div className="flex flex-wrap gap-1.5">
                       {featuredProjects[0].tech.map((t) => (
-                        <span key={t} className="rounded-full border border-line bg-inset px-2.5 py-1 font-mono text-[10px] text-fg-muted">
+                        <span
+                          key={t}
+                          className="rounded-full border border-line bg-inset px-2.5 py-1 font-mono text-[10px] text-fg-muted"
+                        >
                           {t}
                         </span>
                       ))}
                     </div>
                     <div className="flex items-center gap-4 font-mono text-xs text-fg-muted">
-                      <span className="flex items-center gap-1.5"><Star className="h-3 w-3 text-warm" /><span className="tabular-nums">{featuredProjects[0].stats.stars}</span></span>
-                      <span className="flex items-center gap-1.5"><GitFork className="h-3 w-3" /><span className="tabular-nums">{featuredProjects[0].stats.forks}</span></span>
+                      <span className="flex items-center gap-1.5">
+                        <Star className="h-3 w-3 text-warm" />
+                        <span className="tabular-nums">
+                          {featuredProjects[0].stats.stars}
+                        </span>
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <GitFork className="h-3 w-3" />
+                        <span className="tabular-nums">
+                          {featuredProjects[0].stats.forks}
+                        </span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -384,7 +428,9 @@ export default function Home() {
                         "—"
                       )}
                     </dd>
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-fg-faint">Repos</dt>
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-fg-faint">
+                      Repos
+                    </dt>
                   </div>
                   <div className="space-y-1">
                     <dd className="font-mono text-xl font-medium">
@@ -394,7 +440,9 @@ export default function Home() {
                         "—"
                       )}
                     </dd>
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-fg-faint">Stars</dt>
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-fg-faint">
+                      Stars
+                    </dt>
                   </div>
                   <div className="space-y-1">
                     <dd className="font-mono text-xl font-medium">
@@ -404,7 +452,9 @@ export default function Home() {
                         "—"
                       )}
                     </dd>
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-fg-faint">PRs</dt>
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-fg-faint">
+                      PRs
+                    </dt>
                   </div>
                 </dl>
 
@@ -414,7 +464,9 @@ export default function Home() {
                       <div key={lang.name} className="space-y-1.5">
                         <div className="flex justify-between font-mono text-[10px] text-fg-muted">
                           <span>{lang.name}</span>
-                          <span className="tabular-nums text-fg-faint">{lang.pct}%</span>
+                          <span className="tabular-nums text-fg-faint">
+                            {lang.pct}%
+                          </span>
                         </div>
                         <div className="h-1 overflow-hidden rounded-full bg-elevated">
                           <div
@@ -427,8 +479,14 @@ export default function Home() {
                   ) : (
                     <div className="space-y-2.5">
                       {[72, 58, 41, 27].map((w) => (
-                        <div key={w} className="h-1 overflow-hidden rounded-full bg-elevated">
-                          <div className="h-full rounded-full bg-primary/30" style={{ width: `${w}%` }} />
+                        <div
+                          key={w}
+                          className="h-1 overflow-hidden rounded-full bg-elevated"
+                        >
+                          <div
+                            className="h-full rounded-full bg-primary/30"
+                            style={{ width: `${w}%` }}
+                          />
                         </div>
                       ))}
                     </div>
@@ -473,7 +531,10 @@ export default function Home() {
                     <div className="flex items-center justify-between">
                       <div className="flex flex-wrap gap-1.5">
                         {project.tech.slice(0, 3).map((t) => (
-                          <span key={t} className="rounded-full border border-line bg-inset px-2 py-0.5 font-mono text-[10px] text-fg-muted">
+                          <span
+                            key={t}
+                            className="rounded-full border border-line bg-inset px-2 py-0.5 font-mono text-[10px] text-fg-muted"
+                          >
                             {t}
                           </span>
                         ))}
@@ -523,7 +584,10 @@ export default function Home() {
                   <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-faint">
                     Recent writing
                   </p>
-                  <Link to="/blog" className="group/link inline-flex items-center gap-1 font-mono text-[11px] text-fg-muted transition-colors hover:text-foreground">
+                  <Link
+                    to="/blog"
+                    className="group/link inline-flex items-center gap-1 font-mono text-[11px] text-fg-muted transition-colors hover:text-foreground"
+                  >
                     All articles
                     <ArrowRight className="h-3 w-3 transition-transform group-hover/link:translate-x-0.5" />
                   </Link>
@@ -532,10 +596,13 @@ export default function Home() {
                 {latestPosts.length > 0 ? (
                   <ul className="divide-y divide-line">
                     {latestPosts.map((post) => {
-                      const formattedDate = new Date(post.published_at).toLocaleDateString(
-                        "en-US",
-                        { month: "short", day: "numeric", year: "numeric" },
-                      );
+                      const formattedDate = new Date(
+                        post.published_at,
+                      ).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      });
                       const inner = (
                         <>
                           <div className="min-w-0 flex-1">
@@ -543,7 +610,8 @@ export default function Home() {
                               {post.title}
                             </h3>
                             <p className="mt-0.5 font-mono text-[10px] tabular-nums text-fg-faint">
-                              {formattedDate} · {post.reading_time_minutes} min read
+                              {formattedDate} · {post.reading_time_minutes} min
+                              read
                             </p>
                           </div>
                           <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-fg-faint transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary" />
@@ -555,9 +623,21 @@ export default function Home() {
                       return (
                         <li key={post.id}>
                           {post.isLocal ? (
-                            <Link to={`/blog/${post.localId}`} className={rowClass}>{inner}</Link>
+                            <Link
+                              to={`/blog/${post.localId}`}
+                              className={rowClass}
+                            >
+                              {inner}
+                            </Link>
                           ) : (
-                            <a href={post.url} target="_blank" rel="noopener noreferrer" className={rowClass}>{inner}</a>
+                            <a
+                              href={post.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={rowClass}
+                            >
+                              {inner}
+                            </a>
                           )}
                         </li>
                       );
@@ -581,8 +661,8 @@ export default function Home() {
                 </p>
                 <p className="text-sm leading-relaxed text-fg-muted">
                   AI &amp; Data Science undergrad in Chennai turning complex,
-                  repetitive technical workflows into fast, reproducible software
-                  — from Android internals to LLM agents.
+                  repetitive technical workflows into fast, reproducible
+                  software — from Android internals to LLM agents.
                 </p>
                 <Link
                   to="/about"
@@ -600,13 +680,16 @@ export default function Home() {
       {/* ================================================================ */}
       {/* Sage closer — 02 Activity + 03 Explore                            */}
       {/* ================================================================ */}
-      <div className="theme-light bg-sage">
-        <div className="mx-auto max-w-[90rem] px-4 pb-16 pt-16 sm:px-8 sm:pb-20 sm:pt-20">
+      <DualToneSection>
+        <div className="mx-auto w-full max-w-[90rem] px-4 pb-16 pt-8 sm:px-8 sm:pb-20 sm:pt-10">
           {/* 02 — Activity */}
           <section>
             <Reveal>
               <Kicker index="02" label="Activity" />
-              <div aria-hidden className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
+              <div
+                aria-hidden
+                className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent"
+              />
             </Reveal>
             <Reveal delay={0.08}>
               <div className="mt-8">
@@ -619,7 +702,10 @@ export default function Home() {
           <section className="pt-20 sm:pt-24">
             <Reveal>
               <Kicker index="03" label="Explore" />
-              <div aria-hidden className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
+              <div
+                aria-hidden
+                className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent"
+              />
             </Reveal>
 
             <div className="mt-8 border-t border-line">
@@ -629,7 +715,10 @@ export default function Home() {
                     to={link.to}
                     className="group grid grid-cols-[auto_1fr_auto] items-center gap-5 border-b border-line py-7 transition-colors sm:gap-8 sm:py-8"
                   >
-                    <span aria-hidden className="index-num text-4xl leading-none sm:text-5xl">
+                    <span
+                      aria-hidden
+                      className="index-num text-4xl leading-none sm:text-5xl"
+                    >
                       {link.index}
                     </span>
 
@@ -651,7 +740,7 @@ export default function Home() {
             </div>
           </section>
         </div>
-      </div>
+      </DualToneSection>
     </div>
   );
 }

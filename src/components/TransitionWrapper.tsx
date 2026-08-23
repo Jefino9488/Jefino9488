@@ -14,7 +14,15 @@ export default function TransitionWrapper({
       key={location.pathname}
       initial={reduceMotion ? false : { opacity: 0, y: 16, scale: 0.995 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={reduceMotion ? undefined : { opacity: 0, y: -12, transition: { duration: 0.22, ease: "easeIn" } }}
+      exit={
+        reduceMotion
+          ? undefined
+          : {
+              opacity: 0,
+              y: -12,
+              transition: { duration: 0.22, ease: "easeIn" },
+            }
+      }
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="min-h-screen w-full"
     >

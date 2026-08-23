@@ -13,6 +13,7 @@ import Reveal from "./Reveal";
 import { useProjects } from "./ProjectsContext";
 import { useGitHubData } from "@/components/GitHubContext";
 import NextPageLink from "./NextPageLink";
+import DualToneSection from "./DualToneSection";
 
 /** Scroll-scrubbed oversized marquee — type too big for the viewport,
  *  with a live pixel riding inside the words. */
@@ -28,7 +29,11 @@ function MegaMarquee() {
   const words = ["Systems", "Tooling", "AI Agents", "Web"];
 
   return (
-    <div ref={ref} aria-hidden className="relative my-12 overflow-hidden sm:my-16">
+    <div
+      ref={ref}
+      aria-hidden
+      className="relative my-12 overflow-hidden sm:my-16"
+    >
       <motion.p
         style={reduceMotion ? undefined : { x }}
         className="flex w-max items-center gap-10 whitespace-nowrap font-poppins text-[13vw] font-semibold uppercase leading-none tracking-tight will-change-transform sm:text-[9vw]"
@@ -191,11 +196,17 @@ export default function Projects() {
         {/* Intro + quiet GitHub telemetry */}
         <Reveal>
           <div className="relative flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <div aria-hidden className="ambient-glow -top-16 -left-10 h-64 w-64" />
+            <div
+              aria-hidden
+              className="ambient-glow -top-16 -left-10 h-64 w-64"
+            />
             <div className="relative space-y-3">
               <h1
                 className="max-w-[18ch] text-balance font-poppins font-semibold leading-[1.02]"
-                style={{ fontSize: "clamp(1.9rem, 4vw, 3rem)", letterSpacing: "-0.035em" }}
+                style={{
+                  fontSize: "clamp(1.9rem, 4vw, 3rem)",
+                  letterSpacing: "-0.035em",
+                }}
               >
                 Engineering case studies &amp; tools
               </h1>
@@ -208,15 +219,24 @@ export default function Projects() {
             {profile && (
               <div className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-fg-muted">
                 <Github className="h-4 w-4 text-primary" />
-                <span className="tabular-nums">{profile.public_repos} repos</span>
+                <span className="tabular-nums">
+                  {profile.public_repos} repos
+                </span>
                 <span className="text-line-strong">·</span>
-                <span className="tabular-nums">{stats?.totalStars || 140}+ stars</span>
+                <span className="tabular-nums">
+                  {stats?.totalStars || 140}+ stars
+                </span>
                 <span className="hidden text-line-strong sm:inline">·</span>
-                <span className="hidden tabular-nums sm:inline">{stats?.totalPullRequests || 140} PRs</span>
+                <span className="hidden tabular-nums sm:inline">
+                  {stats?.totalPullRequests || 140} PRs
+                </span>
               </div>
             )}
           </div>
-          <div aria-hidden className="mt-9 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
+          <div
+            aria-hidden
+            className="mt-9 h-px w-full bg-gradient-to-r from-line-strong to-transparent"
+          />
         </Reveal>
 
         <MegaMarquee />
@@ -252,7 +272,10 @@ export default function Projects() {
                   </a>
 
                   <div className="grid grid-cols-[auto_1fr] items-start gap-5 py-7 pr-10 sm:grid-cols-[auto_1fr_auto] sm:gap-8 sm:pr-16">
-                    <span aria-hidden className="index-num pt-1 text-5xl leading-none sm:text-6xl">
+                    <span
+                      aria-hidden
+                      className="index-num pt-1 text-5xl leading-none sm:text-6xl"
+                    >
                       {String(index + 1).padStart(2, "0")}
                     </span>
 
@@ -272,13 +295,17 @@ export default function Projects() {
                             <span className="font-mono text-[10px] uppercase tracking-wider text-foreground">
                               Problem
                             </span>
-                            <span className="mt-1 block text-fg-muted">{curation.problem}</span>
+                            <span className="mt-1 block text-fg-muted">
+                              {curation.problem}
+                            </span>
                           </p>
                           <p className="text-xs leading-relaxed">
                             <span className="font-mono text-[10px] uppercase tracking-wider text-primary">
                               Approach
                             </span>
-                            <span className="mt-1 block text-fg-muted">{curation.approach}</span>
+                            <span className="mt-1 block text-fg-muted">
+                              {curation.approach}
+                            </span>
                           </p>
                         </div>
                       )}
@@ -297,7 +324,9 @@ export default function Projects() {
 
                     <div className="col-span-2 flex items-center gap-5 font-mono text-xs tabular-nums text-fg-muted sm:col-span-1 sm:w-28 sm:flex-col sm:items-end sm:gap-2 sm:text-right">
                       {yearStr && (
-                        <span className="hidden text-fg-faint sm:block">{yearStr}</span>
+                        <span className="hidden text-fg-faint sm:block">
+                          {yearStr}
+                        </span>
                       )}
                       <span className="flex items-center gap-1.5 transition-colors hover:text-warm">
                         <Star className="h-3.5 w-3.5 text-warm" />
@@ -319,8 +348,8 @@ export default function Projects() {
       {/* ================================================================ */}
       {/* Sage closer — archive callout + next page                         */}
       {/* ================================================================ */}
-      <div className="theme-light bg-sage">
-        <div className="mx-auto max-w-[90rem] px-4 pb-20 pt-16 sm:px-8 sm:pb-24 sm:pt-20">
+      <DualToneSection>
+        <div className="mx-auto w-full max-w-[90rem] px-4 pb-20 pt-8 sm:px-8 sm:pb-24 sm:pt-10">
           {/* Bottom archive callout */}
           <Reveal>
             <div className="tile flex flex-col items-center justify-between gap-4 p-6 sm:flex-row sm:p-7">
@@ -329,7 +358,8 @@ export default function Projects() {
                   Looking for more repositories?
                 </h3>
                 <p className="text-xs text-fg-muted">
-                  Explore all active, archived, and experimental codebases on GitHub.
+                  Explore all active, archived, and experimental codebases on
+                  GitHub.
                 </p>
               </div>
               <a
@@ -347,7 +377,7 @@ export default function Projects() {
 
           <NextPageLink to="/blog" title="Writing" />
         </div>
-      </div>
+      </DualToneSection>
     </div>
   );
 }

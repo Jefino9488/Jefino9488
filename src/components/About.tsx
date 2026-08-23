@@ -1,7 +1,12 @@
 import type React from "react";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import {
   ArrowUpRight,
   Download,
@@ -14,6 +19,7 @@ import { Github } from "./icons/Github";
 import { Linkedin } from "./icons/Linkedin";
 import Reveal from "./Reveal";
 import NextPageLink from "./NextPageLink";
+import DualToneSection from "./DualToneSection";
 import certificates from "@/certifications/certifications.json";
 
 /** Full-bleed low-contrast backdrop words that drift against scroll. */
@@ -115,9 +121,41 @@ const focusAreas = [
 ];
 
 const technicalSkills = [
-  { category: "Languages", skills: ["Python", "TypeScript", "JavaScript", "Java", "Bash / Shell", "SQL"] },
-  { category: "Web & Backend", skills: ["React", "Node.js", "Express", "FastAPI", "Flask", "Tailwind CSS", "REST APIs"] },
-  { category: "Systems & AI", skills: ["Android Internals", "Linux", "TensorFlow", "PyTorch", "Git", "Docker", "Cisco Networking"] },
+  {
+    category: "Languages",
+    skills: [
+      "Python",
+      "TypeScript",
+      "JavaScript",
+      "Java",
+      "Bash / Shell",
+      "SQL",
+    ],
+  },
+  {
+    category: "Web & Backend",
+    skills: [
+      "React",
+      "Node.js",
+      "Express",
+      "FastAPI",
+      "Flask",
+      "Tailwind CSS",
+      "REST APIs",
+    ],
+  },
+  {
+    category: "Systems & AI",
+    skills: [
+      "Android Internals",
+      "Linux",
+      "TensorFlow",
+      "PyTorch",
+      "Git",
+      "Docker",
+      "Cisco Networking",
+    ],
+  },
 ];
 
 /* Editorial underline fields for the sage contact band */
@@ -201,7 +239,10 @@ export default function About() {
           >
             N.002
           </p>
-          <div aria-hidden className="ambient-glow -top-20 left-1/4 h-80 w-80" />
+          <div
+            aria-hidden
+            className="ambient-glow -top-20 left-1/4 h-80 w-80"
+          />
           <Reveal className="relative z-10">
             <a
               href="https://my-drive.pages.dev/Public/resume.pdf"
@@ -222,7 +263,10 @@ export default function About() {
                 </p>
                 <h1
                   className="mt-4 font-poppins font-semibold leading-[1.02]"
-                  style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", letterSpacing: "-0.04em" }}
+                  style={{
+                    fontSize: "clamp(2.4rem, 5vw, 4rem)",
+                    letterSpacing: "-0.04em",
+                  }}
                 >
                   I&apos;m Jefino<span className="text-primary">.</span>
                 </h1>
@@ -243,9 +287,21 @@ export default function About() {
               <Reveal delay={0.14}>
                 <div className="flex flex-wrap gap-2 pt-1">
                   {[
-                    { href: "https://github.com/Jefino9488", label: "GitHub", icon: Github },
-                    { href: "https://www.linkedin.com/in/jefino9488/", label: "LinkedIn", icon: Linkedin },
-                    { href: "mailto:jefinojacob9488@gmail.com", label: "Email", icon: Mail },
+                    {
+                      href: "https://github.com/Jefino9488",
+                      label: "GitHub",
+                      icon: Github,
+                    },
+                    {
+                      href: "https://www.linkedin.com/in/jefino9488/",
+                      label: "LinkedIn",
+                      icon: Linkedin,
+                    },
+                    {
+                      href: "mailto:jefinojacob9488@gmail.com",
+                      label: "Email",
+                      icon: Mail,
+                    },
                   ].map(({ href, label, icon: Icon }) => (
                     <a
                       key={label}
@@ -291,18 +347,25 @@ export default function About() {
             <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
               What I do
             </p>
-            <div aria-hidden className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent" />
+            <div
+              aria-hidden
+              className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent"
+            />
           </Reveal>
 
           <div className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {focusAreas.map((area, i) => (
               <Reveal key={area.index} delay={i * 0.06}>
                 <div className="tile tile-interactive group h-full space-y-3 p-6 sm:p-7">
-                  <p className="font-mono text-[11px] tabular-nums text-primary">{area.index}</p>
+                  <p className="font-mono text-[11px] tabular-nums text-primary">
+                    {area.index}
+                  </p>
                   <h2 className="text-base font-semibold tracking-tight transition-colors group-hover:text-primary sm:text-lg">
                     {area.title}
                   </h2>
-                  <p className="text-sm leading-relaxed text-fg-muted">{area.description}</p>
+                  <p className="text-sm leading-relaxed text-fg-muted">
+                    {area.description}
+                  </p>
                 </div>
               </Reveal>
             ))}
@@ -391,34 +454,59 @@ export default function About() {
         {/* ================================================================ */}
         <section>
           <Reveal>
-            <div className="tile flex flex-col items-center justify-between gap-4 p-7 sm:flex-row">
-              <div className="space-y-1.5 text-center sm:text-left">
-                <div className="inline-flex items-center justify-center gap-2 sm:justify-start">
-                  <CheckCircle2 className="h-4 w-4 text-success" />
-                  <h2 className="text-base font-semibold text-foreground">
-                    Verified certifications ({certificates.length})
-                  </h2>
-                </div>
-                <p className="text-xs text-fg-muted">
-                  Accreditations from DeepLearning.AI, IBM, Cisco, and TensorFlow.
+            <div className="flex items-end justify-between">
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
+                  Credentials
                 </p>
+                <h2 className="type-title mt-2">Professional accreditations</h2>
               </div>
               <Link
                 to="/certificates"
-                className="press inline-flex shrink-0 items-center gap-2 rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
+                className="group/link mb-1 inline-flex items-center gap-1 font-mono text-[11px] text-fg-muted transition-colors hover:text-foreground"
               >
-                View all credentials
+                View ledger
+                <ArrowUpRight className="h-3 w-3 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
               </Link>
             </div>
+            <div
+              aria-hidden
+              className="mt-4 h-px w-full bg-gradient-to-r from-line-strong to-transparent"
+            />
           </Reveal>
+
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {certificates
+              .filter((c) => c.issuer !== "TUBLIAN")
+              .slice(0, 3)
+              .map((cert, i) => (
+                <Reveal key={cert.id} delay={i * 0.08}>
+                  <div className="tile group flex h-full flex-col justify-between gap-6 p-6 transition-colors hover:border-line-strong">
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+                          {cert.issuer}
+                        </p>
+                      </div>
+                      <h3 className="text-sm font-medium tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-base">
+                        {cert.title}
+                      </h3>
+                    </div>
+                    <p className="font-mono text-[10px] tabular-nums text-fg-faint">
+                      {cert.date}
+                    </p>
+                  </div>
+                </Reveal>
+              ))}
+          </div>
         </section>
       </div>
 
       {/* ================================================================ */}
       {/* Contact — full-bleed sage flip band                               */}
       {/* ================================================================ */}
-      <section className="theme-light bg-sage">
-        <div className="mx-auto max-w-[90rem] px-4 py-20 sm:px-8 sm:py-24">
+      <DualToneSection>
+        <div className="mx-auto w-full max-w-[90rem] px-4 pb-20 pt-8 sm:px-8 sm:pb-24 sm:pt-10">
           <div className="grid items-start gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
             {/* Left — statement */}
             <Reveal>
@@ -428,7 +516,10 @@ export default function About() {
                 </p>
                 <h2
                   className="font-poppins font-semibold leading-[1.02]"
-                  style={{ fontSize: "clamp(2.5rem, 5vw, 4.25rem)", letterSpacing: "-0.04em" }}
+                  style={{
+                    fontSize: "clamp(2.5rem, 5vw, 4.25rem)",
+                    letterSpacing: "-0.04em",
+                  }}
                 >
                   Let&apos;s talk<span className="text-primary">.</span>
                 </h2>
@@ -452,14 +543,19 @@ export default function About() {
               {isSubmitted && (
                 <div className="mb-6 flex items-center gap-2.5 rounded-xl border border-sage-ink/15 bg-sage-ink/5 px-4 py-3 text-xs text-sage-ink">
                   <CheckCircle2 className="h-4 w-4 shrink-0 text-success" />
-                  <span>Message prepared. Your default email client will open.</span>
+                  <span>
+                    Message prepared. Your default email client will open.
+                  </span>
                 </div>
               )}
 
               <form onSubmit={handleSubmit} noValidate className="space-y-7">
                 <div className="grid grid-cols-1 gap-7 sm:grid-cols-2">
                   <div className="space-y-1.5">
-                    <label htmlFor="contact-name" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
+                    <label
+                      htmlFor="contact-name"
+                      className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted"
+                    >
                       Name
                     </label>
                     <input
@@ -474,12 +570,17 @@ export default function About() {
                       className={`${inputBase} ${errors.name ? "border-destructive" : "border-line"}`}
                     />
                     {errors.name && (
-                      <p className="pt-1 font-mono text-[11px] text-destructive">{errors.name}</p>
+                      <p className="pt-1 font-mono text-[11px] text-destructive">
+                        {errors.name}
+                      </p>
                     )}
                   </div>
 
                   <div className="space-y-1.5">
-                    <label htmlFor="contact-email" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
+                    <label
+                      htmlFor="contact-email"
+                      className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted"
+                    >
                       Email
                     </label>
                     <input
@@ -494,13 +595,18 @@ export default function About() {
                       className={`${inputBase} ${errors.email ? "border-destructive" : "border-line"}`}
                     />
                     {errors.email && (
-                      <p className="pt-1 font-mono text-[11px] text-destructive">{errors.email}</p>
+                      <p className="pt-1 font-mono text-[11px] text-destructive">
+                        {errors.email}
+                      </p>
                     )}
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label htmlFor="contact-subject" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
+                  <label
+                    htmlFor="contact-subject"
+                    className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted"
+                  >
                     Subject
                   </label>
                   <input
@@ -514,12 +620,17 @@ export default function About() {
                     className={`${inputBase} ${errors.subject ? "border-destructive" : "border-line"}`}
                   />
                   {errors.subject && (
-                    <p className="pt-1 font-mono text-[11px] text-destructive">{errors.subject}</p>
+                    <p className="pt-1 font-mono text-[11px] text-destructive">
+                      {errors.subject}
+                    </p>
                   )}
                 </div>
 
                 <div className="space-y-1.5">
-                  <label htmlFor="contact-message" className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted">
+                  <label
+                    htmlFor="contact-message"
+                    className="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-muted"
+                  >
                     Message
                   </label>
                   <textarea
@@ -533,7 +644,9 @@ export default function About() {
                     className={`${inputBase} resize-none ${errors.message ? "border-destructive" : "border-line"}`}
                   />
                   {errors.message && (
-                    <p className="pt-1 font-mono text-[11px] text-destructive">{errors.message}</p>
+                    <p className="pt-1 font-mono text-[11px] text-destructive">
+                      {errors.message}
+                    </p>
                   )}
                 </div>
 
@@ -561,7 +674,7 @@ export default function About() {
           {/* Next page pointer lives inside the sage field */}
           <NextPageLink to="/certificates" title="Credentials" />
         </div>
-      </section>
+      </DualToneSection>
     </div>
   );
 }

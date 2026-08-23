@@ -29,7 +29,13 @@ export default function BlogList() {
       .finally(() => setLoading(false));
   }, []);
 
-  const standardCategories = ["All", "Engineering", "AI", "Projects", "Documentation"];
+  const standardCategories = [
+    "All",
+    "Engineering",
+    "AI",
+    "Projects",
+    "Documentation",
+  ];
 
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => {
@@ -46,26 +52,36 @@ export default function BlogList() {
         post.tag_list?.some((t) => t.toLowerCase().includes(tagLower)) ||
         post.title.toLowerCase().includes(tagLower) ||
         (selectedTag === "Documentation" && post.isLocal) ||
-        (selectedTag === "Projects" && (post.tag_list?.includes("project") || post.isLocal))
+        (selectedTag === "Projects" &&
+          (post.tag_list?.includes("project") || post.isLocal))
       );
     });
   }, [posts, searchTerm, selectedTag]);
 
   return (
     <div className="theme-light min-h-screen bg-sage">
-      <PageHeader title="Writing & Publications" meta={`${posts.length} Articles`} />
+      <PageHeader
+        title="Writing & Publications"
+        meta={`${posts.length} Articles`}
+      />
 
       <div className="relative mx-auto max-w-[90rem] space-y-12 px-4 pb-24 pt-10 sm:px-8 sm:pt-12">
         {/* Editorial intro */}
         <Reveal>
-          <div aria-hidden className="ambient-glow -top-16 -left-16 h-64 w-64" />
+          <div
+            aria-hidden
+            className="ambient-glow -top-16 -left-16 h-64 w-64"
+          />
           <div className="relative space-y-5">
             <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
               Notes from the workbench
             </p>
             <h1
               className="max-w-[16ch] text-balance font-poppins font-semibold leading-[1.02]"
-              style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)", letterSpacing: "-0.04em" }}
+              style={{
+                fontSize: "clamp(2.2rem, 5vw, 4rem)",
+                letterSpacing: "-0.04em",
+              }}
             >
               Writing on systems, agents &amp; tooling.
             </h1>
@@ -89,7 +105,9 @@ export default function BlogList() {
                 return (
                   <button
                     key={category}
-                    onClick={() => setSelectedTag(category === "All" ? "" : category)}
+                    onClick={() =>
+                      setSelectedTag(category === "All" ? "" : category)
+                    }
                     aria-pressed={isActive}
                     className={`rounded-full border px-3.5 py-1.5 font-mono text-xs transition-all ${
                       isActive
@@ -136,16 +154,21 @@ export default function BlogList() {
         ) : filteredPosts.length > 0 ? (
           <div className="border-t border-line">
             {filteredPosts.map((post, idx) => {
-              const formattedDate = new Date(post.published_at).toLocaleDateString(
-                "en-US",
-                { month: "short", day: "numeric", year: "numeric" },
-              );
+              const formattedDate = new Date(
+                post.published_at,
+              ).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              });
 
               const content = (
                 <>
                   <div className="flex items-center justify-between gap-4 font-mono text-[11px] tabular-nums text-fg-faint">
                     <span className="flex items-center gap-3">
-                      <span className="text-primary">{String(idx + 1).padStart(2, "0")}</span>
+                      <span className="text-primary">
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
                       <span>{formattedDate}</span>
                       {post.isLocal && (
                         <span className="rounded-full border border-line bg-elevated px-2 py-0.5 text-[9px] uppercase tracking-wider text-primary">
@@ -177,7 +200,12 @@ export default function BlogList() {
                       <ArrowUpRight className="absolute bottom-8 right-0 h-4 w-4 text-fg-faint opacity-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary group-hover:opacity-100" />
                     </Link>
                   ) : (
-                    <a href={post.url} target="_blank" rel="noopener noreferrer" className={rowClass}>
+                    <a
+                      href={post.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={rowClass}
+                    >
                       {content}
                       <ArrowUpRight className="absolute bottom-8 right-0 h-4 w-4 text-fg-faint opacity-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary group-hover:opacity-100" />
                     </a>
@@ -189,7 +217,9 @@ export default function BlogList() {
         ) : (
           <Reveal>
             <div className="tile space-y-3 p-10 text-center">
-              <p className="font-mono text-sm text-fg-muted">No articles match your filters.</p>
+              <p className="font-mono text-sm text-fg-muted">
+                No articles match your filters.
+              </p>
               <button
                 onClick={() => {
                   setSearchTerm("");

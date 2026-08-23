@@ -20,7 +20,6 @@ const NotFound = lazy(() => import("./components/NotFound"));
 // Keep critical components eagerly loaded
 import Loader from "./components/Loader";
 import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
 import Cursor from "./components/Cursor";
 import TransitionWrapper from "./components/TransitionWrapper";
@@ -122,8 +121,6 @@ function AppContent() {
       <Cursor />
       <ScrollProgress />
       <DeferredBackground />
-      {/* Floating pill nav — desktop */}
-      <Sidebar />
 
       {/* Main Content Area — the light-scope lives HERE (not on each page)
           so the fixed nav's translucent backdrop blends into sage, not the
@@ -133,79 +130,84 @@ function AppContent() {
           isLightRoute(location.pathname) ? "theme-light bg-sage" : ""
         }`}
       >
-        {/* Mobile top bar + bottom dock */}
+        {/* Floating Island Navigation (Desktop + Mobile) */}
         <Navbar />
 
-        <main id="main-content" className="flex-grow overflow-x-hidden pt-14 lg:pt-[4.75rem]">
-          <AnimatePresence mode="wait" initial={false}>
-            <Routes location={location} key={location.pathname}>
-            <Route
-              path="/"
-              element={
-                <TransitionWrapper>
-                  <Home />
-                </TransitionWrapper>
-              }
-            />
-            <Route
-              path="/blog"
-              element={
-                <TransitionWrapper>
-                  <BlogList />
-                </TransitionWrapper>
-              }
-            />
-            <Route
-              path="/blog/:id"
-              element={
-                <TransitionWrapper>
-                  <BlogPost />
-                </TransitionWrapper>
-              }
-            />
+        <main
+          id="main-content"
+          className="flex-grow overflow-x-clip pt-20 lg:pt-24"
+        >
+          <Suspense fallback={<Loader />}>
+            <AnimatePresence mode="wait" initial={false}>
+              <Routes location={location} key={location.pathname}>
+                <Route
+                  path="/"
+                  element={
+                    <TransitionWrapper>
+                      <Home />
+                    </TransitionWrapper>
+                  }
+                />
+                <Route
+                  path="/blog"
+                  element={
+                    <TransitionWrapper>
+                      <BlogList />
+                    </TransitionWrapper>
+                  }
+                />
+                <Route
+                  path="/blog/:id"
+                  element={
+                    <TransitionWrapper>
+                      <BlogPost />
+                    </TransitionWrapper>
+                  }
+                />
 
-            <Route
-              path="/about"
-              element={
-                <TransitionWrapper>
-                  <About />
-                </TransitionWrapper>
-              }
-            />
-            <Route
-              path="/projects"
-              element={
-                <TransitionWrapper>
-                  <Projects />
-                </TransitionWrapper>
-              }
-            />
-            <Route
-              path="/projects/:name"
-              element={
-                <TransitionWrapper>
-                  <ProjectDetail />
-                </TransitionWrapper>
-              }
-            />
-            <Route
-              path="/certificates"
-              element={
-                <TransitionWrapper>
-                  <Certificates />
-                </TransitionWrapper>
-              }
-            />
-            <Route
-              path="*"
-              element={
-                <TransitionWrapper>
-                  <NotFound />
-                </TransitionWrapper>
-              }
-            />
-            </Routes>
-          </AnimatePresence>
+                <Route
+                  path="/about"
+                  element={
+                    <TransitionWrapper>
+                      <About />
+                    </TransitionWrapper>
+                  }
+                />
+                <Route
+                  path="/projects"
+                  element={
+                    <TransitionWrapper>
+                      <Projects />
+                    </TransitionWrapper>
+                  }
+                />
+                <Route
+                  path="/projects/:name"
+                  element={
+                    <TransitionWrapper>
+                      <ProjectDetail />
+                    </TransitionWrapper>
+                  }
+                />
+                <Route
+                  path="/certificates"
+                  element={
+                    <TransitionWrapper>
+                      <Certificates />
+                    </TransitionWrapper>
+                  }
+                />
+                <Route
+                  path="*"
+                  element={
+                    <TransitionWrapper>
+                      <NotFound />
+                    </TransitionWrapper>
+                  }
+                />
+              </Routes>
+            </AnimatePresence>
+          </Suspense>
         </main>
         <Footer />
       </div>
@@ -230,9 +232,7 @@ function App() {
         <Router>
           <ProjectsProvider>
             <GitHubProvider>
-              <Suspense fallback={<Loader />}>
-                <AppContent />
-              </Suspense>
+              <AppContent />
             </GitHubProvider>
           </ProjectsProvider>
         </Router>

@@ -71,7 +71,9 @@ export default function Sidebar() {
                     aria-hidden
                     className={cn(
                       "absolute -bottom-0.5 left-0 h-px w-full origin-left bg-primary transition-transform duration-300",
-                      isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+                      isActive
+                        ? "scale-x-100"
+                        : "scale-x-0 group-hover:scale-x-100",
                     )}
                   />
                 </Link>

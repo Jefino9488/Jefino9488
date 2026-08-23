@@ -81,10 +81,30 @@ export default function Loader() {
       className="fixed inset-0 z-[95] overflow-hidden bg-[#0c1310]"
     >
       {/* Registration marks */}
-      <span aria-hidden className="absolute left-1/2 top-10 -translate-x-1/2 font-mono text-sm text-fg-faint">+</span>
-      <span aria-hidden className="absolute bottom-10 left-1/2 -translate-x-1/2 font-mono text-sm text-fg-faint">+</span>
-      <p aria-hidden className="section-marker absolute left-6 top-6 text-fg-faint">N.000</p>
-      <p aria-hidden className="section-marker absolute right-6 top-6 text-fg-faint">Loading</p>
+      <span
+        aria-hidden
+        className="absolute left-1/2 top-10 -translate-x-1/2 font-mono text-sm text-fg-faint"
+      >
+        +
+      </span>
+      <span
+        aria-hidden
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 font-mono text-sm text-fg-faint"
+      >
+        +
+      </span>
+      <p
+        aria-hidden
+        className="section-marker absolute left-6 top-6 text-fg-faint"
+      >
+        N.000
+      </p>
+      <p
+        aria-hidden
+        className="section-marker absolute right-6 top-6 text-fg-faint"
+      >
+        Loading
+      </p>
 
       {/* Letter swarm */}
       <div className="absolute inset-0" aria-hidden>

@@ -63,7 +63,9 @@ const CodeBlock = ({ code }: { code: string }) => {
 const CardNotFound = () => (
   <div className="theme-light flex min-h-[60vh] items-center justify-center bg-sage p-4 pb-24 lg:pb-4">
     <div className="tile max-w-md space-y-4 p-8 text-center sm:p-12">
-      <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">404</p>
+      <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">
+        404
+      </p>
       <h1 className="text-2xl font-semibold">Article not found</h1>
       <p className="text-sm leading-relaxed text-fg-muted">
         The documentation or publication you&apos;re looking for doesn&apos;t
@@ -167,7 +169,10 @@ export default function BlogPost() {
 
               <h1
                 className="max-w-[20ch] text-balance font-poppins font-semibold leading-[1.06]"
-                style={{ fontSize: "clamp(1.9rem, 4.5vw, 3.25rem)", letterSpacing: "-0.035em" }}
+                style={{
+                  fontSize: "clamp(1.9rem, 4.5vw, 3.25rem)",
+                  letterSpacing: "-0.035em",
+                }}
               >
                 {post.title}
               </h1>
@@ -231,7 +236,10 @@ export default function BlogPost() {
                       {section.content &&
                         (Array.isArray(section.content) ? (
                           section.content.map((para: string, i: number) => (
-                            <p key={i} className="text-pretty text-[15px] leading-[1.75] text-fg-muted sm:text-base">
+                            <p
+                              key={i}
+                              className="text-pretty text-[15px] leading-[1.75] text-fg-muted sm:text-base"
+                            >
                               {para}
                             </p>
                           ))
@@ -266,7 +274,9 @@ export default function BlogPost() {
                             key={i}
                             className="flex items-start gap-3 rounded-xl border border-line bg-surface/60 p-3.5 text-sm leading-relaxed text-fg-muted"
                           >
-                            <span className="mt-0.5 font-mono text-xs text-primary">›</span>
+                            <span className="mt-0.5 font-mono text-xs text-primary">
+                              ›
+                            </span>
                             <span>{item}</span>
                           </li>
                         ))}

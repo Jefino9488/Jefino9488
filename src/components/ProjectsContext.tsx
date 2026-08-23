@@ -69,7 +69,7 @@ const getPinnedProjectsQuery = `
 const getAllProjectsQuery = `
     query {
       user(login: "Jefino9488") {
-        repositories(first: 28, orderBy: { field: UPDATED_AT, direction: DESC }) {
+        repositories(first: 100, orderBy: { field: UPDATED_AT, direction: DESC }) {
           nodes {
             name
             description
@@ -160,7 +160,7 @@ async function fetchGitHubProjects(
   }
 }
 
-const PROJECTS_CACHE_KEY = "portfolio_projects_cache";
+const PROJECTS_CACHE_KEY = "portfolio_projects_cache_v3";
 const PROJECTS_CACHE_TTL = 15 * 60 * 1000; // 15 minutes
 
 interface ProjectsCache {

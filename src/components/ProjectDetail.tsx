@@ -311,13 +311,14 @@ export default function ProjectDetail() {
       />
 
       <div className="relative mx-auto max-w-4xl space-y-14 px-4 pb-24 pt-10 sm:px-8 sm:pt-12">
-
         {/* Case Study Header */}
         <div className="space-y-7">
           <div aria-hidden className="ambient-glow -top-16 right-0 h-56 w-56" />
           <div className="relative space-y-4">
             <div className="flex flex-wrap items-center gap-2 font-mono text-xs text-fg-faint">
-              <span className="font-semibold tracking-[0.18em] text-primary uppercase">Case study</span>
+              <span className="font-semibold tracking-[0.18em] text-primary uppercase">
+                Case study
+              </span>
               <span>·</span>
               <span className="uppercase">
                 {repoDetail?.language || project?.tech[0] || "Software"}
@@ -325,14 +326,19 @@ export default function ProjectDetail() {
               {repoDetail?.updated_at && (
                 <>
                   <span>·</span>
-                  <span className="tabular-nums">Updated {formatDate(repoDetail.updated_at)}</span>
+                  <span className="tabular-nums">
+                    Updated {formatDate(repoDetail.updated_at)}
+                  </span>
                 </>
               )}
             </div>
 
             <h1
               className="max-w-[20ch] text-balance font-poppins font-semibold leading-[1.02]"
-              style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", letterSpacing: "-0.04em" }}
+              style={{
+                fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                letterSpacing: "-0.04em",
+              }}
             >
               {displayName}
             </h1>
@@ -350,7 +356,8 @@ export default function ProjectDetail() {
               {
                 icon: Star,
                 label: "Stars",
-                value: repoDetail?.stargazers_count ?? project?.stats.stars ?? "--",
+                value:
+                  repoDetail?.stargazers_count ?? project?.stats.stars ?? "--",
                 color: "text-warm",
               },
               {
@@ -372,10 +379,7 @@ export default function ProjectDetail() {
                 color: "text-success",
               },
             ].map(({ icon: Icon, label, value, color }) => (
-              <div
-                key={label}
-                className="tile space-y-1 p-4"
-              >
+              <div key={label} className="tile space-y-1 p-4">
                 <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-faint">
                   <Icon className={`h-3.5 w-3.5 ${color}`} />
                   <span>{label}</span>
@@ -391,7 +395,7 @@ export default function ProjectDetail() {
           <div className="flex flex-wrap gap-1.5">
             {(repoDetail?.topics?.length
               ? repoDetail.topics
-              : project?.tech ?? []
+              : (project?.tech ?? [])
             ).map((tag) => (
               <span
                 key={tag}
@@ -407,7 +411,9 @@ export default function ProjectDetail() {
         {matchedCaseStudy && (
           <div className="space-y-10 border-t border-line pt-10">
             <div className="space-y-3">
-              <p className="font-mono text-[11px] tabular-nums text-primary">01</p>
+              <p className="font-mono text-[11px] tabular-nums text-primary">
+                01
+              </p>
               <h2 className="type-title">The problem</h2>
               <p className="max-w-2xl text-pretty text-sm leading-relaxed text-fg-muted sm:text-base">
                 {matchedCaseStudy.problem}
@@ -415,7 +421,9 @@ export default function ProjectDetail() {
             </div>
 
             <div className="space-y-3 border-t border-line pt-10">
-              <p className="font-mono text-[11px] tabular-nums text-primary">02</p>
+              <p className="font-mono text-[11px] tabular-nums text-primary">
+                02
+              </p>
               <h2 className="type-title">Approach &amp; solution</h2>
               <p className="max-w-2xl text-pretty text-sm leading-relaxed text-fg-muted sm:text-base">
                 {matchedCaseStudy.approach}
@@ -423,11 +431,16 @@ export default function ProjectDetail() {
             </div>
 
             <div className="space-y-4 border-t border-line pt-10">
-              <p className="font-mono text-[11px] tabular-nums text-primary">03</p>
+              <p className="font-mono text-[11px] tabular-nums text-primary">
+                03
+              </p>
               <h2 className="type-title">System architecture</h2>
               <div className="tile divide-y divide-line p-2">
                 {matchedCaseStudy.architecture.map((step, idx) => (
-                  <div key={idx} className="flex items-start gap-3 px-4 py-3 text-xs sm:text-sm">
+                  <div
+                    key={idx}
+                    className="flex items-start gap-3 px-4 py-3 text-xs sm:text-sm"
+                  >
                     <span className="shrink-0 font-mono font-semibold tabular-nums text-primary">
                       0{idx + 1}.
                     </span>
@@ -438,7 +451,9 @@ export default function ProjectDetail() {
             </div>
 
             <div className="space-y-3 border-t border-line pt-10">
-              <p className="font-mono text-[11px] tabular-nums text-primary">04</p>
+              <p className="font-mono text-[11px] tabular-nums text-primary">
+                04
+              </p>
               <h2 className="type-title">Challenges &amp; results</h2>
               <p className="max-w-2xl text-pretty text-sm leading-relaxed text-fg-muted sm:text-base">
                 {matchedCaseStudy.challenges}
@@ -470,7 +485,8 @@ export default function ProjectDetail() {
             <div className="tile p-6">{renderReadme(readmeContent)}</div>
           ) : (
             <div className="tile p-6 text-center font-mono text-xs text-fg-muted">
-              Full documentation and code samples available in the GitHub repository.
+              Full documentation and code samples available in the GitHub
+              repository.
             </div>
           )}
         </div>
@@ -502,7 +518,6 @@ export default function ProjectDetail() {
         </div>
 
         <NextPageLink to="/blog" title="Writing" />
-
       </div>
     </div>
   );
