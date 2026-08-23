@@ -9,14 +9,15 @@ import { useReducedMotion } from "framer-motion";
  */
 
 const CORE_WORDS = ["Jefino", "Creative", "Developer"];
-const LETTER_SOURCE = "JEFINOCREATIVEDEVELOPER";
+const LETTER_SOURCE = "JEFINO • CREATIVE • DEVELOPER • ";
 
 function easeInOutCubic(t: number): number {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
 interface LetterSeed {
-  angle: number;
+  targetAngle: number;
+  startAngle: number;
   r0: number;
   rot: number;
 }
@@ -29,11 +30,15 @@ export default function Loader() {
 
   const seeds = useMemo<LetterSeed[]>(() => {
     const chars = LETTER_SOURCE.split("");
-    return chars.map((_, i) => ({
-      angle: (i / chars.length) * Math.PI * 2 + (Math.random() - 0.5) * 0.9,
-      r0: 130 + Math.random() * 190,
-      rot: (Math.random() - 0.5) * 150,
-    }));
+    return chars.map((_, i) => {
+      const targetAngle = (i / chars.length) * Math.PI * 2;
+      return {
+        targetAngle,
+        startAngle: targetAngle + (Math.random() - 0.5) * 2,
+        r0: 130 + Math.random() * 190,
+        rot: (Math.random() - 0.5) * 150,
+      };
+    });
   }, []);
 
   useEffect(() => {
@@ -41,7 +46,7 @@ export default function Loader() {
 
     let raf = 0;
     const start = performance.now();
-    const DURATION = 2100;
+    const DURATION = 1700; // Finish earlier so it lingers before fadeout
 
     const tick = (now: number) => {
       const t = Math.min((now - start) / DURATION, 1);
@@ -54,11 +59,19 @@ export default function Loader() {
         if (!el) return;
         const seed = seeds[i];
         // Converge from scattered radius to a tight orbital ring
-        const radius = (seed.r0 * (1 - p) + 78 * p) * scale;
-        const angle = seed.angle + p * 1.7; // gentle swirl while collapsing
+        const radius = (seed.r0 * (1 - p) + 90 * p) * scale;
+        // Interpolate angle from scattered to evenly spaced, plus a global swirl
+        const angle =
+          seed.startAngle * (1 - p) + seed.targetAngle * p + p * 1.7;
+        // Use perfect circle (no elliptical squish)
         const x = Math.cos(angle) * radius;
-        const y = Math.sin(angle) * radius * 0.74;
-        el.style.transform = `translate(-50%, -50%) translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${(seed.rot * (1 - p)).toFixed(1)}deg)`;
+        const y = Math.sin(angle) * radius;
+
+        // Base orientation: face the center
+        const normalRot = (angle * 180) / Math.PI + 90;
+        const finalRot = seed.rot * (1 - p) + normalRot * p;
+
+        el.style.transform = `translate(-50%, -50%) translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${finalRot.toFixed(1)}deg)`;
         el.style.opacity = String(Math.min(1, p * 3.5));
       });
 
@@ -118,7 +131,7 @@ export default function Loader() {
             style={
               reduceMotion
                 ? {
-                    transform: `translate(-50%, -50%) translate(${(Math.cos(seeds[i].angle) * 78).toFixed(0)}px, ${(Math.sin(seeds[i].angle) * 78 * 0.74).toFixed(0)}px)`,
+                    transform: `translate(-50%, -50%) translate(${(Math.cos(seeds[i].targetAngle) * 90).toFixed(1)}px, ${(Math.sin(seeds[i].targetAngle) * 90).toFixed(1)}px) rotate(${((seeds[i].targetAngle * 180) / Math.PI + 90).toFixed(1)}deg)`,
                     opacity: 0.7,
                   }
                 : { opacity: 0 }

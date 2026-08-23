@@ -36,7 +36,7 @@ export default function DualToneSection({
       <motion.section
         id={id}
         style={reduceMotion ? undefined : { y, scale, opacity }}
-        className={`theme-light relative z-10 flex flex-col rounded-t-[2.5rem] bg-sage shadow-[0_-16px_48px_rgba(0,0,0,0.22)] transition-colors duration-500 will-change-transform sm:rounded-t-[3.5rem] ${className}`}
+        className={`theme-light relative z-10 flex flex-col rounded-t-[2.5rem] bg-sage transition-colors duration-500 will-change-transform sm:rounded-t-[3.5rem] ${className}`}
       >
         {children}
       </motion.section>

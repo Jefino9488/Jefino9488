@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Mail } from "lucide-react";
 import { Github } from "./icons/Github";
+import { Linkedin } from "./icons/Linkedin";
+import { Whatsapp } from "./icons/Whatsapp";
 
 const siteLinks = [
   { to: "/projects", label: "Work" },
@@ -13,14 +15,12 @@ export default function Footer() {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
-    /* Sage closing band on every page — flush, no gap above (a margin
-       would expose the dark canvas behind light pages) */
-    <footer className="theme-light bg-sage transition-colors duration-500">
+    <footer className="theme-light border-t border-line bg-sage transition-colors duration-500">
       <div className="mx-auto max-w-[90rem] px-4 pb-28 pt-12 sm:px-8 lg:pb-12">
         {/* Columns */}
-        <div className="grid gap-10 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 sm:gap-10">
           {/* Brand */}
-          <div className="space-y-3">
+          <div className="col-span-2 space-y-3 sm:col-span-1">
             <Link
               to="/"
               className="font-poppins text-lg font-semibold tracking-tight text-foreground"
@@ -60,22 +60,40 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="inline-flex w-fit items-center gap-2 text-fg-muted transition-colors hover:text-foreground"
             >
-              <Github className="h-3.5 w-3.5" />
+              <Github className="h-3.5 w-3.5 shrink-0" />
               GitHub
+            </a>
+            <a
+              href="https://www.linkedin.com/in/jefino9488/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-fit items-center gap-2 text-fg-muted transition-colors hover:text-foreground"
+            >
+              <Linkedin className="h-3.5 w-3.5 shrink-0" />
+              LinkedIn
+            </a>
+            <a
+              href="https://wa.me/918220934327"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-fit items-center gap-2 text-fg-muted transition-colors hover:text-foreground"
+            >
+              <Whatsapp className="h-3.5 w-3.5 shrink-0" />
+              WhatsApp
             </a>
             <a
               href="mailto:jefinojacob9488@gmail.com"
               className="inline-flex w-fit items-center gap-2 text-fg-muted transition-colors hover:text-foreground"
             >
-              jefinojacob9488@gmail.com
+              <Mail className="h-3.5 w-3.5 shrink-0" />
+              Email
             </a>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-line pt-6 sm:flex-row">
-          <p className="font-mono text-[11px] text-fg-faint">
-            © {new Date().getFullYear()} Jefino · Built with React, TypeScript &
-            Tailwind CSS
+        <div className="mt-12 flex flex-col-reverse items-center justify-between gap-6 border-t border-line pt-6 sm:flex-row sm:items-center">
+          <p className="text-center font-mono text-[11px] leading-relaxed text-fg-faint sm:text-left">
+            © {new Date().getFullYear()} Jefino
           </p>
           <button
             type="button"
