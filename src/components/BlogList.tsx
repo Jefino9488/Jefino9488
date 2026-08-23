@@ -1,10 +1,20 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Clock, Loader2, Search, BookOpen, ArrowRight } from "lucide-react";
+import { Search, ArrowUpRight, X } from "lucide-react";
 import PageHeader from "./PageHeader";
+import Reveal from "./Reveal";
+import NextPageLink from "./NextPageLink";
 import { getBlogPosts, type BlogPost } from "@/services/blogService";
+
+function PostSkeleton() {
+  return (
+    <div className="space-y-3 border-b border-line py-7">
+      <div className="skeleton h-3 w-40" />
+      <div className="skeleton h-6 w-3/4" />
+      <div className="skeleton h-3.5 w-full" />
+    </div>
+  );
+}
 
 export default function BlogList() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -13,28 +23,19 @@ export default function BlogList() {
   const [selectedTag, setSelectedTag] = useState("");
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true);
-      try {
-        const fetchedPosts = await getBlogPosts();
-        setPosts(fetchedPosts);
-      } catch (error) {
-        console.error("Error fetching blog posts:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPosts();
+    getBlogPosts()
+      .then((fetchedPosts) => setPosts(fetchedPosts))
+      .catch((err) => console.error("Error fetching blog posts:", err))
+      .finally(() => setLoading(false));
   }, []);
 
-  const allTags = useMemo(() => {
-    const tags = new Set<string>();
-    posts.forEach((post) =>
-      post.tag_list?.forEach((tag: string) => tags.add(tag)),
-    );
-    return Array.from(tags).sort();
-  }, [posts]);
+  const standardCategories = [
+    "All",
+    "Engineering",
+    "AI",
+    "Projects",
+    "Documentation",
+  ];
 
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => {
@@ -43,222 +44,196 @@ export default function BlogList() {
           post.description.toLowerCase().includes(searchTerm.toLowerCase())
         : true;
 
-      const matchesTag = selectedTag
-        ? post.tag_list?.includes(selectedTag)
-        : true;
+      if (!matchesSearch) return false;
+      if (!selectedTag || selectedTag === "All") return true;
 
-      return matchesSearch && matchesTag;
+      const tagLower = selectedTag.toLowerCase();
+      return (
+        post.tag_list?.some((t) => t.toLowerCase().includes(tagLower)) ||
+        post.title.toLowerCase().includes(tagLower) ||
+        (selectedTag === "Documentation" && post.isLocal) ||
+        (selectedTag === "Projects" &&
+          (post.tag_list?.includes("project") || post.isLocal))
+      );
     });
   }, [posts, searchTerm, selectedTag]);
 
-  const formatMonthDay = (dateString: string) => {
-    const date = new Date(dateString);
-    return {
-      month: date.toLocaleDateString("en-US", { month: "short" }).toUpperCase(),
-      day: date.toLocaleDateString("en-US", { day: "2-digit" }),
-      year: date.toLocaleDateString("en-US", { year: "numeric" }),
-    };
-  };
-
-  const handleTagClick = (tag: string) => {
-    setSelectedTag((currentTag) => (currentTag === tag ? "" : tag));
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center text-foreground">
-          <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-primary" />
-          <p className="text-lg font-medium font-mono text-muted-foreground uppercase tracking-widest">
-            Loading Publications...
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen text-foreground relative selection:bg-primary/30">
+    <div className="theme-light min-h-screen bg-sage">
       <PageHeader
-        title="Publications"
-        icon={BookOpen}
-        meta={`${posts.length} Entries`}
+        title="Writing & Publications"
+        meta={`${posts.length} Articles`}
       />
 
-      <div className="container mx-auto px-4 py-24 sm:py-32 max-w-5xl space-y-12">
-        {/* Search & Filter Toolbar */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between bg-white/[0.02] p-4 sm:p-6 rounded-[2rem] border border-white/5"
-        >
-          <div className="relative w-full md:w-80">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#b3bad9]/50" />
-            <input
-              type="text"
-              placeholder="Search publications..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-black/40 border border-white/10 rounded-2xl text-sm text-foreground placeholder-white/30 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all font-mono"
-            />
-          </div>
-
-          <div className="flex flex-wrap gap-2 w-full md:w-auto">
-            <Button
-              onClick={() => setSelectedTag("")}
-              variant="ghost"
-              size="sm"
-              className={`rounded-full border text-xs h-9 px-4 font-mono transition-all ${selectedTag === "" ? "bg-primary border-primary text-primary-foreground shadow-[0_0_15px_-3px_rgba(102,111,188,0.5)]" : "bg-transparent border-white/10 text-[#b3bad9] hover:bg-white/10"}`}
+      <div className="relative mx-auto max-w-[90rem] space-y-12 px-4 pb-24 pt-10 sm:px-8 sm:pt-12">
+        {/* Editorial intro */}
+        <Reveal>
+          <div
+            aria-hidden
+            className="ambient-glow -top-16 -left-16 h-64 w-64"
+          />
+          <div className="relative space-y-5">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
+              Notes from the workbench
+            </p>
+            <h1
+              className="max-w-[16ch] text-balance font-poppins font-semibold leading-[1.02]"
+              style={{
+                fontSize: "clamp(2.2rem, 5vw, 4rem)",
+                letterSpacing: "-0.04em",
+              }}
             >
-              All
-            </Button>
-            {allTags.map((tag) => (
-              <Button
-                key={tag}
-                onClick={() => handleTagClick(tag)}
-                variant="ghost"
-                size="sm"
-                className={`rounded-full border text-xs h-9 px-4 font-mono uppercase tracking-wider transition-all ${selectedTag === tag ? "bg-primary border-primary text-primary-foreground shadow-[0_0_15px_-3px_rgba(102,111,188,0.5)]" : "bg-transparent border-white/10 text-[#b3bad9] hover:bg-white/10 hover:border-white/20"}`}
-              >
-                {tag}
-              </Button>
-            ))}
+              Writing on systems, agents &amp; tooling.
+            </h1>
+            <p className="max-w-xl text-pretty text-sm leading-relaxed text-fg-muted sm:text-base">
+              Thoughts on software engineering, AI agents, Android system
+              internals, and things I&apos;m building.
+            </p>
           </div>
-        </motion.div>
+        </Reveal>
 
-        {/* Main Content - Minimalist Publication List */}
-        <main>
-          {filteredPosts.length > 0 ? (
-            <div className="flex flex-col">
-              {filteredPosts.map((post, index) => {
-                const date = formatMonthDay(post.published_at);
-                const CardWrapper = ({
-                  children,
-                }: {
-                  children: React.ReactNode;
-                }) =>
-                  post.isLocal ? (
-                    <Link to={`/blog/${post.localId}`} className="block group">
-                      {children}
+        {/* Filters */}
+        <Reveal delay={0.08}>
+          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+            <div className="flex flex-wrap gap-1.5">
+              {standardCategories.map((category) => {
+                const isActive =
+                  category === "All"
+                    ? selectedTag === "" || selectedTag === "All"
+                    : selectedTag === category;
+
+                return (
+                  <button
+                    key={category}
+                    onClick={() =>
+                      setSelectedTag(category === "All" ? "" : category)
+                    }
+                    aria-pressed={isActive}
+                    className={`rounded-full border px-3.5 py-1.5 font-mono text-xs transition-all ${
+                      isActive
+                        ? "border-line-strong bg-elevated font-medium text-sage-ink"
+                        : "border-line bg-transparent text-fg-muted hover:border-line-strong hover:text-sage-ink"
+                    }`}
+                  >
+                    {category}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="relative w-full sm:w-64">
+              <Search className="pointer-events-none absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-fg-faint" />
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                aria-label="Search articles"
+                className="w-full rounded-full border border-line bg-surface/70 py-2 pl-10 pr-9 font-mono text-xs text-foreground backdrop-blur-sm transition-colors placeholder:text-fg-faint focus:border-primary focus:outline-none"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  aria-label="Clear search"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-fg-faint transition-colors hover:text-foreground"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+          </div>
+        </Reveal>
+
+        {/* Article index */}
+        {loading ? (
+          <div>
+            <PostSkeleton />
+            <PostSkeleton />
+            <PostSkeleton />
+          </div>
+        ) : filteredPosts.length > 0 ? (
+          <div className="border-t border-line">
+            {filteredPosts.map((post, idx) => {
+              const formattedDate = new Date(
+                post.published_at,
+              ).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              });
+
+              const content = (
+                <>
+                  <div className="flex items-center justify-between gap-4 font-mono text-[11px] tabular-nums text-fg-faint">
+                    <span className="flex items-center gap-3">
+                      <span className="text-primary">
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
+                      <span>{formattedDate}</span>
+                      {post.isLocal && (
+                        <span className="rounded-full border border-line bg-elevated px-2 py-0.5 text-[9px] uppercase tracking-wider text-primary">
+                          Docs
+                        </span>
+                      )}
+                    </span>
+                    <span>{post.reading_time_minutes} min</span>
+                  </div>
+
+                  <h2 className="pt-2 text-lg font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-xl">
+                    {post.title}
+                  </h2>
+
+                  <p className="line-clamp-2 pt-1.5 text-sm leading-relaxed text-fg-muted">
+                    {post.description}
+                  </p>
+                </>
+              );
+
+              const rowClass =
+                "group relative block border-b border-line py-7 transition-colors";
+
+              return (
+                <Reveal key={post.id} delay={Math.min(idx * 0.05, 0.25)}>
+                  {post.isLocal ? (
+                    <Link to={`/blog/${post.localId}`} className={rowClass}>
+                      {content}
+                      <ArrowUpRight className="absolute bottom-8 right-0 h-4 w-4 text-fg-faint opacity-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary group-hover:opacity-100" />
                     </Link>
                   ) : (
                     <a
                       href={post.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block group"
+                      className={rowClass}
                     >
-                      {children}
+                      {content}
+                      <ArrowUpRight className="absolute bottom-8 right-0 h-4 w-4 text-fg-faint opacity-0 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary group-hover:opacity-100" />
                     </a>
-                  );
-
-                return (
-                  <motion.div
-                    key={post.id}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.05 }}
-                  >
-                    <CardWrapper>
-                      <div className="flex flex-col md:flex-row gap-6 md:gap-12 py-8 sm:py-12 border-b border-white/5 relative hover:bg-white/[0.02] transition-colors -mx-4 px-4 sm:-mx-8 sm:px-8 rounded-3xl group-hover:border-primary/20">
-                        {/* Left Column: Date (Desktop) */}
-                        <div className="hidden md:flex flex-col flex-shrink-0 w-24 pt-2">
-                          <span className="text-sm font-mono text-[#b3bad9]/60 uppercase tracking-widest">
-                            {date.month}
-                          </span>
-                          <span className="text-4xl font-poppins font-light text-white my-1">
-                            {date.day}
-                          </span>
-                          <span className="text-xs font-mono text-[#b3bad9]/40">
-                            {date.year}
-                          </span>
-                        </div>
-
-                        {/* Middle Column: Content */}
-                        <div className="flex-1 min-w-0">
-                          {/* Mobile Date */}
-                          <div className="md:hidden flex items-center gap-3 text-xs font-mono text-[#b3bad9]/60 uppercase tracking-widest mb-3">
-                            <span>
-                              {date.month} {date.day}, {date.year}
-                            </span>
-                            <span className="w-1 h-1 rounded-full bg-white/20" />
-                            <span className="flex items-center">
-                              <Clock className="w-3 h-3 mr-1" />{" "}
-                              {post.reading_time_minutes} MIN
-                            </span>
-                          </div>
-
-                          <h3 className="text-2xl sm:text-3xl md:text-4xl font-poppins font-semibold text-white mb-4 group-hover:text-primary transition-colors leading-[1.2] tracking-tight pr-8">
-                            {post.title}
-                          </h3>
-
-                          <p className="font-light text-lg text-[#b3bad9] mb-6 line-clamp-2 sm:line-clamp-3 leading-relaxed">
-                            {post.description}
-                          </p>
-
-                          <div className="flex flex-wrap items-center gap-3 mt-4">
-                            {post.tag_list &&
-                              post.tag_list.slice(0, 3).map((tag: string) => (
-                                <span
-                                  key={tag}
-                                  className="px-3 py-1 bg-white/5 rounded-full text-[10px] font-mono text-[#b3bad9] uppercase tracking-wider border border-white/10"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                            {/* Desktop Read Time */}
-                            <div className="hidden md:flex items-center text-xs font-mono text-[#b3bad9]/50 uppercase tracking-widest ml-4">
-                              <Clock className="w-3.5 h-3.5 mr-1.5" />
-                              {post.reading_time_minutes} Min Read
-                            </div>
-                            {post.isLocal && (
-                              <span className="px-2 py-1 bg-primary/10 text-primary border border-primary/20 rounded-md text-[10px] font-mono font-bold uppercase tracking-widest ml-auto">
-                                Internal Docs
-                              </span>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Right Column: Interaction Arrow */}
-                        <div className="hidden md:flex items-center justify-center flex-shrink-0 w-12 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-                          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
-                            <ArrowRight className="w-5 h-5 text-primary" />
-                          </div>
-                        </div>
-                      </div>
-                    </CardWrapper>
-                  </motion.div>
-                );
-              })}
-            </div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-32 bg-white/[0.02] rounded-[3rem] border border-white/5"
-            >
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/5 border border-white/10 mb-6">
-                <Search className="h-8 w-8 text-[#b3bad9]/50" />
-              </div>
-              <h2 className="text-2xl font-poppins font-semibold mb-3 text-white">
-                No Publications Found
-              </h2>
-              <p className="text-[#b3bad9] mb-8 font-light max-w-md mx-auto">
-                We couldn't find any articles matching your search query or
-                selected tags. Try adjusting them.
+                  )}
+                </Reveal>
+              );
+            })}
+          </div>
+        ) : (
+          <Reveal>
+            <div className="tile space-y-3 p-10 text-center">
+              <p className="font-mono text-sm text-fg-muted">
+                No articles match your filters.
               </p>
-              <Button
+              <button
                 onClick={() => {
                   setSearchTerm("");
                   setSelectedTag("");
                 }}
-                className="bg-white text-black hover:bg-white/90 rounded-full px-8 py-6 font-semibold"
+                className="press mx-auto block rounded-full border border-line bg-elevated px-4 py-2 font-mono text-xs text-sage-ink transition-colors hover:border-line-strong"
               >
-                Clear All Filters
-              </Button>
-            </motion.div>
-          )}
-        </main>
+                Clear filters
+              </button>
+            </div>
+          </Reveal>
+        )}
+
+        <NextPageLink to="/about" title="About" />
       </div>
     </div>
   );

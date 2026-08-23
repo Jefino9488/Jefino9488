@@ -20,49 +20,42 @@ export default function ExperienceCard({
   link,
 }: ExperienceCardProps) {
   return (
-    <div className="glass-crystal rounded-[1.25rem] p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 group w-full relative overflow-hidden border-0 border-l-[4px] border-l-primary hover:bg-white/[0.02] transition-colors shadow-sm">
-      {/* Subtle base gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent pointer-events-none" />
-
-      <div className="flex items-center gap-4 w-full sm:w-auto relative z-10">
-        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center text-primary shadow-inner flex-shrink-0 group-hover:bg-primary/10 transition-colors">
-          {logo}
-        </div>
+    <div className="p-5 rounded-xl bg-[#0b1012] border border-line flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group hover:border-[#28353d] transition-colors">
+      <div className="flex items-center gap-4 min-w-0 flex-1">
+        {logo && (
+          <div className="w-10 h-10 rounded-lg bg-elevated border border-line flex items-center justify-center text-primary shrink-0">
+            {logo}
+          </div>
+        )}
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2 flex-wrap mb-1">
-            <h2 className="text-lg sm:text-xl font-mono tracking-tight font-bold text-white group-hover:text-primary transition-colors truncate pr-8 sm:pr-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h3 className="text-base font-semibold text-foreground group-hover:text-primary transition-colors truncate">
               {company}
-            </h2>
+            </h3>
+            {status && (
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-elevated text-primary border border-line">
+                {status}
+              </span>
+            )}
             {link && (
               <a
                 href={link}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`Open ${company} repository`}
-                className="text-muted-foreground hover:text-primary transition-colors flex-shrink-0 absolute top-5 right-5 sm:static sm:top-auto sm:right-auto"
+                className="text-fg-muted hover:text-foreground transition-colors"
+                aria-label={`Open ${company} link`}
               >
-                <ExternalLink className="w-5 h-5 sm:w-4 sm:h-4" />
+                <ExternalLink className="w-3.5 h-3.5" />
               </a>
             )}
-            {status && (
-              <div className="flex items-center gap-1.5 px-2.5 py-0.5 text-[9px] sm:text-[10px] font-mono tracking-widest uppercase text-primary border border-primary/30 bg-primary/5 rounded-full flex-shrink-0 whitespace-nowrap">
-                <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                {status}
-              </div>
-            )}
           </div>
-          <p className="text-[#8ab8d0] font-mono text-xs sm:text-sm tracking-wide line-clamp-1 opacity-90">
-            {role}
-          </p>
+          <p className="text-xs text-fg-muted mt-0.5 line-clamp-1">{role}</p>
         </div>
       </div>
-      <div className="text-left sm:text-right pl-[4.5rem] sm:pl-0 w-full sm:w-auto mt-[-0.5rem] sm:mt-0 relative z-10">
-        <p className="text-[10px] sm:text-xs font-mono text-[#b3bad9] uppercase tracking-widest whitespace-nowrap">
-          {date}
-        </p>
-        <p className="text-[10px] sm:text-xs font-mono text-muted-foreground/60 uppercase tracking-widest mt-1">
-          {location}
-        </p>
+
+      <div className="text-left sm:text-right text-xs font-mono text-fg-muted shrink-0">
+        <p>{date}</p>
+        <p className="text-[10px] mt-0.5 text-[#525d60]">{location}</p>
       </div>
     </div>
   );
