@@ -1,4 +1,5 @@
 {
+  "id": "/",
   "name": "Jefino | Full-Stack Developer and AI Engineer",
   "short_name": "Jefino",
   "description": "Portfolio of Jefino, a Full-Stack Developer and AI Engineer building performant web applications and production-ready AI features.",
@@ -27,10 +28,16 @@
       "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
-  "theme_color": "#cba6f7",
-  "background_color": "#05050A",
+  "theme_color": "#0c1310",
+  "background_color": "#0c1310",
   "display": "standalone",
   "start_url": "/",
   "scope": "/",
