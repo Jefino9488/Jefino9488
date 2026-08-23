@@ -323,15 +323,13 @@ export default function About() {
               <div className="relative">
                 <div
                   aria-hidden
-                  className="absolute -right-3 -top-3 h-full w-full rounded-4xl border border-line-strong"
+                  className="absolute -right-3 -top-3 h-full w-full rounded-[2rem] border border-line-strong"
                 />
-                <div className="relative h-36 w-36 overflow-hidden rounded-4xl border border-line bg-surface shadow-lift sm:h-44 sm:w-44">
+                <div className="relative w-40 sm:w-48 aspect-[4/5] overflow-hidden rounded-[2rem] border border-line bg-surface shadow-lift">
                   <img
                     src="/profile/profile.jpg"
                     alt="Jefino portrait"
-                    className="h-full w-full object-cover"
-                    width="176"
-                    height="176"
+                    className="h-full w-full object-cover object-[center_20%]"
                   />
                 </div>
               </div>

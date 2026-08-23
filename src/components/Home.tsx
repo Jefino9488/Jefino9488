@@ -48,7 +48,7 @@ function StaggeredLine({
   const reduceMotion = useReducedMotion();
 
   return (
-    <span className="block overflow-hidden pb-1">
+    <span className="inline-block md:block overflow-hidden pb-1 mr-2 md:mr-0">
       {words.map((word, wi) => (
         <motion.span
           key={wi}
@@ -209,7 +209,7 @@ export default function Home() {
           </p>
 
           <h1
-            className="font-poppins font-semibold leading-[0.98]"
+            className="font-poppins font-semibold leading-[1.05] md:leading-[0.98]"
             style={{
               fontSize: "clamp(2.9rem, 7.5vw, 6.75rem)",
               letterSpacing: "-0.045em",
@@ -220,10 +220,12 @@ export default function Home() {
               words={["I", "build", "software,"]}
               baseDelay={0.15}
             />
-            <span className="block pl-[8vw] sm:pl-[6vw]">
+            <span className="md:block md:pl-[6vw]">
               <StaggeredLine words={["automation", "&"]} baseDelay={0.33} />
             </span>
-            <StaggeredLine words={["tools."]} muted baseDelay={0.48} />
+            <span className="md:block">
+              <StaggeredLine words={["tools."]} muted baseDelay={0.48} />
+            </span>
           </h1>
 
           <div className="mt-10 grid items-end gap-12 md:grid-cols-[1fr_auto] md:gap-14">
@@ -279,12 +281,12 @@ export default function Home() {
             <Reveal
               delay={0.55}
               y={26}
-              className="justify-self-start md:justify-self-end"
+              className="hidden md:block justify-self-start md:justify-self-end"
             >
-              <div className="relative">
+              <div className="relative w-fit">
                 <div
                   aria-hidden
-                  className="absolute -right-3 -top-3 h-full w-full rounded-4xl border border-line-strong transition-colors duration-500"
+                  className="absolute -right-3 -top-3 h-full w-full rounded-[2rem] border border-line-strong transition-colors duration-500"
                 />
                 {[
                   "-left-4 -top-4 border-l border-t",
@@ -298,13 +300,11 @@ export default function Home() {
                     className={`absolute ${pos} h-3 w-3 border-primary/50`}
                   />
                 ))}
-                <div className="relative h-40 w-40 overflow-hidden rounded-4xl border border-line bg-surface shadow-lift sm:h-48 sm:w-48">
+                <div className="relative w-40 sm:w-48 aspect-[4/5] overflow-hidden rounded-[2rem] border border-line bg-surface shadow-lift">
                   <img
-                    src="/profile/profile_anime.jpg"
+                    src="/profile/profile.jpg"
                     alt="Jefino"
-                    className="h-full w-full object-cover grayscale-[35%] transition-all duration-700 hover:scale-[1.03] hover:grayscale-0"
-                    width="192"
-                    height="192"
+                    className="h-full w-full object-cover object-[center_20%] grayscale transition-all duration-700 hover:scale-[1.03] hover:grayscale-0"
                   />
                 </div>
               </div>
