@@ -3,7 +3,7 @@
  * Handles fonts, images, JS/CSS chunks with long-lived caching.
  */
 
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const FONT_CACHE = `fonts-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
@@ -18,7 +18,6 @@ const PRECACHE_ASSETS = [
   '/fonts/poppins-600.woff2',
   '/fonts/poppins-700.woff2',
   '/fonts/poppins-300.woff2',
-  '/fonts/orbitron-700.woff2',
 ];
 
 // Install: pre-cache critical assets
