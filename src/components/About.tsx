@@ -270,13 +270,13 @@ export default function About() {
                   I&apos;m Jefino<span className="text-primary">.</span>
                 </h1>
                 <p className="pt-3 font-mono text-xs uppercase tracking-[0.18em] text-fg-muted">
-                  AI &amp; Data Science undergrad · Full-stack engineer
+                  Full-stack engineer &amp; AI engineer
                 </p>
               </Reveal>
 
               <Reveal delay={0.08}>
                 <p className="max-w-xl text-pretty leading-relaxed text-fg-muted">
-                  Based in Chennai, India — working across systems engineering,
+                  Based in Chennai, India, working across systems engineering,
                   Android automation tooling, and artificial intelligence. I
                   build software that bridges low-level system interactions with
                   modern, clean interfaces.
@@ -522,7 +522,7 @@ export default function About() {
                 </h2>
                 <p className="max-w-md text-pretty leading-relaxed text-fg-muted">
                   Have a project, idea, or open-source inquiry? Send a message
-                  and it opens straight in your mail client — or reach me
+                  and it opens straight in your mail client, or reach me
                   directly at the address below.
                 </p>
                 <a

@@ -164,7 +164,7 @@ export default function Home() {
       index: "01",
       title: "Work",
       description:
-        "Case studies and the full repository archive — systems tools, AI agents, web platforms.",
+        "Case studies and the full repository archive: systems tools, AI agents, web platforms.",
     },
     {
       to: "/blog",
@@ -178,7 +178,7 @@ export default function Home() {
       index: "03",
       title: "About",
       description:
-        "Who I am, what I focus on, my journey so far — plus a way to reach me.",
+        "Who I am, what I focus on, my journey so far, plus a way to reach me.",
     },
     {
       to: "/certificates",
@@ -233,7 +233,7 @@ export default function Home() {
               <Reveal delay={0.45}>
                 <p className="max-w-xl text-pretty text-base leading-relaxed text-fg-muted sm:text-lg">
                   Full-stack developer focused on AI, Android systems tooling,
-                  and open-source software — building fast, reliable,
+                  and open-source software, building fast, reliable,
                   maintainable architectures.
                 </p>
               </Reveal>
@@ -660,9 +660,9 @@ export default function Home() {
                   Background
                 </p>
                 <p className="text-sm leading-relaxed text-fg-muted">
-                  AI &amp; Data Science undergrad in Chennai turning complex,
+                  Full-stack engineer and AI engineer turning complex,
                   repetitive technical workflows into fast, reproducible
-                  software — from Android internals to LLM agents.
+                  software, from Android internals to LLM agents.
                 </p>
                 <Link
                   to="/about"
