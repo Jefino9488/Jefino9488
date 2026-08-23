@@ -111,12 +111,57 @@ function ScrollProgress() {
 function AppContent() {
   useSmoothScroll();
   const location = useLocation();
+  const [siteLoading, setSiteLoading] = useState(true);
+
+  useEffect(() => {
+    // Run preloader for 2.1s on initial visit
+    const timer = window.setTimeout(() => {
+      setSiteLoading(false);
+    }, 2100);
+
+    // Eagerly preload all lazy routes in background so navigation is instant
+    const preloadRoutes = () => {
+      import("./components/Home");
+      import("./components/Projects");
+      import("./components/BlogList");
+      import("./components/About");
+      import("./components/Certificates");
+      import("./components/ProjectDetail");
+      import("./components/BlogPost");
+    };
+
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      (window as unknown as IdleWindow).requestIdleCallback?.(preloadRoutes);
+    } else {
+      setTimeout(preloadRoutes, 800);
+    }
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="relative flex min-h-dvh selection:bg-primary/20 selection:text-white">
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
+
+      {/* Initial Site Preloader (runs once on site visit) */}
+      <AnimatePresence mode="wait">
+        {siteLoading && (
+          <motion.div
+            key="initial-preloader"
+            initial={{ opacity: 1 }}
+            exit={{
+              opacity: 0,
+              transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+            }}
+            className="pointer-events-auto fixed inset-0 z-[100]"
+          >
+            <Loader />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div aria-hidden className="grain-overlay" />
       <Cursor />
       <ScrollProgress />
@@ -130,14 +175,14 @@ function AppContent() {
           isLightRoute(location.pathname) ? "theme-light bg-sage" : ""
         }`}
       >
-        {/* Floating Island Navigation (Desktop + Mobile) */}
+        {/* Floating Island Navigation (Desktop + Mobile) - Permanently Pinned */}
         <Navbar />
 
         <main
           id="main-content"
           className="flex-grow overflow-x-clip pt-20 lg:pt-24"
         >
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<div className="min-h-screen" />}>
             <AnimatePresence mode="wait" initial={false}>
               <Routes location={location} key={location.pathname}>
                 <Route
