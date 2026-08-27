@@ -176,8 +176,36 @@ function SpotifyNavPill({ isLightPage }: { isLightPage: boolean }) {
 
 export default function Navbar() {
   const location = useLocation();
-  const isLightPage = isLightRoute(location.pathname);
+  const [isScrolledToLightSection, setIsScrolledToLightSection] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Only do scroll check if we aren't already on a light route
+      if (isLightRoute(location.pathname)) {
+        setIsScrolledToLightSection(false);
+        return;
+      }
+      
+      const lightSection = document.querySelector(".theme-light.bg-sage");
+      if (lightSection) {
+        const rect = lightSection.getBoundingClientRect();
+        // The navbar is at top-5 (20px) and its height is ~50px.
+        // Switch to light theme when the light section scrolls under the navbar.
+        setIsScrolledToLightSection(rect.top <= 80);
+      } else {
+        setIsScrolledToLightSection(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    // Initial check
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [location.pathname]);
+
+  const isLightPage = isLightRoute(location.pathname) || isScrolledToLightSection;
 
   // Close mobile menu on route change
   useEffect(() => {
