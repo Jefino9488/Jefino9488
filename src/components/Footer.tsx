@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowUp, Mail } from "lucide-react";
 import { Github } from "./icons/Github";
 import { Linkedin } from "./icons/Linkedin";
-import { Whatsapp } from "./icons/Whatsapp";
+import { Discord } from "./icons/Discord";
 
 const siteLinks = [
   { to: "/projects", label: "Work" },
@@ -73,13 +73,13 @@ export default function Footer() {
               LinkedIn
             </a>
             <a
-              href="https://wa.me/918220934327"
+              href="https://discordapp.com/users/jefino9488"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex w-fit items-center gap-2 text-fg-muted transition-colors hover:text-foreground"
             >
-              <Whatsapp className="h-3.5 w-3.5 shrink-0" />
-              WhatsApp
+              <Discord className="h-3.5 w-3.5 shrink-0" />
+              Discord
             </a>
             <a
               href="mailto:jefinojacob9488@gmail.com"
