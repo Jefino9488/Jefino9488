@@ -1,0 +1,5 @@
+Contact: https://github.com/Jefino9488/Jefino9488/security
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://jefino.is-a.dev/.well-known/security.txt
+Policy: https://github.com/Jefino9488/Jefino9488/blob/master/README.md

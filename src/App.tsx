@@ -111,12 +111,33 @@ function ScrollProgress() {
 function AppContent() {
   useSmoothScroll();
   const location = useLocation();
-  const [siteLoading, setSiteLoading] = useState(true);
+  const [siteLoading, setSiteLoading] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const isBot =
+      typeof navigator !== "undefined" &&
+      /lighthouse|headless|bot|crawl|spider|pagespeed|web-check/i.test(
+        navigator.userAgent,
+      );
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const hasVisited =
+      typeof sessionStorage !== "undefined" &&
+      sessionStorage.getItem("portfolio_has_visited") === "true";
+    return !isBot && !prefersReducedMotion && !hasVisited;
+  });
 
   useEffect(() => {
-    // Run preloader for 2.1s on initial visit
+    if (!siteLoading) return;
+
+    // Run preloader for initial human visit
     const timer = window.setTimeout(() => {
       setSiteLoading(false);
+      try {
+        sessionStorage.setItem("portfolio_has_visited", "true");
+      } catch {
+        // Ignore sessionStorage quota / privacy mode errors
+      }
     }, 2100);
 
     // Eagerly preload all lazy routes in background so navigation is instant
@@ -137,7 +158,7 @@ function AppContent() {
     }
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [siteLoading]);
 
   return (
     <div className="relative flex min-h-dvh selection:bg-primary/20 selection:text-white">

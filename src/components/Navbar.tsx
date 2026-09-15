@@ -219,7 +219,7 @@ export default function Navbar() {
     boxShadow: navShadow,
     color: colorForeground,
     WebkitBackdropFilter: "blur(20px)",
-  } as React.CSSProperties;
+  } as unknown as React.CSSProperties;
 
   return (
     <>
