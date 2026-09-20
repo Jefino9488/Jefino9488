@@ -8,6 +8,11 @@ updates:
     labels:
       - "dependencies"
       - "automerge"
+    groups:
+      react:
+        patterns:
+          - "react*"
+          - "@types/react*"
     ignore:
       # Prevent bumping to pre-release / unsupported major TypeScript versions
       - dependency-name: "typescript"
