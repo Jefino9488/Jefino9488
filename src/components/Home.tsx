@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Star, GitFork, ExternalLink } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Star, GitFork } from "lucide-react";
 import { Github } from "./icons/Github";
 import { Linkedin } from "./icons/Linkedin";
 import DualToneSection from "./DualToneSection";
@@ -482,25 +482,6 @@ export default function Home() {
                             </span>
                           </>
                         )}
-                        {featuredProjects[0].homepage && (
-                          <>
-                            <span className="text-line-strong">·</span>
-                            <a
-                              href={featuredProjects[0].homepage}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              className="relative z-20 inline-flex items-center gap-1 rounded-full border border-primary/40 bg-primary/10 px-2 py-0.5 text-[10px] text-primary transition-colors hover:bg-primary hover:text-background"
-                            >
-                              <span className="relative flex h-1.5 w-1.5">
-                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
-                                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
-                              </span>
-                              <span>Live Demo</span>
-                              <ExternalLink className="h-2.5 w-2.5" />
-                            </a>
-                          </>
-                        )}
                       </div>
                       <h2 className="text-2xl font-semibold tracking-tight transition-colors group-hover:text-primary sm:text-3xl">
                         {featuredProjects[0].name}
@@ -655,27 +636,9 @@ export default function Home() {
 
                     <div className="flex h-full flex-col justify-between gap-6">
                       <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <p className="font-mono text-[11px] tabular-nums text-primary">
-                            00{i + 2}
-                          </p>
-                          {project.homepage && (
-                            <a
-                              href={project.homepage}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              className="relative z-20 inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 font-mono text-[9px] text-primary transition-colors hover:bg-primary hover:text-background"
-                              title="Open live website"
-                            >
-                              <span className="relative flex h-1.5 w-1.5">
-                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
-                                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
-                              </span>
-                              <span>Live Site</span>
-                            </a>
-                          )}
-                        </div>
+                        <p className="font-mono text-[11px] tabular-nums text-primary">
+                          00{i + 2}
+                        </p>
                         <h3 className="text-lg font-semibold tracking-tight transition-colors group-hover:text-primary sm:text-xl">
                           {project.name}
                         </h3>
