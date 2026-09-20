@@ -6,11 +6,6 @@ import {
   GitFork,
   Code2,
   Eye,
-  Globe,
-  Monitor,
-  Tablet,
-  Smartphone,
-  RotateCw,
 } from "lucide-react";
 import { Github } from "./icons/Github";
 import { useState, useEffect } from "react";
@@ -20,6 +15,20 @@ import NextPageLink from "./NextPageLink";
 import MarkdownRenderer from "./MarkdownRenderer";
 
 const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
+
+function decodeBase64Utf8(base64: string): string {
+  try {
+    const cleanBase64 = base64.replace(/\s/g, "");
+    const binary = atob(cleanBase64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return new TextDecoder("utf-8").decode(bytes);
+  } catch {
+    return "";
+  }
+}
 
 interface RepoDetail {
   name: string;
@@ -44,31 +53,16 @@ interface ReadmeData {
   content: string;
 }
 
-function cleanHomepage(url?: string | null): string | undefined {
-  if (!url || typeof url !== "string") return undefined;
-  const trimmed = url.trim();
-  if (!trimmed) return undefined;
-  return trimmed.startsWith("http://") || trimmed.startsWith("https://")
-    ? trimmed
-    : `https://${trimmed}`;
-}
-
 export default function ProjectDetail() {
   const { name } = useParams<{ name: string }>();
   const { allProjects, pinnedProjects } = useProjects();
   const [repoDetail, setRepoDetail] = useState<RepoDetail | null>(null);
   const [readmeContent, setReadmeContent] = useState<string>("");
   const [readmeLoading, setReadmeLoading] = useState(true);
-  const [iframeKey, setIframeKey] = useState(0);
-  const [previewViewport, setPreviewViewport] = useState<
-    "desktop" | "tablet" | "mobile"
-  >("desktop");
 
   const project = [...pinnedProjects, ...allProjects].find(
     (p) => p.title.toLowerCase() === name?.toLowerCase(),
   );
-
-  const liveUrl = cleanHomepage(repoDetail?.homepage || project?.homepage);
 
   useEffect(() => {
     if (!name) return;
@@ -107,7 +101,7 @@ export default function ProjectDetail() {
         );
         if (res.ok) {
           const data: ReadmeData = await res.json();
-          const decoded = atob(data.content.replace(/\n/g, ""));
+          const decoded = decodeBase64Utf8(data.content);
           setReadmeContent(decoded);
         } else {
           setReadmeContent("");
@@ -141,37 +135,20 @@ export default function ProjectDetail() {
         backTo="/projects"
         backLabel="Work"
         rightAction={
-          <div className="flex items-center gap-2">
-            {liveUrl && (
-              <a
-                href={liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1.5 font-mono text-xs font-medium text-primary transition-colors hover:bg-primary hover:text-background"
-              >
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
-                </span>
-                <span>Live Site</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            )}
-            <a
-              href={
-                repoDetail?.html_url ||
-                project?.link ||
-                `https://github.com/Jefino9488/${name}`
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border border-line bg-elevated px-3.5 py-1.5 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
-            >
-              <Github className="w-3.5 h-3.5" />
-              <span>GitHub Source</span>
-              <ExternalLink className="w-3 h-3 text-fg-muted" />
-            </a>
-          </div>
+          <a
+            href={
+              repoDetail?.html_url ||
+              project?.link ||
+              `https://github.com/Jefino9488/${name}`
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full border border-line bg-elevated px-3.5 py-1.5 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
+          >
+            <Github className="w-3.5 h-3.5" />
+            <span>GitHub Source</span>
+            <ExternalLink className="w-3 h-3 text-fg-muted" />
+          </a>
         }
       />
 
@@ -208,11 +185,11 @@ export default function ProjectDetail() {
               {displayName}
             </h1>
 
-            {(repoDetail?.description || project?.description) && (
-              <p className="text-pretty text-base leading-relaxed text-fg-muted sm:text-lg">
-                {repoDetail?.description || project?.description}
-              </p>
-            )}
+            <p className="text-pretty text-base leading-relaxed text-fg-muted sm:text-lg">
+              {repoDetail?.description ||
+                project?.description ||
+                "Engineering project focused on systems architecture, modularity, and developer experience."}
+            </p>
           </div>
 
           {/* Key Metrics Bar */}
@@ -272,150 +249,6 @@ export default function ProjectDetail() {
           </div>
         </div>
 
-        {/* Live Website Preview (if deployed) */}
-        {liveUrl && (
-          <div className="space-y-4 border-t border-line pt-10">
-            <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-              <div>
-                <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-primary">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-                  </span>
-                  <span>Live Deployment</span>
-                </div>
-                <h2 className="mt-1 text-xl font-semibold text-foreground sm:text-2xl">
-                  Interactive Preview
-                </h2>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="hidden sm:flex items-center gap-1 rounded-full border border-line bg-inset p-0.5 font-mono text-xs">
-                  <button
-                    type="button"
-                    onClick={() => setPreviewViewport("desktop")}
-                    title="Desktop view"
-                    className={`rounded-full p-1.5 transition-colors ${
-                      previewViewport === "desktop"
-                        ? "bg-elevated text-foreground"
-                        : "text-fg-faint hover:text-foreground"
-                    }`}
-                  >
-                    <Monitor className="h-3.5 w-3.5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPreviewViewport("tablet")}
-                    title="Tablet view"
-                    className={`rounded-full p-1.5 transition-colors ${
-                      previewViewport === "tablet"
-                        ? "bg-elevated text-foreground"
-                        : "text-fg-faint hover:text-foreground"
-                    }`}
-                  >
-                    <Tablet className="h-3.5 w-3.5" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPreviewViewport("mobile")}
-                    title="Mobile view"
-                    className={`rounded-full p-1.5 transition-colors ${
-                      previewViewport === "mobile"
-                        ? "bg-elevated text-foreground"
-                        : "text-fg-faint hover:text-foreground"
-                    }`}
-                  >
-                    <Smartphone className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setIframeKey((k) => k + 1)}
-                  title="Reload preview"
-                  className="rounded-full border border-line bg-elevated p-2 text-fg-muted transition-colors hover:text-foreground"
-                >
-                  <RotateCw className="h-3.5 w-3.5" />
-                </button>
-                <a
-                  href={liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-line bg-elevated px-3.5 py-1.5 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
-                >
-                  <span>Open site</span>
-                  <ExternalLink className="h-3.5 w-3.5" />
-                </a>
-              </div>
-            </div>
-
-            {/* Browser Window Mockup */}
-            <div
-              className={`mx-auto overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl transition-all duration-300 ${
-                previewViewport === "desktop"
-                  ? "w-full"
-                  : previewViewport === "tablet"
-                    ? "w-[768px] max-w-full"
-                    : "w-[390px] max-w-full"
-              }`}
-            >
-              {/* Browser Topbar */}
-              <div className="flex items-center justify-between gap-3 border-b border-line bg-elevated/80 px-4 py-3">
-                <div className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-full bg-red-500/80" />
-                  <span className="h-3 w-3 rounded-full bg-yellow-500/80" />
-                  <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
-                </div>
-
-                <div className="flex max-w-md flex-1 items-center gap-2 truncate rounded-full border border-line bg-inset px-3 py-1 font-mono text-[11px] text-fg-muted">
-                  <Globe className="h-3.5 w-3.5 shrink-0 text-primary" />
-                  <span className="truncate">{liveUrl}</span>
-                </div>
-
-                <a
-                  href={liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-fg-faint transition-colors hover:text-primary"
-                  title="Launch in new window"
-                >
-                  <ExternalLink className="h-3.5 w-3.5" />
-                </a>
-              </div>
-
-              {/* Viewport Frame */}
-              <div className="relative aspect-[16/10] min-h-[460px] w-full bg-background sm:min-h-[540px]">
-                <iframe
-                  key={iframeKey}
-                  src={liveUrl}
-                  title={`${displayName} live site`}
-                  className="h-full w-full border-0"
-                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                  loading="lazy"
-                />
-              </div>
-
-              {/* Footer Note */}
-              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line bg-surface px-4 py-2.5 text-[11px] text-fg-muted">
-                <span className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                  <span>Interactive Live Deployment</span>
-                </span>
-                <span className="font-mono text-[10px] text-fg-faint">
-                  If blocked by third-party security policies,{" "}
-                  <a
-                    href={liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary underline"
-                  >
-                    launch directly
-                  </a>
-                  .
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Documentation / README Content */}
         <div className="space-y-5 border-t border-line pt-10">
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-fg-faint">
@@ -455,34 +288,20 @@ export default function ProjectDetail() {
             Back to all projects
           </Link>
 
-          <div className="flex items-center gap-2">
-            {liveUrl && (
-              <a
-                href={liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="press inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 font-mono text-xs font-medium text-primary transition-all hover:bg-primary hover:text-background"
-              >
-                <Globe className="h-3.5 w-3.5" />
-                <span>Open Live Site</span>
-                <ExternalLink className="h-3 w-3" />
-              </a>
-            )}
-            <a
-              href={
-                repoDetail?.html_url ||
-                project?.link ||
-                `https://github.com/Jefino9488/${name}`
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-              className="press inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 font-mono text-xs font-medium text-background transition-all hover:bg-white"
-            >
-              <Github className="h-4 w-4" />
-              <span>Open in GitHub</span>
-              <ExternalLink className="h-3.5 w-3.5" />
-            </a>
-          </div>
+          <a
+            href={
+              repoDetail?.html_url ||
+              project?.link ||
+              `https://github.com/Jefino9488/${name}`
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+            className="press inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 font-mono text-xs font-medium text-background transition-all hover:bg-white"
+          >
+            <Github className="h-4 w-4" />
+            <span>Open in GitHub</span>
+            <ExternalLink className="h-3.5 w-3.5" />
+          </a>
         </div>
 
         <NextPageLink to="/blog" title="Writing" />
