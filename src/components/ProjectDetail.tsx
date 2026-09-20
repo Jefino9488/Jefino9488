@@ -17,6 +17,7 @@ import { useState, useEffect } from "react";
 import { useProjects } from "./ProjectsContext";
 import PageHeader from "./PageHeader";
 import NextPageLink from "./NextPageLink";
+import MarkdownRenderer from "./MarkdownRenderer";
 
 const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
 
@@ -128,115 +129,6 @@ export default function ProjectDetail() {
       month: "short",
       day: "numeric",
     });
-
-  const renderReadme = (content: string) => {
-    if (!content) return null;
-    const lines = content.split("\n");
-    const elements: React.ReactNode[] = [];
-    let inCodeBlock = false;
-    let codeLines: string[] = [];
-    let codeLang = "";
-
-    lines.forEach((line, idx) => {
-      if (line.startsWith("```")) {
-        if (!inCodeBlock) {
-          inCodeBlock = true;
-          codeLang = line.slice(3).trim();
-          codeLines = [];
-        } else {
-          inCodeBlock = false;
-          elements.push(
-            <div
-              key={idx}
-              className="my-5 rounded-xl overflow-hidden border border-line bg-inset"
-            >
-              {codeLang && (
-                <div className="px-4 py-1.5 bg-surface border-b border-line font-mono text-[11px] text-fg-muted">
-                  {codeLang}
-                </div>
-              )}
-              <pre className="p-4 overflow-x-auto text-xs sm:text-sm font-mono text-foreground leading-relaxed">
-                <code>{codeLines.join("\n")}</code>
-              </pre>
-            </div>,
-          );
-        }
-        return;
-      }
-
-      if (inCodeBlock) {
-        codeLines.push(line);
-        return;
-      }
-
-      if (line.startsWith("# ")) {
-        // Skip main H1 to avoid redundancy
-      } else if (line.startsWith("## ")) {
-        elements.push(
-          <h2
-            key={idx}
-            className="mb-3 mt-8 border-b border-line pb-2 text-lg font-semibold text-foreground sm:text-xl"
-          >
-            {line.slice(3)}
-          </h2>,
-        );
-      } else if (line.startsWith("### ")) {
-        elements.push(
-          <h3
-            key={idx}
-            className="text-base font-semibold text-primary mt-6 mb-2"
-          >
-            {line.slice(4)}
-          </h3>,
-        );
-      } else if (line.match(/^[-*+] /)) {
-        elements.push(
-          <li
-            key={idx}
-            className="text-sm leading-relaxed text-fg-muted ml-4 list-disc my-1"
-          >
-            {line.slice(2)}
-          </li>,
-        );
-      } else if (line.match(/^\d+\. /)) {
-        elements.push(
-          <li
-            key={idx}
-            className="text-sm leading-relaxed text-fg-muted ml-4 list-decimal my-1"
-          >
-            {line.replace(/^\d+\. /, "")}
-          </li>,
-        );
-      } else if (line.startsWith("> ")) {
-        elements.push(
-          <blockquote
-            key={idx}
-            className="my-3 border-l-2 border-primary pl-3 text-xs italic leading-relaxed text-fg-muted sm:text-sm"
-          >
-            {line.slice(2)}
-          </blockquote>,
-        );
-      } else if (line.trim() === "") {
-        elements.push(<div key={idx} className="h-2" />);
-      } else {
-        const cleaned = line
-          .replace(/!\[([^\]]*)\]\([^)]+\)/g, "")
-          .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-          .replace(/\*\*([^*]+)\*\*/g, "$1")
-          .replace(/`([^`]+)`/g, "$1")
-          .trim();
-        if (cleaned) {
-          elements.push(
-            <p key={idx} className="my-2 text-sm leading-relaxed text-fg-muted">
-              {cleaned}
-            </p>,
-          );
-        }
-      }
-    });
-
-    return elements;
-  };
 
   const displayName = name
     ? name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, " ")
@@ -538,7 +430,13 @@ export default function ProjectDetail() {
               <div className="skeleton h-3.5 w-2/3" />
             </div>
           ) : readmeContent ? (
-            <div className="tile p-6">{renderReadme(readmeContent)}</div>
+            <div className="tile p-6 sm:p-8">
+              <MarkdownRenderer
+                content={readmeContent}
+                repoName={name}
+                defaultBranch={repoDetail?.default_branch}
+              />
+            </div>
           ) : (
             <div className="tile p-6 text-center font-mono text-xs text-fg-muted">
               Full documentation and code samples available in the GitHub
