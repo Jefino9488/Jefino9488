@@ -1,16 +1,73 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Star, GitFork } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Star, GitFork, ExternalLink } from "lucide-react";
 import { Github } from "./icons/Github";
 import { Linkedin } from "./icons/Linkedin";
 import DualToneSection from "./DualToneSection";
-import { useProjects } from "./ProjectsContext";
+import { useProjects, type Project } from "./ProjectsContext";
 import { useGitHubData } from "@/components/GitHubContext";
 import { getBlogPosts, type BlogPost } from "@/services/blogService";
 import Reveal from "./Reveal";
 import CountUp from "./CountUp";
 import ContributionGraph from "./ContributionGraph";
+
+const IGNORED_REPOS = new Set([
+  "jefino9488",
+  "myprofileviews",
+  "template-vite-react-node-postgres",
+]);
+
+function formatRelativeTime(dateString?: string): string {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInSeconds = Math.max(
+    0,
+    Math.floor((now.getTime() - date.getTime()) / 1000),
+  );
+  if (diffInSeconds < 60) return "just now";
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) return `${diffInHours}h ago`;
+  const diffInDays = Math.floor(diffInHours / 24);
+  if (diffInDays < 30) return `${diffInDays}d ago`;
+  const diffInMonths = Math.floor(diffInDays / 30);
+  if (diffInMonths < 12) return `${diffInMonths}mo ago`;
+  return `${Math.floor(diffInDays / 365)}y ago`;
+}
+
+const FRAMEWORKS_MAP: Record<string, string> = {
+  react: "React",
+  nextjs: "Next.js",
+  fastapi: "FastAPI",
+  nodejs: "Node.js",
+  express: "Express",
+  tailwind: "Tailwind",
+  "spring-boot": "Spring Boot",
+  flask: "Flask",
+  "flask-api": "Flask",
+  vite: "Vite",
+  docker: "Docker",
+  prisma: "Prisma",
+  selenium: "Selenium",
+};
+
+const SYSTEMS_AI_MAP: Record<string, string> = {
+  android: "Android Internals",
+  aosp: "AOSP",
+  fastboot: "Fastboot Tooling",
+  lsposed: "LSPosed",
+  vulkan: "Vulkan",
+  opengl: "OpenGL",
+  llm: "LLM Agents",
+  rag: "RAG Systems",
+  "deep-learning": "Deep Learning",
+  "computer-vision": "Computer Vision",
+  yolov8: "YOLOv8",
+  "machine-learning": "Machine Learning",
+};
 
 const TECH_MARQUEE = [
   "Python",
@@ -80,74 +137,118 @@ export default function Home() {
     });
   }, []);
 
-  const fallbackFlagships = [
-    {
-      title: "frameworkpatcher",
-      name: "FrameworkPatcher",
-      description:
-        "Automated framework for modifying Android system JARs and generating reproducible flashable modules.",
-      tech: ["Python", "Android", "Automation"],
-      stats: { stars: 97, forks: 84 },
-      link: "https://github.com/Jefino9488/FrameworkPatcher",
-      problem:
-        "Vendor ROM patching means fragile manual bytecode edits and endless decompile-recompile loops.",
-    },
-    {
-      title: "fastboot-flasher",
-      name: "Fastboot Flasher",
-      description:
-        "Cross-platform automation utility for device partitioning, flashing, and Android boot recovery workflows.",
-      tech: ["Batch", "Shell", "Android"],
-      stats: { stars: 39, forks: 15 },
-      link: "https://github.com/Jefino9488/Fastboot-Flasher",
-    },
-    {
-      title: "aiwebtester",
-      name: "AIWebTester",
-      description:
-        "AI-assisted automated browser testing suite leveraging vision models and autonomous agent flows.",
-      tech: ["TypeScript", "Python", "AI"],
-      stats: { stars: 12, forks: 4 },
-      link: "https://github.com/Jefino9488",
-    },
-  ];
-
-  const featuredProjects = fallbackFlagships.map((fallback) => {
-    const matched = [...pinnedProjects, ...allProjects].find(
-      (p) =>
-        p.title.toLowerCase() === fallback.title.toLowerCase() ||
-        p.title.toLowerCase().includes(fallback.title.toLowerCase()),
-    );
-    if (matched) {
-      return {
-        ...fallback,
-        title: matched.title,
-        name:
-          matched.title.charAt(0).toUpperCase() +
-          matched.title.slice(1).replace(/-/g, " "),
-        description: matched.description || fallback.description,
-        tech: matched.tech.length > 0 ? matched.tech : fallback.tech,
-        stats: matched.stats.stars > 0 ? matched.stats : fallback.stats,
-        link: matched.link,
-      };
+  const featuredProjects = useMemo(() => {
+    if (allProjects.length === 0) {
+      return [];
     }
-    return fallback;
-  });
 
-  const skillsList = [
-    {
-      category: "Languages",
-      items: ["Python", "TypeScript", "JavaScript", "Java", "Bash"],
-    },
-    {
-      category: "Frameworks",
-      items: ["React", "Node.js", "Express", "FastAPI", "Tailwind"],
-    },
-    {
-      category: "Systems & AI",
-      items: ["Android Internals", "Linux", "TensorFlow", "PyTorch", "Docker"],
-    },
-  ];
+    // 1. Sort all repos by push/update time descending (latest commit first)
+    const sortedByPushed = [...allProjects].sort((a, b) => {
+      const timeA = new Date(a.pushedAt || a.updatedAt || 0).getTime();
+      const timeB = new Date(b.pushedAt || b.updatedAt || 0).getTime();
+      return timeB - timeA;
+    });
+
+    // 2. Select latest committed repo, excluding ignored repos (e.g. portfolio, metrics, templates) and external forks
+    const latestProject =
+      sortedByPushed.find(
+        (p) => !IGNORED_REPOS.has(p.title.toLowerCase()) && !p.isFork,
+      ) ||
+      sortedByPushed.find((p) => !IGNORED_REPOS.has(p.title.toLowerCase()));
+
+    if (!latestProject) return [];
+
+    // 3. For slots 002 and 003, select from pinned repos, then remaining sorted repos
+    const remainingCandidates: Project[] = [
+      ...pinnedProjects,
+      ...sortedByPushed,
+    ].filter(
+      (p) =>
+        !IGNORED_REPOS.has(p.title.toLowerCase()) &&
+        p.title.toLowerCase() !== latestProject.title.toLowerCase(),
+    );
+
+    // Deduplicate by lowercase title
+    const seenTitles = new Set<string>();
+    const uniqueRemaining: Project[] = [];
+    for (const cand of remainingCandidates) {
+      const key = cand.title.toLowerCase();
+      if (!seenTitles.has(key)) {
+        seenTitles.add(key);
+        uniqueRemaining.push(cand);
+      }
+    }
+
+    const slot2 = uniqueRemaining[0];
+    const slot3 = uniqueRemaining[1];
+
+    const rawSlots = [latestProject, slot2, slot3].filter(Boolean) as Project[];
+
+    return rawSlots.map((item, index) => {
+      const displayName =
+        item.name ||
+        item.title
+          .replace(/[-_]/g, " ")
+          .replace(/\b\w/g, (c) => c.toUpperCase());
+
+      return {
+        title: item.title,
+        name: displayName,
+        description: item.description || "Open-source software repository.",
+        tech: item.tech && item.tech.length > 0 ? item.tech : ["Code"],
+        stats: item.stats || { stars: 0, forks: 0 },
+        link: item.link || `https://github.com/Jefino9488/${item.title}`,
+        homepage: item.homepage,
+        pushedAt: item.pushedAt,
+        isLatest: index === 0,
+      };
+    });
+  }, [allProjects, pinnedProjects]);
+
+  const skillsList = useMemo(() => {
+    // Top languages dynamically extracted from live GitHub stats
+    const langItems = languages
+      .slice(0, 5)
+      .map(([name]) => (name === "Batchfile" ? "Batch" : name));
+
+    // Dynamic framework & system extraction from real repository topics & technologies
+    const allTopics = new Set<string>();
+    allProjects.forEach((p) => {
+      (p.topics || []).forEach((t) => allTopics.add(t.toLowerCase()));
+      p.tech.forEach((t) => allTopics.add(t.toLowerCase()));
+    });
+
+    const frameworkItems = Array.from(
+      new Set(
+        Object.entries(FRAMEWORKS_MAP)
+          .filter(([key]) => allTopics.has(key))
+          .map(([, val]) => val),
+      ),
+    ).slice(0, 5);
+
+    const systemsAiItems = Array.from(
+      new Set(
+        Object.entries(SYSTEMS_AI_MAP)
+          .filter(([key]) => allTopics.has(key))
+          .map(([, val]) => val),
+      ),
+    ).slice(0, 5);
+
+    return [
+      {
+        category: "Languages",
+        items: langItems,
+      },
+      {
+        category: "Frameworks",
+        items: frameworkItems,
+      },
+      {
+        category: "Systems & AI",
+        items: systemsAiItems,
+      },
+    ];
+  }, [languages, allProjects]);
 
   const totalLangBytes = languages.reduce((sum, [, b]) => sum + b, 0) || 1;
   const topLanguages = [...languages]
@@ -349,68 +450,108 @@ export default function Home() {
           <div className="mt-8 grid grid-cols-1 gap-4 md:auto-rows-fr md:grid-cols-3">
             {/* Flagship — large tile */}
             <Reveal className="md:col-span-2" delay={0.05}>
-              <article className="tile tile-interactive group h-full p-7 sm:p-9">
-                <Link
-                  to={`/projects/${featuredProjects[0].title}`}
-                  aria-label={`${featuredProjects[0].name} case study`}
-                  className="absolute inset-0 z-10 rounded-[1.375rem]"
-                >
-                  <span className="sr-only">{featuredProjects[0].name}</span>
-                </Link>
-                <a
-                  href={featuredProjects[0].link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Open ${featuredProjects[0].name} on GitHub`}
-                  className="absolute right-5 top-5 z-20 rounded-full p-2 text-fg-faint transition-colors hover:text-foreground"
-                >
-                  <ArrowUpRight className="h-4 w-4" />
-                </a>
+              {featuredProjects[0] ? (
+                <article className="tile tile-interactive group h-full p-7 sm:p-9">
+                  <Link
+                    to={`/projects/${featuredProjects[0].title}`}
+                    aria-label={`${featuredProjects[0].name} case study`}
+                    className="absolute inset-0 z-10 rounded-[1.375rem]"
+                  >
+                    <span className="sr-only">{featuredProjects[0].name}</span>
+                  </Link>
+                  <a
+                    href={featuredProjects[0].link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Open ${featuredProjects[0].name} on GitHub`}
+                    className="absolute right-5 top-5 z-20 rounded-full p-2 text-fg-faint transition-colors hover:text-foreground"
+                  >
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
 
-                <div className="flex h-full flex-col justify-between gap-8">
-                  <div className="space-y-4">
-                    <p className="font-mono text-[11px] tabular-nums text-primary">
-                      001 — Flagship
-                    </p>
-                    <h2 className="text-2xl font-semibold tracking-tight transition-colors group-hover:text-primary sm:text-3xl">
-                      {featuredProjects[0].name}
-                    </h2>
-                    <p className="max-w-lg text-pretty text-sm leading-relaxed text-fg-muted sm:text-base">
-                      {featuredProjects[0].description}
-                    </p>
-                    <p className="max-w-lg border-l-2 border-line-strong pl-4 text-xs leading-relaxed text-fg-faint sm:text-sm">
-                      {featuredProjects[0].problem}
-                    </p>
+                  <div className="flex h-full flex-col justify-between gap-8">
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] tabular-nums text-primary">
+                        <span>001 — Latest commit</span>
+                        {featuredProjects[0].pushedAt && (
+                          <>
+                            <span className="text-line-strong">·</span>
+                            <span className="text-fg-faint">
+                              Pushed{" "}
+                              {formatRelativeTime(featuredProjects[0].pushedAt)}
+                            </span>
+                          </>
+                        )}
+                        {featuredProjects[0].homepage && (
+                          <>
+                            <span className="text-line-strong">·</span>
+                            <a
+                              href={featuredProjects[0].homepage}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="relative z-20 inline-flex items-center gap-1 rounded-full border border-primary/40 bg-primary/10 px-2 py-0.5 text-[10px] text-primary transition-colors hover:bg-primary hover:text-background"
+                            >
+                              <span className="relative flex h-1.5 w-1.5">
+                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+                              </span>
+                              <span>Live Demo</span>
+                              <ExternalLink className="h-2.5 w-2.5" />
+                            </a>
+                          </>
+                        )}
+                      </div>
+                      <h2 className="text-2xl font-semibold tracking-tight transition-colors group-hover:text-primary sm:text-3xl">
+                        {featuredProjects[0].name}
+                      </h2>
+                      <p className="max-w-lg text-pretty text-sm leading-relaxed text-fg-muted sm:text-base">
+                        {featuredProjects[0].description}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap items-end justify-between gap-4">
+                      <div className="flex flex-wrap gap-1.5">
+                        {featuredProjects[0].tech.map((t) => (
+                          <span
+                            key={t}
+                            className="rounded-full border border-line bg-inset px-2.5 py-1 font-mono text-[10px] text-fg-muted"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex items-center gap-4 font-mono text-xs text-fg-muted">
+                        <span className="flex items-center gap-1.5">
+                          <Star className="h-3 w-3 text-warm" />
+                          <span className="tabular-nums">
+                            {featuredProjects[0].stats.stars}
+                          </span>
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <GitFork className="h-3 w-3" />
+                          <span className="tabular-nums">
+                            {featuredProjects[0].stats.forks}
+                          </span>
+                        </span>
+                      </div>
+                    </div>
                   </div>
-
-                  <div className="flex flex-wrap items-end justify-between gap-4">
-                    <div className="flex flex-wrap gap-1.5">
-                      {featuredProjects[0].tech.map((t) => (
-                        <span
-                          key={t}
-                          className="rounded-full border border-line bg-inset px-2.5 py-1 font-mono text-[10px] text-fg-muted"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex items-center gap-4 font-mono text-xs text-fg-muted">
-                      <span className="flex items-center gap-1.5">
-                        <Star className="h-3 w-3 text-warm" />
-                        <span className="tabular-nums">
-                          {featuredProjects[0].stats.stars}
-                        </span>
-                      </span>
-                      <span className="flex items-center gap-1.5">
-                        <GitFork className="h-3 w-3" />
-                        <span className="tabular-nums">
-                          {featuredProjects[0].stats.forks}
-                        </span>
-                      </span>
-                    </div>
+                </article>
+              ) : (
+                <div className="tile flex h-full flex-col justify-between p-7 sm:p-9">
+                  <div className="space-y-4">
+                    <div className="skeleton h-3 w-28" />
+                    <div className="skeleton h-8 w-2/3" />
+                    <div className="skeleton h-4 w-full" />
+                    <div className="skeleton h-4 w-4/5" />
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="skeleton h-6 w-16 rounded-full" />
+                    <div className="skeleton h-6 w-20 rounded-full" />
                   </div>
                 </div>
-              </article>
+              )}
             </Reveal>
 
             {/* Telemetry */}
@@ -478,15 +619,10 @@ export default function Home() {
                     ))
                   ) : (
                     <div className="space-y-2.5">
-                      {[72, 58, 41, 27].map((w) => (
-                        <div
-                          key={w}
-                          className="h-1 overflow-hidden rounded-full bg-elevated"
-                        >
-                          <div
-                            className="h-full rounded-full bg-primary/30"
-                            style={{ width: `${w}%` }}
-                          />
+                      {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="space-y-1.5">
+                          <div className="skeleton h-2.5 w-1/3" />
+                          <div className="skeleton h-1 w-full rounded-full" />
                         </div>
                       ))}
                     </div>
@@ -496,58 +632,95 @@ export default function Home() {
             </Reveal>
 
             {/* Project tiles 2 & 3 */}
-            {featuredProjects.slice(1).map((project, i) => (
-              <Reveal key={project.title} delay={0.12 + i * 0.06}>
-                <article className="tile tile-interactive group h-full p-7">
-                  <Link
-                    to={`/projects/${project.title}`}
-                    aria-label={`${project.name} case study`}
-                    className="absolute inset-0 z-10 rounded-[1.375rem]"
-                  >
-                    <span className="sr-only">{project.name}</span>
-                  </Link>
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Open ${project.name} on GitHub`}
-                    className="absolute right-4 top-4 z-20 rounded-full p-1.5 text-fg-faint transition-colors hover:text-foreground"
-                  >
-                    <ArrowUpRight className="h-3.5 w-3.5" />
-                  </a>
+            {featuredProjects.length > 1 ? (
+              featuredProjects.slice(1).map((project, i) => (
+                <Reveal key={project.title} delay={0.12 + i * 0.06}>
+                  <article className="tile tile-interactive group h-full p-7">
+                    <Link
+                      to={`/projects/${project.title}`}
+                      aria-label={`${project.name} case study`}
+                      className="absolute inset-0 z-10 rounded-[1.375rem]"
+                    >
+                      <span className="sr-only">{project.name}</span>
+                    </Link>
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Open ${project.name} on GitHub`}
+                      className="absolute right-4 top-4 z-20 rounded-full p-1.5 text-fg-faint transition-colors hover:text-foreground"
+                    >
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </a>
 
-                  <div className="flex h-full flex-col justify-between gap-6">
-                    <div className="space-y-3">
-                      <p className="font-mono text-[11px] tabular-nums text-primary">
-                        00{i + 2}
-                      </p>
-                      <h3 className="text-lg font-semibold tracking-tight transition-colors group-hover:text-primary sm:text-xl">
-                        {project.name}
-                      </h3>
-                      <p className="line-clamp-3 text-sm leading-relaxed text-fg-muted">
-                        {project.description}
-                      </p>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex flex-wrap gap-1.5">
-                        {project.tech.slice(0, 3).map((t) => (
-                          <span
-                            key={t}
-                            className="rounded-full border border-line bg-inset px-2 py-0.5 font-mono text-[10px] text-fg-muted"
-                          >
-                            {t}
-                          </span>
-                        ))}
+                    <div className="flex h-full flex-col justify-between gap-6">
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <p className="font-mono text-[11px] tabular-nums text-primary">
+                            00{i + 2}
+                          </p>
+                          {project.homepage && (
+                            <a
+                              href={project.homepage}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="relative z-20 inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 font-mono text-[9px] text-primary transition-colors hover:bg-primary hover:text-background"
+                              title="Open live website"
+                            >
+                              <span className="relative flex h-1.5 w-1.5">
+                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+                              </span>
+                              <span>Live Site</span>
+                            </a>
+                          )}
+                        </div>
+                        <h3 className="text-lg font-semibold tracking-tight transition-colors group-hover:text-primary sm:text-xl">
+                          {project.name}
+                        </h3>
+                        <p className="line-clamp-3 text-sm leading-relaxed text-fg-muted">
+                          {project.description}
+                        </p>
                       </div>
-                      <span className="flex items-center gap-1 font-mono text-[11px] tabular-nums text-fg-muted">
-                        <Star className="h-3 w-3 text-warm" />
-                        {project.stats.stars}
-                      </span>
+                      <div className="flex items-center justify-between">
+                        <div className="flex flex-wrap gap-1.5">
+                          {project.tech.slice(0, 3).map((t) => (
+                            <span
+                              key={t}
+                              className="rounded-full border border-line bg-inset px-2 py-0.5 font-mono text-[10px] text-fg-muted"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                        <span className="flex items-center gap-1 font-mono text-[11px] tabular-nums text-fg-muted">
+                          <Star className="h-3 w-3 text-warm" />
+                          {project.stats.stars}
+                        </span>
+                      </div>
+                    </div>
+                  </article>
+                </Reveal>
+              ))
+            ) : (
+              [2, 3].map((slotNum) => (
+                <Reveal key={slotNum} delay={0.12}>
+                  <div className="tile flex h-full flex-col justify-between p-7 space-y-4">
+                    <div className="space-y-3">
+                      <div className="skeleton h-3 w-10" />
+                      <div className="skeleton h-6 w-32" />
+                      <div className="skeleton h-3.5 w-full" />
+                      <div className="skeleton h-3.5 w-4/5" />
+                    </div>
+                    <div className="flex gap-2">
+                      <div className="skeleton h-5 w-14 rounded-full" />
+                      <div className="skeleton h-5 w-14 rounded-full" />
                     </div>
                   </div>
-                </article>
-              </Reveal>
-            ))}
+                </Reveal>
+              ))
+            )}
 
             {/* Stack tile */}
             <Reveal delay={0.2}>
@@ -562,14 +735,22 @@ export default function Home() {
                         {group.category}
                       </p>
                       <div className="flex flex-wrap gap-1.5">
-                        {group.items.map((item) => (
-                          <span
-                            key={item}
-                            className="rounded-full border border-line bg-elevated px-2.5 py-1 font-mono text-[11px] text-foreground transition-colors hover:border-line-strong"
-                          >
-                            {item}
-                          </span>
-                        ))}
+                        {group.items.length > 0 ? (
+                          group.items.map((item) => (
+                            <span
+                              key={item}
+                              className="rounded-full border border-line bg-elevated px-2.5 py-1 font-mono text-[11px] text-foreground transition-colors hover:border-line-strong"
+                            >
+                              {item}
+                            </span>
+                          ))
+                        ) : (
+                          <div className="flex flex-wrap gap-1.5">
+                            <div className="skeleton h-6 w-16 rounded-full" />
+                            <div className="skeleton h-6 w-20 rounded-full" />
+                            <div className="skeleton h-6 w-14 rounded-full" />
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}

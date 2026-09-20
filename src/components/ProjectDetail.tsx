@@ -6,7 +6,11 @@ import {
   GitFork,
   Code2,
   Eye,
-  CheckCircle2,
+  Globe,
+  Monitor,
+  Tablet,
+  Smartphone,
+  RotateCw,
 } from "lucide-react";
 import { Github } from "./icons/Github";
 import { useState, useEffect } from "react";
@@ -39,66 +43,14 @@ interface ReadmeData {
   content: string;
 }
 
-// Case study structured data for key projects
-const caseStudyData: Record<
-  string,
-  {
-    problem: string;
-    approach: string;
-    architecture: string[];
-    challenges: string;
-    results: string;
-  }
-> = {
-  frameworkpatcher: {
-    problem:
-      "Android OEM frameworks (such as HyperOS/MIUI) enforce deep proprietary restrictions. Customizing system behavior traditionally required laborious manual smali decompilation, patching, and recompilation after every system OTA update.",
-    approach:
-      "Built a deterministic Python framework that ingests raw vendor framework JARs, applies structured regex and AST-based bytecode patches, validates class definitions, and automatically packages flashable Magisk/KernelSU root modules.",
-    architecture: [
-      "Input: OEM system framework.jar & services.jar",
-      "Decompiler: Smali/Baksmali AST parser",
-      "Patch Engine: Rule-based signature matching & bytecode transformer",
-      "Packager: Automated flashable Magisk/KSU module builder",
-    ],
-    challenges:
-      "Managing varying class offsets across different Android API versions (Android 12 through 15) and handling heavily obfuscated vendor bytecode without breaking ART compilation.",
-    results:
-      "Over 95+ stars and 80+ forks. Adopted widely by Android ROM builders and modders to achieve 100% automated, one-command framework patch generation.",
-  },
-  "fastboot-flasher": {
-    problem:
-      "Flashing modern Android partition tables with dynamic partitions and A/B slots is prone to human error, resulting in hard/soft bricked devices during recovery or ROM installation.",
-    approach:
-      "Developed a robust shell and scripting automation toolkit that inspects active slot metadata, verifies partition hash integrity before flashing, and provides safe failover recovery loops.",
-    architecture: [
-      "Device Prober: Fastboot device handshake & variable detection",
-      "Slot Manager: Active/inactive slot validation (slot_a/slot_b)",
-      "Flash Pipeline: Multi-partition sequential execution with error catching",
-      "Post-Flash: Reboot state verification & recovery trigger",
-    ],
-    challenges:
-      "Standardizing fastboot protocol discrepancies across diverse vendor implementations (Qualcomm, MediaTek, Tensor).",
-    results:
-      "Zero-brick automated flashing experience used across dozens of device communities.",
-  },
-  aiwebtester: {
-    problem:
-      "Traditional end-to-end browser automation (Selenium/Cypress) is brittle—selectors frequently break on minor UI refactors and writing test coverage for complex dynamic web apps is time-consuming.",
-    approach:
-      "Constructed an AI-native browser test runner that interprets high-level natural language test instructions (e.g. 'Verify user can complete checkout') into multimodal perception and browser actions.",
-    architecture: [
-      "Test Spec: Natural language scenario definitions",
-      "Perception Engine: DOM snapshotting + visual screenshot analysis",
-      "Agent Planner: LLM-driven step-by-step action planning",
-      "Execution Driver: Playwright action execution & assertion reporting",
-    ],
-    challenges:
-      "Minimizing token costs and latency while ensuring deterministic assertion validation on rapid asynchronous state transitions.",
-    results:
-      "Self-healing end-to-end test execution with instant visual anomaly reporting.",
-  },
-};
+function cleanHomepage(url?: string | null): string | undefined {
+  if (!url || typeof url !== "string") return undefined;
+  const trimmed = url.trim();
+  if (!trimmed) return undefined;
+  return trimmed.startsWith("http://") || trimmed.startsWith("https://")
+    ? trimmed
+    : `https://${trimmed}`;
+}
 
 export default function ProjectDetail() {
   const { name } = useParams<{ name: string }>();
@@ -106,12 +58,16 @@ export default function ProjectDetail() {
   const [repoDetail, setRepoDetail] = useState<RepoDetail | null>(null);
   const [readmeContent, setReadmeContent] = useState<string>("");
   const [readmeLoading, setReadmeLoading] = useState(true);
+  const [iframeKey, setIframeKey] = useState(0);
+  const [previewViewport, setPreviewViewport] = useState<
+    "desktop" | "tablet" | "mobile"
+  >("desktop");
 
   const project = [...pinnedProjects, ...allProjects].find(
     (p) => p.title.toLowerCase() === name?.toLowerCase(),
   );
 
-  const matchedCaseStudy = name ? caseStudyData[name.toLowerCase()] : undefined;
+  const liveUrl = cleanHomepage(repoDetail?.homepage || project?.homepage);
 
   useEffect(() => {
     if (!name) return;
@@ -293,20 +249,37 @@ export default function ProjectDetail() {
         backTo="/projects"
         backLabel="Work"
         rightAction={
-          <a
-            href={
-              repoDetail?.html_url ||
-              project?.link ||
-              `https://github.com/Jefino9488/${name}`
-            }
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full border border-line bg-elevated px-3.5 py-1.5 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
-          >
-            <Github className="w-3.5 h-3.5" />
-            <span>GitHub Source</span>
-            <ExternalLink className="w-3 h-3 text-fg-muted" />
-          </a>
+          <div className="flex items-center gap-2">
+            {liveUrl && (
+              <a
+                href={liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1.5 font-mono text-xs font-medium text-primary transition-colors hover:bg-primary hover:text-background"
+              >
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+                </span>
+                <span>Live Site</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            )}
+            <a
+              href={
+                repoDetail?.html_url ||
+                project?.link ||
+                `https://github.com/Jefino9488/${name}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full border border-line bg-elevated px-3.5 py-1.5 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
+            >
+              <Github className="w-3.5 h-3.5" />
+              <span>GitHub Source</span>
+              <ExternalLink className="w-3 h-3 text-fg-muted" />
+            </a>
+          </div>
         }
       />
 
@@ -343,11 +316,11 @@ export default function ProjectDetail() {
               {displayName}
             </h1>
 
-            <p className="text-pretty text-base leading-relaxed text-fg-muted sm:text-lg">
-              {repoDetail?.description ||
-                project?.description ||
-                "Engineering project focused on systems architecture, modularity, and developer experience."}
-            </p>
+            {(repoDetail?.description || project?.description) && (
+              <p className="text-pretty text-base leading-relaxed text-fg-muted sm:text-lg">
+                {repoDetail?.description || project?.description}
+              </p>
+            )}
           </div>
 
           {/* Key Metrics Bar */}
@@ -407,62 +380,145 @@ export default function ProjectDetail() {
           </div>
         </div>
 
-        {/* Structured Case Study */}
-        {matchedCaseStudy && (
-          <div className="space-y-10 border-t border-line pt-10">
-            <div className="space-y-3">
-              <p className="font-mono text-[11px] tabular-nums text-primary">
-                01
-              </p>
-              <h2 className="type-title">The problem</h2>
-              <p className="max-w-2xl text-pretty text-sm leading-relaxed text-fg-muted sm:text-base">
-                {matchedCaseStudy.problem}
-              </p>
-            </div>
-
-            <div className="space-y-3 border-t border-line pt-10">
-              <p className="font-mono text-[11px] tabular-nums text-primary">
-                02
-              </p>
-              <h2 className="type-title">Approach &amp; solution</h2>
-              <p className="max-w-2xl text-pretty text-sm leading-relaxed text-fg-muted sm:text-base">
-                {matchedCaseStudy.approach}
-              </p>
-            </div>
-
-            <div className="space-y-4 border-t border-line pt-10">
-              <p className="font-mono text-[11px] tabular-nums text-primary">
-                03
-              </p>
-              <h2 className="type-title">System architecture</h2>
-              <div className="tile divide-y divide-line p-2">
-                {matchedCaseStudy.architecture.map((step, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-start gap-3 px-4 py-3 text-xs sm:text-sm"
+        {/* Live Website Preview (if deployed) */}
+        {liveUrl && (
+          <div className="space-y-4 border-t border-line pt-10">
+            <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+              <div>
+                <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-primary">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+                  </span>
+                  <span>Live Deployment</span>
+                </div>
+                <h2 className="mt-1 text-xl font-semibold text-foreground sm:text-2xl">
+                  Interactive Preview
+                </h2>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="hidden sm:flex items-center gap-1 rounded-full border border-line bg-inset p-0.5 font-mono text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setPreviewViewport("desktop")}
+                    title="Desktop view"
+                    className={`rounded-full p-1.5 transition-colors ${
+                      previewViewport === "desktop"
+                        ? "bg-elevated text-foreground"
+                        : "text-fg-faint hover:text-foreground"
+                    }`}
                   >
-                    <span className="shrink-0 font-mono font-semibold tabular-nums text-primary">
-                      0{idx + 1}.
-                    </span>
-                    <span className="text-foreground">{step}</span>
-                  </div>
-                ))}
+                    <Monitor className="h-3.5 w-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPreviewViewport("tablet")}
+                    title="Tablet view"
+                    className={`rounded-full p-1.5 transition-colors ${
+                      previewViewport === "tablet"
+                        ? "bg-elevated text-foreground"
+                        : "text-fg-faint hover:text-foreground"
+                    }`}
+                  >
+                    <Tablet className="h-3.5 w-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPreviewViewport("mobile")}
+                    title="Mobile view"
+                    className={`rounded-full p-1.5 transition-colors ${
+                      previewViewport === "mobile"
+                        ? "bg-elevated text-foreground"
+                        : "text-fg-faint hover:text-foreground"
+                    }`}
+                  >
+                    <Smartphone className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIframeKey((k) => k + 1)}
+                  title="Reload preview"
+                  className="rounded-full border border-line bg-elevated p-2 text-fg-muted transition-colors hover:text-foreground"
+                >
+                  <RotateCw className="h-3.5 w-3.5" />
+                </button>
+                <a
+                  href={liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-line bg-elevated px-3.5 py-1.5 font-mono text-xs text-foreground transition-colors hover:border-line-strong"
+                >
+                  <span>Open site</span>
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
               </div>
             </div>
 
-            <div className="space-y-3 border-t border-line pt-10">
-              <p className="font-mono text-[11px] tabular-nums text-primary">
-                04
-              </p>
-              <h2 className="type-title">Challenges &amp; results</h2>
-              <p className="max-w-2xl text-pretty text-sm leading-relaxed text-fg-muted sm:text-base">
-                {matchedCaseStudy.challenges}
-              </p>
-              <div className="tile mt-4 flex items-start gap-3 p-5">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
-                <p className="text-xs leading-relaxed text-foreground sm:text-sm">
-                  {matchedCaseStudy.results}
-                </p>
+            {/* Browser Window Mockup */}
+            <div
+              className={`mx-auto overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl transition-all duration-300 ${
+                previewViewport === "desktop"
+                  ? "w-full"
+                  : previewViewport === "tablet"
+                    ? "w-[768px] max-w-full"
+                    : "w-[390px] max-w-full"
+              }`}
+            >
+              {/* Browser Topbar */}
+              <div className="flex items-center justify-between gap-3 border-b border-line bg-elevated/80 px-4 py-3">
+                <div className="flex items-center gap-2">
+                  <span className="h-3 w-3 rounded-full bg-red-500/80" />
+                  <span className="h-3 w-3 rounded-full bg-yellow-500/80" />
+                  <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
+                </div>
+
+                <div className="flex max-w-md flex-1 items-center gap-2 truncate rounded-full border border-line bg-inset px-3 py-1 font-mono text-[11px] text-fg-muted">
+                  <Globe className="h-3.5 w-3.5 shrink-0 text-primary" />
+                  <span className="truncate">{liveUrl}</span>
+                </div>
+
+                <a
+                  href={liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-fg-faint transition-colors hover:text-primary"
+                  title="Launch in new window"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              </div>
+
+              {/* Viewport Frame */}
+              <div className="relative aspect-[16/10] min-h-[460px] w-full bg-background sm:min-h-[540px]">
+                <iframe
+                  key={iframeKey}
+                  src={liveUrl}
+                  title={`${displayName} live site`}
+                  className="h-full w-full border-0"
+                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                  loading="lazy"
+                />
+              </div>
+
+              {/* Footer Note */}
+              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line bg-surface px-4 py-2.5 text-[11px] text-fg-muted">
+                <span className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  <span>Interactive Live Deployment</span>
+                </span>
+                <span className="font-mono text-[10px] text-fg-faint">
+                  If blocked by third-party security policies,{" "}
+                  <a
+                    href={liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary underline"
+                  >
+                    launch directly
+                  </a>
+                  .
+                </span>
               </div>
             </div>
           </div>
@@ -501,20 +557,34 @@ export default function ProjectDetail() {
             Back to all projects
           </Link>
 
-          <a
-            href={
-              repoDetail?.html_url ||
-              project?.link ||
-              `https://github.com/Jefino9488/${name}`
-            }
-            target="_blank"
-            rel="noopener noreferrer"
-            className="press inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 font-mono text-xs font-medium text-background transition-all hover:bg-white"
-          >
-            <Github className="h-4 w-4" />
-            <span>Open in GitHub</span>
-            <ExternalLink className="h-3.5 w-3.5" />
-          </a>
+          <div className="flex items-center gap-2">
+            {liveUrl && (
+              <a
+                href={liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="press inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 font-mono text-xs font-medium text-primary transition-all hover:bg-primary hover:text-background"
+              >
+                <Globe className="h-3.5 w-3.5" />
+                <span>Open Live Site</span>
+                <ExternalLink className="h-3 w-3" />
+              </a>
+            )}
+            <a
+              href={
+                repoDetail?.html_url ||
+                project?.link ||
+                `https://github.com/Jefino9488/${name}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="press inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 font-mono text-xs font-medium text-background transition-all hover:bg-white"
+            >
+              <Github className="h-4 w-4" />
+              <span>Open in GitHub</span>
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </div>
         </div>
 
         <NextPageLink to="/blog" title="Writing" />

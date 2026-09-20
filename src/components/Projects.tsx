@@ -1,8 +1,22 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Star, GitFork, Briefcase } from "lucide-react";
+import {
+  ArrowUpRight,
+  Star,
+  GitFork,
+  Briefcase,
+  Globe,
+  Monitor,
+  Tablet,
+  Smartphone,
+  RotateCw,
+  ExternalLink,
+  X,
+  Eye,
+} from "lucide-react";
 import {
   motion,
+  AnimatePresence,
   useReducedMotion,
   useScroll,
   useTransform,
@@ -10,7 +24,7 @@ import {
 import { Github } from "./icons/Github";
 import PageHeader from "./PageHeader";
 import Reveal from "./Reveal";
-import { useProjects } from "./ProjectsContext";
+import { useProjects, Project } from "./ProjectsContext";
 import { useGitHubData } from "@/components/GitHubContext";
 import NextPageLink from "./NextPageLink";
 import DualToneSection from "./DualToneSection";
@@ -78,10 +92,205 @@ function RowSkeleton() {
   );
 }
 
+function LivePreviewModal({
+  project,
+  onClose,
+}: {
+  project: Project | null;
+  onClose: () => void;
+}) {
+  const [viewport, setViewport] = useState<"desktop" | "tablet" | "mobile">(
+    "desktop",
+  );
+  const [iframeKey, setIframeKey] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    setIframeKey((k) => k + 1);
+  }, [project, viewport]);
+
+  useEffect(() => {
+    if (!project) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [project, onClose]);
+
+  if (!project || !project.homepage) return null;
+
+  const widthClass =
+    viewport === "desktop"
+      ? "w-full max-w-6xl"
+      : viewport === "tablet"
+        ? "w-[768px] max-w-full"
+        : "w-[390px] max-w-full";
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6">
+      {/* Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="fixed inset-0 bg-black/80 backdrop-blur-md"
+      />
+
+      {/* Modal Window */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 10 }}
+        transition={{ duration: 0.2 }}
+        className={`relative z-10 flex h-[88vh] max-h-[900px] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl transition-all duration-300 ${widthClass}`}
+      >
+        {/* Window Header */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-elevated/90 px-4 py-3">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
+              <span className="h-3 w-3 rounded-full bg-red-500/80" />
+              <span className="h-3 w-3 rounded-full bg-yellow-500/80" />
+              <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
+            </div>
+            <span className="truncate font-medium text-sm text-foreground">
+              {project.name || project.title}
+            </span>
+          </div>
+
+          {/* URL bar */}
+          <div className="hidden sm:flex max-w-sm flex-1 items-center gap-2 truncate rounded-full border border-line bg-inset px-3 py-1 font-mono text-xs text-fg-muted">
+            <Globe className="h-3.5 w-3.5 shrink-0 text-primary" />
+            <span className="truncate">{project.homepage}</span>
+          </div>
+
+          {/* Viewport & Action Buttons */}
+          <div className="flex items-center gap-1.5">
+            <div className="hidden sm:flex items-center gap-1 rounded-full border border-line bg-inset p-0.5 font-mono text-xs">
+              <button
+                type="button"
+                onClick={() => setViewport("desktop")}
+                title="Desktop View"
+                className={`rounded-full p-1.5 transition-colors ${
+                  viewport === "desktop"
+                    ? "bg-elevated text-foreground"
+                    : "text-fg-faint hover:text-foreground"
+                }`}
+              >
+                <Monitor className="h-3.5 w-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewport("tablet")}
+                title="Tablet View"
+                className={`rounded-full p-1.5 transition-colors ${
+                  viewport === "tablet"
+                    ? "bg-elevated text-foreground"
+                    : "text-fg-faint hover:text-foreground"
+                }`}
+              >
+                <Tablet className="h-3.5 w-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewport("mobile")}
+                title="Mobile View"
+                className={`rounded-full p-1.5 transition-colors ${
+                  viewport === "mobile"
+                    ? "bg-elevated text-foreground"
+                    : "text-fg-faint hover:text-foreground"
+                }`}
+              >
+                <Smartphone className="h-3.5 w-3.5" />
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setLoading(true);
+                setIframeKey((k) => k + 1);
+              }}
+              title="Reload Preview"
+              className="rounded-full p-1.5 text-fg-muted transition-colors hover:bg-surface hover:text-foreground"
+            >
+              <RotateCw className="h-3.5 w-3.5" />
+            </button>
+
+            <a
+              href={project.homepage}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open in new tab"
+              className="rounded-full p-1.5 text-fg-muted transition-colors hover:bg-surface hover:text-foreground"
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+
+            <button
+              type="button"
+              onClick={onClose}
+              title="Close preview"
+              className="rounded-full p-1.5 text-fg-muted transition-colors hover:bg-surface hover:text-foreground"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Iframe Viewport Container */}
+        <div className="relative flex-1 bg-background">
+          {loading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-surface/70 backdrop-blur-sm z-10">
+              <div className="flex flex-col items-center gap-2">
+                <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                <span className="font-mono text-xs text-fg-muted">
+                  Loading live preview...
+                </span>
+              </div>
+            </div>
+          )}
+          <iframe
+            key={iframeKey}
+            src={project.homepage}
+            title={`${project.name || project.title} live preview`}
+            onLoad={() => setLoading(false)}
+            className="h-full w-full border-0"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+          />
+        </div>
+
+        {/* Bottom Banner */}
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line bg-surface px-4 py-2 text-[11px] text-fg-muted">
+          <span className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            <span>Live Deployment</span>
+          </span>
+          <span className="font-mono text-[10px] text-fg-faint">
+            If blocked by external security headers (X-Frame-Options),{" "}
+            <a
+              href={project.homepage}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline"
+            >
+              open in new tab
+            </a>
+            .
+          </span>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 export default function Projects() {
   const { pinnedProjects, allProjects, loading, error } = useProjects();
   const { profile, stats } = useGitHubData();
-  const [filterMode, setFilterMode] = useState<"featured" | "all">("featured");
+  const [filterMode, setFilterMode] = useState<"featured" | "live" | "all">("featured");
+  const [previewProject, setPreviewProject] = useState<Project | null>(null);
 
   if (loading) {
     return (
@@ -126,37 +335,16 @@ export default function Projects() {
     );
   }
 
-  // Curated flagship projects with problem/approach/outcomes
-  const flagshipCurations: Record<
-    string,
-    { problem: string; approach: string }
-  > = {
-    frameworkpatcher: {
-      problem:
-        "Android vendor ROM framework patching typically requires fragile manual bytecode edits and repeated decompile-recompile loops.",
-      approach:
-        "Engineered an automated pipeline in Python to parse system JARs, inject bytecode smali patches deterministically, and package flashable Magisk modules.",
-    },
-    "fastboot-flasher": {
-      problem:
-        "Flashing raw Android partitions across diverse vendor chipsets frequently results in soft-bricked states due to wrong command sequences.",
-      approach:
-        "Created a cross-platform command toolkit with automated partition verification, dynamic slot switching (A/B), and safety checks.",
-    },
-    aiwebtester: {
-      problem:
-        "End-to-end browser testing breaks easily with minor UI changes and requires heavy boilerplate script maintenance.",
-      approach:
-        "Developed an autonomous browser testing agent combining LLM vision models with headless browser automation to test flows dynamically.",
-    },
-  };
+  const liveProjects = allProjects.filter((p) => Boolean(p.homepage));
 
   const displayedProjects =
     filterMode === "featured"
       ? pinnedProjects.length > 0
         ? pinnedProjects
         : allProjects.slice(0, 6)
-      : allProjects;
+      : filterMode === "live"
+        ? liveProjects
+        : allProjects;
 
   return (
     <div className="min-h-screen text-foreground">
@@ -176,6 +364,23 @@ export default function Projects() {
               }`}
             >
               Featured ({pinnedProjects.length || 6})
+            </button>
+            <button
+              onClick={() => setFilterMode("live")}
+              aria-pressed={filterMode === "live"}
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 transition-colors ${
+                filterMode === "live"
+                  ? "bg-elevated font-medium text-foreground"
+                  : "text-fg-muted hover:text-foreground"
+              }`}
+            >
+              {liveProjects.length > 0 && (
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+                </span>
+              )}
+              Live Demos ({liveProjects.length})
             </button>
             <button
               onClick={() => setFilterMode("all")}
@@ -222,14 +427,22 @@ export default function Projects() {
                 <span className="tabular-nums">
                   {profile.public_repos} repos
                 </span>
-                <span className="text-line-strong">·</span>
-                <span className="tabular-nums">
-                  {stats?.totalStars || 140}+ stars
-                </span>
-                <span className="hidden text-line-strong sm:inline">·</span>
-                <span className="hidden tabular-nums sm:inline">
-                  {stats?.totalPullRequests || 140} PRs
-                </span>
+                {typeof stats?.totalStars === "number" && (
+                  <>
+                    <span className="text-line-strong">·</span>
+                    <span className="tabular-nums">
+                      {stats.totalStars}+ stars
+                    </span>
+                  </>
+                )}
+                {typeof stats?.totalPullRequests === "number" && (
+                  <>
+                    <span className="hidden text-line-strong sm:inline">·</span>
+                    <span className="hidden tabular-nums sm:inline">
+                      {stats.totalPullRequests} PRs
+                    </span>
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -244,8 +457,6 @@ export default function Projects() {
         {/* Editorial index rows */}
         <div className="border-t border-line">
           {displayedProjects.map((project, index) => {
-            const key = project.title.toLowerCase();
-            const curation = flagshipCurations[key];
             const yearStr = project.updatedAt
               ? new Date(project.updatedAt).getFullYear()
               : "";
@@ -280,33 +491,54 @@ export default function Projects() {
                     </span>
 
                     <div className="min-w-0 space-y-3.5">
-                      <h2 className="text-xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-2xl">
-                        {project.title.charAt(0).toUpperCase() +
-                          project.title.slice(1).replace(/-/g, " ")}
-                      </h2>
-                      <p className="max-w-xl text-pretty text-sm leading-relaxed text-fg-muted">
-                        {project.description ||
-                          "Open-source software project with modular architecture and documented workflows."}
-                      </p>
+                      <div className="flex flex-wrap items-center gap-2.5">
+                        <h2 className="text-xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-2xl">
+                          {project.title.charAt(0).toUpperCase() +
+                            project.title.slice(1).replace(/-/g, " ")}
+                        </h2>
+                        {project.homepage && (
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 font-mono text-[10px] text-primary">
+                            <span className="relative flex h-1.5 w-1.5">
+                              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+                            </span>
+                            Live Demo
+                          </span>
+                        )}
+                      </div>
 
-                      {curation && (
-                        <div className="grid gap-4 border-l-2 border-line-strong pl-4 pt-1 sm:grid-cols-2 sm:gap-6">
-                          <p className="text-xs leading-relaxed">
-                            <span className="font-mono text-[10px] uppercase tracking-wider text-foreground">
-                              Problem
-                            </span>
-                            <span className="mt-1 block text-fg-muted">
-                              {curation.problem}
-                            </span>
-                          </p>
-                          <p className="text-xs leading-relaxed">
-                            <span className="font-mono text-[10px] uppercase tracking-wider text-primary">
-                              Approach
-                            </span>
-                            <span className="mt-1 block text-fg-muted">
-                              {curation.approach}
-                            </span>
-                          </p>
+                      {project.description ? (
+                        <p className="max-w-xl text-pretty text-sm leading-relaxed text-fg-muted">
+                          {project.description}
+                        </p>
+                      ) : null}
+
+                      {project.homepage && (
+                        <div className="relative z-20 flex flex-wrap items-center gap-2 pt-0.5">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setPreviewProject(project);
+                            }}
+                            className="group/btn inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 font-mono text-xs text-primary transition-all hover:bg-primary hover:text-background"
+                          >
+                            <Eye className="h-3.5 w-3.5 transition-transform group-hover/btn:scale-110" />
+                            <span>Live Preview</span>
+                          </button>
+                          <a
+                            href={project.homepage}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="inline-flex items-center gap-1 rounded-full border border-line bg-surface px-2.5 py-1 font-mono text-xs text-fg-muted transition-colors hover:border-line-strong hover:text-foreground"
+                            title="Open in new window"
+                          >
+                            <Globe className="h-3 w-3 text-fg-faint" />
+                            <span>Launch site</span>
+                            <ExternalLink className="h-2.5 w-2.5 text-fg-faint" />
+                          </a>
                         </div>
                       )}
 
@@ -344,6 +576,15 @@ export default function Projects() {
           })}
         </div>
       </div>
+
+      <AnimatePresence>
+        {previewProject && (
+          <LivePreviewModal
+            project={previewProject}
+            onClose={() => setPreviewProject(null)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* ================================================================ */}
       {/* Sage closer — archive callout + next page                         */}

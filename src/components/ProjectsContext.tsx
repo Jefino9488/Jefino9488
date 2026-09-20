@@ -8,16 +8,30 @@ import React, {
   useCallback,
 } from "react";
 
-interface Project {
+export interface Project {
   title: string;
+  name?: string;
   description: string;
   tech: string[];
+  topics?: string[];
   stats: {
     stars: number;
     forks: number;
   };
   link: string;
+  homepage?: string;
   updatedAt?: string;
+  pushedAt?: string;
+  isFork?: boolean;
+}
+
+function cleanHomepage(url?: string | null): string | undefined {
+  if (!url || typeof url !== "string") return undefined;
+  const trimmed = url.trim();
+  if (!trimmed) return undefined;
+  return trimmed.startsWith("http://") || trimmed.startsWith("https://")
+    ? trimmed
+    : `https://${trimmed}`;
 }
 
 const ProjectsContext = createContext<{
@@ -44,7 +58,10 @@ const getPinnedProjectsQuery = `
               name
               description
               url
+              homepageUrl
               updatedAt
+              pushedAt
+              isFork
               stargazerCount
               forks {
                 totalCount
@@ -52,7 +69,7 @@ const getPinnedProjectsQuery = `
               primaryLanguage {
                 name
               }
-              repositoryTopics(first: 3) {
+              repositoryTopics(first: 10) {
                 nodes {
                   topic {
                     name
@@ -69,12 +86,15 @@ const getPinnedProjectsQuery = `
 const getAllProjectsQuery = `
     query {
       user(login: "Jefino9488") {
-        repositories(first: 100, orderBy: { field: UPDATED_AT, direction: DESC }) {
+        repositories(first: 100, orderBy: { field: PUSHED_AT, direction: DESC }) {
           nodes {
             name
             description
             url
+            homepageUrl
             updatedAt
+            pushedAt
+            isFork
             stargazerCount
             forks {
               totalCount
@@ -82,7 +102,7 @@ const getAllProjectsQuery = `
             primaryLanguage {
               name
             }
-            repositoryTopics(first: 3) {
+            repositoryTopics(first: 10) {
               nodes {
                 topic {
                   name
@@ -94,6 +114,53 @@ const getAllProjectsQuery = `
       }
     }
 `;
+
+async function fetchGitHubProjectsRest(): Promise<{
+  projects: Project[];
+  error?: string;
+}> {
+  try {
+    const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
+    const headers: Record<string, string> = {
+      Accept: "application/vnd.github.v3+json",
+    };
+    if (GITHUB_TOKEN) {
+      headers.Authorization = `Bearer ${GITHUB_TOKEN}`;
+    }
+    const res = await fetch(
+      "https://api.github.com/users/Jefino9488/repos?sort=pushed&direction=desc&per_page=100",
+      { headers },
+    );
+    if (!res.ok) {
+      return {
+        projects: [],
+        error: `Failed to fetch repositories: ${res.statusText}`,
+      };
+    }
+    const data = await res.json();
+    const projects: Project[] = data.map((repo: any) => ({
+      title: repo.name.toLowerCase(),
+      name: repo.name,
+      description: repo.description || "",
+      topics: repo.topics || [],
+      tech: [repo.language, ...(repo.topics || []).slice(0, 3)].filter(
+        Boolean,
+      ),
+      stats: {
+        stars: repo.stargazers_count || 0,
+        forks: repo.forks_count || 0,
+      },
+      link: repo.html_url,
+      homepage: cleanHomepage(repo.homepage),
+      updatedAt: repo.updated_at,
+      pushedAt: repo.pushed_at,
+      isFork: repo.fork,
+    }));
+    return { projects, error: undefined };
+  } catch {
+    return { projects: [], error: "Failed to load projects via REST" };
+  }
+}
 
 async function fetchGitHubProjects(
   query: string,
@@ -112,43 +179,50 @@ async function fetchGitHubProjects(
     });
 
     if (!response.ok) {
-      return {
-        projects: [],
-        error: `Failed to fetch repositories: ${response.statusText}`,
-      };
+      return await fetchGitHubProjectsRest();
     }
 
     const data = await response.json();
 
     if (data.errors) {
-      return {
-        projects: [],
-        error: data.errors.map((error: any) => error.message).join(", "),
-      };
+      return await fetchGitHubProjectsRest();
     }
 
     const items = data.data.user.pinnedItems || data.data.user.repositories;
-    const projects: Project[] = items.nodes.map((repo: any) => ({
-      title: repo.name.toLowerCase(),
-      description: repo.description || "",
-      tech: Array.from(
-        new Set(
-          [
-            repo.primaryLanguage?.name,
-            ...repo.repositoryTopics.nodes
-              .slice(0, 2)
-              .map((topic: any) =>
-                topic.topic.name
-                  .replace(/-/g, " ")
-                  .replace(/\b\w/g, (char: string) => char.toUpperCase()),
-              ),
-          ].filter((tech: string) => tech),
+    const projects: Project[] = items.nodes.map((repo: any) => {
+      const topicNames: string[] = (repo.repositoryTopics?.nodes || []).map(
+        (t: any) => t.topic.name,
+      );
+      return {
+        title: repo.name.toLowerCase(),
+        name: repo.name,
+        description: repo.description || "",
+        topics: topicNames,
+        tech: Array.from(
+          new Set(
+            [
+              repo.primaryLanguage?.name,
+              ...topicNames
+                .slice(0, 3)
+                .map((name: string) =>
+                  name
+                    .replace(/-/g, " ")
+                    .replace(/\b\w/g, (char: string) => char.toUpperCase()),
+                ),
+            ].filter(Boolean),
+          ),
         ),
-      ),
-      stats: { stars: repo.stargazerCount || 0, forks: repo.forks.totalCount },
-      link: repo.url,
-      updatedAt: repo.updatedAt,
-    }));
+        stats: {
+          stars: repo.stargazerCount || 0,
+          forks: repo.forks.totalCount,
+        },
+        link: repo.url,
+        homepage: cleanHomepage(repo.homepageUrl),
+        updatedAt: repo.updatedAt,
+        pushedAt: repo.pushedAt,
+        isFork: repo.isFork,
+      };
+    });
 
     return { projects, error: undefined };
   } catch (error) {
@@ -156,11 +230,11 @@ async function fetchGitHubProjects(
       "Error fetching GitHub repos:",
       error instanceof Error ? error.message : String(error),
     );
-    return { projects: [], error: "Failed to load projects" };
+    return await fetchGitHubProjectsRest();
   }
 }
 
-const PROJECTS_CACHE_KEY = "portfolio_projects_cache_v3";
+const PROJECTS_CACHE_KEY = "portfolio_projects_cache_v7";
 const PROJECTS_CACHE_TTL = 15 * 60 * 1000; // 15 minutes
 
 interface ProjectsCache {
