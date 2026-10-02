@@ -30,6 +30,8 @@ import { isLightRoute } from "@/lib/lightRoutes";
 
 import ErrorBoundary from "./components/ErrorBoundary";
 import NetworkErrorBoundary from "./components/NetworkErrorBoundary";
+import AnalyticsTracker from "./components/AnalyticsTracker";
+import { Analytics } from "@vercel/analytics/react";
 const Background = lazy(() => import("./components/Background"));
 
 type IdleWindow = Window & {
@@ -296,11 +298,13 @@ function App() {
     >
       <NetworkErrorBoundary>
         <Router>
+          <AnalyticsTracker />
           <ProjectsProvider>
             <GitHubProvider>
               <AppContent />
             </GitHubProvider>
           </ProjectsProvider>
+          <Analytics />
         </Router>
       </NetworkErrorBoundary>
     </ErrorBoundary>
