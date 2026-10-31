@@ -24,7 +24,7 @@
     "@react-three/fiber": "^9.8.1",
     "@types/three": "^0.186.0",
     "@vercel/analytics": "^2.0.1",
-    "axios": "^1.20.0",
+    "axios": "^1.21.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "flubber": "^0.4.2",
